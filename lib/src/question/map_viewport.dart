@@ -29,7 +29,8 @@ class MapBounds {
   double get height => maxY - minY;
 }
 
-/// 地図座標と画面座標の変換。縦横比を保って余白つきで収め、y は上向き（緯度）を反転する。
+/// 地図座標と画面座標の変換。縦横比を保って余白つきで収める。
+/// [flipY] が true（既定）なら y は上向き（緯度）として反転、false なら画像座標（y が下向き）のまま。
 /// [xScale] は経度方向の縮尺補正（緯度が高いほど小さくする。例: cos(中心緯度)）。
 class MapViewport {
   MapViewport(
@@ -38,6 +39,7 @@ class MapViewport {
     this.height, {
     this.padding = 8,
     this.xScale = 1.0,
+    this.flipY = true,
   }) {
     final w = math.max(1e-9, bounds.width * xScale);
     final h = math.max(1e-9, bounds.height);
@@ -51,18 +53,19 @@ class MapViewport {
 
   final MapBounds bounds;
   final double width, height, padding, xScale;
+  final bool flipY;
   late final double scale;
   late final double _offsetX, _offsetY;
 
   (double, double) toScreen(GeoPoint p) => (
         _offsetX + (p.x - bounds.minX) * xScale * scale,
-        _offsetY + (bounds.maxY - p.y) * scale,
+        _offsetY + (flipY ? bounds.maxY - p.y : p.y - bounds.minY) * scale,
       );
 
   GeoPoint fromScreen(double dx, double dy) => scale == 0
       ? GeoPoint(bounds.minX, bounds.maxY)
       : GeoPoint(
           bounds.minX + (dx - _offsetX) / (scale * xScale),
-          bounds.maxY - (dy - _offsetY) / scale,
+          flipY ? bounds.maxY - (dy - _offsetY) / scale : bounds.minY + (dy - _offsetY) / scale,
         );
 }

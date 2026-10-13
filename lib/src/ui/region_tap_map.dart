@@ -17,6 +17,9 @@ class RegionTapMap extends StatelessWidget {
     this.regionColors = const {},
     this.showLabels = true,
     this.xScale = 1.0,
+    this.bounds,
+    this.flipY = true,
+    this.background,
   });
 
   final List<MapRegion> regions;
@@ -29,17 +32,27 @@ class RegionTapMap extends StatelessWidget {
   final Map<String, Color> regionColors;
   final bool showLabels;
   final double xScale;
+
+  /// 図タップ用: 画像の座標範囲（例: MapBounds(0, 0, 1, 1)）。省略時は領域の外接矩形。
+  final MapBounds? bounds;
+
+  /// 画像座標（y が下向き）の図なら false。
+  final bool flipY;
+
+  /// 領域の下に敷く画像など（図タップ）。領域と同じ範囲に重なる。
+  final Widget? background;
   final void Function(String regionId) onRegionTapped;
 
   @override
   Widget build(BuildContext context) {
-    final bounds = MapBounds.of(regions);
+    final bounds = this.bounds ?? MapBounds.of(regions);
     return Semantics(
       label: '地図。タップして答えを選ぶ',
       child: AspectRatio(
         aspectRatio: bounds.width * xScale / (bounds.height <= 0 ? 1 : bounds.height),
         child: LayoutBuilder(builder: (context, c) {
-          final vp = MapViewport(bounds, c.maxWidth, c.maxHeight, xScale: xScale);
+          final vp = MapViewport(bounds, c.maxWidth, c.maxHeight,
+              padding: background == null ? 8 : 0, xScale: xScale, flipY: flipY);
           return GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTapUp: (d) {
@@ -48,7 +61,9 @@ class RegionTapMap extends StatelessWidget {
                   available: available);
               if (id != null) onRegionTapped(id);
             },
-            child: CustomPaint(
+            child: Stack(fit: StackFit.expand, children: [
+              ?background,
+              CustomPaint(
               size: Size(c.maxWidth, c.maxHeight),
               painter: _RegionPainter(
                 regions: regions,
@@ -67,6 +82,7 @@ class RegionTapMap extends StatelessWidget {
                 showLabels: showLabels,
               ),
             ),
+            ]),
           );
         }),
       ),
