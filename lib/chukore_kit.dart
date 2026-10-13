@@ -6,6 +6,7 @@ export 'src/scope/unit_tree.dart';
 export 'src/planner/planner.dart';
 export 'src/assess/mastery.dart';
 export 'src/assess/assess.dart';
+export 'src/assess/exam_stats.dart';
 export 'src/weak/weak_notes.dart';
 export 'src/growth/growth.dart';
 export 'src/question/answer.dart';
