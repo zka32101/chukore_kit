@@ -36,7 +36,7 @@ void main() {
   });
 
   test('未知のタイプは例外', () {
-    expect(() => checkAnswer(_q('map', 'x'), 'x'), throwsUnsupportedError);
+    expect(() => checkAnswer(_q('timeline', 'x'), 'x'), throwsUnsupportedError);
   });
 
   test('ストアは期間・単元で絞れる', () async {

@@ -16,11 +16,12 @@ String _normalize(String s) => s
     .replaceAll(',', '')
     .replaceAll('，', '');
 
-/// 問題タイプ別の判定。type: `choice`（選択）／`numeric`（数値入力）／`order`（並べ替え。
+/// 問題タイプ別の判定。type: `choice`（選択）／`map`（地図タップ）／`numeric`（数値入力）／`order`（並べ替え。
 /// answer は選択肢IDをカンマ区切りで並べた正解順）。
 AnswerResult checkAnswer(Question q, String input, {double tolerance = 1e-9}) {
   switch (q.type) {
     case 'choice':
+    case 'map': // 地図タップ: 選んだ領域ID と answer（領域ID）の一致
       final ok = input == q.answer;
       return AnswerResult(ok, misconceptionTag: ok ? null : q.misconceptionTags[input]);
     case 'numeric':
