@@ -1,5 +1,5 @@
 import 'package:chukore_kit/chukore_kit.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 ExamAggregate _agg(List<double> scores) =>
     scores.fold(ExamAggregate.empty, (a, s) => a.add(s));

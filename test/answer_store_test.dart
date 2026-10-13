@@ -1,5 +1,5 @@
 import 'package:chukore_kit/chukore_kit.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 Question _q(String type, String answer, [Map<String, String> tags = const {}]) =>
     Question(

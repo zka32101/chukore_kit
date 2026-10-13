@@ -8,10 +8,10 @@
 実装済み追加: 成長機能の計算部（G2レーダー・G3自己ベスト・G4スタンプ・G5できるようになった数・G6進化）。
 SQLite 保存: `package:chukore_kit/chukore_kit_sqlite.dart`（sqlite3。コード生成なし）。
 実装済み追加: 偏差値 段階2の計算部（exam_stats 互換の3値集計。送受信はアプリがコールバックで注入）。
-実装済み追加: 地図タップ問題の判定（小学コレ！社会の JapanRegionTapMap を参考。描画・地図データはアプリ側）。
-未実装: 成長の描画・カード、図タップ・年表の部品、地図の描画ウィジェット、成長・キャラ。
-中核ロジックは純Dart（Flutter非依存）。UI連携時に app_common_kit を依存に加える。
+実装済み追加: 地図タップ問題の判定（小学コレ！社会の JapanRegionTapMap を参考。境界線データ・教科色はアプリ側。描画は `RegionTapMap`、CustomPainter で flutter_map 非依存）。
+未実装: 成長の描画・カード、図タップ・年表の部品、成長・キャラ。
+中核ロジックは Flutter 非依存（`chukore_kit.dart`）。画面部品は別入口 `chukore_kit_ui.dart`（地図タップの描画 `RegionTapMap` など）。UI 連携時に app_common_kit を依存に加える。
 
 ```
-dart pub get && dart analyze && dart test
+flutter pub get && flutter analyze && flutter test
 ```

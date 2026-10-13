@@ -1,7 +1,7 @@
 import 'package:chukore_kit/chukore_kit.dart';
 import 'package:chukore_kit/chukore_kit_sqlite.dart';
 import 'package:sqlite3/sqlite3.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   late SqliteAttemptStore store;
