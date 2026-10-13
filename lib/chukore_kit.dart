@@ -11,6 +11,7 @@ export 'src/weak/weak_notes.dart';
 export 'src/growth/growth.dart';
 export 'src/question/answer.dart';
 export 'src/question/map_tap.dart';
+export 'src/question/timeline.dart';
 export 'src/store/attempt_store.dart';
 export 'src/guardian/gate.dart';
 export 'src/guardian/report.dart';
