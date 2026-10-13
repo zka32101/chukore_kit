@@ -7,6 +7,7 @@ export 'src/planner/planner.dart';
 export 'src/assess/mastery.dart';
 export 'src/assess/assess.dart';
 export 'src/weak/weak_notes.dart';
+export 'src/growth/growth.dart';
 export 'src/question/answer.dart';
 export 'src/store/attempt_store.dart';
 export 'src/guardian/gate.dart';
