@@ -11,5 +11,5 @@ SQLite 保存: `package:chukore_kit/chukore_kit_sqlite.dart`（sqlite3。コー�
 中核ロジックは純Dart（Flutter非依存）。UI連携時に app_common_kit を依存に加える。
 
 ```
-dart pub get && dart test
+dart pub get && dart analyze && dart test
 ```

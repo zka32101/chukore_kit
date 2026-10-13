@@ -29,7 +29,7 @@ class WeeklyReport {
 
   /// 共有リンクや OS の共有機能に渡す文面。「伸びた所」中心で、責める表現は使わない。
   String toText({int maxItems = 3}) {
-    final b = StringBuffer('今週の学習: ${activeDays}日 / ${attemptCount}問\n');
+    final b = StringBuffer('今週の学習: $activeDays日 / $attemptCount問\n');
     if (improvements.isEmpty) {
       b.write('今週は新しく伸びた単元はありませんでした。来週もゆっくり続けましょう。');
     } else {
