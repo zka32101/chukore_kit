@@ -1,5 +1,5 @@
 import 'package:chukore_kit/chukore_kit.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 Attempt _at(String q, int day, bool ok) => Attempt(
       questionId: q,

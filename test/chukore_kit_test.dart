@@ -1,5 +1,5 @@
 import 'package:chukore_kit/chukore_kit.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 UnitTree _tree() => UnitTree(1, const [
       Unit(id: 'e1', subject: 'en', grade: 1, title: 'be動詞', estimatedQuestions: 20),

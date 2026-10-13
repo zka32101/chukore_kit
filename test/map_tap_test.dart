@@ -1,5 +1,5 @@
 import 'package:chukore_kit/chukore_kit.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 List<GeoPoint> _square(double x, double y, double s) =>
     [GeoPoint(x, y), GeoPoint(x + s, y), GeoPoint(x + s, y + s), GeoPoint(x, y + s)];
