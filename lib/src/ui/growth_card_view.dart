@@ -31,7 +31,7 @@ class GrowthCardPainter extends CustomPainter {
             [accent.withValues(alpha: 0.18), Colors.white]),
     );
 
-    _text(canvas, '${data.subjectLabel}  成長カード', const Offset(72, 64), 44,
+    _text(canvas, data.strings.cardTitle(data.subjectLabel), const Offset(72, 64), 44,
         Colors.black54, bold: true);
     _text(canvas, data.headline, const Offset(72, 140), 76, Colors.black87, bold: true, maxWidth: w - 144);
 
@@ -42,7 +42,7 @@ class GrowthCardPainter extends CustomPainter {
         bold: true, center: true);
     _text(canvas, data.nextLine, const Offset(72, 330), 44, Colors.black87, maxWidth: w - 450);
     if (data.streakDays > 0) {
-      _text(canvas, '${data.streakDays}日 続けている', const Offset(72, 400), 40, Colors.black54,
+      _text(canvas, data.strings.streakDays(data.streakDays), const Offset(72, 400), 40, Colors.black54,
           maxWidth: w - 450);
     }
 
@@ -50,8 +50,8 @@ class GrowthCardPainter extends CustomPainter {
     _radar(canvas, Offset(w / 2, 800), 270);
 
     // 数字
-    _stat(canvas, const Offset(72, 1130), '克服スタンプ', '${data.overcomeStamps}');
-    _stat(canvas, const Offset(560, 1130), 'できるようになった', '${data.nowSolvable}問');
+    _stat(canvas, const Offset(72, 1130), data.strings.statStamps, '${data.overcomeStamps}');
+    _stat(canvas, const Offset(560, 1130), data.strings.statSolvable, data.strings.solvableValue(data.nowSolvable));
     canvas.restore();
   }
 
@@ -149,7 +149,7 @@ class GrowthCardView extends StatelessWidget {
   Widget build(BuildContext context) => AspectRatio(
         aspectRatio: GrowthCardPainter.designSize.width / GrowthCardPainter.designSize.height,
         child: Semantics(
-          label: '成長カード。${data.headline}。レベル${data.levelLabel}',
+          label: data.strings.cardSemantics(data.headline, data.levelLabel),
           child: CustomPaint(painter: GrowthCardPainter(data, accent: accent)),
         ),
       );

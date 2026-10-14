@@ -1,4 +1,5 @@
 import '../assess/mastery.dart';
+import '../l10n/strings.dart';
 import '../models/models.dart';
 import '../scope/unit_tree.dart';
 
@@ -28,14 +29,14 @@ class WeeklyReport {
   final List<Improvement> improvements;
 
   /// 共有リンクや OS の共有機能に渡す文面。「伸びた所」中心で、責める表現は使わない。
-  String toText({int maxItems = 3}) {
-    final b = StringBuffer('今週の学習: $activeDays日 / $attemptCount問\n');
+  String toText({int maxItems = 3, ChukoreStrings strings = const JaStrings()}) {
+    final b = StringBuffer('${strings.reportHeader(activeDays, attemptCount)}\n');
     if (improvements.isEmpty) {
-      b.write('今週は新しく伸びた単元はありませんでした。来週もゆっくり続けましょう。');
+      b.write(strings.reportEmpty);
     } else {
-      b.writeln('今週伸びた所:');
+      b.writeln(strings.reportImprovedTitle);
       for (final i in improvements.take(maxItems)) {
-        b.writeln('・${i.title}（${(i.before * 100).round()}% → ${(i.after * 100).round()}%）');
+        b.writeln(strings.reportItem(i.title, (i.before * 100).round(), (i.after * 100).round()));
       }
     }
     return b.toString().trimRight();
