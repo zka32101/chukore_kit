@@ -49,12 +49,14 @@ void main() {
         has('reportHeader(2,5)', ['2', '5']);
         has('formatYear(-500)', ['500']);
         has('formatYear(1868)', ['1868']);
+        has('deviationRange', ['{low}', '{high}']);
+        has('ringsSemantics(30)', ['30']);
       });
 
       test('英語のまま残っていない（英語以外）', () {
         if (l.languageCode == 'en') return;
         // 構造が同じで文字列が一致しうるもの（記号だけの差・固有の表記）は除く
-        const sameOk = {'reportItem', 'decimalSeparator'};
+        const sameOk = {'reportItem', 'deviationRange', 'decimalSeparator'};
         for (final e in c.entries) {
           if (sameOk.contains(e.key)) continue;
           if (cognates[l.languageCode]?.contains(e.key) ?? false) continue;
