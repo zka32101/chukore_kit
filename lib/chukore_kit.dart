@@ -13,6 +13,7 @@ export 'src/assess/exam_stats.dart';
 export 'src/weak/weak_notes.dart';
 export 'src/teacher/teacher_mode.dart';
 export 'src/bank/question_bank.dart';
+export 'src/prereq/prerequisites.dart';
 export 'src/growth/growth.dart';
 export 'src/growth/growth_card.dart';
 export 'src/growth/growth_rings.dart';

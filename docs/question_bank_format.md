@@ -27,6 +27,27 @@ dart run tool/validate_bank.dart units.json questions.json
 - `estimatedQuestions` はテスト日逆算の重み（葉に付ける）。`order` は同じ親の中の並び順。
 - 問題は**葉の単元**に付ける（葉でないと範囲選択・習熟度が正しく働かない）。
 
+## 単元の前提 `prerequisites.json`（さかのぼり診断用・省略可）
+
+つまずいた単元の前提をたどって、どこでつまずき始めたかを特定するための依存関係。
+
+```json
+{
+  "version": 1,
+  "prerequisites": [
+    {"unitId": "en1_verbs", "requires": ["en1_be"]},
+    {"unitId": "en1_be", "external": [
+      {"id": "shogaku_english_basic", "title": "小学英語: あいさつと自己紹介", "link": "https://example.com/shogaku-kore"}
+    ]}
+  ]
+}
+```
+
+- `requires`: 同じ単元ツリーの中の前提の単元。
+- `external`: 他アプリ（小学コレ！など）にある前提。**コードは共有せず、誘導（リンク）だけ**を持つ。`link` はストアのリンクやアプリ間リンクで、開くのはアプリ側。
+- 診断は `diagnoseBacktrace`。習熟度が基準（既定 0.6）未満の前提を weak、学習の記録が無い前提を unknown とし、「前提がすべて ok なのに自分は weak／unknown」の単元を出発点の候補にする。出発点が持つ `external` が誘導先になる。
+- 検証: `dart run tool/validate_bank.dart units.json questions.json prerequisites.json`（単元が無い・自分自身が前提・循環・重複・`external` の空欄）。
+
 ## 問題集 `questions.json`
 
 ```json
@@ -67,7 +88,7 @@ dart run tool/validate_bank.dart units.json questions.json
 `duplicate_question_id` / `unknown_type` / `explanation_missing` / `bad_version` / `choices_duplicate` /
 `choices_too_few` / `answer_not_in_choices` / `numeric_answer_invalid` / `order_too_few` /
 `order_duplicate` / `order_choices_mismatch` / `tag_choice_missing` / `tag_on_answer` / `tag_format` /
-`unit_missing` / `duplicate_mistake_line_id` / `mistake_*`（元の問題・型・選択肢のつながり、セリフ・説明が空など）
+`unit_missing` / `prereq_unit_missing` / `prereq_requires_missing` / `prereq_self` / `prereq_cycle` / `prereq_duplicate` / `prereq_external_empty` / `duplicate_mistake_line_id` / `mistake_*`（元の問題・型・選択肢のつながり、セリフ・説明が空など）
 
 警告（品質上の注意）:
 `unit_no_estimate` / `difficulty_extreme` / `tags_ignored` / `unit_not_leaf` / `unit_empty`
