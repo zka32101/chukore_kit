@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/strings.dart';
 import '../question/map_tap.dart';
 import '../question/map_viewport.dart';
 
@@ -20,6 +21,7 @@ class RegionTapMap extends StatelessWidget {
     this.bounds,
     this.flipY = true,
     this.background,
+    this.strings = const JaStrings(),
   });
 
   final List<MapRegion> regions;
@@ -41,13 +43,16 @@ class RegionTapMap extends StatelessWidget {
 
   /// 領域の下に敷く画像など（図タップ）。領域と同じ範囲に重なる。
   final Widget? background;
+
+  /// 読み上げ文言の言語。
+  final ChukoreStrings strings;
   final void Function(String regionId) onRegionTapped;
 
   @override
   Widget build(BuildContext context) {
     final bounds = this.bounds ?? MapBounds.of(regions);
     return Semantics(
-      label: '地図。タップして答えを選ぶ',
+      label: strings.mapSemantics,
       child: AspectRatio(
         aspectRatio: bounds.width * xScale / (bounds.height <= 0 ? 1 : bounds.height),
         child: LayoutBuilder(builder: (context, c) {

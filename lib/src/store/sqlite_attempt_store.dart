@@ -5,6 +5,8 @@ import 'attempt_store.dart';
 
 /// SQLite（sqlite3）による回答履歴ストア。回答は UTC の ISO8601 文字列で保存し、
 /// 文字列比較で日付範囲・単元別に絞る。
+/// 海外対応: 日付の区切りは端末のローカル暦日。読み出しはローカル時刻にして、
+/// 範囲の境界はローカルの0時を UTC に直して比較する（時差のある国でも日付がずれない）。
 class SqliteAttemptStore implements AttemptStore {
   SqliteAttemptStore(this._db) {
     _db.execute('''
@@ -52,11 +54,11 @@ class SqliteAttemptStore implements AttemptStore {
     }
     if (from != null) {
       where.add('answered_at >= ?');
-      args.add(dateOnly(from).toIso8601String());
+      args.add(_localMidnightUtc(from));
     }
     if (to != null) {
       where.add('answered_at < ?');
-      args.add(dateOnly(to).toIso8601String());
+      args.add(_localMidnightUtc(to));
     }
     final rows = _db.select(
       'SELECT * FROM attempts ${where.isEmpty ? '' : 'WHERE ${where.join(' AND ')}'} '
@@ -70,10 +72,14 @@ class SqliteAttemptStore implements AttemptStore {
           unitId: r['unit_id'] as String,
           correct: (r['correct'] as int) == 1,
           chosenId: r['chosen_id'] as String?,
-          answeredAt: DateTime.parse(r['answered_at'] as String),
+          answeredAt: DateTime.parse(r['answered_at'] as String).toLocal(),
           elapsedMs: r['elapsed_ms'] as int,
           mode: r['mode'] as String,
         ),
     ];
   }
+
+  /// 指定日（日付部分）のローカル0時を UTC の文字列にする。
+  static String _localMidnightUtc(DateTime d) =>
+      DateTime(d.year, d.month, d.day).toUtc().toIso8601String();
 }

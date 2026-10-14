@@ -23,7 +23,7 @@ void main() {
     expect(r.correct, isFalse);
     expect(r.chosenId, 'b');
     expect(r.elapsedMs, 1200);
-    expect(r.answeredAt, DateTime.utc(2026, 10, 5, 9));
+    expect(r.answeredAt.isAtSameMomentAs(DateTime.utc(2026, 10, 5, 9)), isTrue);
   });
 
   test('期間と単元で絞れて、日付順に並ぶ', () async {
@@ -36,6 +36,20 @@ void main() {
           .map((a) => a.questionId),
       ['q6'],
     );
+  });
+
+  test('読み出しはローカル時刻で、範囲の境界はローカル暦日（時差のある国でも日付がずれない）', () async {
+    // ローカルの 0:30 と 23:30 に回答 → どちらも「その日」に入る
+    final early = DateTime(2026, 10, 6, 0, 30);
+    final late = DateTime(2026, 10, 6, 23, 30);
+    final nextDay = DateTime(2026, 10, 7, 0, 10);
+    for (final t in [early, late, nextDay]) {
+      await store.add(Attempt(questionId: '${t.hour}-${t.day}', unitId: 'u', correct: true, answeredAt: t));
+    }
+    final day = await store.query(from: DateTime(2026, 10, 6), to: DateTime(2026, 10, 7));
+    expect(day.length, 2);
+    expect(day.every((a) => !a.answeredAt.isUtc), isTrue);
+    expect(day.map((a) => a.answeredAt.day).toSet(), {6});
   });
 
   test('メモリ実装と同じ結果になる', () async {

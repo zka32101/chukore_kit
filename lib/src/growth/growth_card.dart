@@ -1,4 +1,5 @@
 import '../assess/assess.dart';
+import '../l10n/strings.dart';
 
 /// レーダーの1軸。[previous] は先月のスナップショット（無ければ null）。
 class RadarAxis {
@@ -24,6 +25,7 @@ class GrowthCardData {
     this.nowSolvable = 0,
     this.streakDays = 0,
     this.stage = 0,
+    this.strings = const JaStrings(),
   }) : assert(radar.length >= 3 && radar.length <= 6);
 
   /// 例: 「英語」。教科名のみ。
@@ -44,6 +46,9 @@ class GrowthCardData {
   /// キャラの進化段階（0〜4）。
   final int stage;
 
+  /// 表示言語。
+  final ChukoreStrings strings;
+
   String get levelLabel => switch (level) {
         Level.s => 'S',
         Level.a => 'A',
@@ -54,18 +59,18 @@ class GrowthCardData {
 
   /// カードの見出し。数字より「前回からの変化」を主役にし、下がった時も落ち込ませない。
   String get headline {
-    if (isPersonalBest) return '自己ベスト更新！';
+    if (isPersonalBest) return strings.headlinePersonalBest;
     final d = scoreDelta;
-    if (d == null) return 'はじめの一歩';
-    if (d > 0) return '前回より +${_fmt(d)}点';
-    if (d == 0) return '前回と同じ。安定してきた';
-    return 'ここからまた伸ばそう';
+    if (d == null) return strings.headlineFirst;
+    if (d > 0) return strings.headlineUp(_fmt(d));
+    if (d == 0) return strings.headlineSame;
+    return strings.headlineDown;
   }
 
   /// 次のレベルへの案内。最上位は祝う文言。
   String get nextLine {
     final p = pointsToNext;
-    return p == null ? '最高レベルに到達！' : 'あと${_fmt(p)}点で次のレベル';
+    return p == null ? strings.topLevel : strings.nextLevel(_fmt(p));
   }
 
   static String _fmt(double v) =>

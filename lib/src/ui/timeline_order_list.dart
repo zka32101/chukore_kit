@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/strings.dart';
 import '../question/timeline.dart';
 
 /// 年表問題: 出来事をドラッグして古い順に並べ替える。
@@ -11,6 +12,7 @@ class TimelineOrderList extends StatelessWidget {
     required this.onReordered,
     this.revealYears = false,
     this.enabled = true,
+    this.strings = const JaStrings(),
   });
 
   /// 現在の並び順（上が古い）。
@@ -18,6 +20,7 @@ class TimelineOrderList extends StatelessWidget {
   final void Function(List<TimelineEvent> newOrder) onReordered;
   final bool revealYears;
   final bool enabled;
+  final ChukoreStrings strings;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +41,7 @@ class TimelineOrderList extends StatelessWidget {
             key: ValueKey(events[i].id),
             leading: CircleAvatar(radius: 14, child: Text('${i + 1}')),
             title: Text(events[i].label),
-            trailing: revealYears ? Text(_year(events[i].year)) : null,
+            trailing: revealYears ? Text(strings.formatYear(events[i].year)) : null,
             tileColor: revealYears
                 ? (correct[i] == events[i].id
                     ? Colors.green.withValues(alpha: 0.15)
@@ -48,6 +51,4 @@ class TimelineOrderList extends StatelessWidget {
       ],
     );
   }
-
-  static String _year(int y) => y < 0 ? '前${-y}年' : '$y年';
 }
