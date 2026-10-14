@@ -184,6 +184,16 @@ void main() {
       expect(r.issues.map((i) => i.subjectId), containsAll(['no_answer', 'bad_difficulty', 'm_broken']));
     });
 
+    test('malformed の理由は、欠けた項目名・範囲・型が分かる', () {
+      String why(Map<String, dynamic> bank) => parseQuestionBank(bank).issues.single.message;
+      final base = {'id': 'q', 'unitId': 'u', 'type': 'choice', 'difficulty': 0.5, 'choices': ['a', 'b'], 'answer': 'a', 'explanationId': 'x'};
+      expect(why({'questions': [Map.of(base)..remove('answer')..remove('explanationId')]}), contains('answer, explanationId'));
+      expect(why({'questions': [Map.of(base)..['difficulty'] = 1.5]}), contains('0〜1'));
+      expect(why({'questions': [Map.of(base)..['choices'] = 'abc']}), contains('型が違います'));
+      expect(why({'questions': ['x']}), contains('オブジェクトではありません'));
+      expect(why({'mistakeLines': [{'id': 'm'}]}), allOf(contains('tag'), contains('fixChoices')));
+    });
+
     test('Question の JSON 往復', () {
       final q = _q(tags: {'b': 'x_y'});
       final back = Question.fromJson(q.toJson());

@@ -26,6 +26,11 @@ const knownQuestionTypes = {'choice', 'map', 'numeric', 'order', 'timeline'};
 
 final _tagPattern = RegExp(r'^[a-z][a-z0-9_]*$');
 
+const _questionKeys = ['id', 'unitId', 'type', 'difficulty', 'answer', 'explanationId'];
+const _mistakeKeys = [
+  'id', 'tag', 'questionId', 'sourceChoiceId', 'statement', 'fixChoices', 'correctChoice', 'explanation',
+];
+
 /// 読み込んだ問題集。壊れた項目は [issues] に報告して読み飛ばす。
 class QuestionBankData {
   const QuestionBankData(this.questions, this.mistakeLines, this.issues);
@@ -39,25 +44,36 @@ class QuestionBankData {
 /// 必須項目の欠け・型の違い・基準正答率の範囲外は、その項目だけ `malformed` として報告して飛ばす。
 QuestionBankData parseQuestionBank(Map<String, dynamic> json) {
   final issues = <ValidationIssue>[];
-  T? tryParse<T>(Object? raw, String kind, T Function(Map<String, dynamic>) build) {
+  T? tryParse<T>(Object? raw, String kind, List<String> required, T Function(Map<String, dynamic>) build) {
     String id = '?';
+    void bad(String why) =>
+        issues.add(ValidationIssue(IssueSeverity.error, 'malformed', id, '$kind を読めません: $why'));
+    if (raw is! Map) {
+      bad('オブジェクトではありません');
+      return null;
+    }
+    final m = Map<String, dynamic>.from(raw);
+    id = (m['id'] as Object?)?.toString() ?? '?';
+    final missing = [for (final k in required) if (m[k] == null) k];
+    if (missing.isNotEmpty) {
+      bad('必須項目がありません: ${missing.join(', ')}');
+      return null;
+    }
     try {
-      final m = Map<String, dynamic>.from(raw as Map);
-      id = (m['id'] as Object?)?.toString() ?? '?';
       return build(m);
     } catch (e) {
-      issues.add(ValidationIssue(IssueSeverity.error, 'malformed', id, '$kind を読めません: ${_short(e)}'));
+      bad(e is AssertionError ? '基準正答率は 0〜1 にしてください' : '項目の型が違います（${_short(e)}）');
       return null;
     }
   }
 
   final questions = <Question>[
     for (final r in (json['questions'] as List? ?? const []))
-      ?tryParse(r, 'question', Question.fromJson),
+      ?tryParse(r, 'question', _questionKeys, Question.fromJson),
   ];
   final lines = <MistakeLine>[
     for (final r in (json['mistakeLines'] as List? ?? const []))
-      ?tryParse(r, 'mistakeLine', MistakeLine.fromJson),
+      ?tryParse(r, 'mistakeLine', _mistakeKeys, MistakeLine.fromJson),
   ];
   return QuestionBankData(questions, lines, issues);
 }
