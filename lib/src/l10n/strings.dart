@@ -14,6 +14,8 @@ abstract class ChukoreStrings {
       'ja' => const JaStrings(),
       'pt' => parts.length > 1 && parts[1] == 'pt' ? const PtStrings(european: true) : const PtStrings(),
       'ko' => const KoStrings(),
+      // `in` は Android・Java で使われる旧式のインドネシア語のコード
+      'id' || 'in' => const IdStrings(),
       'zh' => ZhStrings(traditional: ZhStrings.isTraditional(parts)),
       'fr' => FrStrings(septanteNonante: parts.length > 1 && FrStrings.septanteNonanteRegions.contains(parts[1])),
       'es' => EsStrings(decimalComma: !(parts.length > 1 && EsStrings.decimalPointRegions.contains(parts[1]))),
@@ -37,6 +39,7 @@ abstract class ChukoreStrings {
     FrStrings(),
     FrStrings(septanteNonante: true),
     KoStrings(),
+    IdStrings(),
     ZhStrings(),
     ZhStrings(traditional: true),
   ];
@@ -1124,4 +1127,144 @@ class ZhStrings extends ChukoreStrings {
       _t('朋友或家人扫描后即可设置相同的范围。不含姓名或成绩。', '朋友或家人掃描後即可設定相同的範圍。不含姓名或成績。');
   @override
   String get scopeQrSemantics => _t('考试范围二维码', '考試範圍 QR 碼');
+}
+
+/// インドネシア語。複数形は無い。数詞は規則的（seratus・sebelas・belas・puluh・ratus・ribu）。
+/// 小数点はカンマ、桁区切りはドット。
+class IdStrings extends ChukoreStrings {
+  const IdStrings();
+
+  static const _units = ['', 'satu', 'dua', 'tiga', 'empat', 'lima', 'enam', 'tujuh', 'delapan', 'sembilan'];
+
+  @override
+  String get languageCode => 'id';
+
+  @override
+  String get decimalSeparator => ',';
+
+  /// 1〜99（「sepuluh」「sebelas」「dua belas」「dua puluh satu」）。
+  String _below100(int n) {
+    if (n < 10) return _units[n];
+    if (n == 10) return 'sepuluh';
+    if (n == 11) return 'sebelas';
+    if (n < 20) return '${_units[n - 10]} belas';
+    final unit = n % 10;
+    return '${_units[n ~/ 10]} puluh${unit == 0 ? '' : ' ${_units[unit]}'}';
+  }
+
+  /// 1〜999（「seratus」「seratus satu」「dua ratus」）。
+  String _below1000(int n) {
+    final h = n ~/ 100, r = n % 100;
+    final parts = <String>[];
+    if (h == 1) {
+      parts.add('seratus');
+    } else if (h > 1) {
+      parts.add('${_units[h]} ratus');
+    }
+    if (r > 0) parts.add(_below100(r));
+    return parts.join(' ');
+  }
+
+  @override
+  String gateNumberWords(int n) {
+    if (n < 1 || n > 9999) throw RangeError.range(n, 1, 9999, 'n');
+    final th = n ~/ 1000, r = n % 1000;
+    final thousands = th == 0 ? '' : (th == 1 ? 'seribu' : '${_units[th]} ribu');
+    if (r == 0) return thousands;
+    return th == 0 ? _below1000(r) : '$thousands ${_below1000(r)}';
+  }
+
+  @override
+  String cardTitle(String subject) => '$subject · Kartu Perkembangan';
+  @override
+  String get headlinePersonalBest => 'Rekor pribadi baru!';
+  @override
+  String get headlineFirst => 'Awal yang bagus';
+  @override
+  String headlineUp(String points) => '+$points dari sebelumnya';
+  @override
+  String get headlineSame => 'Stabil, sama seperti sebelumnya';
+  @override
+  String get headlineDown => 'Mari tingkatkan lagi dari sini';
+  @override
+  String nextLevel(String points) => '$points poin lagi menuju level berikutnya';
+  @override
+  String get topLevel => 'Level tertinggi tercapai!';
+  @override
+  String streakDays(int days) => '$days hari berturut-turut';
+  @override
+  String get statStamps => 'Berhasil diatasi';
+  @override
+  String get statSolvable => 'Kini bisa dijawab';
+  @override
+  String solvableValue(int count) => '$count soal';
+  @override
+  String cardSemantics(String headline, String level) => 'Kartu perkembangan. $headline. Level $level';
+  @override
+  String get mapSemantics => 'Peta. Ketuk untuk memilih jawaban';
+  @override
+  String formatYear(int year) => year < 0 ? '${-year} SM' : '$year M';
+  @override
+  String reportHeader(int activeDays, int attempts) => 'Minggu ini: $activeDays hari / $attempts soal';
+  @override
+  String get reportImprovedTitle => 'Yang meningkat minggu ini:';
+  @override
+  String reportItem(String title, int b, int a) => '- $title ($b% -> $a%)';
+  @override
+  String get reportEmpty => 'Belum ada peningkatan baru minggu ini. Lanjutkan sesuai kecepatanmu.';
+  @override
+  String get scopeQrTitle => 'Bagikan cakupan ujian';
+  @override
+  String get scopeQrHint =>
+      'Teman atau keluarga dapat memindai ini untuk mengatur cakupan yang sama. Tidak berisi nama atau nilai.';
+  @override
+  String get scopeQrSemantics => 'Kode QR cakupan ujian';
+  @override
+  String get checklistTitle => 'Cek hari ujian';
+  @override
+  String checklistProgress(int done, int total) => '$done dari $total siap';
+  @override
+  String get checklistAllDone => 'Semua sudah siap. Semoga sukses!';
+  @override
+  String get fiveMinuteTitle => 'Kartu 5 menit terakhir';
+  @override
+  List<(String, String)> get checklistDefaults => [
+        ('pencil', 'Alat tulis'),
+        ('eraser', 'Penghapus'),
+        ('ruler', 'Penggaris dan jangka'),
+        ('watch', 'Jam tangan'),
+        ('tissue', 'Sapu tangan dan tisu'),
+        ('notes', 'Catatan ringkasan'),
+      ];
+  @override
+  String get sheetTitle => 'Lembar kilat sebelum ujian';
+  @override
+  String get sheetQuestion => 'Soal';
+  @override
+  String get sheetAnswer => 'Jawaban';
+  @override
+  String get sheetExplanation => 'Penjelasan';
+  @override
+  String get sheetEmpty => 'Tidak ada yang perlu diperbaiki sekarang. Kerja bagus!';
+  @override
+  String get markCorrect => 'benar';
+  @override
+  String get markWrong => 'salah';
+  @override
+  String get ringsTitle => 'Cincin pertumbuhan';
+  @override
+  String ringsSemantics(int totalDays) => 'Cincin pertumbuhan. Total $totalDays hari belajar';
+  @override
+  String get deviationLabel => 'Indeks skor dalam aplikasi';
+  @override
+  String deviationRange(String low, String high) => '$low–$high';
+  @override
+  String get deviationNote =>
+      'Indeks kasar yang hanya berlaku di dalam aplikasi ini, dengan 50 sebagai rata-rata kelompok acuan. Bukan peringkat nasional.';
+  @override
+  String get teacherPrompt => 'Apa yang salah di sini? Perbaiki kesalahannya';
+  @override
+  String get teacherCorrect => 'Benar! Kamu berhasil memperbaikinya';
+  @override
+  String get teacherWrong => 'Hampir! Baca sekali lagi';
 }
