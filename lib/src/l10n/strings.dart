@@ -82,6 +82,13 @@ abstract class ChukoreStrings {
   String reportItem(String title, int beforePercent, int afterPercent);
   String get reportEmpty;
 
+  // --- 成長の年輪・目安偏差値 ---
+  String get ringsTitle;
+  String ringsSemantics(int totalDays);
+  String get deviationLabel;
+  String deviationRange(String low, String high);
+  String get deviationNote;
+
   // --- 先生役モード（まちがいキャラ）---
   String get teacherPrompt;
   String get teacherCorrect;
@@ -157,6 +164,16 @@ class JaStrings extends ChukoreStrings {
   String get teacherCorrect => '正解！ちゃんと直せたね';
   @override
   String get teacherWrong => 'おしい！もう一度、よく読んでみよう';
+  @override
+  String get ringsTitle => '成長の年輪';
+  @override
+  String ringsSemantics(int totalDays) => '成長の年輪。これまで合計$totalDays日 学習しました';
+  @override
+  String get deviationLabel => '目安偏差値';
+  @override
+  String deviationRange(String low, String high) => '$low〜$high';
+  @override
+  String get deviationNote => '想定した集団の平均を50とした目安です。全国の偏差値ではありません。';
 }
 
 class EnStrings extends ChukoreStrings {
@@ -235,6 +252,18 @@ class EnStrings extends ChukoreStrings {
   String get teacherCorrect => 'Correct! You fixed it';
   @override
   String get teacherWrong => 'Almost! Read it once more';
+  @override
+  String get ringsTitle => 'Growth rings';
+  @override
+  String ringsSemantics(int totalDays) =>
+      'Growth rings. ${totalDays == 1 ? '1 day' : '$totalDays days'} of practice in total';
+  @override
+  String get deviationLabel => 'Estimated score index';
+  @override
+  String deviationRange(String low, String high) => '$low–$high';
+  @override
+  String get deviationNote =>
+      'A rough index where 50 is the average of an assumed group. It is not a nationwide ranking.';
 }
 
 /// ポルトガル語。既定はブラジル式（pt-BR）。[european] が true ならポルトガル式（pt-PT）の綴り。
@@ -340,6 +369,18 @@ class PtStrings extends ChukoreStrings {
   String get teacherCorrect => 'Correto! Você corrigiu';
   @override
   String get teacherWrong => 'Quase! Leia mais uma vez';
+  @override
+  String get ringsTitle => 'Anéis de crescimento';
+  @override
+  String ringsSemantics(int totalDays) =>
+      'Anéis de crescimento. ${totalDays == 1 ? '1 dia' : '$totalDays dias'} de estudo no total';
+  @override
+  String get deviationLabel => 'Índice de pontuação (estimado)';
+  @override
+  String deviationRange(String low, String high) => '$low–$high';
+  @override
+  String get deviationNote =>
+      'Um índice aproximado em que 50 é a média de um grupo de referência. Não é uma classificação nacional.';
 }
 
 /// スペイン語。[decimalComma] が false なら小数点が `.` の地域（メキシコ・米国・中米の一部など）。
@@ -448,6 +489,18 @@ class EsStrings extends ChukoreStrings {
   String get teacherCorrect => '¡Correcto! Lo corregiste';
   @override
   String get teacherWrong => '¡Casi! Léelo una vez más';
+  @override
+  String get ringsTitle => 'Anillos de crecimiento';
+  @override
+  String ringsSemantics(int totalDays) =>
+      'Anillos de crecimiento. ${totalDays == 1 ? '1 día' : '$totalDays días'} de estudio en total';
+  @override
+  String get deviationLabel => 'Índice de puntuación (estimado)';
+  @override
+  String deviationRange(String low, String high) => '$low–$high';
+  @override
+  String get deviationNote =>
+      'Un índice aproximado en el que 50 es el promedio de un grupo de referencia. No es una clasificación nacional.';
 }
 
 /// フランス語。[septanteNonante] が true ならベルギー・スイス式（septante・nonante）。
@@ -571,6 +624,18 @@ class FrStrings extends ChukoreStrings {
   String get teacherCorrect => 'Correct$_nb! Vous l’avez corrigé';
   @override
   String get teacherWrong => 'Presque$_nb! Relisez encore une fois';
+  @override
+  String get ringsTitle => 'Anneaux de croissance';
+  @override
+  String ringsSemantics(int totalDays) =>
+      'Anneaux de croissance. ${totalDays < 2 ? '$totalDays jour' : '$totalDays jours'} d’étude au total';
+  @override
+  String get deviationLabel => 'Indice de score (estimé)';
+  @override
+  String deviationRange(String low, String high) => '$low–$high';
+  @override
+  String get deviationNote =>
+      'Un indice approximatif où 50 correspond à la moyenne d’un groupe de référence. Ce n’est pas un classement national.';
 }
 
 /// 韓国語。数の読み上げは漢字語の数詞（사백팔십이）。
@@ -642,6 +707,16 @@ class KoStrings extends ChukoreStrings {
   String get teacherCorrect => '정답! 잘 고쳤어요';
   @override
   String get teacherWrong => '아깝다! 한 번 더 읽어 봐요';
+  @override
+  String get ringsTitle => '성장 나이테';
+  @override
+  String ringsSemantics(int totalDays) => '성장 나이테. 지금까지 모두 $totalDays일 학습했어요';
+  @override
+  String get deviationLabel => '예상 점수 지수';
+  @override
+  String deviationRange(String low, String high) => '$low~$high';
+  @override
+  String get deviationNote => '가정한 집단의 평균을 50으로 둔 대략적인 지수예요. 전국 순위가 아니에요.';
 }
 
 /// 中国語。[traditional] が true なら繁体字（`zh-Hant`・`zh-TW`・`zh-HK`）、false なら簡体字。
@@ -741,4 +816,14 @@ class ZhStrings extends ChukoreStrings {
   String get teacherCorrect => _t('答对了！你改正了', '答對了！你改正了');
   @override
   String get teacherWrong => _t('差一点！再读一遍吧', '差一點！再讀一遍吧');
+  @override
+  String get ringsTitle => _t('成长年轮', '成長年輪');
+  @override
+  String ringsSemantics(int totalDays) => _t('成长年轮。累计学习$totalDays天', '成長年輪。累計學習$totalDays天');
+  @override
+  String get deviationLabel => _t('预估分数指数', '預估分數指數');
+  @override
+  String deviationRange(String low, String high) => '$low~$high';
+  @override
+  String get deviationNote => _t('以假定群体的平均值为50的大致指数，并非全国排名。', '以假定群體的平均值為50的大致指數，並非全國排名。');
 }
