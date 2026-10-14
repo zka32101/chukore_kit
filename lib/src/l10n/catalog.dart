@@ -57,6 +57,13 @@ Map<String, String> stringsCatalog(ChukoreStrings s) {
   m['sheetAnswer'] = s.sheetAnswer;
   m['sheetExplanation'] = s.sheetExplanation;
   m['sheetEmpty'] = s.sheetEmpty;
+  m['checklistTitle'] = s.checklistTitle;
+  m['checklistProgress'] = s.checklistProgress(2, 6);
+  m['checklistAllDone'] = s.checklistAllDone;
+  m['fiveMinuteTitle'] = s.fiveMinuteTitle;
+  for (final (id, label) in s.checklistDefaults) {
+    m['checklistDefault($id)'] = label;
+  }
   m['decimalSeparator'] = s.decimalSeparator;
   return m;
 }
