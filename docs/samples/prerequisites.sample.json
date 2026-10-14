@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "prerequisites": [
+    {"unitId": "en1_verbs", "requires": ["en1_be"]},
+    {"unitId": "en1_be", "external": [
+      {"id": "shogaku_english_basic", "title": "小学英語: あいさつと自己紹介", "link": "https://example.com/shogaku-kore"}
+    ]}
+  ]
+}
