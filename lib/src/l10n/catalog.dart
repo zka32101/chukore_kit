@@ -52,6 +52,11 @@ Map<String, String> stringsCatalog(ChukoreStrings s) {
   m['deviationNote'] = s.deviationNote;
   m['markCorrect'] = s.markCorrect;
   m['markWrong'] = s.markWrong;
+  m['sheetTitle'] = s.sheetTitle;
+  m['sheetQuestion'] = s.sheetQuestion;
+  m['sheetAnswer'] = s.sheetAnswer;
+  m['sheetExplanation'] = s.sheetExplanation;
+  m['sheetEmpty'] = s.sheetEmpty;
   m['decimalSeparator'] = s.decimalSeparator;
   return m;
 }
