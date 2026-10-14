@@ -5,12 +5,14 @@ abstract class ChukoreStrings {
 
   /// 言語コード（`en`、`pt-BR`、`pt_PT` など）に合う文言。未対応の言語は英語。
   /// ポルトガル語は地域で綴りが違うので、`PT`（ポルトガル）のときだけ欧州式にする。
+  /// フランス語は `BE`・`CH` で 70・90 を septante・nonante と言う。
   /// スペイン語は地域で小数点が違う（メキシコなどは `.`、スペインなど多くは `,`）。
   factory ChukoreStrings.forLocale(String locale) {
     final parts = locale.toLowerCase().split(RegExp('[-_]'));
     return switch (parts.first) {
       'ja' => const JaStrings(),
       'pt' => parts.length > 1 && parts[1] == 'pt' ? const PtStrings(european: true) : const PtStrings(),
+      'fr' => FrStrings(septanteNonante: parts.length > 1 && FrStrings.septanteNonanteRegions.contains(parts[1])),
       'es' => EsStrings(decimalComma: !(parts.length > 1 && EsStrings.decimalPointRegions.contains(parts[1]))),
       _ => const EnStrings(),
     };
@@ -390,4 +392,118 @@ class EsStrings extends ChukoreStrings {
   String reportItem(String title, int b, int a) => '- $title ($b% -> $a%)';
   @override
   String get reportEmpty => 'No hay mejoras nuevas esta semana. Sigue a tu ritmo.';
+}
+
+/// フランス語。[septanteNonante] が true ならベルギー・スイス式（septante・nonante）。
+/// 数詞は伝統的な綴り（十の位と一の位はハイフン、百・千の前後は空白、`et un`）。
+class FrStrings extends ChukoreStrings {
+  const FrStrings({this.septanteNonante = false});
+
+  /// 70・90 を septante・nonante と言う地域（`fr-BE`・`fr-CH`）。80 は quatre-vingts のまま。
+  static const septanteNonanteRegions = {'be', 'ch'};
+
+  final bool septanteNonante;
+
+  static const _small = [
+    '', 'un', 'deux', 'trois', 'quatre', 'cinq', 'six', 'sept', 'huit', 'neuf', 'dix', 'onze',
+    'douze', 'treize', 'quatorze', 'quinze', 'seize',
+  ];
+  static const _tens = ['', '', 'vingt', 'trente', 'quarante', 'cinquante', 'soixante', 'septante', '', 'nonante'];
+
+  @override
+  String get languageCode => 'fr';
+
+  @override
+  String get decimalSeparator => ',';
+
+  /// 複数形は 2 から（フランス語では 1,5 は単数）。
+  static bool _plural(double v) => v >= 2;
+
+  static String _pointWord(String points) =>
+      _plural(double.tryParse(points.replaceAll(',', '.')) ?? 2) ? 'points' : 'point';
+
+  /// 1〜19。
+  static String _upTo19(int n) => n <= 16 ? _small[n] : 'dix-${_small[n - 10]}';
+
+  /// 1〜99。[last] は数の末尾か（quatre-vingts の s は末尾のときだけ）。
+  String _below100(int n, {required bool last}) {
+    if (n < 20) return _upTo19(n);
+    final t = n ~/ 10, u = n % 10;
+    String withUnit(String name) =>
+        u == 0 ? name : (u == 1 ? '$name et un' : '$name-${_small[u]}');
+    if (t <= 6) return withUnit(_tens[t]);
+    if (t == 7 || t == 9) {
+      if (septanteNonante) return withUnit(_tens[t]);
+      if (t == 7 && u == 1) return 'soixante et onze';
+      return '${t == 7 ? 'soixante' : 'quatre-vingt'}-${_upTo19(n - (t == 7 ? 60 : 80))}';
+    }
+    return u == 0 ? (last ? 'quatre-vingts' : 'quatre-vingt') : 'quatre-vingt-${_small[u]}';
+  }
+
+  /// 1〜999。cent の s も末尾で数が割り切れるときだけ（deux cents / deux cent un）。
+  String _below1000(int n, {required bool last}) {
+    final h = n ~/ 100, r = n % 100;
+    final parts = <String>[];
+    if (h == 1) {
+      parts.add('cent');
+    } else if (h > 1) {
+      parts.add('${_small[h]} cent${r == 0 && last ? 's' : ''}');
+    }
+    if (r > 0) parts.add(_below100(r, last: last));
+    return parts.join(' ');
+  }
+
+  @override
+  String gateNumberWords(int n) {
+    if (n < 1 || n > 9999) throw RangeError.range(n, 1, 9999, 'n');
+    final th = n ~/ 1000, r = n % 1000;
+    final thousands = th == 0 ? '' : (th == 1 ? 'mille' : '${_small[th]} mille');
+    if (r == 0) return thousands;
+    final rest = _below1000(r, last: true);
+    return th == 0 ? rest : '$thousands $rest';
+  }
+
+  // フランス語の約物（! ? : %）の前は改行されない空白を入れる。
+  static const _nb = '\u00A0';
+
+  @override
+  String cardTitle(String subject) => '$subject · Carte de progression';
+  @override
+  String get headlinePersonalBest => 'Nouveau record personnel$_nb!';
+  @override
+  String get headlineFirst => 'Un excellent début';
+  @override
+  String headlineUp(String points) => '+$points depuis la dernière fois';
+  @override
+  String get headlineSame => 'Stable, comme la dernière fois';
+  @override
+  String get headlineDown => 'Repartons de là pour progresser';
+  @override
+  String nextLevel(String points) => 'Plus que $points ${_pointWord(points)} pour le niveau suivant';
+  @override
+  String get topLevel => 'Niveau maximal atteint$_nb!';
+  @override
+  String streakDays(int days) => days < 2 ? '$days jour de suite' : '$days jours de suite';
+  @override
+  String get statStamps => 'Maîtrisés';
+  @override
+  String get statSolvable => 'Je sais maintenant résoudre';
+  @override
+  String solvableValue(int count) => count < 2 ? '$count question' : '$count questions';
+  @override
+  String cardSemantics(String headline, String level) => 'Carte de progression. $headline. Niveau $level';
+  @override
+  String get mapSemantics => 'Carte. Touchez pour choisir votre réponse';
+  @override
+  String formatYear(int year) => year < 0 ? '${-year} av. J.-C.' : '$year apr. J.-C.';
+  @override
+  String reportHeader(int activeDays, int attempts) =>
+      'Cette semaine$_nb: ${activeDays < 2 ? '$activeDays jour' : '$activeDays jours'} / '
+      '${attempts < 2 ? '$attempts question' : '$attempts questions'}';
+  @override
+  String get reportImprovedTitle => 'Progrès de la semaine$_nb:';
+  @override
+  String reportItem(String title, int b, int a) => '- $title ($b$_nb% -> $a$_nb%)';
+  @override
+  String get reportEmpty => 'Aucun nouveau progrès cette semaine. Continuez à votre rythme.';
 }
