@@ -40,6 +40,9 @@ Map<String, String> stringsCatalog(ChukoreStrings s) {
   for (final n in [100, 101, 271, 280, 482, 1500]) {
     m['gateNumberWords($n)'] = s.gateNumberWords(n);
   }
+  m['teacherPrompt'] = s.teacherPrompt;
+  m['teacherCorrect'] = s.teacherCorrect;
+  m['teacherWrong'] = s.teacherWrong;
   m['decimalSeparator'] = s.decimalSeparator;
   return m;
 }
