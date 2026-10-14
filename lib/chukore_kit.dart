@@ -16,6 +16,7 @@ export 'src/bank/question_bank.dart';
 export 'src/prereq/prerequisites.dart';
 export 'src/sheet/last_minute_sheet.dart';
 export 'src/dayof/day_of.dart';
+export 'src/share/scope_code.dart';
 export 'src/growth/growth.dart';
 export 'src/growth/growth_card.dart';
 export 'src/growth/growth_rings.dart';

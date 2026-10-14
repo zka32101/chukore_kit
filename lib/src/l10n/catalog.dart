@@ -64,6 +64,9 @@ Map<String, String> stringsCatalog(ChukoreStrings s) {
   for (final (id, label) in s.checklistDefaults) {
     m['checklistDefault($id)'] = label;
   }
+  m['scopeQrTitle'] = s.scopeQrTitle;
+  m['scopeQrHint'] = s.scopeQrHint;
+  m['scopeQrSemantics'] = s.scopeQrSemantics;
   m['decimalSeparator'] = s.decimalSeparator;
   return m;
 }

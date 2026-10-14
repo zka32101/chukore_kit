@@ -35,6 +35,9 @@ class UnitTree {
 
   bool isLeaf(String id) => (_children[id] ?? const []).isEmpty;
 
+  /// すべての葉（木の順）。
+  List<Unit> allLeaves() => resolveLeaves([for (final r in roots) r.id]);
+
   /// 選択した単元（親を選べば配下すべて）を葉に展開する。重複なし・木の順。
   List<Unit> resolveLeaves(Iterable<String> selectedIds) {
     final out = <String, Unit>{};
