@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   ptTests();
+  esTests();
   test('言語コードから文言を選ぶ（未対応は英語）', () {
     expect(ChukoreStrings.forLocale('ja').languageCode, 'ja');
     expect(ChukoreStrings.forLocale('ja_JP').languageCode, 'ja');
@@ -35,7 +36,7 @@ void main() {
   });
 
   test('すべての言語で全100〜999の読み上げが空にならない', () {
-    for (final s in const [JaStrings(), EnStrings(), PtStrings(), PtStrings(european: true)]) {
+    for (final s in const [JaStrings(), EnStrings(), PtStrings(), PtStrings(european: true), EsStrings()]) {
       for (var n = 100; n <= 999; n++) {
         expect(s.gateNumberWords(n).isNotEmpty, isTrue, reason: '${s.languageCode} $n');
       }
@@ -219,5 +220,85 @@ void ptTests() {
       expect(checkAnswer(q, '1.200,5', decimalSeparator: ',').correct, isTrue);
       expect(checkAnswer(q, '1200,5', decimalSeparator: ',').correct, isTrue);
     });
+  });
+}
+
+void esTests() {
+  group('スペイン語', () {
+    test('forLocale: es は小数点カンマ、es-MX などは小数点ドット', () {
+      expect(ChukoreStrings.forLocale('es'), isA<EsStrings>());
+      expect(ChukoreStrings.forLocale('es-ES').decimalSeparator, ',');
+      expect(ChukoreStrings.forLocale('es_AR').decimalSeparator, ',');
+      expect(ChukoreStrings.forLocale('es-MX').decimalSeparator, '.');
+      expect(ChukoreStrings.forLocale('es-US').decimalSeparator, '.');
+      expect(const EsStrings(decimalComma: false).decimalSeparator, '.');
+    });
+
+    test('数の読み上げ', () {
+      const es = EsStrings();
+      expect(es.gateNumberWords(482), 'cuatrocientos ochenta y dos');
+      expect(es.gateNumberWords(100), 'cien');
+      expect(es.gateNumberWords(101), 'ciento uno');
+      expect(es.gateNumberWords(115), 'ciento quince');
+      expect(es.gateNumberWords(121), 'ciento veintiuno');
+      expect(es.gateNumberWords(122), 'ciento veintidós');
+      expect(es.gateNumberWords(130), 'ciento treinta');
+      expect(es.gateNumberWords(500), 'quinientos');
+      expect(es.gateNumberWords(716), 'setecientos dieciséis');
+      expect(es.gateNumberWords(999), 'novecientos noventa y nueve');
+      expect(es.gateNumberWords(1000), 'mil');
+      expect(es.gateNumberWords(1500), 'mil quinientos');
+      expect(es.gateNumberWords(2025), 'dos mil veinticinco');
+    });
+
+    test('成長カード: 小数点と単数形、下がっても落ち込ませない', () {
+      GrowthCardData d(double? delta, {double? toNext = 5, ChukoreStrings s = const EsStrings()}) =>
+          GrowthCardData(
+            subjectLabel: 'Inglés',
+            level: Level.b,
+            pointsToNext: toNext,
+            scoreDelta: delta,
+            strings: s,
+            radar: const [RadarAxis('a', .5), RadarAxis('b', .5), RadarAxis('c', .5)],
+          );
+      expect(d(2.5).headline, '+2,5 desde la última vez');
+      expect(d(2.5, s: const EsStrings(decimalComma: false)).headline, '+2.5 desde la última vez');
+      expect(d(-4).headline, 'Sigamos creciendo desde aquí');
+      expect(d(-4).headline.contains('-'), isFalse);
+      expect(d(null, toNext: 1).nextLine, 'Falta 1 punto para el siguiente nivel');
+      expect(d(null, toNext: 7.5).nextLine, 'Faltan 7,5 puntos para el siguiente nivel');
+      expect(d(1, toNext: null).nextLine, '¡Nivel máximo alcanzado!');
+    });
+
+    test('レポート・年・単複', () {
+      final r = WeeklyReport(
+        weekStart: DateTime.utc(2026, 10, 13),
+        attemptCount: 1,
+        activeDays: 3,
+        improvements: const [Improvement('u', 'Verbos', 0.4, 0.7)],
+      );
+      expect(r.toText(strings: const EsStrings()),
+          'Esta semana: 3 días / 1 pregunta\nMejoraste esta semana:\n- Verbos (40% -> 70%)');
+      expect(const EsStrings().formatYear(-500), '500 a. C.');
+      expect(const EsStrings().formatYear(1810), '1810 d. C.');
+      expect(const EsStrings().streakDays(1), '1 día seguido');
+    });
+
+    test('数値入力は strings.decimalSeparator をそのまま渡せる', () {
+      const q = Question(
+        id: 'q', unitId: 'u', type: 'numeric', difficulty: .5,
+        choices: [], answer: '1200.5', explanationId: 'x',
+      );
+      const es = EsStrings();
+      const mx = EsStrings(decimalComma: false);
+      expect(checkAnswer(q, '1.200,5', decimalSeparator: es.decimalSeparator).correct, isTrue);
+      expect(checkAnswer(q, '1,200.5', decimalSeparator: mx.decimalSeparator).correct, isTrue);
+    });
+  });
+
+  test('単数形: 英語・ポルトガル語も 1 点のとき単数', () {
+    expect(const EnStrings().nextLevel('1'), '1 more point to the next level');
+    expect(const PtStrings().nextLevel('1'), 'Falta 1 ponto para o próximo nível');
+    expect(const PtStrings().nextLevel('3'), 'Faltam 3 pontos para o próximo nível');
   });
 }
