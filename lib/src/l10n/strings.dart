@@ -5,20 +5,26 @@ abstract class ChukoreStrings {
 
   /// 言語コード（`en`、`pt-BR`、`pt_PT` など）に合う文言。未対応の言語は英語。
   /// ポルトガル語は地域で綴りが違うので、`PT`（ポルトガル）のときだけ欧州式にする。
+  /// スペイン語は地域で小数点が違う（メキシコなどは `.`、スペインなど多くは `,`）。
   factory ChukoreStrings.forLocale(String locale) {
     final parts = locale.toLowerCase().split(RegExp('[-_]'));
     return switch (parts.first) {
       'ja' => const JaStrings(),
       'pt' => parts.length > 1 && parts[1] == 'pt' ? const PtStrings(european: true) : const PtStrings(),
+      'es' => EsStrings(decimalComma: !(parts.length > 1 && EsStrings.decimalPointRegions.contains(parts[1]))),
       _ => const EnStrings(),
     };
   }
 
   String get languageCode;
 
+  /// 小数点の記号。数値入力の `checkAnswer(..., decimalSeparator:)` にもこの値を渡す。
+  String get decimalSeparator => '.';
+
   /// 点数などの小数の表記（小数点は国で違う）。整数は小数点なし。
-  String formatNumber(double v) =>
-      v == v.roundToDouble() ? v.round().toString() : v.toStringAsFixed(1);
+  String formatNumber(double v) => v == v.roundToDouble()
+      ? v.round().toString()
+      : v.toStringAsFixed(1).replaceAll('.', decimalSeparator);
 
   // --- 保護者ゲート ---
   /// 出題する数（100〜999）の読み上げ表記。ja は漢数字、en は英単語。
@@ -161,7 +167,8 @@ class EnStrings extends ChukoreStrings {
   @override
   String get headlineDown => "Let's build from here";
   @override
-  String nextLevel(String points) => '$points more points to the next level';
+  String nextLevel(String points) =>
+      points == '1' ? '1 more point to the next level' : '$points more points to the next level';
   @override
   String get topLevel => 'Top level reached!';
   @override
@@ -214,8 +221,7 @@ class PtStrings extends ChukoreStrings {
   String get languageCode => 'pt';
 
   @override
-  String formatNumber(double v) =>
-      v == v.roundToDouble() ? v.round().toString() : v.toStringAsFixed(1).replaceAll('.', ',');
+  String get decimalSeparator => ',';
 
   /// 1〜999 の読み（「cem」「cento e um」「quatrocentos e oitenta e dois」）。
   String _below1000(int n) {
@@ -257,7 +263,8 @@ class PtStrings extends ChukoreStrings {
   @override
   String get headlineDown => 'Vamos crescer a partir daqui';
   @override
-  String nextLevel(String points) => 'Faltam $points pontos para o próximo nível';
+  String nextLevel(String points) =>
+      points == '1' ? 'Falta 1 ponto para o próximo nível' : 'Faltam $points pontos para o próximo nível';
   @override
   String get topLevel => 'Nível máximo alcançado!';
   @override
@@ -284,4 +291,103 @@ class PtStrings extends ChukoreStrings {
   String reportItem(String title, int b, int a) => '- $title ($b% -> $a%)';
   @override
   String get reportEmpty => 'Nenhuma evolução nova esta semana. Continue no seu ritmo.';
+}
+
+/// スペイン語。[decimalComma] が false なら小数点が `.` の地域（メキシコ・米国・中米の一部など）。
+class EsStrings extends ChukoreStrings {
+  const EsStrings({this.decimalComma = true});
+
+  /// 小数点が `.` の地域（`es-MX` など。ベストエフォート。他の地域は `EsStrings(decimalComma: false)` で個別指定）。
+  static const decimalPointRegions = {'mx', 'us', 'gt', 'hn', 'ni', 'sv', 'do', 'pr', 'pa'};
+
+  final bool decimalComma;
+
+  static const _units = ['', 'uno', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve'];
+  static const _teens = [
+    'diez', 'once', 'doce', 'trece', 'catorce', 'quince', 'dieciséis', 'diecisiete', 'dieciocho', 'diecinueve',
+  ];
+  static const _twenties = [
+    'veinte', 'veintiuno', 'veintidós', 'veintitrés', 'veinticuatro', 'veinticinco', 'veintiséis',
+    'veintisiete', 'veintiocho', 'veintinueve',
+  ];
+  static const _tens = ['', '', '', 'treinta', 'cuarenta', 'cincuenta', 'sesenta', 'setenta', 'ochenta', 'noventa'];
+  static const _hundreds = [
+    '', 'ciento', 'doscientos', 'trescientos', 'cuatrocientos', 'quinientos', 'seiscientos', 'setecientos',
+    'ochocientos', 'novecientos',
+  ];
+
+  @override
+  String get languageCode => 'es';
+
+  @override
+  String get decimalSeparator => decimalComma ? ',' : '.';
+
+  /// 1〜999 の読み（「cien」「ciento uno」「cuatrocientos ochenta y dos」）。
+  String _below1000(int n) {
+    if (n == 100) return 'cien';
+    final h = n ~/ 100, r = n % 100;
+    final parts = <String>[];
+    if (h > 0) parts.add(_hundreds[h]);
+    if (r > 0) {
+      parts.add(r < 10
+          ? _units[r]
+          : r < 20
+              ? _teens[r - 10]
+              : r < 30
+                  ? _twenties[r - 20]
+                  : (r % 10 == 0 ? _tens[r ~/ 10] : '${_tens[r ~/ 10]} y ${_units[r % 10]}'));
+    }
+    return parts.join(' ');
+  }
+
+  @override
+  String gateNumberWords(int n) {
+    if (n < 1 || n > 9999) throw RangeError.range(n, 1, 9999, 'n');
+    final th = n ~/ 1000, r = n % 1000;
+    final thousands = th == 0 ? '' : (th == 1 ? 'mil' : '${_units[th]} mil');
+    if (r == 0) return thousands;
+    return th == 0 ? _below1000(r) : '$thousands ${_below1000(r)}';
+  }
+
+  @override
+  String cardTitle(String subject) => '$subject · Tarjeta de progreso';
+  @override
+  String get headlinePersonalBest => '¡Nuevo récord personal!';
+  @override
+  String get headlineFirst => 'Un gran comienzo';
+  @override
+  String headlineUp(String points) => '+$points desde la última vez';
+  @override
+  String get headlineSame => 'Estable, igual que la última vez';
+  @override
+  String get headlineDown => 'Sigamos creciendo desde aquí';
+  @override
+  String nextLevel(String points) =>
+      points == '1' ? 'Falta 1 punto para el siguiente nivel' : 'Faltan $points puntos para el siguiente nivel';
+  @override
+  String get topLevel => '¡Nivel máximo alcanzado!';
+  @override
+  String streakDays(int days) => days == 1 ? '1 día seguido' : '$days días seguidos';
+  @override
+  String get statStamps => 'Superados';
+  @override
+  String get statSolvable => 'Ya sé resolver';
+  @override
+  String solvableValue(int count) => count == 1 ? '1 pregunta' : '$count preguntas';
+  @override
+  String cardSemantics(String headline, String level) => 'Tarjeta de progreso. $headline. Nivel $level';
+  @override
+  String get mapSemantics => 'Mapa. Toca para elegir tu respuesta';
+  @override
+  String formatYear(int year) => year < 0 ? '${-year} a. C.' : '$year d. C.';
+  @override
+  String reportHeader(int activeDays, int attempts) =>
+      'Esta semana: ${activeDays == 1 ? '1 día' : '$activeDays días'} / '
+      '${attempts == 1 ? '1 pregunta' : '$attempts preguntas'}';
+  @override
+  String get reportImprovedTitle => 'Mejoraste esta semana:';
+  @override
+  String reportItem(String title, int b, int a) => '- $title ($b% -> $a%)';
+  @override
+  String get reportEmpty => 'No hay mejoras nuevas esta semana. Sigue a tu ritmo.';
 }
