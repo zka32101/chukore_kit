@@ -17,6 +17,7 @@ SQLite 保存: `package:chukore_kit/chukore_kit_sqlite.dart`（sqlite3。コー�
 実装済み追加: さかのぼり診断（`PrerequisiteGraph`・`diagnoseBacktrace`。他アプリの前提は誘導リンクだけ）。
 実装済み追加: 直前プリント（`buildLastMinuteSheet`・`renderSheetHtml`。間違い理由別・未克服のみ。A4 印刷用の HTML で、端末のフォントを使うので言語を問わず印刷できる）。
 実装済み追加: 当日チェック（持ち物チェックリスト `DayChecklist`・`DayChecklistView`、直前5分カード `buildFiveMinuteCard`）。うかラボとの共通化は app_common_kit 側で別途。
+実装済み追加: 範囲カードの QR 共有（`encodeScope`・`decodeScope`・`ScopeQrView`）。
 未実装: キャラ収集（キャラ案の確定待ち）、英語アプリとの結合。
 中核ロジックは Flutter 非依存（`chukore_kit.dart`）。画面部品は別入口 `chukore_kit_ui.dart`（地図タップの描画 `RegionTapMap` など）。UI 連携時に app_common_kit を依存に加える。
 
@@ -48,3 +49,12 @@ flutter pub get && flutter analyze && flutter test
 - **色だけに頼らない**: 地図タップの回答後は、正解にチェック（✓）・不正解にバツ（✗）の図形を重ねる（`RegionMark`）。年表の回答後も ✓ / ✗ のアイコンを出す。色覚の多様性や白黒表示でも正誤が分かる。
 - **スクリーンリーダー**: 地図は領域ごとにボタンとして読み上げ・操作できる（`CustomPainter.semanticsBuilder`）。回答後は「Alpha (correct)」のように正解・不正解も言う。選択対象外・回答後は操作不可。領域が小さくても押せるよう、最低 24 の大きさにしている。年表のアイコンも、各行の読み上げと一体で正誤を伝える。
 - 読み上げの言語は `strings:`（`RegionTapMap`・`TimelineOrderList`）で切り替える。
+
+## 範囲カードの共有（QR）
+
+テスト範囲を、短い符号 `CKS1.<教科>.<ツリーの版>.<指紋>.<選んだ単元のビット列>[.<テスト日>]` にして QR で渡す（`encodeScope` / `decodeScope` / `ScopeQrView`）。
+
+- **個人情報は入らない**: 入るのは教科・単元ツリーの版と指紋・どの葉の単元を選んだか・（任意で）テスト日だけ。名前・ID・メール・成績・匿名UIDは入らない（文字種・構成をテストで保証）。単元の名前や単元IDそのものも入らない。
+- 送り手と受け手の単元ツリーが**同じ版・同じ中身**のときだけ読める（指紋で確かめる）。違うときは `ScopeError.treeMismatch`（アプリが古い）や `subjectMismatch` を返すので、アプリは「アプリを更新してください」などを出す。
+- 単元ツリーは1つの教科だけで作る前提（教科は単元から決まる）。
+- **設計書では「法務確認後」の機能**。このパッケージは符号化と QR の描画までで、共有の画面を実際に公開するかはアプリ側で決める（法務確認が済むまで出さない）。QR を読み取る側（カメラ）もアプリ側。

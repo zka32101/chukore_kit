@@ -82,6 +82,11 @@ abstract class ChukoreStrings {
   String reportItem(String title, int beforePercent, int afterPercent);
   String get reportEmpty;
 
+  // --- 範囲カードの共有（QR）---
+  String get scopeQrTitle;
+  String get scopeQrHint;
+  String get scopeQrSemantics;
+
   // --- 当日チェック・直前5分カード ---
   String get checklistTitle;
   String checklistProgress(int done, int total);
@@ -225,6 +230,12 @@ class JaStrings extends ChukoreStrings {
         ('tissue', 'ハンカチ・ティッシュ'),
         ('notes', '直前ノート'),
       ];
+  @override
+  String get scopeQrTitle => 'テスト範囲を渡す';
+  @override
+  String get scopeQrHint => '友達や家族に読み取ってもらうと、同じ範囲を設定できます。名前や成績は入っていません。';
+  @override
+  String get scopeQrSemantics => 'テスト範囲のQRコード';
 }
 
 class EnStrings extends ChukoreStrings {
@@ -346,6 +357,12 @@ class EnStrings extends ChukoreStrings {
         ('tissue', 'Handkerchief and tissues'),
         ('notes', 'Review notes'),
       ];
+  @override
+  String get scopeQrTitle => 'Share your test scope';
+  @override
+  String get scopeQrHint => 'Friends or family can scan this to set the same scope. It contains no names or scores.';
+  @override
+  String get scopeQrSemantics => 'QR code for the test scope';
 }
 
 /// ポルトガル語。既定はブラジル式（pt-BR）。[european] が true ならポルトガル式（pt-PT）の綴り。
@@ -494,6 +511,13 @@ class PtStrings extends ChukoreStrings {
         ('tissue', 'Lenço e lenços de papel'),
         ('notes', 'Anotações de revisão'),
       ];
+  @override
+  String get scopeQrTitle => 'Compartilhar o conteúdo da prova';
+  @override
+  String get scopeQrHint =>
+      'Amigos ou família podem escanear para definir o mesmo conteúdo. Não contém nomes nem notas.';
+  @override
+  String get scopeQrSemantics => 'Código QR do conteúdo da prova';
 }
 
 /// スペイン語。[decimalComma] が false なら小数点が `.` の地域（メキシコ・米国・中米の一部など）。
@@ -645,6 +669,13 @@ class EsStrings extends ChukoreStrings {
         ('tissue', 'Pañuelo y pañuelos de papel'),
         ('notes', 'Apuntes de repaso'),
       ];
+  @override
+  String get scopeQrTitle => 'Compartir el temario del examen';
+  @override
+  String get scopeQrHint =>
+      'Amigos o familiares pueden escanearlo para configurar el mismo temario. No contiene nombres ni notas.';
+  @override
+  String get scopeQrSemantics => 'Código QR del temario del examen';
 }
 
 /// フランス語。[septanteNonante] が true ならベルギー・スイス式（septante・nonante）。
@@ -811,6 +842,13 @@ class FrStrings extends ChukoreStrings {
         ('tissue', 'Mouchoirs'),
         ('notes', 'Notes de révision'),
       ];
+  @override
+  String get scopeQrTitle => 'Partager le périmètre du test';
+  @override
+  String get scopeQrHint =>
+      'Vos amis ou votre famille peuvent le scanner pour définir le même périmètre. Il ne contient ni nom ni note.';
+  @override
+  String get scopeQrSemantics => 'QR code du périmètre du test';
 }
 
 /// 韓国語。数の読み上げは漢字語の数詞（사백팔십이）。
@@ -923,6 +961,12 @@ class KoStrings extends ChukoreStrings {
         ('tissue', '손수건과 휴지'),
         ('notes', '직전 요약 노트'),
       ];
+  @override
+  String get scopeQrTitle => '시험 범위 공유하기';
+  @override
+  String get scopeQrHint => '친구나 가족이 스캔하면 같은 범위를 설정할 수 있어요. 이름이나 성적은 들어 있지 않아요.';
+  @override
+  String get scopeQrSemantics => '시험 범위 QR 코드';
 }
 
 /// 中国語。[traditional] が true なら繁体字（`zh-Hant`・`zh-TW`・`zh-HK`）、false なら簡体字。
@@ -1073,4 +1117,11 @@ class ZhStrings extends ChukoreStrings {
         ('tissue', '手帕和纸巾'),
         ('notes', '复习笔记'),
       ];
+  @override
+  String get scopeQrTitle => _t('分享考试范围', '分享考試範圍');
+  @override
+  String get scopeQrHint =>
+      _t('朋友或家人扫描后即可设置相同的范围。不含姓名或成绩。', '朋友或家人掃描後即可設定相同的範圍。不含姓名或成績。');
+  @override
+  String get scopeQrSemantics => _t('考试范围二维码', '考試範圍 QR 碼');
 }
