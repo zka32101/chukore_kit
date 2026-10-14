@@ -20,8 +20,8 @@ flutter pub get && flutter analyze && flutter test
 
 ## 海外対応（i18n）
 
-- 文言は `ChukoreStrings`（`JaStrings` / `EnStrings`）に集約。`ChukoreStrings.forLocale('en-US')` で選ぶ（未対応の言語は英語）。成長カード・週次レポート・地図/年表の読み上げ・年の表記に渡す。言語を増やすときは `ChukoreStrings` を実装して `forLocale` に足す。
+- 文言は `ChukoreStrings`（`JaStrings` / `EnStrings` / `PtStrings`）に集約。`ChukoreStrings.forLocale('pt-BR')` のように選ぶ（未対応の言語は英語）。ポルトガル語は既定がブラジル式、`pt-PT` のときだけ欧州式の綴り（dezasseis など）。成長カード・週次レポート・地図/年表の読み上げ・年の表記に渡す。言語を増やすときは `ChukoreStrings` を実装して `forLocale` に足す。
 - 保護者ゲートの読み上げは言語ごと（日本語=漢数字、英語=英単語）。`GateChallenge.promptFor(strings)`。入力は全角・桁区切り（`, . 空白`）を許容。
-- 数値入力は `checkAnswer(..., decimalSeparator: ',')` で、小数点がカンマの国（欧州など）に対応。マイナス記号の違い（U+2212・全角）も吸収。
+- 数値入力は `checkAnswer(..., decimalSeparator: ',')` で、小数点がカンマの国（ブラジル・ポルトガルなどの欧州・中南米）に対応。点数の表示の小数点も言語ごと（`formatNumber`）。マイナス記号の違い（U+2212・全角）も吸収。
 - 日付はデバイスの**ローカル暦日**で扱う。SQLite は UTC で保存し、読み出しはローカル時刻、範囲の境界はローカル0時を UTC に直して比較（時差のある国でも日付がずれない）。`dateOnly` には必ずローカル時刻の DateTime を渡す。
 - 問題データ・単元名・キャラ名・教科色は教科アプリ側（多言語化はアプリ側）。

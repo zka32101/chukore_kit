@@ -62,7 +62,7 @@ class GrowthCardData {
     if (isPersonalBest) return strings.headlinePersonalBest;
     final d = scoreDelta;
     if (d == null) return strings.headlineFirst;
-    if (d > 0) return strings.headlineUp(_fmt(d));
+    if (d > 0) return strings.headlineUp(strings.formatNumber(d));
     if (d == 0) return strings.headlineSame;
     return strings.headlineDown;
   }
@@ -70,11 +70,8 @@ class GrowthCardData {
   /// 次のレベルへの案内。最上位は祝う文言。
   String get nextLine {
     final p = pointsToNext;
-    return p == null ? strings.topLevel : strings.nextLevel(_fmt(p));
+    return p == null ? strings.topLevel : strings.nextLevel(strings.formatNumber(p));
   }
-
-  static String _fmt(double v) =>
-      v == v.roundToDouble() ? v.round().toString() : v.toStringAsFixed(1);
 }
 
 /// 共有できるか。13歳未満は保護者ゲートを通した後のみ。共有は毎回ユーザーが押す前提。
