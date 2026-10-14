@@ -11,7 +11,7 @@ void main() {
   const cognates = {
     // 英語と同じ「N question(s)」。question はフランス語でも同じ綴り
     // フランス語の correct / incorrect も英語と同じ綴り
-    'fr': {'solvableValue(1)', 'solvableValue(2)', 'solvableValue(5)', 'markCorrect', 'markWrong'},
+    'fr': {'solvableValue(1)', 'solvableValue(2)', 'solvableValue(5)', 'markCorrect', 'markWrong', 'sheetQuestion'},
   };
 
   test('言語タグが重複しない', () {

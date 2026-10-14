@@ -82,6 +82,13 @@ abstract class ChukoreStrings {
   String reportItem(String title, int beforePercent, int afterPercent);
   String get reportEmpty;
 
+  // --- 直前プリント ---
+  String get sheetTitle;
+  String get sheetQuestion;
+  String get sheetAnswer;
+  String get sheetExplanation;
+  String get sheetEmpty;
+
   // --- アクセシビリティ（色だけに頼らない）---
   String get markCorrect;
   String get markWrong;
@@ -182,6 +189,16 @@ class JaStrings extends ChukoreStrings {
   String get markCorrect => '正解';
   @override
   String get markWrong => '不正解';
+  @override
+  String get sheetTitle => '直前プリント';
+  @override
+  String get sheetQuestion => '問題';
+  @override
+  String get sheetAnswer => '答え';
+  @override
+  String get sheetExplanation => '解説';
+  @override
+  String get sheetEmpty => '直すところは今のところありません。よくがんばったね！';
 }
 
 class EnStrings extends ChukoreStrings {
@@ -276,6 +293,16 @@ class EnStrings extends ChukoreStrings {
   String get markCorrect => 'correct';
   @override
   String get markWrong => 'incorrect';
+  @override
+  String get sheetTitle => 'Last-minute sheet';
+  @override
+  String get sheetQuestion => 'Question';
+  @override
+  String get sheetAnswer => 'Answer';
+  @override
+  String get sheetExplanation => 'Explanation';
+  @override
+  String get sheetEmpty => 'Nothing to fix right now. Great work!';
 }
 
 /// ポルトガル語。既定はブラジル式（pt-BR）。[european] が true ならポルトガル式（pt-PT）の綴り。
@@ -397,6 +424,16 @@ class PtStrings extends ChukoreStrings {
   String get markCorrect => 'correto';
   @override
   String get markWrong => 'incorreto';
+  @override
+  String get sheetTitle => 'Folha de revisão final';
+  @override
+  String get sheetQuestion => 'Questão';
+  @override
+  String get sheetAnswer => 'Resposta';
+  @override
+  String get sheetExplanation => 'Explicação';
+  @override
+  String get sheetEmpty => 'Nada para corrigir agora. Ótimo trabalho!';
 }
 
 /// スペイン語。[decimalComma] が false なら小数点が `.` の地域（メキシコ・米国・中米の一部など）。
@@ -521,6 +558,16 @@ class EsStrings extends ChukoreStrings {
   String get markCorrect => 'correcto';
   @override
   String get markWrong => 'incorrecto';
+  @override
+  String get sheetTitle => 'Hoja de repaso final';
+  @override
+  String get sheetQuestion => 'Pregunta';
+  @override
+  String get sheetAnswer => 'Respuesta';
+  @override
+  String get sheetExplanation => 'Explicación';
+  @override
+  String get sheetEmpty => 'No hay nada que corregir ahora. ¡Buen trabajo!';
 }
 
 /// フランス語。[septanteNonante] が true ならベルギー・スイス式（septante・nonante）。
@@ -660,6 +707,16 @@ class FrStrings extends ChukoreStrings {
   String get markCorrect => 'correct';
   @override
   String get markWrong => 'incorrect';
+  @override
+  String get sheetTitle => 'Fiche de dernière minute';
+  @override
+  String get sheetQuestion => 'Question';
+  @override
+  String get sheetAnswer => 'Réponse';
+  @override
+  String get sheetExplanation => 'Explication';
+  @override
+  String get sheetEmpty => 'Rien à corriger pour le moment. Bravo$_nb!';
 }
 
 /// 韓国語。数の読み上げは漢字語の数詞（사백팔십이）。
@@ -745,6 +802,16 @@ class KoStrings extends ChukoreStrings {
   String get markCorrect => '정답';
   @override
   String get markWrong => '오답';
+  @override
+  String get sheetTitle => '시험 직전 프린트';
+  @override
+  String get sheetQuestion => '문제';
+  @override
+  String get sheetAnswer => '정답';
+  @override
+  String get sheetExplanation => '해설';
+  @override
+  String get sheetEmpty => '지금은 고칠 곳이 없어요. 정말 잘했어요!';
 }
 
 /// 中国語。[traditional] が true なら繁体字（`zh-Hant`・`zh-TW`・`zh-HK`）、false なら簡体字。
@@ -859,4 +926,14 @@ class ZhStrings extends ChukoreStrings {
   String get markCorrect => _t('正确', '正確');
   @override
   String get markWrong => _t('错误', '錯誤');
+  @override
+  String get sheetTitle => _t('考前复习单', '考前複習單');
+  @override
+  String get sheetQuestion => _t('题目', '題目');
+  @override
+  String get sheetAnswer => '答案';
+  @override
+  String get sheetExplanation => '解析';
+  @override
+  String get sheetEmpty => _t('现在没有需要改正的地方。做得很好！', '現在沒有需要改正的地方。做得很好！');
 }
