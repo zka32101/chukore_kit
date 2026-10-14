@@ -10,7 +10,8 @@ void main() {
   /// 英語と綴りが同じでも正しい文言（同語源の語）。言語ごとに必要最小限だけ許可する。
   const cognates = {
     // 英語と同じ「N question(s)」。question はフランス語でも同じ綴り
-    'fr': {'solvableValue(1)', 'solvableValue(2)', 'solvableValue(5)'},
+    // フランス語の correct / incorrect も英語と同じ綴り
+    'fr': {'solvableValue(1)', 'solvableValue(2)', 'solvableValue(5)', 'markCorrect', 'markWrong'},
   };
 
   test('言語タグが重複しない', () {
