@@ -5,6 +5,7 @@ abstract class ChukoreStrings {
 
   /// 言語コード（`en`、`pt-BR`、`pt_PT` など）に合う文言。未対応の言語は英語。
   /// ポルトガル語は地域で綴りが違うので、`PT`（ポルトガル）のときだけ欧州式にする。
+  /// 中国語は簡体（既定）・繁体（`Hant`・`TW`・`HK`・`MO`）。
   /// フランス語は `BE`・`CH` で 70・90 を septante・nonante と言う。
   /// スペイン語は地域で小数点が違う（メキシコなどは `.`、スペインなど多くは `,`）。
   factory ChukoreStrings.forLocale(String locale) {
@@ -12,6 +13,8 @@ abstract class ChukoreStrings {
     return switch (parts.first) {
       'ja' => const JaStrings(),
       'pt' => parts.length > 1 && parts[1] == 'pt' ? const PtStrings(european: true) : const PtStrings(),
+      'ko' => const KoStrings(),
+      'zh' => ZhStrings(traditional: ZhStrings.isTraditional(parts)),
       'fr' => FrStrings(septanteNonante: parts.length > 1 && FrStrings.septanteNonanteRegions.contains(parts[1])),
       'es' => EsStrings(decimalComma: !(parts.length > 1 && EsStrings.decimalPointRegions.contains(parts[1]))),
       _ => const EnStrings(),
@@ -33,6 +36,9 @@ abstract class ChukoreStrings {
     EsStrings(decimalComma: false),
     FrStrings(),
     FrStrings(septanteNonante: true),
+    KoStrings(),
+    ZhStrings(),
+    ZhStrings(traditional: true),
   ];
 
   /// 小数点の記号。数値入力の `checkAnswer(..., decimalSeparator:)` にもこの値を渡す。
@@ -530,4 +536,162 @@ class FrStrings extends ChukoreStrings {
   String reportItem(String title, int b, int a) => '- $title ($b$_nb% -> $a$_nb%)';
   @override
   String get reportEmpty => 'Aucun nouveau progrès cette semaine. Continuez à votre rythme.';
+}
+
+/// 韓国語。数の読み上げは漢字語の数詞（사백팔십이）。
+class KoStrings extends ChukoreStrings {
+  const KoStrings();
+
+  static const _digit = ['', '일', '이', '삼', '사', '오', '육', '칠', '팔', '구'];
+
+  @override
+  String get languageCode => 'ko';
+
+  @override
+  String gateNumberWords(int n) {
+    if (n < 1 || n > 9999) throw RangeError.range(n, 1, 9999, 'n');
+    final b = StringBuffer();
+    const units = ['천', '백', '십'];
+    final digits = [n ~/ 1000, n % 1000 ~/ 100, n % 100 ~/ 10];
+    for (var i = 0; i < 3; i++) {
+      final d = digits[i];
+      if (d == 0) continue;
+      if (d != 1) b.write(_digit[d]); // 천・백・십の前の「일」は言わない
+      b.write(units[i]);
+    }
+    b.write(_digit[n % 10]);
+    return b.toString();
+  }
+
+  @override
+  String cardTitle(String subject) => '$subject 성장 카드';
+  @override
+  String get headlinePersonalBest => '개인 최고 기록 갱신!';
+  @override
+  String get headlineFirst => '멋진 첫걸음';
+  @override
+  String headlineUp(String points) => '지난번보다 +$points점';
+  @override
+  String get headlineSame => '지난번과 같아요. 안정적이에요';
+  @override
+  String get headlineDown => '여기서부터 다시 키워 봐요';
+  @override
+  String nextLevel(String points) => '다음 레벨까지 $points점';
+  @override
+  String get topLevel => '최고 레벨 달성!';
+  @override
+  String streakDays(int days) => '$days일 연속';
+  @override
+  String get statStamps => '극복 스탬프';
+  @override
+  String get statSolvable => '이제 풀 수 있는 문제';
+  @override
+  String solvableValue(int count) => '$count문제';
+  @override
+  String cardSemantics(String headline, String level) => '성장 카드. $headline. 레벨 $level';
+  @override
+  String get mapSemantics => '지도. 탭해서 정답을 고르세요';
+  @override
+  String formatYear(int year) => year < 0 ? '기원전 ${-year}년' : '$year년';
+  @override
+  String reportHeader(int activeDays, int attempts) => '이번 주 학습: $activeDays일 / $attempts문제';
+  @override
+  String get reportImprovedTitle => '이번 주 성장한 부분:';
+  @override
+  String reportItem(String title, int b, int a) => '- $title ($b% -> $a%)';
+  @override
+  String get reportEmpty => '이번 주에는 새로 성장한 단원이 없어요. 천천히 이어 가요.';
+}
+
+/// 中国語。[traditional] が true なら繁体字（`zh-Hant`・`zh-TW`・`zh-HK`）、false なら簡体字。
+class ZhStrings extends ChukoreStrings {
+  const ZhStrings({this.traditional = false});
+
+  final bool traditional;
+
+  /// ロケールの要素（小文字）から繁体字か判定。スクリプト（hans・hant）が地域より優先。
+  static bool isTraditional(List<String> parts) {
+    if (parts.contains('hans')) return false;
+    if (parts.contains('hant')) return true;
+    return parts.any(const {'tw', 'hk', 'mo'}.contains);
+  }
+
+  static const _digit = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+
+  String _t(String hans, String hant) => traditional ? hant : hans;
+
+  @override
+  String get languageCode => 'zh';
+
+  @override
+  String get tag => traditional ? 'zh-Hant' : 'zh-Hans';
+
+  /// 数の読み（簡体・繁体で同じ字）。零の入れ方: 途中の 0 の桁は「零」を1つ（一百零五）、
+  /// 末尾の 0 は言わない（一百）。10〜19 だけは「十五」、百の位以上のあとは「一十」（一百一十）。
+  @override
+  String gateNumberWords(int n) {
+    if (n < 1 || n > 9999) throw RangeError.range(n, 1, 9999, 'n');
+    const units = ['千', '百', '十', ''];
+    final digits = [n ~/ 1000, n % 1000 ~/ 100, n % 100 ~/ 10, n % 10];
+    final b = StringBuffer();
+    var started = false, zeroPending = false;
+    for (var i = 0; i < 4; i++) {
+      final d = digits[i];
+      if (d == 0) {
+        if (started) zeroPending = true;
+        continue;
+      }
+      if (zeroPending) b.write('零');
+      zeroPending = false;
+      if (d == 1 && units[i] == '十' && !started) {
+        b.write('十');
+      } else {
+        b.write('${_digit[d]}${units[i]}');
+      }
+      started = true;
+    }
+    return b.toString();
+  }
+
+  @override
+  String cardTitle(String subject) => _t('$subject 成长卡片', '$subject 成長卡片');
+  @override
+  String get headlinePersonalBest => _t('刷新个人最佳！', '刷新個人最佳！');
+  @override
+  String get headlineFirst => _t('好的开始', '好的開始');
+  @override
+  String headlineUp(String points) => '比上次 +$points分';
+  @override
+  String get headlineSame => _t('和上次一样，很稳定', '和上次一樣，很穩定');
+  @override
+  String get headlineDown => _t('从这里再出发吧', '從這裡再出發吧');
+  @override
+  String nextLevel(String points) => _t('距离下一级还差$points分', '距離下一級還差$points分');
+  @override
+  String get topLevel => _t('已达到最高等级！', '已達到最高等級！');
+  @override
+  String streakDays(int days) => _t('连续$days天', '連續$days天');
+  @override
+  String get statStamps => '已攻克';
+  @override
+  String get statSolvable => _t('现在会做的题', '現在會做的題目');
+  @override
+  String solvableValue(int count) => _t('$count题', '$count題');
+  @override
+  String cardSemantics(String headline, String level) =>
+      _t('成长卡片。$headline。等级$level', '成長卡片。$headline。等級$level');
+  @override
+  String get mapSemantics => _t('地图。点击选择答案', '地圖。點選以選擇答案');
+  @override
+  String formatYear(int year) => year < 0 ? '公元前${-year}年' : '$year年';
+  @override
+  String reportHeader(int activeDays, int attempts) =>
+      _t('本周学习：$activeDays天 / $attempts题', '本週學習：$activeDays天 / $attempts題');
+  @override
+  String get reportImprovedTitle => _t('本周进步的地方：', '本週進步的地方：');
+  @override
+  String reportItem(String title, int b, int a) => '- $title（$b% -> $a%）';
+  @override
+  String get reportEmpty =>
+      _t('本周没有新的进步单元。按自己的节奏继续吧。', '本週沒有新的進步單元。按自己的節奏繼續吧。');
 }

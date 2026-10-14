@@ -7,6 +7,7 @@ void main() {
   ptTests();
   esTests();
   frTests();
+  koZhTests();
   test('言語コードから文言を選ぶ（未対応は英語）', () {
     expect(ChukoreStrings.forLocale('ja').languageCode, 'ja');
     expect(ChukoreStrings.forLocale('ja_JP').languageCode, 'ja');
@@ -37,7 +38,7 @@ void main() {
   });
 
   test('すべての言語で全100〜999の読み上げが空にならない', () {
-    for (final s in const [JaStrings(), EnStrings(), PtStrings(), PtStrings(european: true), EsStrings(), FrStrings(), FrStrings(septanteNonante: true)]) {
+    for (final s in const [JaStrings(), EnStrings(), PtStrings(), PtStrings(european: true), EsStrings(), FrStrings(), FrStrings(septanteNonante: true), KoStrings(), ZhStrings(), ZhStrings(traditional: true)]) {
       for (var n = 100; n <= 999; n++) {
         expect(s.gateNumberWords(n).isNotEmpty, isTrue, reason: '${s.languageCode} $n');
       }
@@ -398,6 +399,133 @@ void frTests() {
       expect(checkAnswer(q, '1 200,5', decimalSeparator: sep).correct, isTrue);
       expect(checkAnswer(q, '1 200,5', decimalSeparator: sep).correct, isTrue);
       expect(checkAnswer(q, '1200,5', decimalSeparator: sep).correct, isTrue);
+    });
+  });
+}
+
+void koZhTests() {
+  group('韓国語', () {
+    test('forLocale', () {
+      expect(ChukoreStrings.forLocale('ko'), isA<KoStrings>());
+      expect(ChukoreStrings.forLocale('ko-KR'), isA<KoStrings>());
+    });
+
+    test('数の読み上げ（漢字語。百・十の前の「일」は言わない）', () {
+      const ko = KoStrings();
+      expect(ko.gateNumberWords(10), '십');
+      expect(ko.gateNumberWords(11), '십일');
+      expect(ko.gateNumberWords(100), '백');
+      expect(ko.gateNumberWords(101), '백일');
+      expect(ko.gateNumberWords(110), '백십');
+      expect(ko.gateNumberWords(111), '백십일');
+      expect(ko.gateNumberWords(482), '사백팔십이');
+      expect(ko.gateNumberWords(999), '구백구십구');
+      expect(ko.gateNumberWords(1000), '천');
+      expect(ko.gateNumberWords(1200), '천이백');
+      expect(ko.gateNumberWords(2025), '이천이십오');
+    });
+
+    test('成長カード・レポート・年', () {
+      GrowthCardData d(double? delta, {double? toNext = 5}) => GrowthCardData(
+            subjectLabel: '영어',
+            level: Level.b,
+            pointsToNext: toNext,
+            scoreDelta: delta,
+            strings: const KoStrings(),
+            radar: const [RadarAxis('a', .5), RadarAxis('b', .5), RadarAxis('c', .5)],
+          );
+      expect(d(8).headline, '지난번보다 +8점');
+      expect(d(-3).headline, '여기서부터 다시 키워 봐요');
+      expect(d(-3).headline.contains('-'), isFalse);
+      expect(d(null).nextLine, '다음 레벨까지 5점');
+      expect(d(1, toNext: null).nextLine, '최고 레벨 달성!');
+      final r = WeeklyReport(
+        weekStart: DateTime.utc(2026, 10, 13),
+        attemptCount: 12,
+        activeDays: 3,
+        improvements: const [Improvement('u', '동사', 0.4, 0.7)],
+      );
+      expect(r.toText(strings: const KoStrings()),
+          '이번 주 학습: 3일 / 12문제\n이번 주 성장한 부분:\n- 동사 (40% -> 70%)');
+      expect(const KoStrings().formatYear(-500), '기원전 500년');
+      expect(const KoStrings().formatYear(1945), '1945년');
+    });
+  });
+
+  group('中国語', () {
+    test('forLocale: 簡体が既定、繁体は Hant・TW・HK・MO。スクリプトが地域に優先', () {
+      expect((ChukoreStrings.forLocale('zh') as ZhStrings).traditional, isFalse);
+      expect((ChukoreStrings.forLocale('zh-CN') as ZhStrings).traditional, isFalse);
+      expect((ChukoreStrings.forLocale('zh_Hans') as ZhStrings).traditional, isFalse);
+      expect((ChukoreStrings.forLocale('zh-Hant') as ZhStrings).traditional, isTrue);
+      expect((ChukoreStrings.forLocale('zh-TW') as ZhStrings).traditional, isTrue);
+      expect((ChukoreStrings.forLocale('zh_HK') as ZhStrings).traditional, isTrue);
+      expect((ChukoreStrings.forLocale('zh-Hant-TW') as ZhStrings).traditional, isTrue);
+      expect((ChukoreStrings.forLocale('zh-Hans-TW') as ZhStrings).traditional, isFalse);
+      expect(const ZhStrings().tag, 'zh-Hans');
+      expect(const ZhStrings(traditional: true).tag, 'zh-Hant');
+    });
+
+    test('数の読み上げ（零の入れ方、十・一十）', () {
+      const zh = ZhStrings();
+      expect(zh.gateNumberWords(15), '十五');
+      expect(zh.gateNumberWords(100), '一百');
+      expect(zh.gateNumberWords(101), '一百零一');
+      expect(zh.gateNumberWords(105), '一百零五');
+      expect(zh.gateNumberWords(110), '一百一十');
+      expect(zh.gateNumberWords(115), '一百一十五');
+      expect(zh.gateNumberWords(482), '四百八十二');
+      expect(zh.gateNumberWords(999), '九百九十九');
+      expect(zh.gateNumberWords(1000), '一千');
+      expect(zh.gateNumberWords(1005), '一千零五');
+      expect(zh.gateNumberWords(1010), '一千零一十');
+      expect(zh.gateNumberWords(1200), '一千二百');
+      expect(zh.gateNumberWords(2025), '二千零二十五');
+      // 簡体・繁体で同じ字
+      expect(const ZhStrings(traditional: true).gateNumberWords(482), '四百八十二');
+    });
+
+    test('簡体と繁体で字体が違う', () {
+      const hans = ZhStrings();
+      const hant = ZhStrings(traditional: true);
+      expect(hans.cardTitle('英语'), '英语 成长卡片');
+      expect(hant.cardTitle('英語'), '英語 成長卡片');
+      expect(hans.solvableValue(5), '5题');
+      expect(hant.solvableValue(5), '5題');
+      expect(hans.streakDays(3), '连续3天');
+      expect(hant.streakDays(3), '連續3天');
+      expect(hans.headlineDown, '从这里再出发吧');
+      expect(hant.headlineDown, '從這裡再出發吧');
+      expect(hans.mapSemantics, '地图。点击选择答案');
+      expect(hant.mapSemantics, '地圖。點選以選擇答案');
+    });
+
+    test('成長カード・レポート・年（下がっても落ち込ませない）', () {
+      GrowthCardData d(double? delta, {double? toNext = 5, ChukoreStrings s = const ZhStrings()}) =>
+          GrowthCardData(
+            subjectLabel: '英语',
+            level: Level.b,
+            pointsToNext: toNext,
+            scoreDelta: delta,
+            strings: s,
+            radar: const [RadarAxis('a', .5), RadarAxis('b', .5), RadarAxis('c', .5)],
+          );
+      expect(d(8).headline, '比上次 +8分');
+      expect(d(2.5).headline, '比上次 +2.5分');
+      expect(d(-3).headline, '从这里再出发吧');
+      expect(d(-3).headline.contains('-'), isFalse);
+      expect(d(null).nextLine, '距离下一级还差5分');
+      expect(d(null, s: const ZhStrings(traditional: true)).nextLine, '距離下一級還差5分');
+      expect(d(1, toNext: null).nextLine, '已达到最高等级！');
+      final r = WeeklyReport(
+        weekStart: DateTime.utc(2026, 10, 13),
+        attemptCount: 12,
+        activeDays: 3,
+        improvements: const [Improvement('u', '动词', 0.4, 0.7)],
+      );
+      expect(r.toText(strings: const ZhStrings()),
+          '本周学习：3天 / 12题\n本周进步的地方：\n- 动词（40% -> 70%）');
+      expect(const ZhStrings().formatYear(-221), '公元前221年');
     });
   });
 }
