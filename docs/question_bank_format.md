@@ -44,7 +44,7 @@ dart run tool/validate_bank.dart units.json questions.json
 | 項目 | 内容 |
 |---|---|
 | `type` | `choice`（選択）／`map`（地図タップ。選択肢は領域ID）／`numeric`（数値。`choices` は空でよい）／`order`・`timeline`（並べ替え・年表。`answer` は正解順のIDをカンマ区切り、`choices` は同じID集合） |
-| `difficulty` | 基準正答率 0〜1（目安偏差値の換算に使う）。0 と 1 は警告 |
+| `difficulty` | 基準正答率 0〜1（アプリ内偏差値の換算に使う）。0 と 1 は警告 |
 | `misconceptionTags` | 誤答の選択肢ID → 誤解の型（小文字・数字・`_`）。**正解の選択肢には付けない** |
 | `explanationId` | 解説の ID（解説の本文は別データ） |
 

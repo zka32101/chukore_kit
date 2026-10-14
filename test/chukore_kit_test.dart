@@ -97,7 +97,7 @@ void main() {
     expect(r.priorityUnitIds, isNotEmpty);
   });
 
-  test('目安偏差値: 期待得点と同じなら50', () {
+  test('アプリ内偏差値: 期待得点と同じなら50', () {
     final p = List.filled(30, 0.6);
     final d = estimateDeviation(p, 18);
     expect(d.value, closeTo(50, 1e-9));

@@ -34,7 +34,7 @@ String examStatsKey({
 }) =>
     [subject, 'g$grade', ?unitGroup, 'v$examVersion'].join('_');
 
-/// 段階2の偏差値。集計が [minSamples] 件（既定100）未満、または分散0なら null。
+/// 段階2のアプリ内偏差値。集計が [minSamples] 件（既定100）未満、または分散0なら null。
 /// 人数・順位は返さない。
 DeviationEstimate? deviationFromAggregate(
   ExamAggregate aggregate,

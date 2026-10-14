@@ -1,7 +1,7 @@
 import '../l10n/strings.dart';
 import 'assess.dart';
 
-/// 偏差値を出さない理由。
+/// アプリ内偏差値を出さない理由。
 enum DeviationHiddenReason { under13, notOptedIn, notAvailable }
 
 class DeviationDisplay {
@@ -14,7 +14,7 @@ class DeviationDisplay {
   bool get visible => estimate != null;
 }
 
-/// G9 目安偏差値の表示ポリシー。
+/// G9 アプリ内偏差値の表示ポリシー。
 /// 13歳未満は出さない（到達レベルのみ）。本人が表示を選ぶまで出さない（初期は非表示）。
 /// 換算できないとき（[estimate] が null）も出さない。順位・人数は元から返さない。
 DeviationDisplay deviationDisplay({
