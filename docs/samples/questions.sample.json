@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "questions": [
+    {
+      "id": "en1_verbs_001", "unitId": "en1_verbs", "type": "choice", "difficulty": 0.62,
+      "choices": ["goes", "go", "going"], "answer": "goes", "explanationId": "exp_en1_verbs_001",
+      "misconceptionTags": {"go": "third_person_s"}, "version": 1
+    },
+    {
+      "id": "en1_verbs_002", "unitId": "en1_verbs", "type": "order", "difficulty": 0.48,
+      "choices": ["I", "play", "soccer"], "answer": "I,play,soccer", "explanationId": "exp_en1_verbs_002"
+    },
+    {
+      "id": "en1_be_001", "unitId": "en1_be", "type": "choice", "difficulty": 0.8,
+      "choices": ["am", "is", "are"], "answer": "am", "explanationId": "exp_en1_be_001",
+      "misconceptionTags": {"is": "be_agreement"}
+    }
+  ],
+  "mistakeLines": [
+    {
+      "id": "ml_third_person_s_001", "tag": "third_person_s", "questionId": "en1_verbs_001",
+      "sourceChoiceId": "go", "statement": "He go to school every day.",
+      "fixChoices": ["He goes to school every day.", "He going to school every day."],
+      "correctChoice": "He goes to school every day.", "explanation": "he / she / it の動詞には s をつけます。"
+    }
+  ]
+}

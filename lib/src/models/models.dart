@@ -47,6 +47,33 @@ class Question {
     this.version = 1,
   }) : assert(difficulty >= 0 && difficulty <= 1);
 
+  factory Question.fromJson(Map<String, dynamic> j) => Question(
+        id: j['id'] as String,
+        unitId: j['unitId'] as String,
+        type: j['type'] as String,
+        difficulty: (j['difficulty'] as num).toDouble(),
+        choices: [for (final c in (j['choices'] as List? ?? const [])) c as String],
+        answer: j['answer'] as String,
+        explanationId: j['explanationId'] as String,
+        misconceptionTags: {
+          for (final e in ((j['misconceptionTags'] as Map?) ?? const {}).entries)
+            e.key as String: e.value as String,
+        },
+        version: (j['version'] as int?) ?? 1,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'unitId': unitId,
+        'type': type,
+        'difficulty': difficulty,
+        'choices': choices,
+        'answer': answer,
+        'explanationId': explanationId,
+        if (misconceptionTags.isNotEmpty) 'misconceptionTags': misconceptionTags,
+        'version': version,
+      };
+
   final String id;
   final String unitId;
   final String type;

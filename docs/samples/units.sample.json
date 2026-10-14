@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "units": [
+    {"id": "en1_grammar", "subject": "en", "grade": 1, "title": "Grammar", "order": 1},
+    {"id": "en1_be", "subject": "en", "grade": 1, "parentId": "en1_grammar", "title": "be verbs", "order": 1, "estimatedQuestions": 20},
+    {"id": "en1_verbs", "subject": "en", "grade": 1, "parentId": "en1_grammar", "title": "General verbs", "order": 2, "estimatedQuestions": 30}
+  ]
+}
