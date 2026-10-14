@@ -81,6 +81,11 @@ abstract class ChukoreStrings {
   String get reportImprovedTitle;
   String reportItem(String title, int beforePercent, int afterPercent);
   String get reportEmpty;
+
+  // --- 先生役モード（まちがいキャラ）---
+  String get teacherPrompt;
+  String get teacherCorrect;
+  String get teacherWrong;
 }
 
 class JaStrings extends ChukoreStrings {
@@ -146,6 +151,12 @@ class JaStrings extends ChukoreStrings {
   String reportItem(String title, int b, int a) => '・$title（$b% → $a%）';
   @override
   String get reportEmpty => '今週は新しく伸びた単元はありませんでした。来週もゆっくり続けましょう。';
+  @override
+  String get teacherPrompt => 'まちがいキャラのここ、どこが違う？';
+  @override
+  String get teacherCorrect => '正解！ちゃんと直せたね';
+  @override
+  String get teacherWrong => 'おしい！もう一度、よく読んでみよう';
 }
 
 class EnStrings extends ChukoreStrings {
@@ -218,6 +229,12 @@ class EnStrings extends ChukoreStrings {
   String reportItem(String title, int b, int a) => '- $title ($b% -> $a%)';
   @override
   String get reportEmpty => 'No new improvements this week. Keep going at your own pace.';
+  @override
+  String get teacherPrompt => 'What is wrong here? Fix the mistake';
+  @override
+  String get teacherCorrect => 'Correct! You fixed it';
+  @override
+  String get teacherWrong => 'Almost! Read it once more';
 }
 
 /// ポルトガル語。既定はブラジル式（pt-BR）。[european] が true ならポルトガル式（pt-PT）の綴り。
@@ -317,6 +334,12 @@ class PtStrings extends ChukoreStrings {
   String reportItem(String title, int b, int a) => '- $title ($b% -> $a%)';
   @override
   String get reportEmpty => 'Nenhuma evolução nova esta semana. Continue no seu ritmo.';
+  @override
+  String get teacherPrompt => 'O que está errado aqui? Corrija o erro';
+  @override
+  String get teacherCorrect => 'Correto! Você corrigiu';
+  @override
+  String get teacherWrong => 'Quase! Leia mais uma vez';
 }
 
 /// スペイン語。[decimalComma] が false なら小数点が `.` の地域（メキシコ・米国・中米の一部など）。
@@ -419,6 +442,12 @@ class EsStrings extends ChukoreStrings {
   String reportItem(String title, int b, int a) => '- $title ($b% -> $a%)';
   @override
   String get reportEmpty => 'No hay mejoras nuevas esta semana. Sigue a tu ritmo.';
+  @override
+  String get teacherPrompt => '¿Qué está mal aquí? Corrige el error';
+  @override
+  String get teacherCorrect => '¡Correcto! Lo corregiste';
+  @override
+  String get teacherWrong => '¡Casi! Léelo una vez más';
 }
 
 /// フランス語。[septanteNonante] が true ならベルギー・スイス式（septante・nonante）。
@@ -536,6 +565,12 @@ class FrStrings extends ChukoreStrings {
   String reportItem(String title, int b, int a) => '- $title ($b$_nb% -> $a$_nb%)';
   @override
   String get reportEmpty => 'Aucun nouveau progrès cette semaine. Continuez à votre rythme.';
+  @override
+  String get teacherPrompt => 'Qu’est-ce qui ne va pas ici$_nb? Corrigez l’erreur';
+  @override
+  String get teacherCorrect => 'Correct$_nb! Vous l’avez corrigé';
+  @override
+  String get teacherWrong => 'Presque$_nb! Relisez encore une fois';
 }
 
 /// 韓国語。数の読み上げは漢字語の数詞（사백팔십이）。
@@ -601,6 +636,12 @@ class KoStrings extends ChukoreStrings {
   String reportItem(String title, int b, int a) => '- $title ($b% -> $a%)';
   @override
   String get reportEmpty => '이번 주에는 새로 성장한 단원이 없어요. 천천히 이어 가요.';
+  @override
+  String get teacherPrompt => '여기 어디가 틀렸을까요? 고쳐 보세요';
+  @override
+  String get teacherCorrect => '정답! 잘 고쳤어요';
+  @override
+  String get teacherWrong => '아깝다! 한 번 더 읽어 봐요';
 }
 
 /// 中国語。[traditional] が true なら繁体字（`zh-Hant`・`zh-TW`・`zh-HK`）、false なら簡体字。
@@ -694,4 +735,10 @@ class ZhStrings extends ChukoreStrings {
   @override
   String get reportEmpty =>
       _t('本周没有新的进步单元。按自己的节奏继续吧。', '本週沒有新的進步單元。按自己的節奏繼續吧。');
+  @override
+  String get teacherPrompt => _t('这里哪里不对？请改正', '這裡哪裡不對？請改正');
+  @override
+  String get teacherCorrect => _t('答对了！你改正了', '答對了！你改正了');
+  @override
+  String get teacherWrong => _t('差一点！再读一遍吧', '差一點！再讀一遍吧');
 }

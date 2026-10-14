@@ -10,6 +10,7 @@ export 'src/assess/mastery.dart';
 export 'src/assess/assess.dart';
 export 'src/assess/exam_stats.dart';
 export 'src/weak/weak_notes.dart';
+export 'src/teacher/teacher_mode.dart';
 export 'src/growth/growth.dart';
 export 'src/growth/growth_card.dart';
 export 'src/question/answer.dart';
