@@ -20,6 +20,21 @@ abstract class ChukoreStrings {
 
   String get languageCode;
 
+  /// 一覧・確認用の識別子（地域で内容が違う言語は地域つき。例: `pt-BR`・`pt-PT`）。
+  String get tag => languageCode;
+
+  /// 対応している文言の一覧（翻訳確認の書き出し・検査に使う）。言語を足したらここにも足す。
+  static const List<ChukoreStrings> supported = [
+    JaStrings(),
+    EnStrings(),
+    PtStrings(),
+    PtStrings(european: true),
+    EsStrings(),
+    EsStrings(decimalComma: false),
+    FrStrings(),
+    FrStrings(septanteNonante: true),
+  ];
+
   /// 小数点の記号。数値入力の `checkAnswer(..., decimalSeparator:)` にもこの値を渡す。
   String get decimalSeparator => '.';
 
@@ -223,6 +238,9 @@ class PtStrings extends ChukoreStrings {
   String get languageCode => 'pt';
 
   @override
+  String get tag => european ? 'pt-PT' : 'pt-BR';
+
+  @override
   String get decimalSeparator => ',';
 
   /// 1〜999 の読み（「cem」「cento e um」「quatrocentos e oitenta e dois」）。
@@ -322,6 +340,9 @@ class EsStrings extends ChukoreStrings {
   String get languageCode => 'es';
 
   @override
+  String get tag => decimalComma ? 'es' : 'es-MX';
+
+  @override
   String get decimalSeparator => decimalComma ? ',' : '.';
 
   /// 1〜999 の読み（「cien」「ciento uno」「cuatrocientos ochenta y dos」）。
@@ -412,6 +433,9 @@ class FrStrings extends ChukoreStrings {
 
   @override
   String get languageCode => 'fr';
+
+  @override
+  String get tag => septanteNonante ? 'fr-BE' : 'fr';
 
   @override
   String get decimalSeparator => ',';

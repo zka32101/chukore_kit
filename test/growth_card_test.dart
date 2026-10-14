@@ -22,6 +22,7 @@ GrowthCardData _data({double? delta, bool best = false, double? toNext = 5}) => 
     );
 
 void main() {
+  fontTests();
   test('見出し: 前回からの変化が主役で、下がっても落ち込ませない', () {
     expect(_data(delta: 8).headline, '前回より +8点');
     expect(_data(delta: 2.5).headline, '前回より +2.5点');
@@ -67,5 +68,17 @@ void main() {
     // PNG シグネチャ
     expect(bytes!.sublist(0, 4), [0x89, 0x50, 0x4E, 0x47]);
     expect(bytes.length, greaterThan(500));
+  });
+}
+
+void fontTests() {
+  testWidgets('フォント指定つきでも画像化できる', (tester) async {
+    final bytes = await tester.runAsync(() => renderGrowthCardPng(
+          _data(delta: 4),
+          scale: 0.25,
+          fontFamily: 'Noto Sans',
+          fontFamilyFallback: const ['Noto Sans CJK JP', 'Noto Sans Thai'],
+        ));
+    expect(bytes!.sublist(0, 4), [0x89, 0x50, 0x4E, 0x47]);
   });
 }
