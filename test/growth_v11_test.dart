@@ -112,7 +112,7 @@ void main() {
     });
   });
 
-  group('G9 目安偏差値の表示ポリシー', () {
+  group('G9 アプリ内偏差値の表示ポリシー', () {
     const est = DeviationEstimate(55);
 
     test('13歳未満は出さない（本人が希望しても）', () {
@@ -145,7 +145,19 @@ void main() {
       expect(formatDeviationRange(const DeviationEstimate(52.6), const JaStrings()), '48〜58');
     });
 
-    test('全言語で「目安」と明示する文言がある', () {
+    test('名称は「アプリ内偏差値」。日本語では全国の偏差値と区別する注記つき', () {
+      const ja = JaStrings();
+      expect(ja.deviationLabel, 'アプリ内偏差値');
+      expect(ja.deviationNote, contains('アプリ内'));
+      expect(ja.deviationNote, contains('全国の偏差値ではありません'));
+      // 旧名称の「目安偏差値」は、利用者に見える文言に残さない
+      for (final s in ChukoreStrings.supported) {
+        expect(s.deviationLabel, isNot(contains('目安')));
+        expect(s.deviationNote, isNot(contains('目安偏差値')));
+      }
+    });
+
+    test('全言語で、アプリ内だけの目安であることを明示する文言がある', () {
       for (final s in ChukoreStrings.supported) {
         expect(s.deviationLabel, isNotEmpty);
         expect(s.deviationNote, contains('50'));

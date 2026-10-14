@@ -147,7 +147,7 @@ List<ValidationIssue> validateQuestionBank({
     if (q.explanationId.trim().isEmpty) err('explanation_missing', q.id, 'explanationId が空です');
     if (q.version < 1) err('bad_version', q.id, 'version は 1 以上');
     if (q.difficulty == 0 || q.difficulty == 1) {
-      warn('difficulty_extreme', q.id, '基準正答率が ${q.difficulty}（偏差値の換算で分散が 0 になります）');
+      warn('difficulty_extreme', q.id, '基準正答率が ${q.difficulty}（アプリ内偏差値の換算で分散が 0 になります）');
     }
 
     final uniqueChoices = q.choices.toSet();

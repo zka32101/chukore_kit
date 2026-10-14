@@ -68,8 +68,8 @@ class DeviationEstimate {
   double get high => value + margin;
 }
 
-/// 目安偏差値（段階1）。[baseRates] は各問の基準正答率 p_i、[score] は正解数 X。
-/// 偏差値 = 50 + 10 × (X − E) / (k × √V)。50 は想定集団の平均であり全国値ではない。
+/// アプリ内偏差値（段階1）。[baseRates] は各問の基準正答率 p_i、[score] は正解数 X。
+/// 偏差値 = 50 + 10 × (X − E) / (k × √V)。50 は想定集団の平均で、アプリ内だけの目安（全国の偏差値ではない）。
 DeviationEstimate estimateDeviation(
   List<double> baseRates,
   int score, {
