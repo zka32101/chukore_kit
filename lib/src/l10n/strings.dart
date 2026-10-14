@@ -3,14 +3,22 @@
 abstract class ChukoreStrings {
   const ChukoreStrings();
 
-  /// 言語コードに合う文言。未対応の言語は英語。
-  factory ChukoreStrings.forLocale(String languageCode) =>
-      switch (languageCode.toLowerCase().split(RegExp('[-_]')).first) {
-        'ja' => const JaStrings(),
-        _ => const EnStrings(),
-      };
+  /// 言語コード（`en`、`pt-BR`、`pt_PT` など）に合う文言。未対応の言語は英語。
+  /// ポルトガル語は地域で綴りが違うので、`PT`（ポルトガル）のときだけ欧州式にする。
+  factory ChukoreStrings.forLocale(String locale) {
+    final parts = locale.toLowerCase().split(RegExp('[-_]'));
+    return switch (parts.first) {
+      'ja' => const JaStrings(),
+      'pt' => parts.length > 1 && parts[1] == 'pt' ? const PtStrings(european: true) : const PtStrings(),
+      _ => const EnStrings(),
+    };
+  }
 
   String get languageCode;
+
+  /// 点数などの小数の表記（小数点は国で違う）。整数は小数点なし。
+  String formatNumber(double v) =>
+      v == v.roundToDouble() ? v.round().toString() : v.toStringAsFixed(1);
 
   // --- 保護者ゲート ---
   /// 出題する数（100〜999）の読み上げ表記。ja は漢数字、en は英単語。
@@ -180,4 +188,100 @@ class EnStrings extends ChukoreStrings {
   String reportItem(String title, int b, int a) => '- $title ($b% -> $a%)';
   @override
   String get reportEmpty => 'No new improvements this week. Keep going at your own pace.';
+}
+
+/// ポルトガル語。既定はブラジル式（pt-BR）。[european] が true ならポルトガル式（pt-PT）の綴り。
+class PtStrings extends ChukoreStrings {
+  const PtStrings({this.european = false});
+
+  /// pt-PT の綴り（dezasseis・dezassete・dezanove）にする。
+  final bool european;
+
+  static const _units = ['', 'um', 'dois', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove'];
+  static const _teensBr = [
+    'dez', 'onze', 'doze', 'treze', 'catorze', 'quinze', 'dezesseis', 'dezessete', 'dezoito', 'dezenove',
+  ];
+  static const _teensPt = [
+    'dez', 'onze', 'doze', 'treze', 'catorze', 'quinze', 'dezasseis', 'dezassete', 'dezoito', 'dezanove',
+  ];
+  static const _tens = ['', '', 'vinte', 'trinta', 'quarenta', 'cinquenta', 'sessenta', 'setenta', 'oitenta', 'noventa'];
+  static const _hundreds = [
+    '', 'cento', 'duzentos', 'trezentos', 'quatrocentos', 'quinhentos', 'seiscentos', 'setecentos',
+    'oitocentos', 'novecentos',
+  ];
+
+  @override
+  String get languageCode => 'pt';
+
+  @override
+  String formatNumber(double v) =>
+      v == v.roundToDouble() ? v.round().toString() : v.toStringAsFixed(1).replaceAll('.', ',');
+
+  /// 1〜999 の読み（「cem」「cento e um」「quatrocentos e oitenta e dois」）。
+  String _below1000(int n) {
+    final h = n ~/ 100, r = n % 100;
+    if (n == 100) return 'cem';
+    final parts = <String>[];
+    if (h > 0) parts.add(_hundreds[h]);
+    if (r > 0) {
+      parts.add(r < 10
+          ? _units[r]
+          : r < 20
+              ? (european ? _teensPt : _teensBr)[r - 10]
+              : (r % 10 == 0 ? _tens[r ~/ 10] : '${_tens[r ~/ 10]} e ${_units[r % 10]}'));
+    }
+    return parts.join(' e ');
+  }
+
+  @override
+  String gateNumberWords(int n) {
+    if (n < 1 || n > 9999) throw RangeError.range(n, 1, 9999, 'n');
+    final th = n ~/ 1000, r = n % 1000;
+    final thousands = th == 0 ? '' : (th == 1 ? 'mil' : '${_units[th]} mil');
+    if (r == 0) return thousands;
+    // 「mil e quinhentos」「mil e vinte」だが「mil trezentos e quarenta」（余りが100未満か百の位だけのとき e）
+    final joiner = (r < 100 || r % 100 == 0) ? ' e ' : ' ';
+    return th == 0 ? _below1000(r) : '$thousands$joiner${_below1000(r)}';
+  }
+
+  @override
+  String cardTitle(String subject) => '$subject · Cartão de progresso';
+  @override
+  String get headlinePersonalBest => 'Novo recorde pessoal!';
+  @override
+  String get headlineFirst => 'Um ótimo começo';
+  @override
+  String headlineUp(String points) => '+$points desde a última vez';
+  @override
+  String get headlineSame => 'Estável, igual à última vez';
+  @override
+  String get headlineDown => 'Vamos crescer a partir daqui';
+  @override
+  String nextLevel(String points) => 'Faltam $points pontos para o próximo nível';
+  @override
+  String get topLevel => 'Nível máximo alcançado!';
+  @override
+  String streakDays(int days) => days == 1 ? '1 dia seguido' : '$days dias seguidos';
+  @override
+  String get statStamps => 'Superados';
+  @override
+  String get statSolvable => 'Já sei resolver';
+  @override
+  String solvableValue(int count) => count == 1 ? '1 questão' : '$count questões';
+  @override
+  String cardSemantics(String headline, String level) => 'Cartão de progresso. $headline. Nível $level';
+  @override
+  String get mapSemantics => 'Mapa. Toque para escolher a resposta';
+  @override
+  String formatYear(int year) => year < 0 ? '${-year} a.C.' : '$year d.C.';
+  @override
+  String reportHeader(int activeDays, int attempts) =>
+      'Esta semana: ${activeDays == 1 ? '1 dia' : '$activeDays dias'} / '
+      '${attempts == 1 ? '1 questão' : '$attempts questões'}';
+  @override
+  String get reportImprovedTitle => 'Evoluiu esta semana:';
+  @override
+  String reportItem(String title, int b, int a) => '- $title ($b% -> $a%)';
+  @override
+  String get reportEmpty => 'Nenhuma evolução nova esta semana. Continue no seu ritmo.';
 }
