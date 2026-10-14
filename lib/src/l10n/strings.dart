@@ -82,6 +82,15 @@ abstract class ChukoreStrings {
   String reportItem(String title, int beforePercent, int afterPercent);
   String get reportEmpty;
 
+  // --- 当日チェック・直前5分カード ---
+  String get checklistTitle;
+  String checklistProgress(int done, int total);
+  String get checklistAllDone;
+  String get fiveMinuteTitle;
+
+  /// 持ち物の既定の項目（IDは全言語で同じ）。
+  List<(String id, String label)> get checklistDefaults;
+
   // --- 直前プリント ---
   String get sheetTitle;
   String get sheetQuestion;
@@ -199,6 +208,23 @@ class JaStrings extends ChukoreStrings {
   String get sheetExplanation => '解説';
   @override
   String get sheetEmpty => '直すところは今のところありません。よくがんばったね！';
+  @override
+  String get checklistTitle => '当日チェック';
+  @override
+  String checklistProgress(int done, int total) => '$done/$total そろった';
+  @override
+  String get checklistAllDone => 'ぜんぶそろったよ！いってらっしゃい';
+  @override
+  String get fiveMinuteTitle => '直前5分カード';
+  @override
+  List<(String, String)> get checklistDefaults => [
+        ('pencil', '筆記用具'),
+        ('eraser', '消しゴム'),
+        ('ruler', '定規・コンパス'),
+        ('watch', '時計'),
+        ('tissue', 'ハンカチ・ティッシュ'),
+        ('notes', '直前ノート'),
+      ];
 }
 
 class EnStrings extends ChukoreStrings {
@@ -303,6 +329,23 @@ class EnStrings extends ChukoreStrings {
   String get sheetExplanation => 'Explanation';
   @override
   String get sheetEmpty => 'Nothing to fix right now. Great work!';
+  @override
+  String get checklistTitle => 'Test-day check';
+  @override
+  String checklistProgress(int done, int total) => '$done of $total ready';
+  @override
+  String get checklistAllDone => 'Everything is ready. Good luck!';
+  @override
+  String get fiveMinuteTitle => 'Last 5 minutes card';
+  @override
+  List<(String, String)> get checklistDefaults => [
+        ('pencil', 'Pens and pencils'),
+        ('eraser', 'Eraser'),
+        ('ruler', 'Ruler and compass'),
+        ('watch', 'Watch'),
+        ('tissue', 'Handkerchief and tissues'),
+        ('notes', 'Review notes'),
+      ];
 }
 
 /// ポルトガル語。既定はブラジル式（pt-BR）。[european] が true ならポルトガル式（pt-PT）の綴り。
@@ -434,6 +477,23 @@ class PtStrings extends ChukoreStrings {
   String get sheetExplanation => 'Explicação';
   @override
   String get sheetEmpty => 'Nada para corrigir agora. Ótimo trabalho!';
+  @override
+  String get checklistTitle => 'Checklist do dia da prova';
+  @override
+  String checklistProgress(int done, int total) => '$done de $total prontos';
+  @override
+  String get checklistAllDone => 'Tudo pronto. Boa sorte!';
+  @override
+  String get fiveMinuteTitle => 'Cartão dos últimos 5 minutos';
+  @override
+  List<(String, String)> get checklistDefaults => [
+        ('pencil', 'Canetas e lápis'),
+        ('eraser', 'Borracha'),
+        ('ruler', 'Régua e compasso'),
+        ('watch', 'Relógio'),
+        ('tissue', 'Lenço e lenços de papel'),
+        ('notes', 'Anotações de revisão'),
+      ];
 }
 
 /// スペイン語。[decimalComma] が false なら小数点が `.` の地域（メキシコ・米国・中米の一部など）。
@@ -568,6 +628,23 @@ class EsStrings extends ChukoreStrings {
   String get sheetExplanation => 'Explicación';
   @override
   String get sheetEmpty => 'No hay nada que corregir ahora. ¡Buen trabajo!';
+  @override
+  String get checklistTitle => 'Lista del día del examen';
+  @override
+  String checklistProgress(int done, int total) => '$done de $total listos';
+  @override
+  String get checklistAllDone => 'Todo listo. ¡Buena suerte!';
+  @override
+  String get fiveMinuteTitle => 'Tarjeta de los últimos 5 minutos';
+  @override
+  List<(String, String)> get checklistDefaults => [
+        ('pencil', 'Bolígrafos y lápices'),
+        ('eraser', 'Goma de borrar'),
+        ('ruler', 'Regla y compás'),
+        ('watch', 'Reloj'),
+        ('tissue', 'Pañuelo y pañuelos de papel'),
+        ('notes', 'Apuntes de repaso'),
+      ];
 }
 
 /// フランス語。[septanteNonante] が true ならベルギー・スイス式（septante・nonante）。
@@ -717,6 +794,23 @@ class FrStrings extends ChukoreStrings {
   String get sheetExplanation => 'Explication';
   @override
   String get sheetEmpty => 'Rien à corriger pour le moment. Bravo$_nb!';
+  @override
+  String get checklistTitle => 'Check-list du jour J';
+  @override
+  String checklistProgress(int done, int total) => '$done sur $total prêts';
+  @override
+  String get checklistAllDone => 'Tout est prêt. Bonne chance$_nb!';
+  @override
+  String get fiveMinuteTitle => 'Carte des 5 dernières minutes';
+  @override
+  List<(String, String)> get checklistDefaults => [
+        ('pencil', 'Stylos et crayons'),
+        ('eraser', 'Gomme'),
+        ('ruler', 'Règle et compas'),
+        ('watch', 'Montre'),
+        ('tissue', 'Mouchoirs'),
+        ('notes', 'Notes de révision'),
+      ];
 }
 
 /// 韓国語。数の読み上げは漢字語の数詞（사백팔십이）。
@@ -812,6 +906,23 @@ class KoStrings extends ChukoreStrings {
   String get sheetExplanation => '해설';
   @override
   String get sheetEmpty => '지금은 고칠 곳이 없어요. 정말 잘했어요!';
+  @override
+  String get checklistTitle => '시험 당일 체크';
+  @override
+  String checklistProgress(int done, int total) => '$total개 중 $done개 준비됨';
+  @override
+  String get checklistAllDone => '모두 준비됐어요. 행운을 빌어요!';
+  @override
+  String get fiveMinuteTitle => '직전 5분 카드';
+  @override
+  List<(String, String)> get checklistDefaults => [
+        ('pencil', '필기구'),
+        ('eraser', '지우개'),
+        ('ruler', '자와 컴퍼스'),
+        ('watch', '시계'),
+        ('tissue', '손수건과 휴지'),
+        ('notes', '직전 요약 노트'),
+      ];
 }
 
 /// 中国語。[traditional] が true なら繁体字（`zh-Hant`・`zh-TW`・`zh-HK`）、false なら簡体字。
@@ -936,4 +1047,30 @@ class ZhStrings extends ChukoreStrings {
   String get sheetExplanation => '解析';
   @override
   String get sheetEmpty => _t('现在没有需要改正的地方。做得很好！', '現在沒有需要改正的地方。做得很好！');
+  @override
+  String get checklistTitle => _t('考试当天检查', '考試當天檢查');
+  @override
+  String checklistProgress(int done, int total) => _t('已准备 $done/$total', '已準備 $done/$total');
+  @override
+  String get checklistAllDone => _t('都准备好了，加油！', '都準備好了，加油！');
+  @override
+  String get fiveMinuteTitle => _t('考前5分钟卡片', '考前5分鐘卡片');
+  @override
+  List<(String, String)> get checklistDefaults => traditional
+      ? [
+        ('pencil', '筆'),
+        ('eraser', '橡皮擦'),
+        ('ruler', '尺和圓規'),
+        ('watch', '手錶'),
+        ('tissue', '手帕和面紙'),
+        ('notes', '複習筆記'),
+      ]
+      : [
+        ('pencil', '笔'),
+        ('eraser', '橡皮'),
+        ('ruler', '尺子和圆规'),
+        ('watch', '手表'),
+        ('tissue', '手帕和纸巾'),
+        ('notes', '复习笔记'),
+      ];
 }
