@@ -1,6 +1,7 @@
 /// ちゅうコレ！専用の共通部品の公開API。
 library;
 
+export 'src/l10n/catalog.dart';
 export 'src/l10n/strings.dart';
 export 'src/models/models.dart';
 export 'src/scope/unit_tree.dart';

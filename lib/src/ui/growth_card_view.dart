@@ -8,12 +8,22 @@ import '../growth/growth_card.dart';
 
 /// 成長カードの描画。名前・ID・メールの欄は無い。画面表示にも画像化にも同じ描画を使う。
 class GrowthCardPainter extends CustomPainter {
-  GrowthCardPainter(this.data, {this.accent = const Color(0xFF3B82F6)});
+  GrowthCardPainter(
+    this.data, {
+    this.accent = const Color(0xFF3B82F6),
+    this.fontFamily,
+    this.fontFamilyFallback = const [],
+  });
 
   final GrowthCardData data;
 
   /// 教科色。
   final Color accent;
+
+  /// 文字のフォント。画像化は端末にあるフォントで描くので、日本語・中国語・韓国語・タイ語など
+  /// 言語ごとに [fontFamilyFallback] を渡すと、端末による文字化け（四角）を避けられる。
+  final String? fontFamily;
+  final List<String> fontFamilyFallback;
 
   /// 基準サイズ。画像は 4:5。
   static const Size designSize = Size(1080, 1350);
@@ -125,7 +135,11 @@ class GrowthCardPainter extends CustomPainter {
       text: TextSpan(
         text: s,
         style: TextStyle(
-            color: color, fontSize: size, fontWeight: bold ? FontWeight.w700 : FontWeight.w400),
+            color: color,
+            fontSize: size,
+            fontFamily: fontFamily,
+            fontFamilyFallback: fontFamilyFallback.isEmpty ? null : fontFamilyFallback,
+            fontWeight: bold ? FontWeight.w700 : FontWeight.w400),
       ),
       textDirection: TextDirection.ltr,
       maxLines: 2,
@@ -135,22 +149,37 @@ class GrowthCardPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(GrowthCardPainter old) => old.data != data || old.accent != accent;
+  bool shouldRepaint(GrowthCardPainter old) =>
+      old.data != data ||
+      old.accent != accent ||
+      old.fontFamily != fontFamily ||
+      old.fontFamilyFallback != fontFamilyFallback;
 }
 
 /// 画面に出す成長カード（4:5）。
 class GrowthCardView extends StatelessWidget {
-  const GrowthCardView({super.key, required this.data, this.accent = const Color(0xFF3B82F6)});
+  const GrowthCardView({
+    super.key,
+    required this.data,
+    this.accent = const Color(0xFF3B82F6),
+    this.fontFamily,
+    this.fontFamilyFallback = const [],
+  });
 
   final GrowthCardData data;
   final Color accent;
+  final String? fontFamily;
+  final List<String> fontFamilyFallback;
 
   @override
   Widget build(BuildContext context) => AspectRatio(
         aspectRatio: GrowthCardPainter.designSize.width / GrowthCardPainter.designSize.height,
         child: Semantics(
           label: data.strings.cardSemantics(data.headline, data.levelLabel),
-          child: CustomPaint(painter: GrowthCardPainter(data, accent: accent)),
+          child: CustomPaint(
+            painter: GrowthCardPainter(data,
+                accent: accent, fontFamily: fontFamily, fontFamilyFallback: fontFamilyFallback),
+          ),
         ),
       );
 }
@@ -160,10 +189,13 @@ Future<Uint8List> renderGrowthCardPng(
   GrowthCardData data, {
   Color accent = const Color(0xFF3B82F6),
   double scale = 1.0,
+  String? fontFamily,
+  List<String> fontFamilyFallback = const [],
 }) async {
   final size = GrowthCardPainter.designSize * scale;
   final recorder = ui.PictureRecorder();
-  GrowthCardPainter(data, accent: accent).paint(Canvas(recorder), size);
+  GrowthCardPainter(data, accent: accent, fontFamily: fontFamily, fontFamilyFallback: fontFamilyFallback)
+      .paint(Canvas(recorder), size);
   final image = await recorder.endRecording().toImage(size.width.round(), size.height.round());
   final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
   image.dispose();
