@@ -82,6 +82,10 @@ abstract class ChukoreStrings {
   String reportItem(String title, int beforePercent, int afterPercent);
   String get reportEmpty;
 
+  // --- アクセシビリティ（色だけに頼らない）---
+  String get markCorrect;
+  String get markWrong;
+
   // --- 成長の年輪・目安偏差値 ---
   String get ringsTitle;
   String ringsSemantics(int totalDays);
@@ -174,6 +178,10 @@ class JaStrings extends ChukoreStrings {
   String deviationRange(String low, String high) => '$low〜$high';
   @override
   String get deviationNote => '想定した集団の平均を50とした目安です。全国の偏差値ではありません。';
+  @override
+  String get markCorrect => '正解';
+  @override
+  String get markWrong => '不正解';
 }
 
 class EnStrings extends ChukoreStrings {
@@ -264,6 +272,10 @@ class EnStrings extends ChukoreStrings {
   @override
   String get deviationNote =>
       'A rough index where 50 is the average of an assumed group. It is not a nationwide ranking.';
+  @override
+  String get markCorrect => 'correct';
+  @override
+  String get markWrong => 'incorrect';
 }
 
 /// ポルトガル語。既定はブラジル式（pt-BR）。[european] が true ならポルトガル式（pt-PT）の綴り。
@@ -381,6 +393,10 @@ class PtStrings extends ChukoreStrings {
   @override
   String get deviationNote =>
       'Um índice aproximado em que 50 é a média de um grupo de referência. Não é uma classificação nacional.';
+  @override
+  String get markCorrect => 'correto';
+  @override
+  String get markWrong => 'incorreto';
 }
 
 /// スペイン語。[decimalComma] が false なら小数点が `.` の地域（メキシコ・米国・中米の一部など）。
@@ -501,6 +517,10 @@ class EsStrings extends ChukoreStrings {
   @override
   String get deviationNote =>
       'Un índice aproximado en el que 50 es el promedio de un grupo de referencia. No es una clasificación nacional.';
+  @override
+  String get markCorrect => 'correcto';
+  @override
+  String get markWrong => 'incorrecto';
 }
 
 /// フランス語。[septanteNonante] が true ならベルギー・スイス式（septante・nonante）。
@@ -636,6 +656,10 @@ class FrStrings extends ChukoreStrings {
   @override
   String get deviationNote =>
       'Un indice approximatif où 50 correspond à la moyenne d’un groupe de référence. Ce n’est pas un classement national.';
+  @override
+  String get markCorrect => 'correct';
+  @override
+  String get markWrong => 'incorrect';
 }
 
 /// 韓国語。数の読み上げは漢字語の数詞（사백팔십이）。
@@ -717,6 +741,10 @@ class KoStrings extends ChukoreStrings {
   String deviationRange(String low, String high) => '$low~$high';
   @override
   String get deviationNote => '가정한 집단의 평균을 50으로 둔 대략적인 지수예요. 전국 순위가 아니에요.';
+  @override
+  String get markCorrect => '정답';
+  @override
+  String get markWrong => '오답';
 }
 
 /// 中国語。[traditional] が true なら繁体字（`zh-Hant`・`zh-TW`・`zh-HK`）、false なら簡体字。
@@ -826,4 +854,8 @@ class ZhStrings extends ChukoreStrings {
   String deviationRange(String low, String high) => '$low~$high';
   @override
   String get deviationNote => _t('以假定群体的平均值为50的大致指数，并非全国排名。', '以假定群體的平均值為50的大致指數，並非全國排名。');
+  @override
+  String get markCorrect => _t('正确', '正確');
+  @override
+  String get markWrong => _t('错误', '錯誤');
 }

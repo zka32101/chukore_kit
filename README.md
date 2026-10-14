@@ -39,3 +39,9 @@ flutter pub get && flutter analyze && flutter test
 ### フォント
 
 成長カードの画像化は端末のフォントで描く。日本語・中国語・韓国語・タイ語などは、`renderGrowthCardPng` / `GrowthCardView` の `fontFamily` / `fontFamilyFallback` を言語ごとに渡すと、端末による文字の四角化（豆腐）を避けられる。
+
+## アクセシビリティ
+
+- **色だけに頼らない**: 地図タップの回答後は、正解にチェック（✓）・不正解にバツ（✗）の図形を重ねる（`RegionMark`）。年表の回答後も ✓ / ✗ のアイコンを出す。色覚の多様性や白黒表示でも正誤が分かる。
+- **スクリーンリーダー**: 地図は領域ごとにボタンとして読み上げ・操作できる（`CustomPainter.semanticsBuilder`）。回答後は「Alpha (correct)」のように正解・不正解も言う。選択対象外・回答後は操作不可。領域が小さくても押せるよう、最低 24 の大きさにしている。年表のアイコンも、各行の読み上げと一体で正誤を伝える。
+- 読み上げの言語は `strings:`（`RegionTapMap`・`TimelineOrderList`）で切り替える。

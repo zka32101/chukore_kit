@@ -50,6 +50,8 @@ Map<String, String> stringsCatalog(ChukoreStrings s) {
   m['deviationLabel'] = s.deviationLabel;
   m['deviationRange'] = s.deviationRange('{low}', '{high}');
   m['deviationNote'] = s.deviationNote;
+  m['markCorrect'] = s.markCorrect;
+  m['markWrong'] = s.markWrong;
   m['decimalSeparator'] = s.decimalSeparator;
   return m;
 }

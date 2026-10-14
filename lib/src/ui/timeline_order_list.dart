@@ -41,7 +41,16 @@ class TimelineOrderList extends StatelessWidget {
             key: ValueKey(events[i].id),
             leading: CircleAvatar(radius: 14, child: Text('${i + 1}')),
             title: Text(events[i].label),
-            trailing: revealYears ? Text(strings.formatYear(events[i].year)) : null,
+            // 回答後は年に加えて ✓/✗ のアイコンも出す（色だけで正誤を伝えない）
+            trailing: revealYears
+                ? Row(mainAxisSize: MainAxisSize.min, children: [
+                    Text(strings.formatYear(events[i].year)),
+                    const SizedBox(width: 8),
+                    correct[i] == events[i].id
+                        ? Icon(Icons.check_circle, color: Colors.green.shade800, semanticLabel: strings.markCorrect)
+                        : Icon(Icons.cancel, color: Colors.red.shade800, semanticLabel: strings.markWrong),
+                  ])
+                : null,
             tileColor: revealYears
                 ? (correct[i] == events[i].id
                     ? Colors.green.withValues(alpha: 0.15)
