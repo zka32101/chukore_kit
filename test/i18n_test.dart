@@ -6,11 +6,12 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   ptTests();
   esTests();
+  frTests();
   test('言語コードから文言を選ぶ（未対応は英語）', () {
     expect(ChukoreStrings.forLocale('ja').languageCode, 'ja');
     expect(ChukoreStrings.forLocale('ja_JP').languageCode, 'ja');
     expect(ChukoreStrings.forLocale('en-US').languageCode, 'en');
-    expect(ChukoreStrings.forLocale('fr').languageCode, 'en');
+    expect(ChukoreStrings.forLocale('de').languageCode, 'en');
   });
 
   test('英語の数の読み上げ', () {
@@ -36,7 +37,7 @@ void main() {
   });
 
   test('すべての言語で全100〜999の読み上げが空にならない', () {
-    for (final s in const [JaStrings(), EnStrings(), PtStrings(), PtStrings(european: true), EsStrings()]) {
+    for (final s in const [JaStrings(), EnStrings(), PtStrings(), PtStrings(european: true), EsStrings(), FrStrings(), FrStrings(septanteNonante: true)]) {
       for (var n = 100; n <= 999; n++) {
         expect(s.gateNumberWords(n).isNotEmpty, isTrue, reason: '${s.languageCode} $n');
       }
@@ -300,5 +301,103 @@ void esTests() {
     expect(const EnStrings().nextLevel('1'), '1 more point to the next level');
     expect(const PtStrings().nextLevel('1'), 'Falta 1 ponto para o próximo nível');
     expect(const PtStrings().nextLevel('3'), 'Faltam 3 pontos para o próximo nível');
+  });
+}
+
+void frTests() {
+  group('フランス語', () {
+    test('forLocale: fr は標準、fr-BE・fr-CH は septante/nonante', () {
+      expect(ChukoreStrings.forLocale('fr'), isA<FrStrings>());
+      expect((ChukoreStrings.forLocale('fr-FR') as FrStrings).septanteNonante, isFalse);
+      expect((ChukoreStrings.forLocale('fr_BE') as FrStrings).septanteNonante, isTrue);
+      expect((ChukoreStrings.forLocale('fr-CH') as FrStrings).septanteNonante, isTrue);
+      expect(ChukoreStrings.forLocale('fr-CA').decimalSeparator, ',');
+    });
+
+    test('数の読み上げ（cent・vingt の s、et un、70〜99）', () {
+      const fr = FrStrings();
+      expect(fr.gateNumberWords(482), 'quatre cent quatre-vingt-deux');
+      expect(fr.gateNumberWords(100), 'cent');
+      expect(fr.gateNumberWords(101), 'cent un');
+      expect(fr.gateNumberWords(200), 'deux cents');
+      expect(fr.gateNumberWords(201), 'deux cent un');
+      expect(fr.gateNumberWords(221), 'deux cent vingt et un');
+      expect(fr.gateNumberWords(222), 'deux cent vingt-deux');
+      expect(fr.gateNumberWords(271), 'deux cent soixante et onze');
+      expect(fr.gateNumberWords(272), 'deux cent soixante-douze');
+      expect(fr.gateNumberWords(277), 'deux cent soixante-dix-sept');
+      expect(fr.gateNumberWords(280), 'deux cent quatre-vingts');
+      expect(fr.gateNumberWords(281), 'deux cent quatre-vingt-un');
+      expect(fr.gateNumberWords(300), 'trois cents');
+      expect(fr.gateNumberWords(370), 'trois cent soixante-dix');
+      expect(fr.gateNumberWords(391), 'trois cent quatre-vingt-onze');
+      expect(fr.gateNumberWords(397), 'trois cent quatre-vingt-dix-sept');
+      expect(fr.gateNumberWords(116), 'cent seize');
+      expect(fr.gateNumberWords(117), 'cent dix-sept');
+      expect(fr.gateNumberWords(999), 'neuf cent quatre-vingt-dix-neuf');
+      expect(fr.gateNumberWords(1000), 'mille');
+      expect(fr.gateNumberWords(1500), 'mille cinq cents');
+      expect(fr.gateNumberWords(1981), 'mille neuf cent quatre-vingt-un');
+      expect(fr.gateNumberWords(2000), 'deux mille');
+      expect(fr.gateNumberWords(2080), 'deux mille quatre-vingts');
+      expect(fr.gateNumberWords(2100), 'deux mille cent');
+    });
+
+    test('ベルギー・スイス式', () {
+      const be = FrStrings(septanteNonante: true);
+      expect(be.gateNumberWords(472), 'quatre cent septante-deux');
+      expect(be.gateNumberWords(171), 'cent septante et un');
+      expect(be.gateNumberWords(391), 'trois cent nonante et un');
+      expect(be.gateNumberWords(399), 'trois cent nonante-neuf');
+      expect(be.gateNumberWords(380), 'trois cent quatre-vingts');
+    });
+
+    test('成長カード: 1,5 は単数、約物の前は改行されない空白、下がっても落ち込ませない', () {
+      GrowthCardData d(double? delta, {double? toNext = 5, bool best = false}) => GrowthCardData(
+            subjectLabel: 'Anglais',
+            level: Level.b,
+            pointsToNext: toNext,
+            scoreDelta: delta,
+            isPersonalBest: best,
+            strings: const FrStrings(),
+            radar: const [RadarAxis('a', .5), RadarAxis('b', .5), RadarAxis('c', .5)],
+          );
+      expect(d(2.5).headline, '+2,5 depuis la dernière fois');
+      expect(d(-4).headline, 'Repartons de là pour progresser');
+      expect(d(-4).headline.contains('-'), isFalse);
+      expect(d(null, best: true).headline, 'Nouveau record personnel !');
+      expect(d(null, toNext: 1).nextLine, 'Plus que 1 point pour le niveau suivant');
+      expect(d(null, toNext: 1.5).nextLine, 'Plus que 1,5 point pour le niveau suivant');
+      expect(d(null, toNext: 2).nextLine, 'Plus que 2 points pour le niveau suivant');
+      expect(d(null, toNext: 7.5).nextLine, 'Plus que 7,5 points pour le niveau suivant');
+      expect(d(1, toNext: null).nextLine, 'Niveau maximal atteint !');
+    });
+
+    test('レポート・年・単複（0 と 1 は単数）', () {
+      final r = WeeklyReport(
+        weekStart: DateTime.utc(2026, 10, 13),
+        attemptCount: 0,
+        activeDays: 1,
+        improvements: const [Improvement('u', 'Verbes', 0.4, 0.7)],
+      );
+      expect(r.toText(strings: const FrStrings()),
+          'Cette semaine : 1 jour / 0 question\nProgrès de la semaine :\n- Verbes (40 % -> 70 %)');
+      expect(const FrStrings().formatYear(-500), '500 av. J.-C.');
+      expect(const FrStrings().formatYear(1789), '1789 apr. J.-C.');
+      expect(const FrStrings().solvableValue(1), '1 question');
+      expect(const FrStrings().solvableValue(3), '3 questions');
+      expect(const FrStrings().streakDays(1), '1 jour de suite');
+    });
+
+    test('数値入力: 小数点カンマ・空白区切り（1 200,5）', () {
+      const q = Question(
+        id: 'q', unitId: 'u', type: 'numeric', difficulty: .5,
+        choices: [], answer: '1200.5', explanationId: 'x',
+      );
+      final sep = const FrStrings().decimalSeparator;
+      expect(checkAnswer(q, '1 200,5', decimalSeparator: sep).correct, isTrue);
+      expect(checkAnswer(q, '1 200,5', decimalSeparator: sep).correct, isTrue);
+      expect(checkAnswer(q, '1200,5', decimalSeparator: sep).correct, isTrue);
+    });
   });
 }
