@@ -8,6 +8,7 @@ void main() {
   esTests();
   frTests();
   koZhTests();
+  idTests();
   test('言語コードから文言を選ぶ（未対応は英語）', () {
     expect(ChukoreStrings.forLocale('ja').languageCode, 'ja');
     expect(ChukoreStrings.forLocale('ja_JP').languageCode, 'ja');
@@ -526,6 +527,109 @@ void koZhTests() {
       expect(r.toText(strings: const ZhStrings()),
           '本周学习：3天 / 12题\n本周进步的地方：\n- 动词（40% -> 70%）');
       expect(const ZhStrings().formatYear(-221), '公元前221年');
+    });
+  });
+}
+
+void idTests() {
+  group('インドネシア語', () {
+    test('forLocale: id・id-ID・旧式の in', () {
+      expect(ChukoreStrings.forLocale('id'), isA<IdStrings>());
+      expect(ChukoreStrings.forLocale('id-ID'), isA<IdStrings>());
+      expect(ChukoreStrings.forLocale('in'), isA<IdStrings>());
+      expect(ChukoreStrings.forLocale('in_ID'), isA<IdStrings>());
+      expect(const IdStrings().tag, 'id');
+    });
+
+    test('数の読み上げ（seratus・sebelas・belas・puluh・seribu）', () {
+      const id = IdStrings();
+      expect(id.gateNumberWords(482), 'empat ratus delapan puluh dua');
+      expect(id.gateNumberWords(100), 'seratus');
+      expect(id.gateNumberWords(101), 'seratus satu');
+      expect(id.gateNumberWords(110), 'seratus sepuluh');
+      expect(id.gateNumberWords(111), 'seratus sebelas');
+      expect(id.gateNumberWords(115), 'seratus lima belas');
+      expect(id.gateNumberWords(120), 'seratus dua puluh');
+      expect(id.gateNumberWords(200), 'dua ratus');
+      expect(id.gateNumberWords(321), 'tiga ratus dua puluh satu');
+      expect(id.gateNumberWords(999), 'sembilan ratus sembilan puluh sembilan');
+      expect(id.gateNumberWords(1000), 'seribu');
+      expect(id.gateNumberWords(1001), 'seribu satu');
+      expect(id.gateNumberWords(1500), 'seribu lima ratus');
+      expect(id.gateNumberWords(2025), 'dua ribu dua puluh lima');
+      expect(id.gateNumberWords(9999), 'sembilan ribu sembilan ratus sembilan puluh sembilan');
+      expect(() => id.gateNumberWords(0), throwsRangeError);
+    });
+
+    test('1〜9999 のすべてで、典型的な誤り（satu ratus・satu puluh・satu belas・satu ribu・空白の乱れ）が出ない', () {
+      const id = IdStrings();
+      for (var n = 1; n <= 9999; n++) {
+        final w = id.gateNumberWords(n);
+        expect(w, isNotEmpty, reason: '$n');
+        expect(w, equals(w.trim()), reason: '$n 前後の空白: "$w"');
+        expect(w.contains('  '), isFalse, reason: '$n 二重の空白: "$w"');
+        for (final wrong in ['satu ratus', 'satu puluh', 'satu belas', 'satu ribu', 'sepuluh satu']) {
+          expect(w.contains(wrong), isFalse, reason: '$n に "$wrong": "$w"');
+        }
+      }
+      // 区切りの数: 下3桁の読みを足し上げたものと一致（桁の取りこぼしが無い）
+      expect(id.gateNumberWords(5050), 'lima ribu lima puluh');
+      expect(id.gateNumberWords(1010), 'seribu sepuluh');
+      expect(id.gateNumberWords(7000), 'tujuh ribu');
+    });
+
+    test('保護者ゲート: 読み上げと、ドットの桁区切り（1.200）', () {
+      expect(const GateChallenge(482).promptFor(const IdStrings()), 'empat ratus delapan puluh dua');
+      expect(const GateChallenge(1200).verify('1.200'), isTrue);
+    });
+
+    test('小数点はカンマ。成長カード・レポート・年', () {
+      const id = IdStrings();
+      expect(id.decimalSeparator, ',');
+      GrowthCardData d(double? delta, {double? toNext = 5}) => GrowthCardData(
+            subjectLabel: 'Bahasa Inggris',
+            level: Level.b,
+            pointsToNext: toNext,
+            scoreDelta: delta,
+            strings: id,
+            radar: const [RadarAxis('a', .5), RadarAxis('b', .5), RadarAxis('c', .5)],
+          );
+      expect(d(2.5).headline, '+2,5 dari sebelumnya');
+      expect(d(-4).headline, 'Mari tingkatkan lagi dari sini');
+      expect(d(-4).headline.contains('-'), isFalse);
+      expect(d(null, toNext: 7.5).nextLine, '7,5 poin lagi menuju level berikutnya');
+      expect(d(1, toNext: null).nextLine, 'Level tertinggi tercapai!');
+      final r = WeeklyReport(
+        weekStart: DateTime.utc(2026, 10, 13),
+        attemptCount: 12,
+        activeDays: 3,
+        improvements: const [Improvement('u', 'Kata kerja', 0.4, 0.7)],
+      );
+      expect(r.toText(strings: id),
+          'Minggu ini: 3 hari / 12 soal\nYang meningkat minggu ini:\n- Kata kerja (40% -> 70%)');
+      expect(id.formatYear(-500), '500 SM');
+      expect(id.formatYear(1945), '1945 M');
+      expect(id.solvableValue(1), '1 soal'); // 複数形は無い
+      expect(id.streakDays(1), '1 hari berturut-turut');
+    });
+
+    test('数値入力: 1.200,5（ドットが桁区切り、カンマが小数点）', () {
+      const q = Question(
+        id: 'q', unitId: 'u', type: 'numeric', difficulty: .5,
+        choices: [], answer: '1200.5', explanationId: 'x',
+      );
+      final sep = const IdStrings().decimalSeparator;
+      expect(checkAnswer(q, '1.200,5', decimalSeparator: sep).correct, isTrue);
+      expect(checkAnswer(q, '1200,5', decimalSeparator: sep).correct, isTrue);
+    });
+
+    test('持ち物の既定の項目・プリント・偏差値の名称', () {
+      const id = IdStrings();
+      expect(id.checklistDefaults.first, ('pencil', 'Alat tulis'));
+      expect(id.checklistDefaults.length, 6);
+      expect(id.deviationLabel, 'Indeks skor dalam aplikasi');
+      expect(id.deviationNote, contains('50'));
+      expect(formatDeviationRange(const DeviationEstimate(55), id), '50–60');
     });
   });
 }
