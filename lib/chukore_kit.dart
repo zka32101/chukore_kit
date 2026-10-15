@@ -11,6 +11,7 @@ export 'src/assess/assess.dart';
 export 'src/assess/deviation_policy.dart';
 export 'src/assess/exam_stats.dart';
 export 'src/weak/weak_notes.dart';
+export 'src/review/spaced_review.dart';
 export 'src/teacher/teacher_mode.dart';
 export 'src/bank/question_bank.dart';
 export 'src/prereq/prerequisites.dart';
