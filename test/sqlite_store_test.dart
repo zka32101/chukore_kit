@@ -62,4 +62,12 @@ void main() {
     expect((await store.query(from: from)).map((a) => a.questionId),
         (await mem.query(from: from)).map((a) => a.questionId));
   });
+
+  test('スキーマ版を記録し、新しい版の DB は拒否する', () {
+    final db = sqlite3.openInMemory();
+    SqliteAttemptStore(db);
+    expect(db.select('PRAGMA user_version').first.values.first, SqliteAttemptStore.schemaVersion);
+    db.execute('PRAGMA user_version = ${SqliteAttemptStore.schemaVersion + 1}');
+    expect(() => SqliteAttemptStore(db), throwsStateError);
+  });
 }

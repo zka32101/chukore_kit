@@ -9,6 +9,10 @@ import 'attempt_store.dart';
 /// 範囲の境界はローカルの0時を UTC に直して比較する（時差のある国でも日付がずれない）。
 class SqliteAttemptStore implements AttemptStore {
   SqliteAttemptStore(this._db) {
+    final version = _db.select('PRAGMA user_version').first.values.first as int;
+    if (version > schemaVersion) {
+      throw StateError('新しい版のデータベースです（$version > $schemaVersion）。アプリを更新してください');
+    }
     _db.execute('''
       CREATE TABLE IF NOT EXISTS attempts (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -23,7 +27,12 @@ class SqliteAttemptStore implements AttemptStore {
       CREATE INDEX IF NOT EXISTS idx_attempts_unit ON attempts(unit_id, answered_at);
       CREATE INDEX IF NOT EXISTS idx_attempts_time ON attempts(answered_at);
     ''');
+    // 将来の列追加で既存端末の DB を移行できるように、版を記録しておく。
+    if (version < schemaVersion) _db.execute('PRAGMA user_version = $schemaVersion');
   }
+
+  /// テーブル構成の版。列を足すときは上げて、移行を書く。
+  static const schemaVersion = 1;
 
   final Database _db;
 
