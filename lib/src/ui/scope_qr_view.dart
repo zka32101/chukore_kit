@@ -5,7 +5,7 @@ import '../l10n/strings.dart';
 
 /// 範囲カードの QR コード。白地に黒で描く（読み取りやすさのため、教科色などは使わない）。
 /// 周りの余白（クワイエットゾーン）は 4 モジュール分。
-class ScopeQrView extends StatelessWidget {
+class ScopeQrView extends StatefulWidget {
   const ScopeQrView({
     super.key,
     required this.code,
@@ -19,12 +19,29 @@ class ScopeQrView extends StatelessWidget {
   final ChukoreStrings strings;
 
   @override
+  State<ScopeQrView> createState() => _ScopeQrViewState();
+}
+
+class _ScopeQrViewState extends State<ScopeQrView> {
+  late QrImage _image = _build(widget.code);
+
+  // 符号が変わったときだけ QR を作り直す（build のたびに計算しない）。
+  static QrImage _build(String code) =>
+      QrImage(QrCode.fromData(data: code, errorCorrectLevel: QrErrorCorrectLevel.M));
+
+  @override
+  void didUpdateWidget(ScopeQrView old) {
+    super.didUpdateWidget(old);
+    if (old.code != widget.code) _image = _build(widget.code);
+  }
+
+  @override
   Widget build(BuildContext context) => Semantics(
-        label: strings.scopeQrSemantics,
+        label: widget.strings.scopeQrSemantics,
         image: true,
         child: SizedBox.square(
-          dimension: size,
-          child: CustomPaint(painter: _QrPainter(QrImage(QrCode.fromData(data: code, errorCorrectLevel: QrErrorCorrectLevel.M)))),
+          dimension: widget.size,
+          child: CustomPaint(painter: _QrPainter(_image)),
         ),
       );
 }
@@ -52,5 +69,5 @@ class _QrPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_QrPainter old) => old.image != image;
+  bool shouldRepaint(_QrPainter old) => !identical(old.image, image);
 }

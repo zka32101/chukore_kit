@@ -74,4 +74,27 @@ void main() {
     expect(regionStyle(RegionVisual.correct, Colors.blue).$2, Colors.green);
     expect(regionStyle(RegionVisual.wrong, Colors.blue).$2, Colors.red);
   });
+
+  testWidgets('幅 0 の図（1点だけ）でも落ちない', (tester) async {
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: SizedBox(
+          width: 200,
+          height: 200,
+          child: RegionTapMap(
+            regions: [
+              MapRegion(id: 'p', label: 'P', rings: [
+                [const GeoPoint(1, 1), const GeoPoint(1, 1), const GeoPoint(1, 1)],
+              ]),
+            ],
+            available: const {'p'},
+            answered: false,
+            correctId: 'p',
+            onRegionTapped: (_) {},
+          ),
+        ),
+      ),
+    ));
+    expect(tester.takeException(), isNull);
+  });
 }

@@ -219,4 +219,19 @@ void main() {
     ]);
     expect(treeFingerprint(tree), 'd5eb74f7');
   });
+
+  testWidgets('符号が変わると QR も描き直される', (tester) async {
+    final a = encodeScope(_tree(), unitIds: ['e1']);
+    final b = encodeScope(_tree(), unitIds: ['e2']);
+    Future<void> show(String c) =>
+        tester.pumpWidget(MaterialApp(home: Scaffold(body: ScopeQrView(code: c))));
+    await show(a);
+    final first = tester.widget<CustomPaint>(find.descendant(of: find.byType(ScopeQrView), matching: find.byType(CustomPaint)).first).painter;
+    await show(b);
+    final second = tester.widget<CustomPaint>(find.descendant(of: find.byType(ScopeQrView), matching: find.byType(CustomPaint)).first).painter;
+    expect(second!.shouldRepaint(first!), isTrue);
+    await show(b);
+    final third = tester.widget<CustomPaint>(find.descendant(of: find.byType(ScopeQrView), matching: find.byType(CustomPaint)).first).painter;
+    expect(third!.shouldRepaint(second), isFalse);
+  });
 }

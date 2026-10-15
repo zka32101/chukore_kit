@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
+import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/material.dart';
 
 import '../growth/growth_card.dart';
@@ -146,6 +147,7 @@ class GrowthCardPainter extends CustomPainter {
       ellipsis: '…',
     )..layout(maxWidth: maxWidth);
     tp.paint(canvas, center ? o - Offset(tp.width / 2, tp.height / 2) : o);
+    tp.dispose();
   }
 
   @override
@@ -153,7 +155,7 @@ class GrowthCardPainter extends CustomPainter {
       old.data != data ||
       old.accent != accent ||
       old.fontFamily != fontFamily ||
-      old.fontFamilyFallback != fontFamilyFallback;
+      !listEquals(old.fontFamilyFallback, fontFamilyFallback);
 }
 
 /// 画面に出す成長カード（4:5）。
