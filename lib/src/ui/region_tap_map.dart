@@ -58,6 +58,12 @@ class RegionTapMap extends StatelessWidget {
   final ChukoreStrings strings;
   final void Function(String regionId) onRegionTapped;
 
+  /// 縦横比。1点だけの図など幅・高さが 0 でも AspectRatio が落ちないようにする。
+  static double _aspect(MapBounds b, double xScale) {
+    final w = b.width * xScale, h = b.height;
+    return w > 0 && h > 0 ? w / h : 1.0;
+  }
+
   @override
   Widget build(BuildContext context) {
     final bounds = this.bounds ?? MapBounds.of(regions);
@@ -80,7 +86,7 @@ class RegionTapMap extends StatelessWidget {
     return Semantics(
       label: strings.mapSemantics,
       child: AspectRatio(
-        aspectRatio: bounds.width * xScale / (bounds.height <= 0 ? 1 : bounds.height),
+        aspectRatio: _aspect(bounds, xScale),
         child: LayoutBuilder(builder: (context, c) {
           final vp = MapViewport(bounds, c.maxWidth, c.maxHeight,
               padding: background == null ? 8 : 0, xScale: xScale, flipY: flipY);
@@ -185,6 +191,7 @@ class _RegionPainter extends CustomPainter {
         textDirection: TextDirection.ltr,
       )..layout();
       tp.paint(canvas, Offset(x - tp.width / 2, y - tp.height / 2));
+      tp.dispose();
     }
   }
 
@@ -268,6 +275,13 @@ class _RegionPainter extends CustomPainter {
       old.regions != regions ||
       old.viewport.width != viewport.width ||
       old.viewport.height != viewport.height ||
+      old.viewport.xScale != viewport.xScale ||
+      old.viewport.flipY != viewport.flipY ||
+      old.viewport.padding != viewport.padding ||
+      old.viewport.bounds.minX != viewport.bounds.minX ||
+      old.viewport.bounds.minY != viewport.bounds.minY ||
+      old.viewport.bounds.maxX != viewport.bounds.maxX ||
+      old.viewport.bounds.maxY != viewport.bounds.maxY ||
       old.showLabels != showLabels ||
       old.regionColors != regionColors ||
       _labelsDiffer(old.labels, labels) ||
