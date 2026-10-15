@@ -207,4 +207,15 @@ void main() {
       expect(r.issues, isEmpty);
     });
   });
+
+  test('基準正答率の範囲外は assert に頼らず FormatException（リリースビルドでも検出）', () {
+    final j = {'id': 'q', 'unitId': 'u', 'type': 'choice', 'difficulty': -0.2, 'choices': ['a', 'b'], 'answer': 'a', 'explanationId': 'x'};
+    expect(() => Question.fromJson(j), throwsFormatException);
+    expect(() => Question.fromJson({...j, 'difficulty': 1.5}), throwsFormatException);
+  });
+
+  test('数値の正解にカンマがあると警告', () {
+    final c = validateQuestionBank(questions: [_q(type: 'numeric', choices: const [], answer: '3,5')]);
+    expect(_codes(c), contains('numeric_answer_comma'));
+  });
 }

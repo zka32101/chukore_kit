@@ -47,7 +47,16 @@ class Question {
     this.version = 1,
   }) : assert(difficulty >= 0 && difficulty <= 1);
 
-  factory Question.fromJson(Map<String, dynamic> j) => Question(
+  /// 基準正答率の範囲外（assert はリリースビルドで無効なので、読み込み時にも明示的に確かめる）。
+  static const difficultyRangeError = 'difficulty_out_of_range';
+
+  factory Question.fromJson(Map<String, dynamic> j) {
+    final d = (j['difficulty'] as num).toDouble();
+    if (!(d >= 0 && d <= 1)) throw const FormatException(difficultyRangeError);
+    return Question._fromJson(j);
+  }
+
+  factory Question._fromJson(Map<String, dynamic> j) => Question(
         id: j['id'] as String,
         unitId: j['unitId'] as String,
         type: j['type'] as String,

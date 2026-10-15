@@ -24,6 +24,7 @@ bool hasErrors(Iterable<ValidationIssue> issues) => issues.any((i) => i.isError)
 /// `checkAnswer` が扱う問題タイプ。
 const knownQuestionTypes = {'choice', 'map', 'numeric', 'order', 'timeline'};
 
+final _thousands = RegExp(r'^-?\d{1,3}(,\d{3})+(\.\d+)?$');
 final _tagPattern = RegExp(r'^[a-z][a-z0-9_]*$');
 
 const _questionKeys = ['id', 'unitId', 'type', 'difficulty', 'answer', 'explanationId'];
@@ -62,7 +63,8 @@ QuestionBankData parseQuestionBank(Map<String, dynamic> json) {
     try {
       return build(m);
     } catch (e) {
-      bad(e is AssertionError ? '基準正答率は 0〜1 にしてください' : '項目の型が違います（${_short(e)}）');
+      bad(e is AssertionError || (e is FormatException && e.message == Question.difficultyRangeError)
+          ? '基準正答率は 0〜1 にしてください' : '項目の型が違います（${_short(e)}）');
       return null;
     }
   }
@@ -146,7 +148,9 @@ List<ValidationIssue> validateQuestionBank({
     }
     if (q.explanationId.trim().isEmpty) err('explanation_missing', q.id, 'explanationId が空です');
     if (q.version < 1) err('bad_version', q.id, 'version は 1 以上');
-    if (q.difficulty == 0 || q.difficulty == 1) {
+    if (!(q.difficulty >= 0 && q.difficulty <= 1)) {
+      err('difficulty_out_of_range', q.id, '基準正答率は 0〜1 にしてください: ${q.difficulty}');
+    } else if (q.difficulty == 0 || q.difficulty == 1) {
       warn('difficulty_extreme', q.id, '基準正答率が ${q.difficulty}（アプリ内偏差値の換算で分散が 0 になります）');
     }
 
@@ -159,7 +163,11 @@ List<ValidationIssue> validateQuestionBank({
         if (!uniqueChoices.contains(q.answer)) err('answer_not_in_choices', q.id, '正解 ${q.answer} が選択肢にありません');
       case 'numeric':
         final v = double.tryParse(q.answer.replaceAll(',', ''));
-        if (v == null) err('numeric_answer_invalid', q.id, '数値として読めない正解: ${q.answer}');
+        if (v == null) {
+          err('numeric_answer_invalid', q.id, '数値として読めない正解: ${q.answer}');
+        } else if (q.answer.contains(',') && !_thousands.hasMatch(q.answer.trim())) {
+          warn('numeric_answer_comma', q.id, '正解はピリオド区切りで書いてください（桁区切り以外のカンマは無視されます）: ${q.answer}');
+        }
       case 'order' || 'timeline':
         final ids = q.answer.split(',').map((e) => e.trim()).toList();
         if (ids.length < 2) err('order_too_few', q.id, '並べ替えは2つ以上');
