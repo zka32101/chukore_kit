@@ -12,6 +12,8 @@ SQLite 保存: `package:chukore_kit/chukore_kit_sqlite.dart`（sqlite3。コー�
 実装済み追加: 図タップ（`RegionTapMap` の background＋画像座標 flipY=false）、年表（timeline 判定・`TimelineOrderList`）。
 実装済み追加: 成長カード（`GrowthCardData`・`GrowthCardView`・`renderGrowthCardPng`。名前/ID/メール欄なし、13歳未満はゲート通過後のみ共有）。
 実装済み追加: 先生役モード（まちがいキャラ）の出題・進行（`MistakeLine`・`pickMistakeLines`・`TeacherSession`・`teacherAttempt`）。誤解の型と弱点ノートの克服判定につながる。セリフなどの中身は問題データ（アプリ側）。
+
+実装済み追加: 間隔反復（`buildReviewStates`・`dueForReview`）。問題ごとに、正解で箱が上がり復習間隔が 1→3→7→14→30 日と伸び、不正解で箱 0 に戻って翌日に出す。テスト日を超えない。今日の復習は「遅れている順→箱が低い順」で、件数・単元で絞れる。固定の再出題日（`retryDates`）とは別に使える。
 実装済み追加: 問題集・単元ツリーの JSON 形式と検証（`parseQuestionBank`・`validateQuestionBank`・`validateUnitList`、`dart run tool/validate_bank.dart`）。形式は `docs/question_bank_format.md`。
 実装済み追加: 成長機能 v1.1（G7 成長の年輪 `buildGrowthRings`・`GrowthRingsView`、G8 本番の点数の記録 `compareRealTests`、G9 アプリ内偏差値の表示ポリシー `deviationDisplay`・`formatDeviationRange`）。
 実装済み追加: さかのぼり診断（`PrerequisiteGraph`・`diagnoseBacktrace`。他アプリの前提は誘導リンクだけ）。
