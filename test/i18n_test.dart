@@ -9,6 +9,7 @@ void main() {
   frTests();
   koZhTests();
   idTests();
+  viTests();
   test('言語コードから文言を選ぶ（未対応は英語）', () {
     expect(ChukoreStrings.forLocale('ja').languageCode, 'ja');
     expect(ChukoreStrings.forLocale('ja_JP').languageCode, 'ja');
@@ -630,6 +631,109 @@ void idTests() {
       expect(id.deviationLabel, 'Indeks skor dalam aplikasi');
       expect(id.deviationNote, contains('50'));
       expect(formatDeviationRange(const DeviationEstimate(55), id), '50–60');
+    });
+  });
+}
+
+void viTests() {
+  group('ベトナム語', () {
+    test('forLocale: vi・vi-VN', () {
+      expect(ChukoreStrings.forLocale('vi'), isA<ViStrings>());
+      expect(ChukoreStrings.forLocale('vi-VN'), isA<ViStrings>());
+      expect(ChukoreStrings.forLocale('vi_VN'), isA<ViStrings>());
+      expect(const ViStrings().tag, 'vi');
+    });
+
+    test('数の読み上げ（mười・mốt・lăm・lẻ・không trăm・nghìn）', () {
+      const vi = ViStrings();
+      expect(vi.gateNumberWords(482), 'bốn trăm tám mươi hai');
+      expect(vi.gateNumberWords(100), 'một trăm');
+      expect(vi.gateNumberWords(101), 'một trăm lẻ một');
+      expect(vi.gateNumberWords(105), 'một trăm lẻ năm');
+      expect(vi.gateNumberWords(110), 'một trăm mười');
+      expect(vi.gateNumberWords(111), 'một trăm mười một');
+      expect(vi.gateNumberWords(115), 'một trăm mười lăm');
+      expect(vi.gateNumberWords(120), 'một trăm hai mươi');
+      expect(vi.gateNumberWords(121), 'một trăm hai mươi mốt');
+      expect(vi.gateNumberWords(124), 'một trăm hai mươi bốn');
+      expect(vi.gateNumberWords(125), 'một trăm hai mươi lăm');
+      expect(vi.gateNumberWords(555), 'năm trăm năm mươi lăm');
+      expect(vi.gateNumberWords(999), 'chín trăm chín mươi chín');
+      expect(vi.gateNumberWords(1000), 'một nghìn');
+      expect(vi.gateNumberWords(1001), 'một nghìn không trăm lẻ một');
+      expect(vi.gateNumberWords(1010), 'một nghìn không trăm mười');
+      expect(vi.gateNumberWords(1500), 'một nghìn năm trăm');
+      expect(vi.gateNumberWords(2025), 'hai nghìn không trăm hai mươi lăm');
+      expect(vi.gateNumberWords(9999), 'chín nghìn chín trăm chín mươi chín');
+      expect(() => vi.gateNumberWords(0), throwsRangeError);
+    });
+
+    test('1〜9999 のすべてで、典型的な誤り（một mươi・mươi một・mười năm・lẻ mười・空白の乱れ）が出ない', () {
+      const vi = ViStrings();
+      for (var n = 1; n <= 9999; n++) {
+        final w = vi.gateNumberWords(n);
+        expect(w, isNotEmpty, reason: '$n');
+        expect(w, equals(w.trim()), reason: '$n 前後の空白: "$w"');
+        expect(w.contains('  '), isFalse, reason: '$n 二重の空白: "$w"');
+        for (final wrong in ['một mươi', 'mươi một', 'mươi năm', 'mười năm', 'lẻ mười', 'lẻ lăm', 'không trăm không']) {
+          expect(w.contains(wrong), isFalse, reason: '$n に "$wrong": "$w"');
+        }
+        // 千の位より下で百の位が 0 のときだけ「không trăm」が出る
+        expect(w.contains('không trăm'), n >= 1000 && n % 1000 != 0 && n % 1000 < 100, reason: '$n: "$w"');
+      }
+    });
+
+    test('保護者ゲート: 読み上げと、ドットの桁区切り（1.200）', () {
+      expect(const GateChallenge(482).promptFor(const ViStrings()), 'bốn trăm tám mươi hai');
+      expect(const GateChallenge(1200).verify('1.200'), isTrue);
+    });
+
+    test('小数点はカンマ。成長カード・レポート・年', () {
+      const vi = ViStrings();
+      expect(vi.decimalSeparator, ',');
+      GrowthCardData d(double? delta, {double? toNext = 5}) => GrowthCardData(
+            subjectLabel: 'Tiếng Anh',
+            level: Level.b,
+            pointsToNext: toNext,
+            scoreDelta: delta,
+            strings: vi,
+            radar: const [RadarAxis('a', .5), RadarAxis('b', .5), RadarAxis('c', .5)],
+          );
+      expect(d(2.5).headline, '+2,5 so với lần trước');
+      expect(d(-4).headline, 'Cùng tiến lên từ đây nhé');
+      expect(d(-4).headline.contains('-'), isFalse);
+      expect(d(null, toNext: 7.5).nextLine, '7,5 điểm nữa để lên cấp tiếp theo');
+      expect(d(1, toNext: null).nextLine, 'Đã đạt cấp cao nhất!');
+      final r = WeeklyReport(
+        weekStart: DateTime.utc(2026, 10, 13),
+        attemptCount: 12,
+        activeDays: 3,
+        improvements: const [Improvement('u', 'Động từ', 0.4, 0.7)],
+      );
+      expect(r.toText(strings: vi),
+          'Tuần này: 3 ngày / 12 câu\nNhững điều tiến bộ trong tuần này:\n- Động từ (40% -> 70%)');
+      expect(vi.formatYear(-500), '500 TCN');
+      expect(vi.formatYear(1945), 'năm 1945');
+      expect(vi.solvableValue(1), '1 câu'); // 複数形は無い
+    });
+
+    test('数値入力: 1.200,5（ドットが桁区切り、カンマが小数点）', () {
+      const q = Question(
+        id: 'q', unitId: 'u', type: 'numeric', difficulty: .5,
+        choices: [], answer: '1200.5', explanationId: 'x',
+      );
+      final sep = const ViStrings().decimalSeparator;
+      expect(checkAnswer(q, '1.200,5', decimalSeparator: sep).correct, isTrue);
+      expect(checkAnswer(q, '1200,5', decimalSeparator: sep).correct, isTrue);
+    });
+
+    test('持ち物の既定の項目・偏差値の名称', () {
+      const vi = ViStrings();
+      expect(vi.checklistDefaults.first, ('pencil', 'Bút và bút chì'));
+      expect(vi.checklistDefaults.length, 6);
+      expect(vi.deviationLabel, 'Chỉ số điểm trong ứng dụng');
+      expect(vi.deviationNote, contains('50'));
+      expect(formatDeviationRange(const DeviationEstimate(55), vi), '50–60');
     });
   });
 }

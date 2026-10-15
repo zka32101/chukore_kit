@@ -16,6 +16,7 @@ abstract class ChukoreStrings {
       'ko' => const KoStrings(),
       // `in` は Android・Java で使われる旧式のインドネシア語のコード
       'id' || 'in' => const IdStrings(),
+      'vi' => const ViStrings(),
       'zh' => ZhStrings(traditional: ZhStrings.isTraditional(parts)),
       'fr' => FrStrings(septanteNonante: parts.length > 1 && FrStrings.septanteNonanteRegions.contains(parts[1])),
       'es' => EsStrings(decimalComma: !(parts.length > 1 && EsStrings.decimalPointRegions.contains(parts[1]))),
@@ -40,6 +41,7 @@ abstract class ChukoreStrings {
     FrStrings(septanteNonante: true),
     KoStrings(),
     IdStrings(),
+    ViStrings(),
     ZhStrings(),
     ZhStrings(traditional: true),
   ];
@@ -1267,4 +1269,146 @@ class IdStrings extends ChukoreStrings {
   String get teacherCorrect => 'Benar! Kamu berhasil memperbaikinya';
   @override
   String get teacherWrong => 'Hampir! Baca sekali lagi';
+}
+
+class ViStrings extends ChukoreStrings {
+  const ViStrings();
+
+  static const _units = ['', 'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín'];
+
+  @override
+  String get languageCode => 'vi';
+
+  @override
+  String get decimalSeparator => ',';
+
+  /// 1〜99（「mười」「mười lăm」「hai mươi mốt」「hai mươi lăm」）。
+  String _below100(int n) {
+    if (n < 10) return _units[n];
+    final t = n ~/ 10, u = n % 10;
+    if (t == 1) {
+      return switch (u) { 0 => 'mười', 5 => 'mười lăm', _ => 'mười ${_units[u]}' };
+    }
+    final unit = switch (u) { 0 => '', 1 => ' mốt', 5 => ' lăm', _ => ' ${_units[u]}' };
+    return '${_units[t]} mươi$unit';
+  }
+
+  /// 1〜999。[zeroHundreds] は千の位より下で百の位が 0 のとき「không trăm」を読む（1005 = một nghìn không trăm lẻ năm）。
+  String _below1000(int n, {bool zeroHundreds = false}) {
+    final h = n ~/ 100, r = n % 100;
+    final parts = <String>[];
+    if (h > 0) {
+      parts.add('${_units[h]} trăm');
+    } else if (zeroHundreds) {
+      parts.add('không trăm');
+    }
+    if (r > 0) {
+      // 十の位が 0 の一桁は「lẻ」（北部）を挟む
+      parts.add(r < 10 && parts.isNotEmpty ? 'lẻ ${_units[r]}' : _below100(r));
+    }
+    return parts.join(' ');
+  }
+
+  @override
+  String gateNumberWords(int n) {
+    if (n < 1 || n > 9999) throw RangeError.range(n, 1, 9999, 'n');
+    final th = n ~/ 1000, r = n % 1000;
+    final thousands = th == 0 ? '' : '${_units[th]} nghìn';
+    if (r == 0) return thousands;
+    return th == 0 ? _below1000(r) : '$thousands ${_below1000(r, zeroHundreds: true)}';
+  }
+
+  @override
+  String cardTitle(String subject) => '$subject · Thẻ tiến bộ';
+  @override
+  String get headlinePersonalBest => 'Kỷ lục cá nhân mới!';
+  @override
+  String get headlineFirst => 'Khởi đầu tốt đẹp';
+  @override
+  String headlineUp(String points) => '+$points so với lần trước';
+  @override
+  String get headlineSame => 'Ổn định như lần trước';
+  @override
+  String get headlineDown => 'Cùng tiến lên từ đây nhé';
+  @override
+  String nextLevel(String points) => '$points điểm nữa để lên cấp tiếp theo';
+  @override
+  String get topLevel => 'Đã đạt cấp cao nhất!';
+  @override
+  String streakDays(int days) => '$days ngày liên tiếp';
+  @override
+  String get statStamps => 'Đã vượt qua';
+  @override
+  String get statSolvable => 'Giờ đã làm được';
+  @override
+  String solvableValue(int count) => '$count câu';
+  @override
+  String cardSemantics(String headline, String level) => 'Thẻ tiến bộ. $headline. Cấp $level';
+  @override
+  String get mapSemantics => 'Bản đồ. Chạm để chọn đáp án';
+  @override
+  String formatYear(int year) => year < 0 ? '${-year} TCN' : 'năm $year';
+  @override
+  String reportHeader(int activeDays, int attempts) => 'Tuần này: $activeDays ngày / $attempts câu';
+  @override
+  String get reportImprovedTitle => 'Những điều tiến bộ trong tuần này:';
+  @override
+  String reportItem(String title, int b, int a) => '- $title ($b% -> $a%)';
+  @override
+  String get reportEmpty => 'Tuần này chưa có tiến bộ mới. Cứ học theo nhịp của bạn nhé.';
+  @override
+  String get scopeQrTitle => 'Chia sẻ phạm vi kiểm tra';
+  @override
+  String get scopeQrHint =>
+      'Bạn bè hoặc gia đình có thể quét mã này để đặt cùng phạm vi. Mã không chứa tên hay điểm số.';
+  @override
+  String get scopeQrSemantics => 'Mã QR phạm vi kiểm tra';
+  @override
+  String get checklistTitle => 'Kiểm tra ngày thi';
+  @override
+  String checklistProgress(int done, int total) => '$done/$total đã sẵn sàng';
+  @override
+  String get checklistAllDone => 'Mọi thứ đã sẵn sàng. Chúc bạn thi tốt!';
+  @override
+  String get fiveMinuteTitle => 'Thẻ 5 phút cuối';
+  @override
+  List<(String, String)> get checklistDefaults => [
+        ('pencil', 'Bút và bút chì'),
+        ('eraser', 'Cục tẩy'),
+        ('ruler', 'Thước và compa'),
+        ('watch', 'Đồng hồ đeo tay'),
+        ('tissue', 'Khăn tay và khăn giấy'),
+        ('notes', 'Ghi chú tóm tắt'),
+      ];
+  @override
+  String get sheetTitle => 'Tờ ôn nhanh trước giờ thi';
+  @override
+  String get sheetQuestion => 'Câu hỏi';
+  @override
+  String get sheetAnswer => 'Đáp án';
+  @override
+  String get sheetExplanation => 'Giải thích';
+  @override
+  String get sheetEmpty => 'Hiện chưa có gì cần sửa. Làm tốt lắm!';
+  @override
+  String get markCorrect => 'đúng';
+  @override
+  String get markWrong => 'sai';
+  @override
+  String get ringsTitle => 'Vòng tăng trưởng';
+  @override
+  String ringsSemantics(int totalDays) => 'Vòng tăng trưởng. Tổng cộng $totalDays ngày học';
+  @override
+  String get deviationLabel => 'Chỉ số điểm trong ứng dụng';
+  @override
+  String deviationRange(String low, String high) => '$low–$high';
+  @override
+  String get deviationNote =>
+      'Chỉ số ước lượng chỉ có giá trị trong ứng dụng này, lấy 50 làm trung bình của nhóm tham chiếu. Không phải xếp hạng toàn quốc.';
+  @override
+  String get teacherPrompt => 'Chỗ nào sai? Hãy sửa lại cho đúng';
+  @override
+  String get teacherCorrect => 'Đúng rồi! Bạn đã sửa được';
+  @override
+  String get teacherWrong => 'Gần đúng! Hãy đọc lại một lần nữa';
 }
