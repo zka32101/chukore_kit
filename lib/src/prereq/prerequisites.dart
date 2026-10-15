@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import '../bank/question_bank.dart';
 import '../models/models.dart';
 import '../scope/unit_tree.dart';
@@ -186,6 +188,17 @@ BacktraceResult diagnoseBacktrace(
       status[id] != StepStatus.ok &&
       graph.requiresOf(id).where(depth.containsKey).every((r) => status[r] == StepStatus.ok);
 
+  // 循環した前提（検証を通さず読み込んだ場合）では isRoot が誰も true にならないので、
+  // 習熟が足りない前提のうち最も土台に近い（段数が大きい）ものを出発点の候補にする。
+  final rootIds = <String>{for (final id in depth.keys) if (isRoot(id)) id};
+  if (rootIds.isEmpty) {
+    final notOk = [for (final id in depth.keys) if (status[id] != StepStatus.ok) id];
+    if (notOk.isNotEmpty) {
+      final deepest = notOk.map((id) => depth[id]!).reduce(math.max);
+      rootIds.addAll(notOk.where((id) => depth[id] == deepest));
+    }
+  }
+
   final steps = [
     for (final e in depth.entries)
       BacktraceStep(
@@ -193,7 +206,7 @@ BacktraceResult diagnoseBacktrace(
         depth: e.value,
         mastery: mastery[e.key]?.score,
         status: status[e.key]!,
-        isRootCause: isRoot(e.key),
+        isRootCause: rootIds.contains(e.key),
       ),
   ]..sort((a, b) {
       final c = b.depth.compareTo(a.depth); // 土台に近い順

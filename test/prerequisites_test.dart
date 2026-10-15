@@ -147,4 +147,15 @@ void main() {
     expect(r.rootCauses.map((s) => s.unitId), ['en1_be']);
     expect(r.externalReferrals.single.id, 'shogaku_english_basic');
   });
+
+  test('循環した前提でも、出発点の候補が空にならない（検証を通さない入力）', () {
+    final g = PrerequisiteGraph([
+      const PrereqNode('a', requires: ['b']),
+      const PrereqNode('b', requires: ['c']),
+      const PrereqNode('c', requires: ['b']),
+    ]);
+    final r = diagnoseBacktrace(g, 'a', ms({'b': 0.2, 'c': 0.3}));
+    expect(r.prerequisitesSolid, isFalse);
+    expect(r.rootCauses, isNotEmpty);
+  });
 }
