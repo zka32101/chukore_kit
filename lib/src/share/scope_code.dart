@@ -58,7 +58,9 @@ final _subjectPattern = RegExp(r'^[a-z][a-z0-9]{0,15}$');
 String treeFingerprint(UnitTree tree) {
   var h = 0x811c9dc5;
   for (final b in utf8.encode(tree.allLeaves().map((u) => u.id).join('\n'))) {
-    h = ((h ^ b) * 0x01000193) & 0xFFFFFFFF;
+    // h * 0x01000193 を分割して計算（Web の 2^53 超えで精度が落ちないように）
+    final x = h ^ b;
+    h = (((x << 24) & 0xFFFFFFFF) + ((x * 0x193) & 0xFFFFFFFF)) & 0xFFFFFFFF;
   }
   return h.toRadixString(16).padLeft(8, '0');
 }

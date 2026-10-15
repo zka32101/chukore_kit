@@ -212,4 +212,11 @@ void main() {
       }
     }
   });
+
+  test('指紋は FNV-1a 32bit の既知値と一致する（分割乗算の回帰）', () {
+    final tree = UnitTree(1, [
+      for (final id in ['a', 'b', 'c']) Unit(id: id, subject: 'en', grade: 1, title: id),
+    ]);
+    expect(treeFingerprint(tree), 'd5eb74f7');
+  });
 }
