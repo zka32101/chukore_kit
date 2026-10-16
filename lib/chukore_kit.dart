@@ -18,6 +18,7 @@ export 'src/review/spaced_review.dart';
 export 'src/time/study_time.dart';
 export 'src/goal/goal_plan.dart';
 export 'src/mock/mock_exam.dart';
+export 'src/mock/mock_history.dart';
 export 'src/teacher/teacher_mode.dart';
 export 'src/bank/question_bank.dart';
 export 'src/prereq/prerequisites.dart';
