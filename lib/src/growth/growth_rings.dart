@@ -10,6 +10,13 @@ class RingMonth {
 
   /// その月の学習日の割合 0〜1（年輪の太さ）。
   double get ratio => days / daysInMonth;
+
+  @override
+  bool operator ==(Object other) =>
+      other is RingMonth && other.year == year && other.month == month && other.days == days;
+
+  @override
+  int get hashCode => Object.hash(year, month, days);
 }
 
 /// G7 成長の年輪。毎日の学習が積み重なり、休んでも消えない。
@@ -21,6 +28,21 @@ class GrowthRings {
 
   /// これまでに学習した日数の合計。減らない。
   final int totalDays;
+
+  /// 中身が同じなら等しい（画面が、同じ年輪を作り直されるたびに描き直さないため）。
+  @override
+  bool operator ==(Object other) {
+    if (other is! GrowthRings || other.totalDays != totalDays || other.months.length != months.length) {
+      return false;
+    }
+    for (var i = 0; i < months.length; i++) {
+      if (other.months[i] != months[i]) return false;
+    }
+    return true;
+  }
+
+  @override
+  int get hashCode => Object.hash(totalDays, Object.hashAll(months));
 }
 
 /// 学習した日の一覧から年輪を作る。同じ日は1日と数える。[now] を渡すと今月までの輪を作る。

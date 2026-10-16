@@ -164,4 +164,22 @@ void main() {
       }
     });
   });
+
+  test('年輪は中身が同じなら等しい（作り直されても描き直さない）。違えば等しくない', () {
+    final days = [DateTime.utc(2026, 9, 3), DateTime.utc(2026, 10, 1), DateTime.utc(2026, 10, 2)];
+    final a = buildGrowthRings(days);
+    final b = buildGrowthRings(days);
+    expect(identical(a, b), isFalse);
+    expect(a, b);
+    expect(a.hashCode, b.hashCode);
+    expect(a.months.first, b.months.first);
+    expect(buildGrowthRings([...days, DateTime.utc(2026, 10, 3)]), isNot(a));
+    expect(buildGrowthRings(days.sublist(1)), isNot(a));
+    // 合計日数も月の数も同じで、月ごとの日数だけが違う
+    final x = buildGrowthRings([DateTime.utc(2026, 9, 3), DateTime.utc(2026, 9, 4), DateTime.utc(2026, 10, 1)]);
+    final y = buildGrowthRings([DateTime.utc(2026, 9, 3), DateTime.utc(2026, 10, 1), DateTime.utc(2026, 10, 2)]);
+    expect((x.totalDays, x.months.length), (y.totalDays, y.months.length));
+    expect(x, isNot(y));
+    expect(const GrowthRings([], 0), const GrowthRings([], 0));
+  });
 }
