@@ -22,25 +22,29 @@ class SqliteAttemptStore implements AttemptStore {
         chosen_id TEXT,
         answered_at TEXT NOT NULL,
         elapsed_ms INTEGER NOT NULL DEFAULT 0,
-        mode TEXT NOT NULL DEFAULT 'practice'
+        mode TEXT NOT NULL DEFAULT 'practice',
+        confident INTEGER
       );
       CREATE INDEX IF NOT EXISTS idx_attempts_unit ON attempts(unit_id, answered_at);
       CREATE INDEX IF NOT EXISTS idx_attempts_time ON attempts(answered_at);
     ''');
-    // 将来の列追加で既存端末の DB を移行できるように、版を記録しておく。
+    // 版 1 → 2: 自信度の列を足す。版の数字ではなく列の有無で見る
+    // （版を記録する前に作られた DB は user_version が 0 のままのため）。
+    final columns = {for (final r in _db.select('PRAGMA table_info(attempts)')) r['name'] as String};
+    if (!columns.contains('confident')) _db.execute('ALTER TABLE attempts ADD COLUMN confident INTEGER');
     if (version < schemaVersion) _db.execute('PRAGMA user_version = $schemaVersion');
   }
 
   /// テーブル構成の版。列を足すときは上げて、移行を書く。
-  static const schemaVersion = 1;
+  static const schemaVersion = 2;
 
   final Database _db;
 
   @override
   Future<void> add(Attempt a) async {
     _db.execute(
-      'INSERT INTO attempts (question_id, unit_id, correct, chosen_id, answered_at, elapsed_ms, mode) '
-      'VALUES (?, ?, ?, ?, ?, ?, ?)',
+      'INSERT INTO attempts (question_id, unit_id, correct, chosen_id, answered_at, elapsed_ms, mode, confident) '
+      'VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
       [
         a.questionId,
         a.unitId,
@@ -49,6 +53,7 @@ class SqliteAttemptStore implements AttemptStore {
         a.answeredAt.toUtc().toIso8601String(),
         a.elapsedMs,
         a.mode,
+        a.confident == null ? null : (a.confident! ? 1 : 0),
       ],
     );
   }
@@ -84,6 +89,7 @@ class SqliteAttemptStore implements AttemptStore {
           answeredAt: DateTime.parse(r['answered_at'] as String).toLocal(),
           elapsedMs: r['elapsed_ms'] as int,
           mode: r['mode'] as String,
+          confident: switch (r['confident'] as int?) { null => null, final c => c == 1 },
         ),
     ];
   }
