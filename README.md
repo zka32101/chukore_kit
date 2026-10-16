@@ -24,6 +24,8 @@ SQLite 保存: `package:chukore_kit/chukore_kit_sqlite.dart`（sqlite3。コー�
 実装済み追加: テスト後の振り返り（`buildPostTestReview`）。実際のテストの問題は問題集に無いので、単元ごとの失点と理由（理解不足／忘れ／ケアレス／時間切れ）を入れる。単元別・理由別の失点、「取り戻しやすい失点」（ケアレス・時間切れ）と「学び直しが要る失点」（理解不足・忘れ）、入力の食い違い（`consistent`）を返す。理解不足・忘れの単元だけ習熟度を下げた `adjustedMastery`（`buildPlan` にそのまま渡せる）と、履歴に残す `mode: 'real_test'` の回答を作る。ツリーを渡すと、存在しない単元・葉でない単元を `issues` で報告して外す。
 
 実装済み追加: 誤解の型の傾向分析（`analyzeMisconceptions`）。誤答した選択肢に付いた誤解の型を単元をまたいで集計し、型ごとに回数・自信ありで誤答した回数・単元別の回数・直近 14 日とその前の 14 日の比較（新しく出た／増えた／同じ／減った／直近は出ていない）・克服済みかを返す。複数の単元に出ている型（`crossUnit`）は、単元をこえた共通のつまずきとして先に並び、さかのぼり診断や学び直しの入口になる。
+
+実装済み追加: 学習時間の見積もり（`buildPace`・`estimateDayTimes`・`daysOverBudget`・`questionsWithinBudget`）。回答の所要時間（`elapsedMs`）から1問あたりの時間を中央値で求め（単元の記録が 5 件以上ならその単元、足りなければ全体、全体も足りなければ既定の 45 秒。未計測と 5 分超は除く）、`buildPlan` の日ごとの計画から1日の学習時間を見積もる（表示用に5分きざみの切り上げ）。1日に使える分を決めて、超える日を探したり、その分で解ける問題数を出したりできる。
 実装済み追加: 問題集・単元ツリーの JSON 形式と検証（`parseQuestionBank`・`validateQuestionBank`・`validateUnitList`、`dart run tool/validate_bank.dart`）。形式は `docs/question_bank_format.md`。
 実装済み追加: 成長機能 v1.1（G7 成長の年輪 `buildGrowthRings`・`GrowthRingsView`、G8 本番の点数の記録 `compareRealTests`、G9 アプリ内偏差値の表示ポリシー `deviationDisplay`・`formatDeviationRange`）。
 実装済み追加: さかのぼり診断（`PrerequisiteGraph`・`diagnoseBacktrace`。他アプリの前提は誘導リンクだけ）。
