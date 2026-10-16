@@ -20,6 +20,8 @@ SQLite 保存: `package:chukore_kit/chukore_kit_sqlite.dart`（sqlite3。コー�
 実装済み追加: ケアレスミス判定（`classifyMistakes`）。誤答を「ケアレスの疑い」（その単元で正解するときの中央値の 35% 未満で答えた＝`tooFast`、直後 10 分以内に同じ問題を正解し直した＝`quickRetry`）と「理解不足の疑い」に分ける目安。`buildWeakNotes(..., ignoreCareless: true)` でケアレスの疑いの誤答を弱点に数えない（既定は従来どおり数える）。所要時間が未計測（0）や、基準になる正解が 5 件未満のときは速さでは判定しない。
 
 実装済み追加: 自信度（`Attempt.confident`・`confidenceKindOf`・`summarizeConfidence`）。回答のとき「自信あり／なし」を任意で聞き、正誤と合わせて4つに分ける（自信ありで正解＝定着、自信なしで正解＝まぐれかも、自信ありで誤答＝思い込みの疑い、自信なしで誤答＝分からないと自覚）。単元別に「誤答のうち自信ありだった割合」「正解のうち自信なしだった割合」を出せる。間隔反復では、自信なしの正解は箱を上げず、自信ありで誤答した問題は同じ遅れなら先に出す。弱点ノートに `confidentWrongCount`。模試の `scoreMockExam(confident:)` でも残せる。SQLite は版 2（`confident` 列。旧版の DB は開くと列が足され、既存の回答は残る）。
+
+実装済み追加: テスト後の振り返り（`buildPostTestReview`）。実際のテストの問題は問題集に無いので、単元ごとの失点と理由（理解不足／忘れ／ケアレス／時間切れ）を入れる。単元別・理由別の失点、「取り戻しやすい失点」（ケアレス・時間切れ）と「学び直しが要る失点」（理解不足・忘れ）、入力の食い違い（`consistent`）を返す。理解不足・忘れの単元だけ習熟度を下げた `adjustedMastery`（`buildPlan` にそのまま渡せる）と、履歴に残す `mode: 'real_test'` の回答を作る。ツリーを渡すと、存在しない単元・葉でない単元を `issues` で報告して外す。
 実装済み追加: 問題集・単元ツリーの JSON 形式と検証（`parseQuestionBank`・`validateQuestionBank`・`validateUnitList`、`dart run tool/validate_bank.dart`）。形式は `docs/question_bank_format.md`。
 実装済み追加: 成長機能 v1.1（G7 成長の年輪 `buildGrowthRings`・`GrowthRingsView`、G8 本番の点数の記録 `compareRealTests`、G9 アプリ内偏差値の表示ポリシー `deviationDisplay`・`formatDeviationRange`）。
 実装済み追加: さかのぼり診断（`PrerequisiteGraph`・`diagnoseBacktrace`。他アプリの前提は誘導リンクだけ）。
