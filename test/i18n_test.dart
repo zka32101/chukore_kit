@@ -13,6 +13,7 @@ void main() {
   deTests();
   trTests();
   thTests();
+  formatNumberTests();
   test('言語コードから文言を選ぶ（未対応は英語）', () {
     expect(ChukoreStrings.forLocale('ja').languageCode, 'ja');
     expect(ChukoreStrings.forLocale('ja_JP').languageCode, 'ja');
@@ -1054,5 +1055,22 @@ void thTests() {
       expect(th.deviationNote, contains('50'));
       expect(formatDeviationRange(const DeviationEstimate(55), th), '50–60');
     });
+  });
+}
+
+void formatNumberTests() {
+  test('点数の表示: 小数1桁に丸めて、整数なら小数点なし（3.0・0.0・-0.0 にしない）', () {
+    for (final s in ChukoreStrings.supported) {
+      expect(s.formatNumber(3), '3', reason: s.tag);
+      expect(s.formatNumber(2.96), '3', reason: s.tag);
+      expect(s.formatNumber(99.96), '100', reason: s.tag);
+      expect(s.formatNumber(0.04), '0', reason: s.tag);
+      expect(s.formatNumber(-0.04), '0', reason: s.tag);
+      expect(s.formatNumber(0), '0', reason: s.tag);
+      expect(s.formatNumber(2.5), '2${s.decimalSeparator}5', reason: s.tag);
+      expect(s.formatNumber(7.45), '7${s.decimalSeparator}5', reason: s.tag);
+      expect(s.formatNumber(-2.5), '-2${s.decimalSeparator}5', reason: s.tag);
+      expect(s.formatNumber(0.06), '0${s.decimalSeparator}1', reason: s.tag);
+    }
   });
 }

@@ -58,9 +58,13 @@ abstract class ChukoreStrings {
   String get decimalSeparator => '.';
 
   /// 点数などの小数の表記（小数点は国で違う）。整数は小数点なし。
-  String formatNumber(double v) => v == v.roundToDouble()
-      ? v.round().toString()
-      : v.toStringAsFixed(1).replaceAll('.', decimalSeparator);
+  String formatNumber(double v) {
+    // 先に小数1桁へ丸める（2.96 → 3、0.04 → 0、-0.04 → 0。「3.0」「-0.0」にしない）
+    final r = (v * 10).round() / 10;
+    return r == r.roundToDouble()
+        ? r.round().toString()
+        : r.toStringAsFixed(1).replaceAll('.', decimalSeparator);
+  }
 
   // --- 保護者ゲート ---
   /// 出題する数（100〜999）の読み上げ表記。ja は漢数字、en は英単語。
