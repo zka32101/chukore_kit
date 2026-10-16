@@ -1,4 +1,5 @@
 import '../models/models.dart';
+import 'careless.dart';
 
 /// 弱点の1項目。誤解の型（tag）または問題単位（questionId）で管理する。
 class WeakEntry {
@@ -33,15 +34,22 @@ bool isOvercome(
 }
 
 /// 回答履歴から弱点ノートを作る。誤答選択肢に型があればその型、無ければ問題単位。
+/// [ignoreCareless] が true なら、`classifyMistakes` でケアレスミスの疑いとされた誤答は弱点に数えない。
 /// 結果は未克服を先、最近間違えた順。
 List<WeakEntry> buildWeakNotes(
   Iterable<Attempt> attempts,
   Map<String, Question> questions, {
   int streak = 3,
   int minDays = 2,
+  bool ignoreCareless = false,
 }) {
   final sorted = attempts.toList()
     ..sort((a, b) => a.answeredAt.compareTo(b.answeredAt));
+
+  // ケアレスミスの疑いの誤答は、弱点の数え上げから外す（履歴・克服判定には残す）。
+  final careless = ignoreCareless
+      ? {for (final v in classifyMistakes(sorted)) if (v.careless) v.attempt}
+      : const <Attempt>{};
 
   final history = <String, List<Attempt>>{};
   final wrong = <String, List<Attempt>>{};
@@ -57,7 +65,7 @@ List<WeakEntry> buildWeakNotes(
     }
     (history['q:${q.id}'] ??= []).add(a);
     meta['q:${q.id}'] = (null, q.id);
-    if (!a.correct) {
+    if (!a.correct && !careless.contains(a)) {
       final tag = a.chosenId == null ? null : q.misconceptionTags[a.chosenId];
       final key = tag != null ? 'tag:$tag' : 'q:${q.id}';
       (wrong[key] ??= []).add(a);

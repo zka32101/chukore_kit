@@ -16,6 +16,8 @@ SQLite 保存: `package:chukore_kit/chukore_kit_sqlite.dart`（sqlite3。コー�
 実装済み追加: 間隔反復（`buildReviewStates`・`dueForReview`）。問題ごとに、正解で箱が上がり復習間隔が 1→3→7→14→30 日と伸び、不正解で箱 0 に戻って翌日に出す。テスト日を超えない。今日の復習は「遅れている順→箱が低い順」で、件数・単元で絞れる。固定の再出題日（`retryDates`）とは別に使える。
 
 実装済み追加: 模試モード（`buildMockExam`・`scoreMockExam`）。範囲と問題数・制限時間を決めると、単元の重み（estimatedQuestions）に比例して出題する（同じ seed なら同じ出題）。採点は単元別の成績・未回答（不正解扱い）・時間切れ・アプリ内偏差値（段階1）を返し、回答履歴は `mode: 'mock'` で習熟度・間隔反復・弱点ノートにそのまま使える。正答率の低い単元は `weakUnits()`。
+
+実装済み追加: ケアレスミス判定（`classifyMistakes`）。誤答を「ケアレスの疑い」（その単元で正解するときの中央値の 35% 未満で答えた＝`tooFast`、直後 10 分以内に同じ問題を正解し直した＝`quickRetry`）と「理解不足の疑い」に分ける目安。`buildWeakNotes(..., ignoreCareless: true)` でケアレスの疑いの誤答を弱点に数えない（既定は従来どおり数える）。所要時間が未計測（0）や、基準になる正解が 5 件未満のときは速さでは判定しない。
 実装済み追加: 問題集・単元ツリーの JSON 形式と検証（`parseQuestionBank`・`validateQuestionBank`・`validateUnitList`、`dart run tool/validate_bank.dart`）。形式は `docs/question_bank_format.md`。
 実装済み追加: 成長機能 v1.1（G7 成長の年輪 `buildGrowthRings`・`GrowthRingsView`、G8 本番の点数の記録 `compareRealTests`、G9 アプリ内偏差値の表示ポリシー `deviationDisplay`・`formatDeviationRange`）。
 実装済み追加: さかのぼり診断（`PrerequisiteGraph`・`diagnoseBacktrace`。他アプリの前提は誘導リンクだけ）。
