@@ -11,11 +11,12 @@ void main() {
   idTests();
   viTests();
   deTests();
+  trTests();
   test('言語コードから文言を選ぶ（未対応は英語）', () {
     expect(ChukoreStrings.forLocale('ja').languageCode, 'ja');
     expect(ChukoreStrings.forLocale('ja_JP').languageCode, 'ja');
     expect(ChukoreStrings.forLocale('en-US').languageCode, 'en');
-    expect(ChukoreStrings.forLocale('tr').languageCode, 'en');
+    expect(ChukoreStrings.forLocale('ru').languageCode, 'en');
   });
 
   test('英語の数の読み上げ', () {
@@ -853,6 +854,101 @@ void deTests() {
       expect(de.deviationLabel, 'Punkte-Index in der App');
       expect(de.deviationNote, contains('50'));
       expect(formatDeviationRange(const DeviationEstimate(55), de), '50–60');
+    });
+  });
+}
+
+void trTests() {
+  group('トルコ語', () {
+    test('forLocale: tr・tr-TR', () {
+      expect(ChukoreStrings.forLocale('tr'), isA<TrStrings>());
+      expect(ChukoreStrings.forLocale('tr-TR'), isA<TrStrings>());
+      expect(ChukoreStrings.forLocale('TR_tr'), isA<TrStrings>());
+      expect(const TrStrings().tag, 'tr');
+    });
+
+    test('数の読み上げ（yüz・bin は「bir」を付けない。分けて書く）', () {
+      const tr = TrStrings();
+      expect(tr.gateNumberWords(482), 'dört yüz seksen iki');
+      expect(tr.gateNumberWords(100), 'yüz');
+      expect(tr.gateNumberWords(101), 'yüz bir');
+      expect(tr.gateNumberWords(110), 'yüz on');
+      expect(tr.gateNumberWords(200), 'iki yüz');
+      expect(tr.gateNumberWords(321), 'üç yüz yirmi bir');
+      expect(tr.gateNumberWords(555), 'beş yüz elli beş');
+      expect(tr.gateNumberWords(999), 'dokuz yüz doksan dokuz');
+      expect(tr.gateNumberWords(1000), 'bin');
+      expect(tr.gateNumberWords(1001), 'bin bir');
+      expect(tr.gateNumberWords(1500), 'bin beş yüz');
+      expect(tr.gateNumberWords(2025), 'iki bin yirmi beş');
+      expect(tr.gateNumberWords(9999), 'dokuz bin dokuz yüz doksan dokuz');
+      expect(() => tr.gateNumberWords(0), throwsRangeError);
+    });
+
+    test('1〜9999 のすべてで、典型的な誤り（bir yüz・bir bin・空白の乱れ）が出ない', () {
+      const tr = TrStrings();
+      for (var n = 1; n <= 9999; n++) {
+        final w = tr.gateNumberWords(n);
+        expect(w, isNotEmpty, reason: '$n');
+        expect(w, equals(w.trim()), reason: '$n 前後の空白: "$w"');
+        expect(w.contains('  '), isFalse, reason: '$n 二重の空白: "$w"');
+        expect(w.startsWith('bir yüz') || w.startsWith('bir bin') || w.contains(' bir yüz') || w.contains(' bir bin'),
+            isFalse, reason: '$n: "$w"');
+      }
+    });
+
+    test('保護者ゲート: 読み上げと、ドットの桁区切り（1.200）', () {
+      expect(const GateChallenge(482).promptFor(const TrStrings()), 'dört yüz seksen iki');
+      expect(const GateChallenge(1200).verify('1.200'), isTrue);
+    });
+
+    test('小数点はカンマ。成長カード・レポート（%が前）・年', () {
+      const tr = TrStrings();
+      expect(tr.decimalSeparator, ',');
+      GrowthCardData d(double? delta, {double? toNext = 5}) => GrowthCardData(
+            subjectLabel: 'İngilizce',
+            level: Level.b,
+            pointsToNext: toNext,
+            scoreDelta: delta,
+            strings: tr,
+            radar: const [RadarAxis('a', .5), RadarAxis('b', .5), RadarAxis('c', .5)],
+          );
+      expect(d(2.5).headline, 'Geçen seferden +2,5');
+      expect(d(-4).headline, 'Buradan yeniden yükselelim');
+      expect(d(-4).headline.contains('-'), isFalse);
+      expect(d(null, toNext: 7.5).nextLine, 'Bir sonraki seviyeye 7,5 puan kaldı');
+      expect(d(1, toNext: null).nextLine, 'En yüksek seviyeye ulaşıldı!');
+      final r = WeeklyReport(
+        weekStart: DateTime.utc(2026, 10, 13),
+        attemptCount: 12,
+        activeDays: 3,
+        improvements: const [Improvement('u', 'Fiiller', 0.4, 0.7)],
+      );
+      expect(r.toText(strings: tr),
+          'Bu hafta: 3 gün / 12 soru\nBu hafta gelişenler:\n- Fiiller (%40 -> %70)');
+      expect(tr.formatYear(-500), 'M.Ö. 500');
+      expect(tr.formatYear(1945), '1945');
+      expect(tr.solvableValue(1), '1 soru'); // 数詞のあとは単数形
+      expect(tr.solvableValue(5), '5 soru');
+    });
+
+    test('数値入力: 1.200,5（ドットが桁区切り、カンマが小数点）', () {
+      const q = Question(
+        id: 'q', unitId: 'u', type: 'numeric', difficulty: .5,
+        choices: [], answer: '1200.5', explanationId: 'x',
+      );
+      final sep = const TrStrings().decimalSeparator;
+      expect(checkAnswer(q, '1.200,5', decimalSeparator: sep).correct, isTrue);
+      expect(checkAnswer(q, '1200,5', decimalSeparator: sep).correct, isTrue);
+    });
+
+    test('持ち物の既定の項目・偏差値の名称', () {
+      const tr = TrStrings();
+      expect(tr.checklistDefaults.first, ('pencil', 'Kalemler'));
+      expect(tr.checklistDefaults.length, 6);
+      expect(tr.deviationLabel, 'Uygulama içi puan endeksi');
+      expect(tr.deviationNote, contains('50'));
+      expect(formatDeviationRange(const DeviationEstimate(55), tr), '50–60');
     });
   });
 }
