@@ -28,6 +28,8 @@ SQLite 保存: `package:chukore_kit/chukore_kit_sqlite.dart`（sqlite3。コー�
 実装済み追加: 学習時間の見積もり（`buildPace`・`estimateDayTimes`・`daysOverBudget`・`questionsWithinBudget`）。回答の所要時間（`elapsedMs`）から1問あたりの時間を中央値で求め（単元の記録が 5 件以上ならその単元、足りなければ全体、全体も足りなければ既定の 45 秒。未計測と 5 分超は除く）、`buildPlan` の日ごとの計画から1日の学習時間を見積もる（表示用に5分きざみの切り上げ）。1日に使える分を決めて、超える日を探したり、その分で解ける問題数を出したりできる。
 
 実装済み追加: 目標点からの逆算（`buildGoalPlan`）。「この教科で80点」と決めると、今の習熟度から見込む点（範囲の単元を問題数の重みで平均）との差を出し、習熟度を上限（既定 0.9）まで上げたときの増分が大きい単元から、届くところまで「どの単元をどこまで伸ばすか」を返す（最後の単元は必要な分だけ）。上限まで伸ばしても届かない目標は `unreachable`。記録のない単元は未学習（0）として数える。到達レベルの下限点（`LevelThresholds.minOf`）を目標にもできる。伸ばす単元の ID は `unitIds`。
+
+実装済み追加: 模試の履歴比較（`compareMockExams`）。模試の結果（`MockHistoryEntry`）を日付順に並べ、得点・アプリ内偏差値・1問あたりの時間・未回答・時間切れの推移、前回との差、自己ベスト、得点の傾き（1回ごとに平均で何点動くか）を出す。単元別には、直近の回と「前回」「最初の回」での正答率の変化（伸びた順）を返し、最も伸びた単元・最も下がった単元を取り出せる。問題数が少ない単元（既定 2 問未満）は、ぶれが大きいので比べない。
 実装済み追加: 問題集・単元ツリーの JSON 形式と検証（`parseQuestionBank`・`validateQuestionBank`・`validateUnitList`、`dart run tool/validate_bank.dart`）。形式は `docs/question_bank_format.md`。
 実装済み追加: 成長機能 v1.1（G7 成長の年輪 `buildGrowthRings`・`GrowthRingsView`、G8 本番の点数の記録 `compareRealTests`、G9 アプリ内偏差値の表示ポリシー `deviationDisplay`・`formatDeviationRange`）。
 実装済み追加: さかのぼり診断（`PrerequisiteGraph`・`diagnoseBacktrace`。他アプリの前提は誘導リンクだけ）。
