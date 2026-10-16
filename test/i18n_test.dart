@@ -10,11 +10,12 @@ void main() {
   koZhTests();
   idTests();
   viTests();
+  deTests();
   test('言語コードから文言を選ぶ（未対応は英語）', () {
     expect(ChukoreStrings.forLocale('ja').languageCode, 'ja');
     expect(ChukoreStrings.forLocale('ja_JP').languageCode, 'ja');
     expect(ChukoreStrings.forLocale('en-US').languageCode, 'en');
-    expect(ChukoreStrings.forLocale('de').languageCode, 'en');
+    expect(ChukoreStrings.forLocale('tr').languageCode, 'en');
   });
 
   test('英語の数の読み上げ', () {
@@ -734,6 +735,124 @@ void viTests() {
       expect(vi.deviationLabel, 'Chỉ số điểm trong ứng dụng');
       expect(vi.deviationNote, contains('50'));
       expect(formatDeviationRange(const DeviationEstimate(55), vi), '50–60');
+    });
+  });
+}
+
+void deTests() {
+  group('ドイツ語', () {
+    test('forLocale: de・de-DE・de-AT、スイスは de-CH・de-LI', () {
+      expect(ChukoreStrings.forLocale('de'), isA<DeStrings>());
+      expect(ChukoreStrings.forLocale('de-DE'), isA<DeStrings>());
+      expect((ChukoreStrings.forLocale('de-AT') as DeStrings).swiss, isFalse);
+      expect((ChukoreStrings.forLocale('de_CH') as DeStrings).swiss, isTrue);
+      expect((ChukoreStrings.forLocale('de-LI') as DeStrings).swiss, isTrue);
+      expect(const DeStrings().tag, 'de');
+      expect(const DeStrings(swiss: true).tag, 'de-CH');
+    });
+
+    test('数の読み上げ（一語に続ける。einundzwanzig・eins・sechzehn・dreißig）', () {
+      const de = DeStrings();
+      expect(de.gateNumberWords(482), 'vierhundertzweiundachtzig');
+      expect(de.gateNumberWords(100), 'einhundert');
+      expect(de.gateNumberWords(101), 'einhunderteins');
+      expect(de.gateNumberWords(111), 'einhundertelf');
+      expect(de.gateNumberWords(116), 'einhundertsechzehn');
+      expect(de.gateNumberWords(117), 'einhundertsiebzehn');
+      expect(de.gateNumberWords(121), 'einhunderteinundzwanzig');
+      expect(de.gateNumberWords(130), 'einhundertdreißig');
+      expect(de.gateNumberWords(200), 'zweihundert');
+      expect(de.gateNumberWords(371), 'dreihunderteinundsiebzig');
+      expect(de.gateNumberWords(999), 'neunhundertneunundneunzig');
+      expect(de.gateNumberWords(1000), 'eintausend');
+      expect(de.gateNumberWords(1100), 'eintausendeinhundert');
+      expect(de.gateNumberWords(1001), 'eintausendeins');
+      expect(de.gateNumberWords(2025), 'zweitausendfünfundzwanzig');
+      expect(de.gateNumberWords(9999), 'neuntausendneunhundertneunundneunzig');
+      expect(() => de.gateNumberWords(0), throwsRangeError);
+    });
+
+    test('スイス式は ß を使わない（dreissig）', () {
+      const ch = DeStrings(swiss: true);
+      expect(ch.gateNumberWords(130), 'einhundertdreissig');
+      expect(ch.gateNumberWords(437), 'vierhundertsiebenunddreissig');
+      expect(const DeStrings().gateNumberWords(30), 'dreißig');
+    });
+
+    test('1〜9999 のすべてで、典型的な誤り（einsund・eineund・空白・ß の混在）が出ない', () {
+      for (final de in const [DeStrings(), DeStrings(swiss: true)]) {
+        for (var n = 1; n <= 9999; n++) {
+          final w = de.gateNumberWords(n);
+          expect(w, isNotEmpty, reason: '$n');
+          expect(w.contains(' '), isFalse, reason: '$n に空白: "$w"');
+          expect(w.contains('einsund'), isFalse, reason: '$n: "$w"');
+          expect(w.contains('eineund'), isFalse, reason: '$n: "$w"');
+          expect(w.contains('einhunderteinhundert'), isFalse, reason: '$n: "$w"');
+          expect(w.contains('ß'), de.swiss ? isFalse : (w.contains('dreißig')), reason: '$n: "$w"');
+          // 末尾が 1 のとき: 一の位だけなら「eins」、二十以上は「…einundzwanzig」のように und でつながる
+          if (n % 10 == 1 && n % 100 != 11) {
+            expect(w.endsWith('eins') || w.contains('einund'), isTrue, reason: '$n: "$w"');
+          }
+        }
+      }
+    });
+
+    test('保護者ゲート: 読み上げと、ドットの桁区切り（1.200）', () {
+      expect(const GateChallenge(482).promptFor(const DeStrings()), 'vierhundertzweiundachtzig');
+      expect(const GateChallenge(1200).verify('1.200'), isTrue);
+    });
+
+    test('小数点はカンマ（スイスはドット）。複数形と年', () {
+      const de = DeStrings();
+      expect(de.decimalSeparator, ',');
+      expect(const DeStrings(swiss: true).decimalSeparator, '.');
+      GrowthCardData d(ChukoreStrings s, double? delta, {double? toNext = 5}) => GrowthCardData(
+            subjectLabel: 'Englisch',
+            level: Level.b,
+            pointsToNext: toNext,
+            scoreDelta: delta,
+            strings: s,
+            radar: const [RadarAxis('a', .5), RadarAxis('b', .5), RadarAxis('c', .5)],
+          );
+      expect(d(de, 2.5).headline, '+2,5 gegenüber dem letzten Mal');
+      expect(d(const DeStrings(swiss: true), 2.5).headline, '+2.5 gegenüber dem letzten Mal');
+      expect(d(de, -4).headline, 'Von hier aus geht es weiter nach oben');
+      expect(d(de, -4).headline.contains('-'), isFalse);
+      expect(d(de, null, toNext: 7.5).nextLine, 'Noch 7,5 Punkte bis zur nächsten Stufe');
+      expect(d(de, 1, toNext: null).nextLine, 'Höchste Stufe erreicht!');
+      expect(de.solvableValue(1), '1 Aufgabe');
+      expect(de.solvableValue(3), '3 Aufgaben');
+      expect(de.streakDays(1), '1 Tag in Folge');
+      expect(de.streakDays(5), '5 Tage in Folge');
+      final r = WeeklyReport(
+        weekStart: DateTime.utc(2026, 10, 13),
+        attemptCount: 1,
+        activeDays: 1,
+        improvements: const [Improvement('u', 'Verben', 0.4, 0.7)],
+      );
+      expect(r.toText(strings: de),
+          'Diese Woche: 1 Tag / 1 Aufgabe\nDas hat sich diese Woche verbessert:\n- Verben (40% -> 70%)');
+      expect(de.formatYear(-500), '500 v. Chr.');
+      expect(de.formatYear(1945), '1945');
+    });
+
+    test('数値入力: 1.200,5（ドットが桁区切り、カンマが小数点）', () {
+      const q = Question(
+        id: 'q', unitId: 'u', type: 'numeric', difficulty: .5,
+        choices: [], answer: '1200.5', explanationId: 'x',
+      );
+      final sep = const DeStrings().decimalSeparator;
+      expect(checkAnswer(q, '1.200,5', decimalSeparator: sep).correct, isTrue);
+      expect(checkAnswer(q, '1200,5', decimalSeparator: sep).correct, isTrue);
+    });
+
+    test('持ち物の既定の項目・偏差値の名称', () {
+      const de = DeStrings();
+      expect(de.checklistDefaults.first, ('pencil', 'Stifte'));
+      expect(de.checklistDefaults.length, 6);
+      expect(de.deviationLabel, 'Punkte-Index in der App');
+      expect(de.deviationNote, contains('50'));
+      expect(formatDeviationRange(const DeviationEstimate(55), de), '50–60');
     });
   });
 }

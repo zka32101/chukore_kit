@@ -17,6 +17,8 @@ abstract class ChukoreStrings {
       // `in` は Android・Java で使われる旧式のインドネシア語のコード
       'id' || 'in' => const IdStrings(),
       'vi' => const ViStrings(),
+      // スイス・リヒテンシュタインは小数点が `.`、ß を使わない（ss）
+      'de' => DeStrings(swiss: parts.length > 1 && DeStrings.swissRegions.contains(parts[1])),
       'zh' => ZhStrings(traditional: ZhStrings.isTraditional(parts)),
       'fr' => FrStrings(septanteNonante: parts.length > 1 && FrStrings.septanteNonanteRegions.contains(parts[1])),
       'es' => EsStrings(decimalComma: !(parts.length > 1 && EsStrings.decimalPointRegions.contains(parts[1]))),
@@ -42,6 +44,8 @@ abstract class ChukoreStrings {
     KoStrings(),
     IdStrings(),
     ViStrings(),
+    DeStrings(),
+    DeStrings(swiss: true),
     ZhStrings(),
     ZhStrings(traditional: true),
   ];
@@ -1411,4 +1415,146 @@ class ViStrings extends ChukoreStrings {
   String get teacherCorrect => 'Đúng rồi! Bạn đã sửa được';
   @override
   String get teacherWrong => 'Gần đúng! Hãy đọc lại một lần nữa';
+}
+
+/// ドイツ語。[swiss] が true なら スイス・リヒテンシュタイン式（小数点は `.`、ß を使わず ss）。
+class DeStrings extends ChukoreStrings {
+  const DeStrings({this.swiss = false});
+
+  static const swissRegions = {'ch', 'li'};
+
+  final bool swiss;
+
+  static const _units = ['', 'ein', 'zwei', 'drei', 'vier', 'fünf', 'sechs', 'sieben', 'acht', 'neun'];
+  static const _teens = [
+    'zehn', 'elf', 'zwölf', 'dreizehn', 'vierzehn', 'fünfzehn', 'sechzehn', 'siebzehn', 'achtzehn', 'neunzehn',
+  ];
+
+  String get _thirty => swiss ? 'dreissig' : 'dreißig';
+
+  @override
+  String get languageCode => 'de';
+
+  @override
+  String get tag => swiss ? 'de-CH' : 'de';
+
+  @override
+  String get decimalSeparator => swiss ? '.' : ',';
+
+  /// 1〜99。一の位が 1 の単独は「eins」、二十以上は「einundzwanzig」の形。
+  String _below100(int n, {required bool standalone}) {
+    if (n < 10) return n == 1 && standalone ? 'eins' : _units[n];
+    if (n < 20) return _teens[n - 10];
+    final tens = ['', '', 'zwanzig', _thirty, 'vierzig', 'fünfzig', 'sechzig', 'siebzig', 'achtzig', 'neunzig'][n ~/ 10];
+    final u = n % 10;
+    return u == 0 ? tens : '${_units[u]}und$tens';
+  }
+
+  @override
+  String gateNumberWords(int n) {
+    if (n < 1 || n > 9999) throw RangeError.range(n, 1, 9999, 'n');
+    final th = n ~/ 1000, h = (n % 1000) ~/ 100, r = n % 100;
+    final b = StringBuffer();
+    if (th > 0) b.write('${_units[th]}tausend');
+    if (h > 0) b.write('${_units[h]}hundert');
+    if (r > 0) b.write(_below100(r, standalone: true));
+    return b.toString();
+  }
+
+  static String _count(int n, String one, String many) => n == 1 ? '1 $one' : '$n $many';
+
+  @override
+  String cardTitle(String subject) => '$subject · Fortschrittskarte';
+  @override
+  String get headlinePersonalBest => 'Neuer persönlicher Rekord!';
+  @override
+  String get headlineFirst => 'Ein guter Start';
+  @override
+  String headlineUp(String points) => '+$points gegenüber dem letzten Mal';
+  @override
+  String get headlineSame => 'Stabil wie beim letzten Mal';
+  @override
+  String get headlineDown => 'Von hier aus geht es weiter nach oben';
+  @override
+  String nextLevel(String points) => 'Noch $points Punkte bis zur nächsten Stufe';
+  @override
+  String get topLevel => 'Höchste Stufe erreicht!';
+  @override
+  String streakDays(int days) => '${_count(days, 'Tag', 'Tage')} in Folge';
+  @override
+  String get statStamps => 'Gemeistert';
+  @override
+  String get statSolvable => 'Jetzt lösbar';
+  @override
+  String solvableValue(int count) => _count(count, 'Aufgabe', 'Aufgaben');
+  @override
+  String cardSemantics(String headline, String level) => 'Fortschrittskarte. $headline. Stufe $level';
+  @override
+  String get mapSemantics => 'Karte. Tippe, um die Antwort zu wählen';
+  @override
+  String formatYear(int year) => year < 0 ? '${-year} v. Chr.' : '$year';
+  @override
+  String reportHeader(int activeDays, int attempts) =>
+      'Diese Woche: ${_count(activeDays, 'Tag', 'Tage')} / ${_count(attempts, 'Aufgabe', 'Aufgaben')}';
+  @override
+  String get reportImprovedTitle => 'Das hat sich diese Woche verbessert:';
+  @override
+  String reportItem(String title, int b, int a) => '- $title ($b% -> $a%)';
+  @override
+  String get reportEmpty => 'Diese Woche gibt es noch keine neuen Verbesserungen. Lerne in deinem eigenen Tempo weiter.';
+  @override
+  String get scopeQrTitle => 'Prüfungsbereich teilen';
+  @override
+  String get scopeQrHint =>
+      'Freunde oder Familie können das scannen, um denselben Bereich einzustellen. Es enthält weder Namen noch Ergebnisse.';
+  @override
+  String get scopeQrSemantics => 'QR-Code für den Prüfungsbereich';
+  @override
+  String get checklistTitle => 'Check für den Prüfungstag';
+  @override
+  String checklistProgress(int done, int total) => '$done von $total bereit';
+  @override
+  String get checklistAllDone => 'Alles bereit. Viel Erfolg!';
+  @override
+  String get fiveMinuteTitle => 'Karte für die letzten 5 Minuten';
+  @override
+  List<(String, String)> get checklistDefaults => [
+        ('pencil', 'Stifte'),
+        ('eraser', 'Radiergummi'),
+        ('ruler', 'Lineal und Zirkel'),
+        ('watch', 'Armbanduhr'),
+        ('tissue', 'Taschentücher'),
+        ('notes', 'Zusammenfassung'),
+      ];
+  @override
+  String get sheetTitle => 'Blitzblatt vor der Prüfung';
+  @override
+  String get sheetQuestion => 'Aufgabe';
+  @override
+  String get sheetAnswer => 'Antwort';
+  @override
+  String get sheetExplanation => 'Erklärung';
+  @override
+  String get sheetEmpty => 'Im Moment gibt es nichts zu wiederholen. Gut gemacht!';
+  @override
+  String get markCorrect => 'richtig';
+  @override
+  String get markWrong => 'falsch';
+  @override
+  String get ringsTitle => 'Wachstumsringe';
+  @override
+  String ringsSemantics(int totalDays) => 'Wachstumsringe. Insgesamt ${_count(totalDays, 'Lerntag', 'Lerntage')}';
+  @override
+  String get deviationLabel => 'Punkte-Index in der App';
+  @override
+  String deviationRange(String low, String high) => '$low–$high';
+  @override
+  String get deviationNote =>
+      'Ein grober Index, der nur in dieser App gilt, mit 50 als Durchschnitt der Vergleichsgruppe. Kein bundesweites Ranking.';
+  @override
+  String get teacherPrompt => 'Was ist hier falsch? Verbessere den Fehler';
+  @override
+  String get teacherCorrect => 'Richtig! Du hast es verbessert';
+  @override
+  String get teacherWrong => 'Fast! Lies noch einmal nach';
 }
