@@ -16,6 +16,7 @@ export 'src/insight/misconception_trends.dart';
 export 'src/confidence/confidence.dart';
 export 'src/review/spaced_review.dart';
 export 'src/time/study_time.dart';
+export 'src/goal/goal_plan.dart';
 export 'src/mock/mock_exam.dart';
 export 'src/teacher/teacher_mode.dart';
 export 'src/bank/question_bank.dart';
