@@ -12,6 +12,7 @@ void main() {
   viTests();
   deTests();
   trTests();
+  thTests();
   test('言語コードから文言を選ぶ（未対応は英語）', () {
     expect(ChukoreStrings.forLocale('ja').languageCode, 'ja');
     expect(ChukoreStrings.forLocale('ja_JP').languageCode, 'ja');
@@ -949,6 +950,109 @@ void trTests() {
       expect(tr.deviationLabel, 'Uygulama içi puan endeksi');
       expect(tr.deviationNote, contains('50'));
       expect(formatDeviationRange(const DeviationEstimate(55), tr), '50–60');
+    });
+  });
+}
+
+void thTests() {
+  group('タイ語', () {
+    test('forLocale: th・th-TH', () {
+      expect(ChukoreStrings.forLocale('th'), isA<ThStrings>());
+      expect(ChukoreStrings.forLocale('th-TH'), isA<ThStrings>());
+      expect(const ThStrings().tag, 'th');
+    });
+
+    test('数の読み上げ（สิบ・ยี่สิบ・เอ็ด。単語の間に空白を入れない）', () {
+      const th = ThStrings();
+      expect(th.gateNumberWords(1), 'หนึ่ง');
+      expect(th.gateNumberWords(10), 'สิบ');
+      expect(th.gateNumberWords(11), 'สิบเอ็ด');
+      expect(th.gateNumberWords(21), 'ยี่สิบเอ็ด');
+      expect(th.gateNumberWords(482), 'สี่ร้อยแปดสิบสอง');
+      expect(th.gateNumberWords(100), 'หนึ่งร้อย');
+      expect(th.gateNumberWords(101), 'หนึ่งร้อยเอ็ด');
+      expect(th.gateNumberWords(110), 'หนึ่งร้อยสิบ');
+      expect(th.gateNumberWords(111), 'หนึ่งร้อยสิบเอ็ด');
+      expect(th.gateNumberWords(120), 'หนึ่งร้อยยี่สิบ');
+      expect(th.gateNumberWords(121), 'หนึ่งร้อยยี่สิบเอ็ด');
+      expect(th.gateNumberWords(125), 'หนึ่งร้อยยี่สิบห้า');
+      expect(th.gateNumberWords(999), 'เก้าร้อยเก้าสิบเก้า');
+      expect(th.gateNumberWords(1000), 'หนึ่งพัน');
+      expect(th.gateNumberWords(1001), 'หนึ่งพันเอ็ด');
+      expect(th.gateNumberWords(2025), 'สองพันยี่สิบห้า');
+      expect(th.gateNumberWords(9999), 'เก้าพันเก้าร้อยเก้าสิบเก้า');
+      expect(() => th.gateNumberWords(0), throwsRangeError);
+    });
+
+    test('1〜9999 のすべてで、典型的な誤り（หนึ่งสิบ・สองสิบ・สิบหนึ่ง・…สิบหนึ่ง・空白）が出ない', () {
+      const th = ThStrings();
+      for (var n = 1; n <= 9999; n++) {
+        final w = th.gateNumberWords(n);
+        expect(w, isNotEmpty, reason: '$n');
+        expect(w.contains(' '), isFalse, reason: '$n に空白: "$w"');
+        expect(w.contains('หนึ่งสิบ'), isFalse, reason: '$n: "$w"');
+        expect(w.contains('สองสิบ'), isFalse, reason: '$n: 20 台は ยี่สิบ: "$w"');
+        expect(w.contains('สิบหนึ่ง'), isFalse, reason: '$n: 一の位の 1 は เอ็ด: "$w"');
+        // 「หนึ่ง」で終わるのは 1 だけ（それ以外の末尾の 1 は เอ็ด）
+        expect(w.endsWith('หนึ่ง'), n == 1, reason: '$n: "$w"');
+      }
+    });
+
+    test('保護者ゲート: 読み上げ・ドットの桁区切り・タイ数字の入力', () {
+      expect(const GateChallenge(482).promptFor(const ThStrings()), 'สี่ร้อยแปดสิบสอง');
+      expect(const GateChallenge(1200).verify('1.200'), isTrue);
+      expect(const GateChallenge(482).verify('๔๘๒'), isTrue);
+      expect(const GateChallenge(1200).verify('๑,๒๐๐'), isTrue);
+      expect(const GateChallenge(482).verify('๔๘๓'), isFalse);
+    });
+
+    test('小数点はドット。成長カード・レポート・年（仏暦に西暦を添える）', () {
+      const th = ThStrings();
+      expect(th.decimalSeparator, '.');
+      GrowthCardData d(double? delta, {double? toNext = 5}) => GrowthCardData(
+            subjectLabel: 'ภาษาอังกฤษ',
+            level: Level.b,
+            pointsToNext: toNext,
+            scoreDelta: delta,
+            strings: th,
+            radar: const [RadarAxis('a', .5), RadarAxis('b', .5), RadarAxis('c', .5)],
+          );
+      expect(d(2.5).headline, '+2.5 จากครั้งก่อน');
+      expect(d(-4).headline, 'มาไปต่อจากตรงนี้กัน');
+      expect(d(-4).headline.contains('-'), isFalse);
+      expect(d(null, toNext: 7.5).nextLine, 'อีก 7.5 คะแนนถึงระดับถัดไป');
+      expect(d(1, toNext: null).nextLine, 'ถึงระดับสูงสุดแล้ว!');
+      final r = WeeklyReport(
+        weekStart: DateTime.utc(2026, 10, 13),
+        attemptCount: 12,
+        activeDays: 3,
+        improvements: const [Improvement('u', 'คำกริยา', 0.4, 0.7)],
+      );
+      expect(r.toText(strings: th),
+          'สัปดาห์นี้: 3 วัน / 12 ข้อ\nสิ่งที่ดีขึ้นในสัปดาห์นี้:\n- คำกริยา (40% -> 70%)');
+      expect(th.formatYear(1945), 'พ.ศ. 2488 (ค.ศ. 1945)');
+      expect(th.formatYear(2026), 'พ.ศ. 2569 (ค.ศ. 2026)');
+      expect(th.formatYear(-500), 'ก่อน ค.ศ. 500');
+      expect(th.solvableValue(1), '1 ข้อ'); // 複数形は無い
+    });
+
+    test('数値入力: 1,200.5（カンマが桁区切り、ドットが小数点）', () {
+      const q = Question(
+        id: 'q', unitId: 'u', type: 'numeric', difficulty: .5,
+        choices: [], answer: '1200.5', explanationId: 'x',
+      );
+      final sep = const ThStrings().decimalSeparator;
+      expect(checkAnswer(q, '1,200.5', decimalSeparator: sep).correct, isTrue);
+      expect(checkAnswer(q, '1200.5', decimalSeparator: sep).correct, isTrue);
+    });
+
+    test('持ち物の既定の項目・偏差値の名称', () {
+      const th = ThStrings();
+      expect(th.checklistDefaults.first, ('pencil', 'เครื่องเขียน'));
+      expect(th.checklistDefaults.length, 6);
+      expect(th.deviationLabel, 'ดัชนีคะแนนในแอป');
+      expect(th.deviationNote, contains('50'));
+      expect(formatDeviationRange(const DeviationEstimate(55), th), '50–60');
     });
   });
 }
