@@ -17,6 +17,7 @@ abstract class ChukoreStrings {
       // `in` は Android・Java で使われる旧式のインドネシア語のコード
       'id' || 'in' => const IdStrings(),
       'vi' => const ViStrings(),
+      'tr' => const TrStrings(),
       // スイス・リヒテンシュタインは小数点が `.`、ß を使わない（ss）
       'de' => DeStrings(swiss: parts.length > 1 && DeStrings.swissRegions.contains(parts[1])),
       'zh' => ZhStrings(traditional: ZhStrings.isTraditional(parts)),
@@ -44,6 +45,7 @@ abstract class ChukoreStrings {
     KoStrings(),
     IdStrings(),
     ViStrings(),
+    TrStrings(),
     DeStrings(),
     DeStrings(swiss: true),
     ZhStrings(),
@@ -1557,4 +1559,124 @@ class DeStrings extends ChukoreStrings {
   String get teacherCorrect => 'Richtig! Du hast es verbessert';
   @override
   String get teacherWrong => 'Fast! Lies noch einmal nach';
+}
+
+/// トルコ語。数詞は分けて書き、100 は「yüz」・1000 は「bin」（「bir yüz」「bir bin」とは言わない）。
+class TrStrings extends ChukoreStrings {
+  const TrStrings();
+
+  static const _units = ['', 'bir', 'iki', 'üç', 'dört', 'beş', 'altı', 'yedi', 'sekiz', 'dokuz'];
+  static const _tens = ['', 'on', 'yirmi', 'otuz', 'kırk', 'elli', 'altmış', 'yetmiş', 'seksen', 'doksan'];
+
+  @override
+  String get languageCode => 'tr';
+
+  @override
+  String get decimalSeparator => ',';
+
+  @override
+  String gateNumberWords(int n) {
+    if (n < 1 || n > 9999) throw RangeError.range(n, 1, 9999, 'n');
+    final th = n ~/ 1000, h = (n % 1000) ~/ 100, t = (n % 100) ~/ 10, u = n % 10;
+    return [
+      if (th == 1) 'bin' else if (th > 1) '${_units[th]} bin',
+      if (h == 1) 'yüz' else if (h > 1) '${_units[h]} yüz',
+      if (t > 0) _tens[t],
+      if (u > 0) _units[u],
+    ].join(' ');
+  }
+
+  @override
+  String cardTitle(String subject) => '$subject · Gelişim Kartı';
+  @override
+  String get headlinePersonalBest => 'Yeni kişisel rekor!';
+  @override
+  String get headlineFirst => 'Güzel bir başlangıç';
+  @override
+  String headlineUp(String points) => 'Geçen seferden +$points';
+  @override
+  String get headlineSame => 'Geçen seferki gibi istikrarlı';
+  @override
+  String get headlineDown => 'Buradan yeniden yükselelim';
+  @override
+  String nextLevel(String points) => 'Bir sonraki seviyeye $points puan kaldı';
+  @override
+  String get topLevel => 'En yüksek seviyeye ulaşıldı!';
+  @override
+  String streakDays(int days) => '$days gün üst üste';
+  @override
+  String get statStamps => 'Üstesinden gelinen';
+  @override
+  String get statSolvable => 'Artık çözülebilen';
+  @override
+  String solvableValue(int count) => '$count soru';
+  @override
+  String cardSemantics(String headline, String level) => 'Gelişim kartı. $headline. Seviye $level';
+  @override
+  String get mapSemantics => 'Harita. Cevabı seçmek için dokunun';
+  @override
+  String formatYear(int year) => year < 0 ? 'M.Ö. ${-year}' : '$year';
+  @override
+  String reportHeader(int activeDays, int attempts) => 'Bu hafta: $activeDays gün / $attempts soru';
+  @override
+  String get reportImprovedTitle => 'Bu hafta gelişenler:';
+  @override
+  String reportItem(String title, int b, int a) => '- $title (%$b -> %$a)';
+  @override
+  String get reportEmpty => 'Bu hafta henüz yeni bir gelişme yok. Kendi hızında devam et.';
+  @override
+  String get scopeQrTitle => 'Sınav kapsamını paylaş';
+  @override
+  String get scopeQrHint =>
+      'Arkadaşların veya ailen bunu tarayarak aynı kapsamı ayarlayabilir. İsim veya sonuç içermez.';
+  @override
+  String get scopeQrSemantics => 'Sınav kapsamı QR kodu';
+  @override
+  String get checklistTitle => 'Sınav günü kontrolü';
+  @override
+  String checklistProgress(int done, int total) => '$done/$total hazır';
+  @override
+  String get checklistAllDone => 'Her şey hazır. Başarılar!';
+  @override
+  String get fiveMinuteTitle => 'Son 5 dakika kartı';
+  @override
+  List<(String, String)> get checklistDefaults => [
+        ('pencil', 'Kalemler'),
+        ('eraser', 'Silgi'),
+        ('ruler', 'Cetvel ve pergel'),
+        ('watch', 'Kol saati'),
+        ('tissue', 'Mendil'),
+        ('notes', 'Özet notlar'),
+      ];
+  @override
+  String get sheetTitle => 'Sınav öncesi hızlı sayfa';
+  @override
+  String get sheetQuestion => 'Soru';
+  @override
+  String get sheetAnswer => 'Cevap';
+  @override
+  String get sheetExplanation => 'Açıklama';
+  @override
+  String get sheetEmpty => 'Şu an düzeltilecek bir şey yok. Aferin!';
+  @override
+  String get markCorrect => 'doğru';
+  @override
+  String get markWrong => 'yanlış';
+  @override
+  String get ringsTitle => 'Gelişim halkaları';
+  @override
+  String ringsSemantics(int totalDays) => 'Gelişim halkaları. Toplam $totalDays çalışma günü';
+  @override
+  String get deviationLabel => 'Uygulama içi puan endeksi';
+  @override
+  String deviationRange(String low, String high) => '$low–$high';
+  @override
+  String get deviationNote =>
+      "Yalnızca bu uygulamada geçerli, 50'nin referans grubun ortalaması olduğu kaba bir endeks. Ülke genelinde bir sıralama değildir.";
+  @override
+  String get teacherPrompt => 'Burada ne yanlış? Hatayı düzelt';
+  @override
+  String get teacherCorrect => 'Doğru! Düzeltmeyi başardın';
+  @override
+  String get teacherWrong => 'Neredeyse! Bir kez daha oku';
 }
