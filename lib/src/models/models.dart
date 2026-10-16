@@ -107,6 +107,7 @@ class Attempt {
     this.chosenId,
     this.elapsedMs = 0,
     this.mode = 'practice',
+    this.confident,
   });
 
   final String questionId;
@@ -116,6 +117,9 @@ class Attempt {
   final DateTime answeredAt;
   final int elapsedMs;
   final String mode;
+
+  /// 回答時の自信（true = 自信あり、false = 自信なし、null = 聞いていない）。
+  final bool? confident;
 }
 
 class Mastery {

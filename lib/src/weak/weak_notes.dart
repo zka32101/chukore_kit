@@ -10,6 +10,7 @@ class WeakEntry {
     required this.overcome,
     this.tag,
     this.questionId,
+    this.confidentWrongCount = 0,
   });
 
   /// `tag:<型>` または `q:<問題ID>`。
@@ -17,6 +18,9 @@ class WeakEntry {
   final String? tag;
   final String? questionId;
   final int wrongCount;
+
+  /// そのうち「自信ありで誤答」だった回数（思い込み・誤解の疑い）。
+  final int confidentWrongCount;
   final DateTime lastWrongAt;
   final bool overcome;
 }
@@ -79,6 +83,7 @@ List<WeakEntry> buildWeakNotes(
         tag: meta[e.key]?.$1,
         questionId: meta[e.key]?.$2,
         wrongCount: e.value.length,
+        confidentWrongCount: e.value.where((a) => a.confident == true).length,
         lastWrongAt: e.value.last.answeredAt,
         // 間違えた後の履歴だけで判定する（過去の正解で克服扱いにしない）。
         overcome: isOvercome(

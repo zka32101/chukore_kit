@@ -186,6 +186,9 @@ MockExamResult scoreMockExam(
   required DateTime answeredAt,
   Duration elapsed = Duration.zero,
   Map<String, int> perQuestionMs = const {},
+
+  /// 問題ID → 自信（true = 自信あり）。任意。履歴の confident になる。
+  Map<String, bool> confident = const {},
   String decimalSeparator = '.',
 }) {
   var correct = 0, unanswered = 0;
@@ -211,6 +214,7 @@ MockExamResult scoreMockExam(
       answeredAt: answeredAt,
       elapsedMs: perQuestionMs[q.id] ?? 0,
       mode: 'mock',
+      confident: confident[q.id],
     ));
   }
   final unitIds = totals.keys.toList()..sort();

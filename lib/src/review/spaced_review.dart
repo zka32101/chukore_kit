@@ -19,6 +19,7 @@ class ReviewState {
     required this.lapses,
     required this.lastAnsweredOn,
     required this.dueOn,
+    this.lastConfidentWrong = false,
   });
 
   final String questionId;
@@ -33,6 +34,9 @@ class ReviewState {
 
   /// 次に出す日（日付だけ）。
   final DateTime dueOn;
+
+  /// 直近の回答が「自信ありで誤答」（思い込みの疑い）。同じ遅れなら先に出す。
+  final bool lastConfidentWrong;
 
   /// [today] 時点で何日遅れているか（期日前は負）。
   int overdueDays(DateTime today) => dateOnly(today).difference(dueOn).inDays;
@@ -54,12 +58,19 @@ Map<String, ReviewState> buildReviewStates(
   final lapses = <String, int>{};
   final unit = <String, String>{};
   final last = <String, DateTime>{};
+  final confidentWrong = <String, bool>{};
   for (final a in sorted) {
     final q = a.questionId;
     unit[q] = a.unitId;
     last[q] = a.answeredAt;
+    confidentWrong[q] = !a.correct && a.confident == true;
     if (a.correct) {
       final b = box[q];
+      // 自信なしの正解はまぐれかもしれないので、箱を上げない（初回は 0 のまま）
+      if (a.confident == false) {
+        box[q] = b ?? 0;
+        continue;
+      }
       box[q] = b == null ? 0 : (b + 1 > config.maxBox ? config.maxBox : b + 1);
     } else {
       box[q] = 0;
@@ -83,12 +94,13 @@ Map<String, ReviewState> buildReviewStates(
           lapses: lapses[q] ?? 0,
           lastAnsweredOn: answeredOn,
           dueOn: due,
+          lastConfidentWrong: confidentWrong[q] ?? false,
         );
       }(),
   };
 }
 
-/// [today] に復習する問題。遅れている順 → 箱が低い順 → 問題ID順。[limit] で件数を絞れる。
+/// [today] に復習する問題。遅れている順 → 自信ありで誤答の問題 → 箱が低い順 → 問題ID順。[limit] で件数を絞れる。
 List<ReviewState> dueForReview(
   Map<String, ReviewState> states,
   DateTime today, {
@@ -101,6 +113,7 @@ List<ReviewState> dueForReview(
   ]..sort((a, b) {
       final c = b.overdueDays(today).compareTo(a.overdueDays(today));
       if (c != 0) return c;
+      if (a.lastConfidentWrong != b.lastConfidentWrong) return a.lastConfidentWrong ? -1 : 1;
       final d = a.box.compareTo(b.box);
       return d != 0 ? d : a.questionId.compareTo(b.questionId);
     });
