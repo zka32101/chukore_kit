@@ -30,6 +30,8 @@ SQLite 保存: `package:chukore_kit/chukore_kit_sqlite.dart`（sqlite3。コー�
 実装済み追加: 目標点からの逆算（`buildGoalPlan`）。「この教科で80点」と決めると、今の習熟度から見込む点（範囲の単元を問題数の重みで平均）との差を出し、習熟度を上限（既定 0.9）まで上げたときの増分が大きい単元から、届くところまで「どの単元をどこまで伸ばすか」を返す（最後の単元は必要な分だけ）。上限まで伸ばしても届かない目標は `unreachable`。記録のない単元は未学習（0）として数える。到達レベルの下限点（`LevelThresholds.minOf`）を目標にもできる。伸ばす単元の ID は `unitIds`。
 
 実装済み追加: 模試の履歴比較（`compareMockExams`）。模試の結果（`MockHistoryEntry`）を日付順に並べ、得点・アプリ内偏差値・1問あたりの時間・未回答・時間切れの推移、前回との差、自己ベスト、得点の傾き（1回ごとに平均で何点動くか）を出す。単元別には、直近の回と「前回」「最初の回」での正答率の変化（伸びた順）を返し、最も伸びた単元・最も下がった単元を取り出せる。問題数が少ない単元（既定 2 問未満）は、ぶれが大きいので比べない。
+
+実装済み追加: 週次レポートの材料の強化（`WeeklyReport`）。先週の回答数・学習した日数（`previousAttemptCount`・`previousActiveDays`・`attemptDelta`）に加えて、`buildWeeklyReport(..., questions: ...)` で問題集を渡すと、その週に新しく克服できた弱点の数（`newlyOvercome`）と、先週は間違えたが今週は間違えなかった誤解の型（`easedMisconceptions`）も出す。いずれも「できるようになったところ」を伝える材料で、本文（`toText`）はこれまでどおり。新しい項目を本文に出す文言（全言語）と、13歳未満に見せてよい内容・範囲は、法務確認のあとに決める（見せる側のアプリが決める）。
 実装済み追加: 問題集・単元ツリーの JSON 形式と検証（`parseQuestionBank`・`validateQuestionBank`・`validateUnitList`、`dart run tool/validate_bank.dart`）。形式は `docs/question_bank_format.md`。
 実装済み追加: 成長機能 v1.1（G7 成長の年輪 `buildGrowthRings`・`GrowthRingsView`、G8 本番の点数の記録 `compareRealTests`、G9 アプリ内偏差値の表示ポリシー `deviationDisplay`・`formatDeviationRange`）。
 実装済み追加: さかのぼり診断（`PrerequisiteGraph`・`diagnoseBacktrace`。他アプリの前提は誘導リンクだけ）。
