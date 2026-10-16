@@ -12,6 +12,7 @@ export 'src/assess/deviation_policy.dart';
 export 'src/assess/exam_stats.dart';
 export 'src/weak/weak_notes.dart';
 export 'src/weak/careless.dart';
+export 'src/insight/misconception_trends.dart';
 export 'src/confidence/confidence.dart';
 export 'src/review/spaced_review.dart';
 export 'src/mock/mock_exam.dart';
