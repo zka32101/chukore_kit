@@ -18,6 +18,7 @@ abstract class ChukoreStrings {
       'id' || 'in' => const IdStrings(),
       'vi' => const ViStrings(),
       'tr' => const TrStrings(),
+      'th' => const ThStrings(),
       // スイス・リヒテンシュタインは小数点が `.`、ß を使わない（ss）
       'de' => DeStrings(swiss: parts.length > 1 && DeStrings.swissRegions.contains(parts[1])),
       'zh' => ZhStrings(traditional: ZhStrings.isTraditional(parts)),
@@ -46,6 +47,7 @@ abstract class ChukoreStrings {
     IdStrings(),
     ViStrings(),
     TrStrings(),
+    ThStrings(),
     DeStrings(),
     DeStrings(swiss: true),
     ZhStrings(),
@@ -1679,4 +1681,129 @@ class TrStrings extends ChukoreStrings {
   String get teacherCorrect => 'Doğru! Düzeltmeyi başardın';
   @override
   String get teacherWrong => 'Neredeyse! Bir kez daha oku';
+}
+
+/// タイ語。年は仏暦（พ.ศ. = 西暦 + 543）を主にし、西暦（ค.ศ.）を添える。単語の間に空白を入れない。
+class ThStrings extends ChukoreStrings {
+  const ThStrings();
+
+  static const _units = ['', 'หนึ่ง', 'สอง', 'สาม', 'สี่', 'ห้า', 'หก', 'เจ็ด', 'แปด', 'เก้า'];
+
+  @override
+  String get languageCode => 'th';
+
+  /// 1〜99。十の位があって一の位が 1 なら「เอ็ด」、20 は「ยี่สิบ」、10 は「สิบ」（「หนึ่งสิบ」とは言わない）。
+  String _below100(int n) {
+    final t = n ~/ 10, u = n % 10;
+    final tens = switch (t) { 0 => '', 1 => 'สิบ', 2 => 'ยี่สิบ', _ => '${_units[t]}สิบ' };
+    final unit = u == 0 ? '' : (u == 1 && t > 0 ? 'เอ็ด' : _units[u]);
+    return '$tens$unit';
+  }
+
+  @override
+  String gateNumberWords(int n) {
+    if (n < 1 || n > 9999) throw RangeError.range(n, 1, 9999, 'n');
+    final th = n ~/ 1000, h = (n % 1000) ~/ 100, r = n % 100;
+    final b = StringBuffer();
+    if (th > 0) b.write('${_units[th]}พัน');
+    if (h > 0) b.write('${_units[h]}ร้อย');
+    if (r > 0) {
+      // 百や千の位のあとに続く 1 も「เอ็ด」（101 = หนึ่งร้อยเอ็ด）
+      b.write(r == 1 && (h > 0 || th > 0) ? 'เอ็ด' : _below100(r));
+    }
+    return b.toString();
+  }
+
+  @override
+  String cardTitle(String subject) => '$subject · การ์ดความก้าวหน้า';
+  @override
+  String get headlinePersonalBest => 'สถิติส่วนตัวใหม่!';
+  @override
+  String get headlineFirst => 'เริ่มต้นได้ดี';
+  @override
+  String headlineUp(String points) => '+$points จากครั้งก่อน';
+  @override
+  String get headlineSame => 'คงที่เท่าครั้งก่อน';
+  @override
+  String get headlineDown => 'มาไปต่อจากตรงนี้กัน';
+  @override
+  String nextLevel(String points) => 'อีก $points คะแนนถึงระดับถัดไป';
+  @override
+  String get topLevel => 'ถึงระดับสูงสุดแล้ว!';
+  @override
+  String streakDays(int days) => '$days วันติดต่อกัน';
+  @override
+  String get statStamps => 'ผ่านมาได้แล้ว';
+  @override
+  String get statSolvable => 'ตอนนี้ทำได้';
+  @override
+  String solvableValue(int count) => '$count ข้อ';
+  @override
+  String cardSemantics(String headline, String level) => 'การ์ดความก้าวหน้า. $headline. ระดับ $level';
+  @override
+  String get mapSemantics => 'แผนที่ แตะเพื่อเลือกคำตอบ';
+  @override
+  String formatYear(int year) => year < 0 ? 'ก่อน ค.ศ. ${-year}' : 'พ.ศ. ${year + 543} (ค.ศ. $year)';
+  @override
+  String reportHeader(int activeDays, int attempts) => 'สัปดาห์นี้: $activeDays วัน / $attempts ข้อ';
+  @override
+  String get reportImprovedTitle => 'สิ่งที่ดีขึ้นในสัปดาห์นี้:';
+  @override
+  String reportItem(String title, int b, int a) => '- $title ($b% -> $a%)';
+  @override
+  String get reportEmpty => 'สัปดาห์นี้ยังไม่มีความก้าวหน้าใหม่ ค่อย ๆ ไปตามจังหวะของตัวเองนะ';
+  @override
+  String get scopeQrTitle => 'แชร์ขอบเขตการสอบ';
+  @override
+  String get scopeQrHint => 'เพื่อนหรือครอบครัวสแกนเพื่อตั้งขอบเขตเดียวกันได้ ไม่มีชื่อหรือผลคะแนน';
+  @override
+  String get scopeQrSemantics => 'คิวอาร์โค้ดขอบเขตการสอบ';
+  @override
+  String get checklistTitle => 'เช็กลิสต์วันสอบ';
+  @override
+  String checklistProgress(int done, int total) => 'พร้อมแล้ว $done จาก $total';
+  @override
+  String get checklistAllDone => 'พร้อมทุกอย่างแล้ว ขอให้โชคดี!';
+  @override
+  String get fiveMinuteTitle => 'การ์ด 5 นาทีสุดท้าย';
+  @override
+  List<(String, String)> get checklistDefaults => [
+        ('pencil', 'เครื่องเขียน'),
+        ('eraser', 'ยางลบ'),
+        ('ruler', 'ไม้บรรทัดและวงเวียน'),
+        ('watch', 'นาฬิกาข้อมือ'),
+        ('tissue', 'ผ้าเช็ดหน้าและทิชชู'),
+        ('notes', 'โน้ตสรุป'),
+      ];
+  @override
+  String get sheetTitle => 'ใบสรุปด่วนก่อนสอบ';
+  @override
+  String get sheetQuestion => 'โจทย์';
+  @override
+  String get sheetAnswer => 'คำตอบ';
+  @override
+  String get sheetExplanation => 'คำอธิบาย';
+  @override
+  String get sheetEmpty => 'ตอนนี้ไม่มีอะไรต้องทบทวน เยี่ยมมาก!';
+  @override
+  String get markCorrect => 'ถูก';
+  @override
+  String get markWrong => 'ผิด';
+  @override
+  String get ringsTitle => 'วงแหวนการเติบโต';
+  @override
+  String ringsSemantics(int totalDays) => 'วงแหวนการเติบโต รวม $totalDays วันที่เรียน';
+  @override
+  String get deviationLabel => 'ดัชนีคะแนนในแอป';
+  @override
+  String deviationRange(String low, String high) => '$low–$high';
+  @override
+  String get deviationNote =>
+      'ดัชนีคร่าว ๆ ที่ใช้ได้เฉพาะในแอปนี้ โดยมี 50 เป็นค่าเฉลี่ยของกลุ่มอ้างอิง ไม่ใช่อันดับระดับประเทศ';
+  @override
+  String get teacherPrompt => 'ตรงไหนผิด? ช่วยแก้ให้ถูก';
+  @override
+  String get teacherCorrect => 'ถูกต้อง! แก้ได้แล้ว';
+  @override
+  String get teacherWrong => 'เกือบแล้ว! อ่านอีกครั้งนะ';
 }
