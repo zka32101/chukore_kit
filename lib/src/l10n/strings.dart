@@ -19,6 +19,7 @@ abstract class ChukoreStrings {
       'vi' => const ViStrings(),
       'tr' => const TrStrings(),
       'th' => const ThStrings(),
+      'hi' => const HiStrings(),
       // スイス・リヒテンシュタインは小数点が `.`、ß を使わない（ss）
       'de' => DeStrings(swiss: parts.length > 1 && DeStrings.swissRegions.contains(parts[1])),
       'zh' => ZhStrings(traditional: ZhStrings.isTraditional(parts)),
@@ -48,6 +49,7 @@ abstract class ChukoreStrings {
     ViStrings(),
     TrStrings(),
     ThStrings(),
+    HiStrings(),
     DeStrings(),
     DeStrings(swiss: true),
     ZhStrings(),
@@ -1849,4 +1851,133 @@ class ThStrings extends ChukoreStrings {
   String get teacherCorrect => 'ถูกต้อง! แก้ได้แล้ว';
   @override
   String get teacherWrong => 'เกือบแล้ว! อ่านอีกครั้งนะ';
+}
+
+/// ヒンディー語。数詞は 1〜99 がすべて不規則なので、0〜99 を表で持つ。100 は「एक सौ」・1000 は「एक हज़ार」。
+/// 小数点はドット。年は西暦「ई.」・紀元前「ई.पू.」。
+class HiStrings extends ChukoreStrings {
+  const HiStrings();
+
+  /// 0〜99 の読み。綴りの揺れがある語（तिरपन など）は一般的な綴りを採った。ネイティブ確認の対象。
+  static const numbers = [
+    'शून्य', 'एक', 'दो', 'तीन', 'चार', 'पाँच', 'छह', 'सात', 'आठ', 'नौ',
+    'दस', 'ग्यारह', 'बारह', 'तेरह', 'चौदह', 'पंद्रह', 'सोलह', 'सत्रह', 'अठारह', 'उन्नीस',
+    'बीस', 'इक्कीस', 'बाईस', 'तेईस', 'चौबीस', 'पच्चीस', 'छब्बीस', 'सत्ताईस', 'अट्ठाईस', 'उनतीस',
+    'तीस', 'इकतीस', 'बत्तीस', 'तैंतीस', 'चौंतीस', 'पैंतीस', 'छत्तीस', 'सैंतीस', 'अड़तीस', 'उनतालीस',
+    'चालीस', 'इकतालीस', 'बयालीस', 'तैंतालीस', 'चौवालीस', 'पैंतालीस', 'छियालीस', 'सैंतालीस', 'अड़तालीस', 'उनचास',
+    'पचास', 'इक्यावन', 'बावन', 'तिरपन', 'चौवन', 'पचपन', 'छप्पन', 'सत्तावन', 'अट्ठावन', 'उनसठ',
+    'साठ', 'इकसठ', 'बासठ', 'तिरसठ', 'चौंसठ', 'पैंसठ', 'छियासठ', 'सड़सठ', 'अड़सठ', 'उनहत्तर',
+    'सत्तर', 'इकहत्तर', 'बहत्तर', 'तिहत्तर', 'चौहत्तर', 'पचहत्तर', 'छिहत्तर', 'सतहत्तर', 'अठहत्तर', 'उन्यासी',
+    'अस्सी', 'इक्यासी', 'बयासी', 'तिरासी', 'चौरासी', 'पचासी', 'छियासी', 'सत्तासी', 'अट्ठासी', 'नवासी',
+    'नब्बे', 'इक्यानवे', 'बानवे', 'तिरानवे', 'चौरानवे', 'पंचानवे', 'छियानवे', 'सत्तानवे', 'अट्ठानवे', 'निन्यानवे',
+  ];
+
+  @override
+  String get languageCode => 'hi';
+
+  @override
+  String gateNumberWords(int n) {
+    if (n < 1 || n > 9999) throw RangeError.range(n, 1, 9999, 'n');
+    final th = n ~/ 1000, h = (n % 1000) ~/ 100, r = n % 100;
+    return [
+      if (th > 0) '${numbers[th]} हज़ार',
+      if (h > 0) '${numbers[h]} सौ',
+      if (r > 0) numbers[r],
+    ].join(' ');
+  }
+
+  @override
+  String cardTitle(String subject) => '$subject · प्रगति कार्ड';
+  @override
+  String get headlinePersonalBest => 'नया निजी रिकॉर्ड!';
+  @override
+  String get headlineFirst => 'बढ़िया शुरुआत';
+  @override
+  String headlineUp(String points) => 'पिछली बार से +$points';
+  @override
+  String get headlineSame => 'पिछली बार जितना ही स्थिर';
+  @override
+  String get headlineDown => 'यहाँ से फिर आगे बढ़ें';
+  @override
+  String nextLevel(String points) => 'अगले स्तर के लिए $points अंक बाकी';
+  @override
+  String get topLevel => 'सबसे ऊँचे स्तर पर पहुँच गए!';
+  @override
+  String streakDays(int days) => '$days दिन लगातार';
+  @override
+  String get statStamps => 'पार किए';
+  @override
+  String get statSolvable => 'अब हल कर सकते हैं';
+  @override
+  String solvableValue(int count) => '$count प्रश्न';
+  @override
+  String cardSemantics(String headline, String level) => 'प्रगति कार्ड। $headline। स्तर $level';
+  @override
+  String get mapSemantics => 'नक्शा। उत्तर चुनने के लिए छुएँ';
+  @override
+  String formatYear(int year) => year < 0 ? '${-year} ई.पू.' : '$year ई.';
+  @override
+  String reportHeader(int activeDays, int attempts) => 'इस सप्ताह: $activeDays दिन / $attempts प्रश्न';
+  @override
+  String get reportImprovedTitle => 'इस सप्ताह जो बेहतर हुआ:';
+  @override
+  String reportItem(String title, int b, int a) => '- $title ($b% -> $a%)';
+  @override
+  String get reportEmpty => 'इस सप्ताह अभी कोई नई प्रगति नहीं है। अपनी गति से आगे बढ़ते रहें।';
+  @override
+  String get scopeQrTitle => 'परीक्षा का दायरा साझा करें';
+  @override
+  String get scopeQrHint => 'दोस्त या परिवार इसे स्कैन करके वही दायरा सेट कर सकते हैं। इसमें नाम या परिणाम नहीं होते।';
+  @override
+  String get scopeQrSemantics => 'परीक्षा के दायरे का QR कोड';
+  @override
+  String get checklistTitle => 'परीक्षा के दिन की जाँच-सूची';
+  @override
+  String checklistProgress(int done, int total) => '$total में से $done तैयार';
+  @override
+  String get checklistAllDone => 'सब कुछ तैयार है। शुभकामनाएँ!';
+  @override
+  String get fiveMinuteTitle => 'आख़िरी 5 मिनट का कार्ड';
+  @override
+  List<(String, String)> get checklistDefaults => [
+        ('pencil', 'पेन-पेंसिल'),
+        ('eraser', 'रबर'),
+        ('ruler', 'स्केल और कंपास'),
+        ('watch', 'कलाई घड़ी'),
+        ('tissue', 'रुमाल और टिशू'),
+        ('notes', 'सारांश नोट्स'),
+      ];
+  @override
+  String get sheetTitle => 'परीक्षा से पहले की झटपट शीट';
+  @override
+  String get sheetQuestion => 'प्रश्न';
+  @override
+  String get sheetAnswer => 'उत्तर';
+  @override
+  String get sheetExplanation => 'व्याख्या';
+  @override
+  String get sheetEmpty => 'अभी दोहराने के लिए कुछ नहीं है। शाबाश!';
+  @override
+  String get markCorrect => 'सही';
+  @override
+  String get markWrong => 'गलत';
+  @override
+  String get ringsTitle => 'विकास के छल्ले';
+  @override
+  String ringsSemantics(int totalDays) => 'विकास के छल्ले। कुल $totalDays दिन पढ़ाई';
+  @override
+  String ringsLatestMonth(String month, int days) => 'सबसे हाल का महीना, $month: $days दिन पढ़ाई';
+  @override
+  String get deviationLabel => 'ऐप के भीतर का अंक सूचकांक';
+  @override
+  String deviationRange(String low, String high) => '$low–$high';
+  @override
+  String get deviationNote =>
+      'केवल इसी ऐप में मान्य एक मोटा सूचकांक, जिसमें 50 संदर्भ समूह का औसत है। यह राष्ट्रीय रैंकिंग नहीं है।';
+  @override
+  String get teacherPrompt => 'यहाँ क्या गलत है? गलती सुधारें';
+  @override
+  String get teacherCorrect => 'सही! आपने इसे सुधार दिया';
+  @override
+  String get teacherWrong => 'लगभग! एक बार फिर पढ़ें';
 }
