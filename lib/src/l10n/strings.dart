@@ -21,6 +21,7 @@ abstract class ChukoreStrings {
       'th' => const ThStrings(),
       'hi' => const HiStrings(),
       'ar' => const ArStrings(),
+      'ru' => const RuStrings(),
       // スイス・リヒテンシュタインは小数点が `.`、ß を使わない（ss）
       'de' => DeStrings(swiss: parts.length > 1 && DeStrings.swissRegions.contains(parts[1])),
       'zh' => ZhStrings(traditional: ZhStrings.isTraditional(parts)),
@@ -52,6 +53,7 @@ abstract class ChukoreStrings {
     ThStrings(),
     HiStrings(),
     ArStrings(),
+    RuStrings(),
     DeStrings(),
     DeStrings(swiss: true),
     ZhStrings(),
@@ -2135,4 +2137,157 @@ class ArStrings extends ChukoreStrings {
   String get teacherCorrect => 'صحيح! لقد صححته';
   @override
   String get teacherWrong => 'تقريبا! اقرأ مرة أخرى';
+}
+
+/// ロシア語。複数形は 3 つ（1・2〜4・5 以上。11〜14 は 5 以上の形）。小数点はカンマ。
+/// 数の読み上げは男性形（千は女性形: одна тысяча・две тысячи）。
+class RuStrings extends ChukoreStrings {
+  const RuStrings();
+
+  static const _ones = ['', 'один', 'два', 'три', 'четыре', 'пять', 'шесть', 'семь', 'восемь', 'девять'];
+  static const _teens = [
+    'десять', 'одиннадцать', 'двенадцать', 'тринадцать', 'четырнадцать',
+    'пятнадцать', 'шестнадцать', 'семнадцать', 'восемнадцать', 'девятнадцать',
+  ];
+  static const _tens = [
+    '', '', 'двадцать', 'тридцать', 'сорок', 'пятьдесят', 'шестьдесят', 'семьдесят', 'восемьдесят', 'девяносто',
+  ];
+  static const _hundreds = [
+    '', 'сто', 'двести', 'триста', 'четыреста', 'пятьсот', 'шестьсот', 'семьсот', 'восемьсот', 'девятьсот',
+  ];
+
+  @override
+  String get languageCode => 'ru';
+
+  @override
+  String get decimalSeparator => ',';
+
+  /// 数に合う名詞の形（1 / 2〜4 / 5 以上）。
+  static String plural(int n, String one, String few, String many) {
+    final m100 = n % 100, m10 = n % 10;
+    if (m100 >= 11 && m100 <= 14) return many;
+    if (m10 == 1) return one;
+    if (m10 >= 2 && m10 <= 4) return few;
+    return many;
+  }
+
+  @override
+  String gateNumberWords(int n) {
+    if (n < 1 || n > 9999) throw RangeError.range(n, 1, 9999, 'n');
+    final th = n ~/ 1000, rest = n % 1000;
+    final h = rest ~/ 100, r = rest % 100;
+    final parts = <String>[];
+    if (th > 0) {
+      final w = switch (th) { 1 => 'одна', 2 => 'две', _ => _ones[th] };
+      parts.add('$w ${plural(th, 'тысяча', 'тысячи', 'тысяч')}');
+    }
+    if (h > 0) parts.add(_hundreds[h]);
+    if (r >= 10 && r < 20) {
+      parts.add(_teens[r - 10]);
+    } else {
+      if (r >= 20) parts.add(_tens[r ~/ 10]);
+      if (r % 10 > 0) parts.add(_ones[r % 10]);
+    }
+    return parts.join(' ');
+  }
+
+  @override
+  String cardTitle(String subject) => '$subject · Карточка роста';
+  @override
+  String get headlinePersonalBest => 'Новый личный рекорд!';
+  @override
+  String get headlineFirst => 'Хорошее начало';
+  @override
+  String headlineUp(String points) => '+$points к прошлому разу';
+  @override
+  String get headlineSame => 'Стабильно, как в прошлый раз';
+  @override
+  String get headlineDown => 'Давай снова поднимемся';
+  @override
+  String nextLevel(String points) => 'До следующего уровня: $points';
+  @override
+  String get topLevel => 'Достигнут высший уровень!';
+  @override
+  String streakDays(int days) => '$days ${plural(days, 'день', 'дня', 'дней')} подряд';
+  @override
+  String get statStamps => 'Преодолено';
+  @override
+  String get statSolvable => 'Теперь получается';
+  @override
+  String solvableValue(int count) => '$count ${plural(count, 'вопрос', 'вопроса', 'вопросов')}';
+  @override
+  String cardSemantics(String headline, String level) => 'Карточка роста. $headline. Уровень $level';
+  @override
+  String get mapSemantics => 'Карта. Нажми, чтобы выбрать ответ';
+  @override
+  String formatYear(int year) => year < 0 ? '${-year} г. до н. э.' : '$year г.';
+  @override
+  String reportHeader(int activeDays, int attempts) =>
+      'На этой неделе: $activeDays ${plural(activeDays, 'день', 'дня', 'дней')} / '
+      '$attempts ${plural(attempts, 'вопрос', 'вопроса', 'вопросов')}';
+  @override
+  String get reportImprovedTitle => 'Что улучшилось на этой неделе:';
+  @override
+  String reportItem(String title, int b, int a) => '- $title ($b% -> $a%)';
+  @override
+  String get reportEmpty => 'На этой неделе пока нет новых улучшений. Занимайся в своём темпе.';
+  @override
+  String get scopeQrTitle => 'Поделиться областью экзамена';
+  @override
+  String get scopeQrHint =>
+      'Друзья или семья могут отсканировать код и настроить ту же область. Имён и результатов в нём нет.';
+  @override
+  String get scopeQrSemantics => 'QR-код области экзамена';
+  @override
+  String get checklistTitle => 'Проверка в день экзамена';
+  @override
+  String checklistProgress(int done, int total) => 'Готово $done из $total';
+  @override
+  String get checklistAllDone => 'Всё готово. Удачи!';
+  @override
+  String get fiveMinuteTitle => 'Карточки на последние 5 минут';
+  @override
+  List<(String, String)> get checklistDefaults => [
+        ('pencil', 'Карандаши и ручки'),
+        ('eraser', 'Ластик'),
+        ('ruler', 'Линейка и циркуль'),
+        ('watch', 'Наручные часы'),
+        ('tissue', 'Салфетки'),
+        ('notes', 'Конспект'),
+      ];
+  @override
+  String get sheetTitle => 'Быстрый лист перед экзаменом';
+  @override
+  String get sheetQuestion => 'Вопрос';
+  @override
+  String get sheetAnswer => 'Ответ';
+  @override
+  String get sheetExplanation => 'Объяснение';
+  @override
+  String get sheetEmpty => 'Сейчас нечего исправлять. Молодец!';
+  @override
+  String get markCorrect => 'верно';
+  @override
+  String get markWrong => 'неверно';
+  @override
+  String get ringsTitle => 'Кольца роста';
+  @override
+  String ringsSemantics(int totalDays) =>
+      'Кольца роста. Всего $totalDays ${plural(totalDays, 'день', 'дня', 'дней')} занятий';
+  @override
+  String ringsLatestMonth(String month, int days) =>
+      'Последний месяц, $month: $days ${plural(days, 'день', 'дня', 'дней')} занятий';
+  @override
+  String get deviationLabel => 'Индекс баллов в приложении';
+  @override
+  String deviationRange(String low, String high) => '$low–$high';
+  @override
+  String get deviationNote =>
+      'Грубый индекс только внутри этого приложения: 50 — среднее значение условной группы. Это не рейтинг по стране.';
+  @override
+  String get teacherPrompt => 'Что здесь не так? Исправь ошибку';
+  @override
+  String get teacherCorrect => 'Верно! Ты исправил(а) ошибку';
+  @override
+  String get teacherWrong => 'Почти! Прочитай ещё раз';
 }
