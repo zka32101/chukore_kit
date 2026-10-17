@@ -4,6 +4,7 @@ import 'package:flutter/semantics.dart';
 import '../l10n/strings.dart';
 import '../question/map_tap.dart';
 import '../question/map_viewport.dart';
+import 'text_direction.dart';
 
 /// 地図タップ問題の描画。境界線データ（[regions]）と教科色（[regionColors]）はアプリ側が渡す。
 /// 当たり判定と回答後の状態は map_tap.dart のロジックを使う（flutter_map には依存しない）。
@@ -85,6 +86,7 @@ class RegionTapMap extends StatelessWidget {
         };
     return Semantics(
       label: strings.mapSemantics,
+      textDirection: textDirectionOf(strings),
       child: AspectRatio(
         aspectRatio: _aspect(bounds, xScale),
         child: LayoutBuilder(builder: (context, c) {
@@ -108,7 +110,7 @@ class RegionTapMap extends StatelessWidget {
                 visuals: visuals,
                 labels: {for (final r in regions) r.id: labelOf(r)},
                 onTap: onRegionTapped,
-                textDirection: Directionality.of(context),
+                textDirection: textDirectionOf(strings),
                 regionColors: regionColors,
                 showLabels: showLabels,
               ),
@@ -188,7 +190,7 @@ class _RegionPainter extends CustomPainter {
           text: r.label,
           style: const TextStyle(color: Colors.black87, fontSize: 11, fontWeight: FontWeight.w600),
         ),
-        textDirection: TextDirection.ltr,
+        textDirection: textDirection,
       )..layout();
       tp.paint(canvas, Offset(x - tp.width / 2, y - tp.height / 2));
       tp.dispose();

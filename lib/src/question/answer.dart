@@ -1,3 +1,4 @@
+import '../l10n/digits.dart';
 import '../models/models.dart';
 
 /// 判定結果。誤答のとき選択肢に型があれば [misconceptionTag] に入る。
@@ -11,9 +12,7 @@ class AnswerResult {
 /// 数値入力の正規化。全角・マイナス記号の違い・桁区切りを吸収する。
 /// [decimalSeparator] が `,` の国（欧州など）では `.` を桁区切り、`,` を小数点として読む。
 String _normalize(String s, String decimalSeparator) {
-  var t = s
-      .trim()
-      .replaceAllMapped(RegExp('[０-９]'), (m) => '${m[0]!.codeUnitAt(0) - 0xFF10}')
+  var t = normalizeDigits(s.trim())
       .replaceAll('．', '.')
       .replaceAll('，', ',')
       .replaceAll(RegExp('[－−–]'), '-')

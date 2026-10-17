@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../growth/growth_rings.dart';
 import '../l10n/strings.dart';
+import 'text_direction.dart';
 
 /// G7 成長の年輪。一番内側が最初の月、外へ向かって新しい月。学習した日が多い月ほど太く濃い輪になる。
 /// 休んだ月も細い輪として残る（消えない）。
@@ -30,6 +31,7 @@ class GrowthRingsView extends StatelessWidget {
         aspectRatio: 1,
         child: Semantics(
           label: semanticsLabel,
+          textDirection: textDirectionOf(strings),
           child: CustomPaint(painter: GrowthRingsPainter(rings, accent: accent)),
         ),
       );

@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import '../l10n/digits.dart';
 import '../l10n/strings.dart';
 
 /// 1〜9999 を漢数字にする（例: 482 → 四百八十二、110 → 百十）。
@@ -21,14 +22,9 @@ class GateChallenge {
   /// 指定した言語の読み上げ（例: en なら "four hundred eighty-two"）。
   String promptFor(ChukoreStrings strings) => strings.gateNumberWords(value);
 
-  /// 全角数字・タイ数字（๐〜๙）・デーヴァナーガリー数字（०〜९）・前後の空白・桁区切り（, . 空白）を許容して判定する。
+  /// 各地の数字（全角・タイ・デーヴァナーガリー・アラビア・ペルシア。`normalizeDigits`）・前後の空白・桁区切り（, . 空白）を許容して判定する。
   bool verify(String input) {
-    final normalized = input
-        .trim()
-        .replaceAllMapped(RegExp('[０-９]'), (m) => '${m[0]!.codeUnitAt(0) - 0xFF10}')
-        .replaceAllMapped(RegExp('[๐-๙]'), (m) => '${m[0]!.codeUnitAt(0) - 0x0E50}')
-        .replaceAllMapped(RegExp('[०-९]'), (m) => '${m[0]!.codeUnitAt(0) - 0x0966}')
-        .replaceAll(RegExp(r'[\s,，.．\u00A0\u202F]'), '');
+    final normalized = normalizeDigits(input.trim()).replaceAll(RegExp(r'[\s,，.．\u00A0\u202F]'), '');
     return int.tryParse(normalized) == value;
   }
 
