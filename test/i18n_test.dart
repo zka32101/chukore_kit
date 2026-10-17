@@ -19,7 +19,7 @@ void main() {
     expect(ChukoreStrings.forLocale('ja').languageCode, 'ja');
     expect(ChukoreStrings.forLocale('ja_JP').languageCode, 'ja');
     expect(ChukoreStrings.forLocale('en-US').languageCode, 'en');
-    expect(ChukoreStrings.forLocale('ru').languageCode, 'en');
+    expect(ChukoreStrings.forLocale('it').languageCode, 'en');
   });
 
   test('英語の数の読み上げ', () {
