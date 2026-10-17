@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qr/qr.dart';
 
 import '../l10n/strings.dart';
+import 'text_direction.dart';
 
 /// 範囲カードの QR コード。白地に黒で描く（読み取りやすさのため、教科色などは使わない）。
 /// 周りの余白（クワイエットゾーン）は 4 モジュール分。
@@ -38,6 +39,7 @@ class _ScopeQrViewState extends State<ScopeQrView> {
   @override
   Widget build(BuildContext context) => Semantics(
         label: widget.strings.scopeQrSemantics,
+        textDirection: textDirectionOf(widget.strings),
         image: true,
         child: SizedBox.square(
           dimension: widget.size,

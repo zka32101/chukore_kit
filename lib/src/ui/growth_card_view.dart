@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/material.dart';
 
 import '../growth/growth_card.dart';
+import 'text_direction.dart';
 
 /// 成長カードの描画。名前・ID・メールの欄は無い。画面表示にも画像化にも同じ描画を使う。
 class GrowthCardPainter extends CustomPainter {
@@ -25,6 +26,8 @@ class GrowthCardPainter extends CustomPainter {
   /// 言語ごとに [fontFamilyFallback] を渡すと、端末による文字化け（四角）を避けられる。
   final String? fontFamily;
   final List<String> fontFamilyFallback;
+
+  bool get _rtl => data.strings.rightToLeft;
 
   /// 基準サイズ。画像は 4:5。
   static const Size designSize = Size(1080, 1350);
@@ -46,8 +49,8 @@ class GrowthCardPainter extends CustomPainter {
         Colors.black54, bold: true);
     _text(canvas, data.headline, const Offset(72, 140), 76, Colors.black87, bold: true, maxWidth: w - 144);
 
-    // レベルバッジ
-    final badge = Offset(w - 200, 330);
+    // レベルバッジ（右から左に書く言語では左側に置く）
+    final badge = Offset(_rtl ? 200 : w - 200, 330);
     canvas.drawCircle(badge, 110, Paint()..color = accent);
     _text(canvas, data.levelLabel, badge - const Offset(0, 0), 120, Colors.white,
         bold: true, center: true);
@@ -142,11 +145,13 @@ class GrowthCardPainter extends CustomPainter {
             fontFamilyFallback: fontFamilyFallback.isEmpty ? null : fontFamilyFallback,
             fontWeight: bold ? FontWeight.w700 : FontWeight.w400),
       ),
-      textDirection: TextDirection.ltr,
+      textDirection: textDirectionOf(data.strings),
       maxLines: 2,
       ellipsis: '…',
     )..layout(maxWidth: maxWidth);
-    tp.paint(canvas, center ? o - Offset(tp.width / 2, tp.height / 2) : o);
+    // 右から左に書く言語は、左端そろえの位置 o.dx を右端そろえに映す（中央そろえはそのまま）
+    final x = center ? o.dx - tp.width / 2 : (_rtl ? designSize.width - o.dx - tp.width : o.dx);
+    tp.paint(canvas, Offset(x, center ? o.dy - tp.height / 2 : o.dy));
     tp.dispose();
   }
 
@@ -178,6 +183,7 @@ class GrowthCardView extends StatelessWidget {
         aspectRatio: GrowthCardPainter.designSize.width / GrowthCardPainter.designSize.height,
         child: Semantics(
           label: data.strings.cardSemantics(data.headline, data.levelLabel),
+          textDirection: textDirectionOf(data.strings),
           child: CustomPaint(
             painter: GrowthCardPainter(data,
                 accent: accent, fontFamily: fontFamily, fontFamilyFallback: fontFamilyFallback),

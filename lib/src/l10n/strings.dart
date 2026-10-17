@@ -20,6 +20,7 @@ abstract class ChukoreStrings {
       'tr' => const TrStrings(),
       'th' => const ThStrings(),
       'hi' => const HiStrings(),
+      'ar' => const ArStrings(),
       // スイス・リヒテンシュタインは小数点が `.`、ß を使わない（ss）
       'de' => DeStrings(swiss: parts.length > 1 && DeStrings.swissRegions.contains(parts[1])),
       'zh' => ZhStrings(traditional: ZhStrings.isTraditional(parts)),
@@ -50,11 +51,15 @@ abstract class ChukoreStrings {
     TrStrings(),
     ThStrings(),
     HiStrings(),
+    ArStrings(),
     DeStrings(),
     DeStrings(swiss: true),
     ZhStrings(),
     ZhStrings(traditional: true),
   ];
+
+  /// 右から左に書く言語か（アラビア語など）。画面部品は、これを見て文字の向きと並びを決める。
+  bool get rightToLeft => false;
 
   /// 小数点の記号。数値入力の `checkAnswer(..., decimalSeparator:)` にもこの値を渡す。
   String get decimalSeparator => '.';
@@ -1980,4 +1985,154 @@ class HiStrings extends ChukoreStrings {
   String get teacherCorrect => 'सही! आपने इसे सुधार दिया';
   @override
   String get teacherWrong => 'लगभग! एक बार फिर पढ़ें';
+}
+
+/// アラビア語（現代標準アラビア語）。右から左に書く。数字は西洋式（0〜9）で出し、
+/// 入力は東洋式（٠〜٩）・ペルシア式（۰〜۹）も受け付ける。小数点はドット。
+/// 数詞は男性形の基数詞（位は「و」でつなぐ）。個数の言い方（2 は双数、3〜10 は複数、11 以上は単数）に対応する。
+class ArStrings extends ChukoreStrings {
+  const ArStrings();
+
+  static const _ones = ['', 'واحد', 'اثنان', 'ثلاثة', 'أربعة', 'خمسة', 'ستة', 'سبعة', 'ثمانية', 'تسعة'];
+  static const _tens = ['', 'عشرة', 'عشرون', 'ثلاثون', 'أربعون', 'خمسون', 'ستون', 'سبعون', 'ثمانون', 'تسعون'];
+  static const _hundreds = [
+    '', 'مئة', 'مئتان', 'ثلاثمئة', 'أربعمئة', 'خمسمئة', 'ستمئة', 'سبعمئة', 'ثمانمئة', 'تسعمئة',
+  ];
+  static const _thousands = [
+    '', 'ألف', 'ألفان', 'ثلاثة آلاف', 'أربعة آلاف', 'خمسة آلاف', 'ستة آلاف', 'سبعة آلاف', 'ثمانية آلاف', 'تسعة آلاف',
+  ];
+
+  @override
+  String get languageCode => 'ar';
+
+  @override
+  bool get rightToLeft => true;
+
+  /// 1〜99（11・12 は特別、13〜19 は「〜 عشر」、21 以上は「一の位 و 十の位」）。
+  String _below100(int n) {
+    if (n < 10) return _ones[n];
+    if (n == 10) return 'عشرة';
+    if (n == 11) return 'أحد عشر';
+    if (n == 12) return 'اثنا عشر';
+    if (n < 20) return '${_ones[n - 10]} عشر';
+    final u = n % 10, t = n ~/ 10;
+    return u == 0 ? _tens[t] : '${_ones[u]} و${_tens[t]}';
+  }
+
+  @override
+  String gateNumberWords(int n) {
+    if (n < 1 || n > 9999) throw RangeError.range(n, 1, 9999, 'n');
+    final parts = [
+      if (n >= 1000) _thousands[n ~/ 1000],
+      if ((n % 1000) >= 100) _hundreds[(n % 1000) ~/ 100],
+      if (n % 100 > 0) _below100(n % 100),
+    ];
+    return parts.first + [for (final p in parts.skip(1)) ' و$p'].join();
+  }
+
+  /// 個数の言い方: 1 は「يوم واحد」、2 は双数「يومان」、3〜10 は複数「أيام」、11 以上は単数の対格「يومًا」。
+  static String _count(int n, String one, String two, String few, String many) {
+    if (n == 1) return one;
+    if (n == 2) return two;
+    if (n >= 3 && n <= 10) return '$n $few';
+    return '$n $many';
+  }
+
+  static String _days(int n) => _count(n, 'يوم واحد', 'يومان', 'أيام', 'يومًا');
+  static String _questions(int n) => _count(n, 'سؤال واحد', 'سؤالان', 'أسئلة', 'سؤالًا');
+
+  @override
+  String cardTitle(String subject) => '$subject · بطاقة التقدم';
+  @override
+  String get headlinePersonalBest => 'رقم قياسي شخصي جديد!';
+  @override
+  String get headlineFirst => 'بداية رائعة';
+  @override
+  String headlineUp(String points) => '+$points عن المرة السابقة';
+  @override
+  String get headlineSame => 'ثابت مثل المرة السابقة';
+  @override
+  String get headlineDown => 'لنواصل التقدم من هنا';
+  @override
+  String nextLevel(String points) => 'بقي $points نقطة للمستوى التالي';
+  @override
+  String get topLevel => 'وصلت إلى أعلى مستوى!';
+  @override
+  String streakDays(int days) => 'سلسلة متتالية: ${_days(days)}';
+  @override
+  String get statStamps => 'ما تم إتقانه';
+  @override
+  String get statSolvable => 'ما يمكنك حله الآن';
+  @override
+  String solvableValue(int count) => _questions(count);
+  @override
+  String cardSemantics(String headline, String level) => 'بطاقة التقدم. $headline. المستوى $level';
+  @override
+  String get mapSemantics => 'خريطة. المس لاختيار الإجابة';
+  @override
+  String formatYear(int year) => year < 0 ? '${-year} ق.م' : '$year م';
+  @override
+  String reportHeader(int activeDays, int attempts) => 'هذا الأسبوع: ${_days(activeDays)} / ${_questions(attempts)}';
+  @override
+  String get reportImprovedTitle => 'ما تحسن هذا الأسبوع:';
+  @override
+  String reportItem(String title, int b, int a) => '- $title (من $b% إلى $a%)';
+  @override
+  String get reportEmpty => 'لا تقدم جديد هذا الأسبوع بعد. واصل بالسرعة التي تناسبك.';
+  @override
+  String get scopeQrTitle => 'مشاركة نطاق الاختبار';
+  @override
+  String get scopeQrHint => 'يمكن للأصدقاء أو العائلة مسح الرمز لضبط النطاق نفسه. لا يحتوي على أسماء أو نتائج.';
+  @override
+  String get scopeQrSemantics => 'رمز QR لنطاق الاختبار';
+  @override
+  String get checklistTitle => 'قائمة يوم الاختبار';
+  @override
+  String checklistProgress(int done, int total) => 'جاهز $done من $total';
+  @override
+  String get checklistAllDone => 'كل شيء جاهز. بالتوفيق!';
+  @override
+  String get fiveMinuteTitle => 'بطاقة آخر 5 دقائق';
+  @override
+  List<(String, String)> get checklistDefaults => [
+        ('pencil', 'أقلام'),
+        ('eraser', 'ممحاة'),
+        ('ruler', 'مسطرة وفرجار'),
+        ('watch', 'ساعة يد'),
+        ('tissue', 'مناديل'),
+        ('notes', 'ملاحظات ملخصة'),
+      ];
+  @override
+  String get sheetTitle => 'ورقة المراجعة السريعة قبل الاختبار';
+  @override
+  String get sheetQuestion => 'السؤال';
+  @override
+  String get sheetAnswer => 'الإجابة';
+  @override
+  String get sheetExplanation => 'الشرح';
+  @override
+  String get sheetEmpty => 'لا شيء للمراجعة الآن. أحسنت!';
+  @override
+  String get markCorrect => 'صحيح';
+  @override
+  String get markWrong => 'خطأ';
+  @override
+  String get ringsTitle => 'حلقات النمو';
+  @override
+  String ringsSemantics(int totalDays) => 'حلقات النمو. المجموع ${_days(totalDays)} من الدراسة';
+  @override
+  String ringsLatestMonth(String month, int days) => 'أحدث شهر، $month: ${_days(days)} من الدراسة';
+  @override
+  String get deviationLabel => 'مؤشر الدرجات داخل التطبيق';
+  @override
+  String deviationRange(String low, String high) => '$low–$high';
+  @override
+  String get deviationNote =>
+      'مؤشر تقريبي صالح داخل هذا التطبيق فقط، وفيه 50 هو متوسط المجموعة المرجعية. وليس ترتيبا وطنيا.';
+  @override
+  String get teacherPrompt => 'ما الخطأ هنا؟ صحح الخطأ';
+  @override
+  String get teacherCorrect => 'صحيح! لقد صححته';
+  @override
+  String get teacherWrong => 'تقريبا! اقرأ مرة أخرى';
 }

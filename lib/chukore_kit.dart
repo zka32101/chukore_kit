@@ -2,6 +2,7 @@
 library;
 
 export 'src/l10n/catalog.dart';
+export 'src/l10n/digits.dart';
 export 'src/l10n/strings.dart';
 export 'src/models/models.dart';
 export 'src/scope/unit_tree.dart';

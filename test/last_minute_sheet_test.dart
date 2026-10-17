@@ -106,7 +106,7 @@ void main() {
     test('見出し・日付・問題・答え・解説が出て、言語を切り替えられる', () {
       final s = _build([_w('tag:t_s', tag: 't_s')], qs, perSection: 1);
       final ja = renderSheetHtml(s);
-      expect(ja, contains('<html lang="ja">'));
+      expect(ja, contains('<html lang="ja" dir="ltr">'));
       expect(ja, contains('<title>直前プリント</title>'));
       expect(ja, contains('2026-10-14'));
       expect(ja, contains('問題'));
@@ -114,10 +114,19 @@ void main() {
       expect(ja, contains('解説'));
       expect(ja, contains('TAG:t_s'));
       final en = renderSheetHtml(s, strings: const EnStrings());
-      expect(en, contains('<html lang="en">'));
+      expect(en, contains('<html lang="en" dir="ltr">'));
       expect(en, contains('Last-minute sheet'));
       expect(en, contains('Explanation'));
       expect(renderSheetHtml(s, strings: const ZhStrings(traditional: true)), contains('lang="zh-Hant"'));
+    });
+
+    test('右から左に書く言語（アラビア語）は dir="rtl"。余白は左右に依らない書き方', () {
+      final s = _build([_w('tag:t_s', tag: 't_s')], qs, perSection: 1);
+      final ar = renderSheetHtml(s, strings: const ArStrings());
+      expect(ar, contains('<html lang="ar" dir="rtl">'));
+      expect(ar, contains('ورقة المراجعة السريعة قبل الاختبار'));
+      expect(ar, contains('padding-inline-start'));
+      expect(ar, isNot(contains('padding-left')));
     });
 
     test('問題データに混じった HTML はエスケープされる（スクリプトが動かない）', () {

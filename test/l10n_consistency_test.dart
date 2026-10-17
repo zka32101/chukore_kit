@@ -14,6 +14,12 @@ void main() {
     'fr': {'solvableValue(1)', 'solvableValue(2)', 'solvableValue(5)', 'markCorrect', 'markWrong', 'sheetQuestion'},
   };
 
+  /// アラビア語の「2」は双数（يومان・سؤالان）で、数字を使わず語で言うのが正しい。
+  /// そのため「数字 2 が文言に入っている」検査から、この項目だけ外す。
+  const dualWithoutDigit = {
+    'ar': {'streakDays(2)', 'solvableValue(2)', 'reportHeader(2,5)', 'ringsLatestMonth(2)'},
+  };
+
   test('言語タグが重複しない', () {
     final tags = all.map((l) => l.tag).toList();
     expect(tags.toSet().length, tags.length, reason: '$tags');
@@ -34,6 +40,7 @@ void main() {
       test('プレースホルダが訳で落ちていない', () {
         void has(String key, List<String> tokens) {
           for (final t in tokens) {
+            if (t == '2' && (dualWithoutDigit[l.languageCode]?.contains(key) ?? false)) continue;
             expect(c[key], contains(t), reason: '${l.tag} $key に $t が無い');
           }
         }
