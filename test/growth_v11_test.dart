@@ -47,8 +47,38 @@ void main() {
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(body: SizedBox(width: 200, height: 200, child: GrowthRingsView(rings: rings, strings: const EnStrings()))),
       ));
-      expect(find.bySemanticsLabel('Growth rings. 5 days of practice in total'), findsOneWidget);
+      // 最新の月は 11 月（学習 0 日）。休んだ月も読み上げに出る
+      expect(find.bySemanticsLabel('Growth rings. 5 days of practice in total. Latest month, 2026-11: 0 days of practice'),
+          findsOneWidget);
       handle.dispose();
+    });
+
+    test('読み上げの文言: 最新の月の学習日数（月は 2026-10 の形）', () {
+      final rings = buildGrowthRings([DateTime.utc(2026, 9, 3), DateTime.utc(2026, 10, 1), DateTime.utc(2026, 10, 2)]);
+      expect(rings.months.last.label, '2026-10');
+      expect(GrowthRingsView(rings: rings, strings: const EnStrings()).semanticsLabel,
+          'Growth rings. 3 days of practice in total. Latest month, 2026-10: 2 days of practice');
+      expect(GrowthRingsView(rings: rings, strings: const JaStrings()).semanticsLabel,
+          contains('直近の月（2026-10）は2日'));
+      expect(GrowthRingsView(rings: rings, strings: const ThStrings()).semanticsLabel, contains('2026-10'));
+      // 年輪が空なら合計の文言だけ
+      expect(GrowthRingsView(rings: buildGrowthRings(const []), strings: const EnStrings()).semanticsLabel,
+          'Growth rings. 0 days of practice in total');
+    });
+
+    test('最新の月の文言の単複・形式（全言語で月と日数が入る）', () {
+      expect(const EnStrings().ringsLatestMonth('2026-10', 1), 'Latest month, 2026-10: 1 day of practice');
+      expect(const FrStrings().ringsLatestMonth('2026-10', 1), contains('1 jour d'));
+      expect(const FrStrings().ringsLatestMonth('2026-10', 5), contains('5 jours'));
+      expect(const DeStrings().ringsLatestMonth('2026-10', 1), 'Letzter Monat, 2026-10: 1 Lerntag');
+      expect(const DeStrings().ringsLatestMonth('2026-10', 3), 'Letzter Monat, 2026-10: 3 Lerntage');
+      expect(const PtStrings().ringsLatestMonth('2026-10', 1), contains('1 dia'));
+      expect(const EsStrings().ringsLatestMonth('2026-10', 2), contains('2 días'));
+      for (final l in ChukoreStrings.supported) {
+        final t = l.ringsLatestMonth('2026-10', 12);
+        expect(t, contains('2026-10'), reason: l.tag);
+        expect(t, contains('12'), reason: l.tag);
+      }
     });
 
     test('読み上げの単複', () {

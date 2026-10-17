@@ -35,6 +35,8 @@ README の実装済み一覧の詳細。各項目の先頭は公開 API の名�
 - 成長カード（`GrowthCardData`・`GrowthCardView`・`renderGrowthCardPng`。名前/ID/メール欄なし、13歳未満はゲート通過後のみ共有）。
 - 成長機能 v1.1（G7 成長の年輪 `buildGrowthRings`・`GrowthRingsView`、G8 本番の点数の記録 `compareRealTests`、G9 アプリ内偏差値の表示ポリシー `deviationDisplay`・`formatDeviationRange`）。
 
+- 成長の年輪の読み上げ（`GrowthRingsView.semanticsLabel`・`ChukoreStrings.ringsLatestMonth`）。合計の学習日数に加えて、最新の月の学習日数（月は `2026-10` の形）も伝える。休んだ月（0 日）もそのまま伝える。図の太さが見えない人にも、最近の学習の様子が分かるようにするため。全 12 言語・17 列。
+
 ## 問題タイプ・地図・年表
 
 - 地図タップ問題の判定（小学コレ！社会の JapanRegionTapMap を参考。境界線データ・教科色はアプリ側。描画は `RegionTapMap`、CustomPainter で flutter_map 非依存）。

@@ -52,6 +52,9 @@ void main() {
         has('formatYear(1868)', ['1868']);
         has('deviationRange', ['{low}', '{high}']);
         has('ringsSemantics(30)', ['30']);
+        for (final n in [2, 30]) {
+          has('ringsLatestMonth($n)', ['{month}', '$n']);
+        }
       });
 
       test('英語のまま残っていない（英語以外）', () {
