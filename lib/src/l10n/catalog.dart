@@ -47,6 +47,9 @@ Map<String, String> stringsCatalog(ChukoreStrings s) {
   for (final n in [0, 1, 2, 30]) {
     m['ringsSemantics($n)'] = s.ringsSemantics(n);
   }
+  for (final n in [0, 1, 2, 30]) {
+    m['ringsLatestMonth($n)'] = s.ringsLatestMonth('{month}', n);
+  }
   m['deviationLabel'] = s.deviationLabel;
   m['deviationRange'] = s.deviationRange('{low}', '{high}');
   m['deviationNote'] = s.deviationNote;

@@ -127,6 +127,9 @@ abstract class ChukoreStrings {
   // --- 成長の年輪・アプリ内偏差値 ---
   String get ringsTitle;
   String ringsSemantics(int totalDays);
+
+  /// 最新の月の学習日数。[month] は `2026-10` の形（言語に依らない数字の表記）。
+  String ringsLatestMonth(String month, int days);
   String get deviationLabel;
   String deviationRange(String low, String high);
   String get deviationNote;
@@ -210,6 +213,9 @@ class JaStrings extends ChukoreStrings {
   String get ringsTitle => '成長の年輪';
   @override
   String ringsSemantics(int totalDays) => '成長の年輪。これまで合計$totalDays日 学習しました';
+  @override
+  String ringsLatestMonth(String month, int days) =>
+      '直近の月（$month）は$days日 学習しました';
   @override
   String get deviationLabel => 'アプリ内偏差値';
   @override
@@ -336,6 +342,9 @@ class EnStrings extends ChukoreStrings {
   @override
   String ringsSemantics(int totalDays) =>
       'Growth rings. ${totalDays == 1 ? '1 day' : '$totalDays days'} of practice in total';
+  @override
+  String ringsLatestMonth(String month, int days) =>
+      'Latest month, $month: ${days == 1 ? '1 day' : '$days days'} of practice';
   @override
   String get deviationLabel => 'In-app score index';
   @override
@@ -490,6 +499,9 @@ class PtStrings extends ChukoreStrings {
   @override
   String ringsSemantics(int totalDays) =>
       'Anéis de crescimento. ${totalDays == 1 ? '1 dia' : '$totalDays dias'} de estudo no total';
+  @override
+  String ringsLatestMonth(String month, int days) =>
+      'Mês mais recente, $month: ${days == 1 ? '1 dia' : '$days dias'} de estudo';
   @override
   String get deviationLabel => 'Índice de pontuação do app';
   @override
@@ -648,6 +660,9 @@ class EsStrings extends ChukoreStrings {
   @override
   String ringsSemantics(int totalDays) =>
       'Anillos de crecimiento. ${totalDays == 1 ? '1 día' : '$totalDays días'} de estudio en total';
+  @override
+  String ringsLatestMonth(String month, int days) =>
+      'Mes más reciente, $month: ${days == 1 ? '1 día' : '$days días'} de estudio';
   @override
   String get deviationLabel => 'Índice de puntuación de la app';
   @override
@@ -822,6 +837,9 @@ class FrStrings extends ChukoreStrings {
   String ringsSemantics(int totalDays) =>
       'Anneaux de croissance. ${totalDays < 2 ? '$totalDays jour' : '$totalDays jours'} d’étude au total';
   @override
+  String ringsLatestMonth(String month, int days) =>
+      'Mois le plus récent, $month\u00A0: ${days < 2 ? '$days jour' : '$days jours'} d’étude';
+  @override
   String get deviationLabel => 'Indice de score dans l’appli';
   @override
   String deviationRange(String low, String high) => '$low–$high';
@@ -941,6 +959,9 @@ class KoStrings extends ChukoreStrings {
   String get ringsTitle => '성장 나이테';
   @override
   String ringsSemantics(int totalDays) => '성장 나이테. 지금까지 모두 $totalDays일 학습했어요';
+  @override
+  String ringsLatestMonth(String month, int days) =>
+      '가장 최근 달($month): $days일 학습했어요';
   @override
   String get deviationLabel => '앱 내 점수 지수';
   @override
@@ -1087,6 +1108,9 @@ class ZhStrings extends ChukoreStrings {
   String get ringsTitle => _t('成长年轮', '成長年輪');
   @override
   String ringsSemantics(int totalDays) => _t('成长年轮。累计学习$totalDays天', '成長年輪。累計學習$totalDays天');
+  @override
+  String ringsLatestMonth(String month, int days) =>
+      _t('最近一个月（$month）：学习$days天', '最近一個月（$month）：學習$days天');
   @override
   String get deviationLabel => _t('应用内分数指数', '應用程式內分數指數');
   @override
@@ -1269,6 +1293,9 @@ class IdStrings extends ChukoreStrings {
   @override
   String ringsSemantics(int totalDays) => 'Cincin pertumbuhan. Total $totalDays hari belajar';
   @override
+  String ringsLatestMonth(String month, int days) =>
+      'Bulan terbaru, $month: $days hari belajar';
+  @override
   String get deviationLabel => 'Indeks skor dalam aplikasi';
   @override
   String deviationRange(String low, String high) => '$low–$high';
@@ -1410,6 +1437,9 @@ class ViStrings extends ChukoreStrings {
   String get ringsTitle => 'Vòng tăng trưởng';
   @override
   String ringsSemantics(int totalDays) => 'Vòng tăng trưởng. Tổng cộng $totalDays ngày học';
+  @override
+  String ringsLatestMonth(String month, int days) =>
+      'Tháng gần nhất, $month: $days ngày học';
   @override
   String get deviationLabel => 'Chỉ số điểm trong ứng dụng';
   @override
@@ -1553,6 +1583,9 @@ class DeStrings extends ChukoreStrings {
   @override
   String ringsSemantics(int totalDays) => 'Wachstumsringe. Insgesamt ${_count(totalDays, 'Lerntag', 'Lerntage')}';
   @override
+  String ringsLatestMonth(String month, int days) =>
+      'Letzter Monat, $month: ${_count(days, 'Lerntag', 'Lerntage')}';
+  @override
   String get deviationLabel => 'Punkte-Index in der App';
   @override
   String deviationRange(String low, String high) => '$low–$high';
@@ -1672,6 +1705,9 @@ class TrStrings extends ChukoreStrings {
   String get ringsTitle => 'Gelişim halkaları';
   @override
   String ringsSemantics(int totalDays) => 'Gelişim halkaları. Toplam $totalDays çalışma günü';
+  @override
+  String ringsLatestMonth(String month, int days) =>
+      'Son ay, $month: $days çalışma günü';
   @override
   String get deviationLabel => 'Uygulama içi puan endeksi';
   @override
@@ -1797,6 +1833,9 @@ class ThStrings extends ChukoreStrings {
   String get ringsTitle => 'วงแหวนการเติบโต';
   @override
   String ringsSemantics(int totalDays) => 'วงแหวนการเติบโต รวม $totalDays วันที่เรียน';
+  @override
+  String ringsLatestMonth(String month, int days) =>
+      'เดือนล่าสุด $month: เรียน $days วัน';
   @override
   String get deviationLabel => 'ดัชนีคะแนนในแอป';
   @override

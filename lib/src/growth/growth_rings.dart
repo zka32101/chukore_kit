@@ -6,6 +6,9 @@ class RingMonth {
 
   final int year, month, days;
 
+  /// `2026-10` の形（言語に依らない数字の表記。読み上げの文言に渡す）。
+  String get label => '${year.toString().padLeft(4, '0')}-${month.toString().padLeft(2, '0')}';
+
   int get daysInMonth => DateTime.utc(year, month + 1, 0).day;
 
   /// その月の学習日の割合 0〜1（年輪の太さ）。

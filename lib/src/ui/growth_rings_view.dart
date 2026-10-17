@@ -17,11 +17,19 @@ class GrowthRingsView extends StatelessWidget {
   final Color accent;
   final ChukoreStrings strings;
 
+  /// 読み上げ: 合計の学習日数に加えて、最新の月の学習日数も伝える（図の太さは見えない人にも）。
+  String get semanticsLabel {
+    final total = strings.ringsSemantics(rings.totalDays);
+    if (rings.months.isEmpty) return total;
+    final latest = rings.months.last;
+    return '$total. ${strings.ringsLatestMonth(latest.label, latest.days)}';
+  }
+
   @override
   Widget build(BuildContext context) => AspectRatio(
         aspectRatio: 1,
         child: Semantics(
-          label: strings.ringsSemantics(rings.totalDays),
+          label: semanticsLabel,
           child: CustomPaint(painter: GrowthRingsPainter(rings, accent: accent)),
         ),
       );
