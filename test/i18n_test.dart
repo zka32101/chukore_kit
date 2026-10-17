@@ -13,6 +13,7 @@ void main() {
   deTests();
   trTests();
   thTests();
+  hiTests();
   formatNumberTests();
   test('言語コードから文言を選ぶ（未対応は英語）', () {
     expect(ChukoreStrings.forLocale('ja').languageCode, 'ja');
@@ -1072,5 +1073,114 @@ void formatNumberTests() {
       expect(s.formatNumber(-2.5), '-2${s.decimalSeparator}5', reason: s.tag);
       expect(s.formatNumber(0.06), '0${s.decimalSeparator}1', reason: s.tag);
     }
+  });
+}
+
+void hiTests() {
+  group('ヒンディー語', () {
+    test('forLocale: hi・hi-IN', () {
+      expect(ChukoreStrings.forLocale('hi'), isA<HiStrings>());
+      expect(ChukoreStrings.forLocale('hi-IN'), isA<HiStrings>());
+      expect(ChukoreStrings.forLocale('hi_IN'), isA<HiStrings>());
+      expect(const HiStrings().tag, 'hi');
+    });
+
+    test('0〜99 の表: 100 語・重複なし・空白なし（写し間違いの検出）', () {
+      expect(HiStrings.numbers.length, 100);
+      expect(HiStrings.numbers.toSet().length, 100);
+      for (final w in HiStrings.numbers) {
+        expect(w.trim(), w);
+        expect(w.contains(' '), isFalse, reason: w);
+      }
+    });
+
+    test('数の読み上げ（不規則な 1〜99 は表から。〜सौ・〜हज़ार は空白で区切る）', () {
+      const hi = HiStrings();
+      expect(hi.gateNumberWords(1), 'एक');
+      expect(hi.gateNumberWords(11), 'ग्यारह');
+      expect(hi.gateNumberWords(25), 'पच्चीस');
+      expect(hi.gateNumberWords(99), 'निन्यानवे');
+      expect(hi.gateNumberWords(100), 'एक सौ');
+      expect(hi.gateNumberWords(101), 'एक सौ एक');
+      expect(hi.gateNumberWords(200), 'दो सौ');
+      expect(hi.gateNumberWords(482), 'चार सौ बयासी');
+      expect(hi.gateNumberWords(999), 'नौ सौ निन्यानवे');
+      expect(hi.gateNumberWords(1000), 'एक हज़ार');
+      expect(hi.gateNumberWords(1001), 'एक हज़ार एक');
+      expect(hi.gateNumberWords(2025), 'दो हज़ार पच्चीस');
+      expect(hi.gateNumberWords(9999), 'नौ हज़ार नौ सौ निन्यानवे');
+      expect(() => hi.gateNumberWords(0), throwsRangeError);
+    });
+
+    test('1〜9999 のすべてで、空白の乱れや重複した位取りが出ない', () {
+      const hi = HiStrings();
+      for (var n = 1; n <= 9999; n++) {
+        final w = hi.gateNumberWords(n);
+        expect(w, isNotEmpty, reason: '$n');
+        expect(w, equals(w.trim()), reason: '$n: "$w"');
+        expect(w.contains('  '), isFalse, reason: '$n: "$w"');
+        expect(RegExp('सौ').allMatches(w).length, lessThanOrEqualTo(1), reason: '$n: "$w"');
+        expect(RegExp('हज़ार').allMatches(w).length, lessThanOrEqualTo(1), reason: '$n: "$w"');
+        // 位の読みは、その位の数が 1 以上のときだけ出る
+        expect(w.contains('सौ'), (n % 1000) >= 100, reason: '$n: "$w"');
+        expect(w.contains('हज़ार'), n >= 1000, reason: '$n: "$w"');
+      }
+    });
+
+    test('保護者ゲート: 読み上げ・ドットの桁区切り・デーヴァナーガリー数字の入力', () {
+      expect(const GateChallenge(482).promptFor(const HiStrings()), 'चार सौ बयासी');
+      expect(const GateChallenge(1200).verify('1,200'), isTrue);
+      expect(const GateChallenge(482).verify('४८२'), isTrue);
+      expect(const GateChallenge(1200).verify('१,२००'), isTrue);
+      expect(const GateChallenge(482).verify('४८३'), isFalse);
+    });
+
+    test('小数点はドット。成長カード・レポート・年', () {
+      const hi = HiStrings();
+      expect(hi.decimalSeparator, '.');
+      GrowthCardData d(double? delta, {double? toNext = 5}) => GrowthCardData(
+            subjectLabel: 'अंग्रेज़ी',
+            level: Level.b,
+            pointsToNext: toNext,
+            scoreDelta: delta,
+            strings: hi,
+            radar: const [RadarAxis('a', .5), RadarAxis('b', .5), RadarAxis('c', .5)],
+          );
+      expect(d(2.5).headline, 'पिछली बार से +2.5');
+      expect(d(-4).headline, 'यहाँ से फिर आगे बढ़ें');
+      expect(d(-4).headline.contains('-'), isFalse);
+      expect(d(null, toNext: 7.5).nextLine, 'अगले स्तर के लिए 7.5 अंक बाकी');
+      expect(d(1, toNext: null).nextLine, 'सबसे ऊँचे स्तर पर पहुँच गए!');
+      final r = WeeklyReport(
+        weekStart: DateTime.utc(2026, 10, 13),
+        attemptCount: 12,
+        activeDays: 3,
+        improvements: const [Improvement('u', 'क्रिया', 0.4, 0.7)],
+      );
+      expect(r.toText(strings: hi), 'इस सप्ताह: 3 दिन / 12 प्रश्न\nइस सप्ताह जो बेहतर हुआ:\n- क्रिया (40% -> 70%)');
+      expect(hi.formatYear(-500), '500 ई.पू.');
+      expect(hi.formatYear(1945), '1945 ई.');
+      expect(hi.solvableValue(1), '1 प्रश्न'); // 複数形の区別は付けない
+    });
+
+    test('数値入力: 1,200.5（カンマが桁区切り、ドットが小数点）', () {
+      const q = Question(
+        id: 'q', unitId: 'u', type: 'numeric', difficulty: .5,
+        choices: [], answer: '1200.5', explanationId: 'x',
+      );
+      final sep = const HiStrings().decimalSeparator;
+      expect(checkAnswer(q, '1,200.5', decimalSeparator: sep).correct, isTrue);
+      expect(checkAnswer(q, '1200.5', decimalSeparator: sep).correct, isTrue);
+    });
+
+    test('持ち物の既定の項目・偏差値の名称・年輪の読み上げ', () {
+      const hi = HiStrings();
+      expect(hi.checklistDefaults.first, ('pencil', 'पेन-पेंसिल'));
+      expect(hi.checklistDefaults.length, 6);
+      expect(hi.deviationLabel, 'ऐप के भीतर का अंक सूचकांक');
+      expect(hi.deviationNote, contains('50'));
+      expect(formatDeviationRange(const DeviationEstimate(55), hi), '50–60');
+      expect(hi.ringsLatestMonth('2026-10', 12), contains('2026-10'));
+    });
   });
 }
