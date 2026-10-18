@@ -51,11 +51,11 @@ final allowed = policyTable.allows(age, ChildFeature.weeklyReport);
 | 学習計画・設定・同意 | `SharedPreferencesEraser` と `ConsentStore.clear()` |
 | 匿名集計に送った分 | **端末側からは特定できない**（個人を結びつけない設計のため）。説明に「すでに送った統計は取り消せない」を書く |
 
-→ **基盤に足すもの（案）**: `SqliteAttemptStore` に全削除（`deleteAll()`）は**まだ無い**（確認済み）ので足す（実装は小さい。テストで「削除後に空」を固定）。
+→ **実装済み**: `AttemptStore.deleteAll()`（`InMemoryAttemptStore`・`SqliteAttemptStore`）。SQLite は `DELETE` のあと `VACUUM` で空き領域も詰め、消した内容がファイルに残らないことをテストで確認している。実装していないストアは `UnsupportedError`。
 
 ## 5. つなぎ目 ④: 設定画面と言語
 
-- `SettingsScreen` の `languages` には、chukore_kit の `ChukoreStrings.supported`（18言語）から作る。`SettingsLanguage(code, 自分の言語での名前)` の一覧を、基盤が返せると楽（**案**: `ChukoreStrings.supported` に言語名のゲッターを足す。ネイティブ確認の対象に含める）。
+- `SettingsScreen` の `languages` には、chukore_kit の `ChukoreStrings.supported` から作る: `SettingsLanguage(s.tag, s.languageName)`（**実装済み**。`languageName` はその言語での名前。地域つきは `Deutsch (Schweiz)` など）。言語名はネイティブ確認の対象に含める。
 - 受験日は `TestPlan.testDate` に保存する（保存はアプリ側）。
 - アラビア語（RTL）は `textDirectionOf`（chukore_kit）と、`SettingsScreen` の RTL 対応を合わせて確認する（実機未確認）。
 
@@ -79,8 +79,8 @@ chukore_kit は2つのキットに**依存しない**（中核を軽く保つ。
 
 ## 8. 次の作業（優先順）
 
-1. [ ] `SqliteAttemptStore` の全削除 `deleteAll()` の追加（現状は無い）— chukore_kit、小さい。
-2. [ ] `ChukoreStrings` の言語名（設定画面の言語リスト用）— chukore_kit、18言語+CSV。
+1. [x] `AttemptStore.deleteAll()` — 実装済み。
+2. [x] `ChukoreStrings.languageName`（設定画面の言語リスト用）— 実装済み（ネイティブ確認は未実施）。
 3. [ ] `app_common_kit` の `ConsentCategory.learningStats` と同意文言 — **法務確認後**。
 4. [ ] `ChildFeature.dataSharing` と送る束の関数 — **法務確認後**。
 5. [ ] アプリ側の結線例（サンプルアプリ）で、保護者ゲート → 同意 → 削除の流れを実機で確認。

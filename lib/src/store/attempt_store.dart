@@ -6,6 +6,10 @@ abstract class AttemptStore {
 
   /// [from] 以上 [to] 未満（日付単位）。省略時は無制限。
   Future<List<Attempt>> query({DateTime? from, DateTime? to, String? unitId});
+
+  /// 回答履歴をすべて消す（データ削除用）。端末の外に書き出したもの（`AttemptBackup` のファイルなど）は消せない。
+  /// 実装していないストアは [UnsupportedError]。
+  Future<void> deleteAll() async => throw UnsupportedError('deleteAll is not supported');
 }
 
 class InMemoryAttemptStore implements AttemptStore {
@@ -13,6 +17,9 @@ class InMemoryAttemptStore implements AttemptStore {
 
   @override
   Future<void> add(Attempt attempt) async => _items.add(attempt);
+
+  @override
+  Future<void> deleteAll() async => _items.clear();
 
   @override
   Future<List<Attempt>> query({DateTime? from, DateTime? to, String? unitId}) async {
