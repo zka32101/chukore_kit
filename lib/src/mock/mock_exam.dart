@@ -107,6 +107,7 @@ List<T> _shuffled<T>(List<T> xs, int seed) {
 
 /// 範囲 [unitIds] の葉の単元から [count] 問を選ぶ。単元ごとの本数は estimatedQuestions に比例
 /// （最大剰余法）、各単元の中は [seed] で決まる順。[excludeQuestionIds] は出さない。
+/// 暗記カード（`card`）は自己採点で点数にできないので、出さない。
 /// 問題が足りなければ全部出して [MockExam.shortfall] を true にする。同じ入力なら同じ結果。
 MockExam buildMockExam({
   required List<Question> questions,
@@ -123,7 +124,7 @@ MockExam buildMockExam({
   for (final u in leaves) {
     final pool = [
       for (final q in questions)
-        if (q.unitId == u.id && !excludeQuestionIds.contains(q.id)) q,
+        if (q.unitId == u.id && q.type != 'card' && !excludeQuestionIds.contains(q.id)) q,
     ]..sort((a, b) => a.id.compareTo(b.id));
     if (pool.isNotEmpty) pools[u.id] = _shuffled(pool, seed ^ _stableHash(u.id));
   }

@@ -41,6 +41,7 @@ export 'src/growth/growth_rings.dart';
 export 'src/growth/real_tests.dart';
 export 'src/postmortem/post_test_review.dart';
 export 'src/question/answer.dart';
+export 'src/question/card.dart';
 export 'src/question/text_match.dart';
 export 'src/question/map_tap.dart';
 export 'src/question/timeline.dart';

@@ -32,7 +32,8 @@ String _normalize(String s, String decimalSeparator) {
 
 /// 問題タイプ別の判定。type: `choice`（選択）／`map`（地図タップ）／`numeric`（数値入力）／`order`・`timeline`（並べ替え・年表。
 /// answer は選択肢IDをカンマ区切りで並べた正解順）／`text`（短い記述。answer は別解を `|` で区切る）／
-/// `multi`（複数の項目を答える。answer は項目を `;`、各項目の別解を `|` で区切る。順不同・部分点あり）。
+/// `multi`（複数の項目を答える。answer は項目を `;`、各項目の別解を `|` で区切る。順不同・部分点あり）／
+/// `card`（暗記カード。入力は自己採点の名前 `good`・`hard`・`again`。`good`・`hard` を正解として数える）。
 /// 記述（`text`・`multi`）は [normalizeText] で表記ゆれをそろえて比べる。[foldKana] が偽なら、
 /// カタカナとひらがなを区別する（カタカナで書く指定の問題用）。
 AnswerResult checkAnswer(
@@ -67,6 +68,12 @@ AnswerResult checkAnswer(
       return AnswerResult(ok);
     case 'multi':
       return _checkMulti(q.answer, input, foldKana);
+    case 'card': // 暗記カード: 入力は自己採点の名前（again・hard・good）。わかった=1、あやしい=0.5、わからない=0
+      return switch (input) {
+        'good' => const AnswerResult(true, score: 1.0),
+        'hard' => const AnswerResult(true, score: 0.5),
+        _ => const AnswerResult(false),
+      };
     default:
       throw UnsupportedError('unknown question type: ${q.type}');
   }
