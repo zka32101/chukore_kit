@@ -18,6 +18,7 @@ export 'src/weak/retry_set.dart';
 export 'src/weak/mistake_reasons.dart';
 export 'src/weak/careless.dart';
 export 'src/insight/misconception_trends.dart';
+export 'src/insight/difficulty_calibration.dart';
 export 'src/confidence/confidence.dart';
 export 'src/review/spaced_review.dart';
 export 'src/time/study_time.dart';
