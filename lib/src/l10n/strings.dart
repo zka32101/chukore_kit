@@ -24,6 +24,7 @@ abstract class ChukoreStrings {
       'ru' => const RuStrings(),
       'it' => const ItStrings(),
       'nl' => const NlStrings(),
+      'pl' => const PlStrings(),
       // スイス・リヒテンシュタインは小数点が `.`、ß を使わない（ss）
       'de' => DeStrings(swiss: parts.length > 1 && DeStrings.swissRegions.contains(parts[1])),
       'zh' => ZhStrings(traditional: ZhStrings.isTraditional(parts)),
@@ -58,6 +59,7 @@ abstract class ChukoreStrings {
     RuStrings(),
     ItStrings(),
     NlStrings(),
+    PlStrings(),
     DeStrings(),
     DeStrings(swiss: true),
     ZhStrings(),
@@ -2698,4 +2700,163 @@ class NlStrings extends ChukoreStrings {
   String get nudgeReview => 'Een korte herhaling helpt om niets te vergeten';
   @override
   String get nudgeStreak => 'Houd je reeks vol met een beetje oefening vandaag';
+}
+
+/// ポーランド語。複数形は 3 つ（1・2〜4・それ以外。12〜14 は「それ以外」）。ロシア語と違い、21・101 などは
+/// 1 の形にならない。小数点はカンマ。数の読み上げは男性形（千は 2〜4 が `tysiące`・5 以上が `tysięcy`）。
+class PlStrings extends ChukoreStrings {
+  const PlStrings();
+
+  static const _ones = ['', 'jeden', 'dwa', 'trzy', 'cztery', 'pięć', 'sześć', 'siedem', 'osiem', 'dziewięć'];
+  static const _teens = [
+    'dziesięć', 'jedenaście', 'dwanaście', 'trzynaście', 'czternaście', 'piętnaście', 'szesnaście', 'siedemnaście',
+    'osiemnaście', 'dziewiętnaście',
+  ];
+  static const _tens = [
+    '', '', 'dwadzieścia', 'trzydzieści', 'czterdzieści', 'pięćdziesiąt', 'sześćdziesiąt', 'siedemdziesiąt',
+    'osiemdziesiąt', 'dziewięćdziesiąt',
+  ];
+  static const _hundreds = [
+    '', 'sto', 'dwieście', 'trzysta', 'czterysta', 'pięćset', 'sześćset', 'siedemset', 'osiemset', 'dziewięćset',
+  ];
+
+  @override
+  String get languageCode => 'pl';
+
+  @override
+  String get decimalSeparator => ',';
+
+  /// 数に合う名詞の形（1 / 2〜4 / それ以外）。1 だけが単数形で、21・101 は複数形。
+  static String plural(int n, String one, String few, String many) {
+    if (n == 1) return one;
+    final m100 = n % 100, m10 = n % 10;
+    if (m10 >= 2 && m10 <= 4 && !(m100 >= 12 && m100 <= 14)) return few;
+    return many;
+  }
+
+  @override
+  String gateNumberWords(int n) {
+    if (n < 1 || n > 9999) throw RangeError.range(n, 1, 9999, 'n');
+    final th = n ~/ 1000, rest = n % 1000, h = rest ~/ 100, r = rest % 100;
+    return [
+      if (th == 1)
+        'tysiąc'
+      else if (th > 1)
+        '${_ones[th]} ${th <= 4 ? 'tysiące' : 'tysięcy'}',
+      if (h > 0) _hundreds[h],
+      if (r >= 10 && r < 20)
+        _teens[r - 10]
+      else ...[
+        if (r >= 20) _tens[r ~/ 10],
+        if (r % 10 > 0) _ones[r % 10],
+      ],
+    ].join(' ');
+  }
+
+  static String _days(int n) => n == 1 ? '1 dzień' : '$n dni';
+  static String _questions(int n) => '$n ${plural(n, 'pytanie', 'pytania', 'pytań')}';
+
+  @override
+  String cardTitle(String subject) => '$subject · Karta postępów';
+  @override
+  String get headlinePersonalBest => 'Nowy rekord życiowy!';
+  @override
+  String get headlineFirst => 'Dobry początek';
+  @override
+  String headlineUp(String points) => '+$points względem poprzedniego razu';
+  @override
+  String get headlineSame => 'Stabilnie, tak jak ostatnio';
+  @override
+  String get headlineDown => 'Zacznijmy znowu piąć się w górę';
+  @override
+  String nextLevel(String points) =>
+      points == '1' ? 'Do następnego poziomu brakuje 1 punktu' : 'Do następnego poziomu brakuje $points punktów';
+  @override
+  String get topLevel => 'Osiągnięto najwyższy poziom!';
+  @override
+  String streakDays(int days) => '${_days(days)} z rzędu';
+  @override
+  String get statStamps => 'Pokonane';
+  @override
+  String get statSolvable => 'Teraz potrafię rozwiązać';
+  @override
+  String solvableValue(int count) => _questions(count);
+  @override
+  String cardSemantics(String headline, String level) => 'Karta postępów. $headline. Poziom $level';
+  @override
+  String get mapSemantics => 'Mapa. Dotknij, aby wybrać odpowiedź';
+  @override
+  String formatYear(int year) => year < 0 ? '${-year} r. p.n.e.' : '$year r.';
+  @override
+  String reportHeader(int activeDays, int attempts) =>
+      'W tym tygodniu: ${_days(activeDays)} / ${_questions(attempts)}';
+  @override
+  String get reportImprovedTitle => 'Co poprawiło się w tym tygodniu:';
+  @override
+  String reportItem(String title, int b, int a) => '- $title ($b% -> $a%)';
+  @override
+  String get reportEmpty => 'W tym tygodniu nie ma jeszcze nowych postępów. Ucz się we własnym tempie.';
+  @override
+  String get scopeQrTitle => 'Udostępnij zakres sprawdzianu';
+  @override
+  String get scopeQrHint =>
+      'Znajomi lub rodzina mogą go zeskanować, aby ustawić ten sam zakres. Nie zawiera imion ani wyników.';
+  @override
+  String get scopeQrSemantics => 'Kod QR zakresu sprawdzianu';
+  @override
+  String get checklistTitle => 'Lista na dzień sprawdzianu';
+  @override
+  String checklistProgress(int done, int total) => 'Gotowe: $done z $total';
+  @override
+  String get checklistAllDone => 'Wszystko gotowe. Powodzenia!';
+  @override
+  String get fiveMinuteTitle => 'Karta na ostatnie 5 minut';
+  @override
+  List<(String, String)> get checklistDefaults => [
+        ('pencil', 'Długopisy i ołówki'),
+        ('eraser', 'Gumka'),
+        ('ruler', 'Linijka i cyrkiel'),
+        ('watch', 'Zegarek'),
+        ('tissue', 'Chusteczki'),
+        ('notes', 'Notatki do powtórki'),
+      ];
+  @override
+  String get sheetTitle => 'Arkusz powtórki przed sprawdzianem';
+  @override
+  String get sheetQuestion => 'Pytanie';
+  @override
+  String get sheetAnswer => 'Odpowiedź';
+  @override
+  String get sheetExplanation => 'Wyjaśnienie';
+  @override
+  String get sheetEmpty => 'Teraz nie ma nic do poprawienia. Dobra robota!';
+  @override
+  String get markCorrect => 'poprawnie';
+  @override
+  String get markWrong => 'błędnie';
+  @override
+  String get ringsTitle => 'Słoje wzrostu';
+  @override
+  String ringsSemantics(int totalDays) => 'Słoje wzrostu. Łącznie ${_days(totalDays)} nauki';
+  @override
+  String ringsLatestMonth(String month, int days) => 'Ostatni miesiąc, $month: ${_days(days)} nauki';
+  @override
+  String get deviationLabel => 'Wskaźnik punktowy aplikacji';
+  @override
+  String deviationRange(String low, String high) => '$low–$high';
+  @override
+  String get deviationNote =>
+      'Przybliżony wskaźnik obowiązujący tylko w tej aplikacji, w którym 50 to średnia grupy odniesienia. To nie jest ranking ogólnokrajowy.';
+  @override
+  String get teacherPrompt => 'Co tu jest nie tak? Popraw błąd';
+  @override
+  String get teacherCorrect => 'Dobrze! Udało Ci się poprawić';
+  @override
+  String get teacherWrong => 'Prawie! Przeczytaj jeszcze raz';
+  @override
+  String get nudgeTestSoon => 'Sprawdzian się zbliża. Poćwicz dziś chociaż trochę';
+  @override
+  String get nudgeReview => 'Krótka powtórka pomaga niczego nie zapomnieć';
+  @override
+  String get nudgeStreak => 'Podtrzymaj swoją serię, ćwicząc dziś trochę';
 }
