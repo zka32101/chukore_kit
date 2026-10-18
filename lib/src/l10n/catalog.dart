@@ -60,6 +60,7 @@ Map<String, String> stringsCatalog(ChukoreStrings s) {
   m['breakMistakes'] = s.breakMistakes;
   m['breakSlowing'] = s.breakSlowing;
   m['breakRushing'] = s.breakRushing;
+  m['peakAhead'] = s.peakAhead;
   m['cardAgain'] = s.cardAgain;
   m['cardHard'] = s.cardHard;
   m['cardGood'] = s.cardGood;
