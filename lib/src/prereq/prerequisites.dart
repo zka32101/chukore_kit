@@ -56,6 +56,51 @@ class PrerequisiteGraph {
 
   List<ExternalRef> externalOf(String unitId) => _nodes[unitId]?.external ?? const [];
 
+  /// [from] から前提をたどって [target] に着くか（[from] 自身は含まない）。循環があっても止まる。
+  bool _reaches(String from, String target) {
+    final seen = <String>{};
+    final stack = [...requiresOf(from)];
+    while (stack.isNotEmpty) {
+      final cur = stack.removeLast();
+      if (cur == target) return true;
+      if (seen.add(cur)) stack.addAll(requiresOf(cur));
+    }
+    return false;
+  }
+
+  /// [id] から前提をたどって [id] に戻る道筋（[id] から始まり、最後の手前まで）。循環が無ければ null。
+  List<String>? _cyclePath(String id) {
+    final prev = <String, String>{};
+    final queue = <String>[];
+    for (final r in requiresOf(id)) {
+      if (r == id) return [id];
+      if (!prev.containsKey(r)) {
+        prev[r] = id;
+        queue.add(r);
+      }
+    }
+    for (var i = 0; i < queue.length; i++) {
+      for (final r in requiresOf(queue[i])) {
+        if (r == id) {
+          final path = <String>[];
+          for (String? c = queue[i]; c != null && c != id; c = prev[c]) {
+            path.add(c);
+          }
+          return [id, ...path.reversed];
+        }
+        if (!prev.containsKey(r)) {
+          prev[r] = queue[i];
+          queue.add(r);
+        }
+      }
+    }
+    return null;
+  }
+
+  /// 前提の定義がまだ無い末端の単元（作成の進み具合の確認用）。単元ツリーの順。
+  List<Unit> uncoveredLeaves(UnitTree tree) =>
+      [for (final u in tree.allLeaves()) if (!_nodes.containsKey(u.id)) u];
+
   /// 単元ツリーと突き合わせて検証する（単元が無い・自分自身が前提・循環・IDの重複）。
   List<ValidationIssue> validate(UnitTree tree, {Iterable<PrereqNode>? rawNodes}) {
     final issues = <ValidationIssue>[];
@@ -79,20 +124,37 @@ class PrerequisiteGraph {
         if (e.id.trim().isEmpty || e.title.trim().isEmpty) err('prereq_external_empty', n.unitId, '他アプリの前提の id と title は必須です');
       }
     }
-    // 循環: 前提をたどって自分に戻る
+    // 循環: 前提をたどって自分に戻る。同じ循環は、IDが最小の単元でだけ 1 回報告し、道筋を示す。
     for (final id in _nodes.keys) {
-      final stack = [...requiresOf(id)];
-      final seen = <String>{};
-      var cyclic = false;
-      while (stack.isNotEmpty) {
-        final cur = stack.removeLast();
-        if (cur == id) {
-          cyclic = true;
-          break;
-        }
-        if (seen.add(cur)) stack.addAll(requiresOf(cur));
+      final path = _cyclePath(id);
+      if (path == null) continue;
+      if (path.reduce((a, b) => a.compareTo(b) <= 0 ? a : b) != id) continue;
+      err('prereq_cycle', id, '前提が循環しています: ${[...path, id].join(' → ')}');
+    }
+
+    // 警告（直すと分かりやすくなるが、動作には影響しない）
+    void warn(String code, String id, String msg) =>
+        issues.add(ValidationIssue(IssueSeverity.warning, code, id, msg));
+    for (final n in nodes) {
+      final seenReq = <String>{};
+      for (final r in n.requires) {
+        if (!seenReq.add(r)) warn('prereq_requires_duplicate', n.unitId, '前提 $r が重複しています');
       }
-      if (cyclic) err('prereq_cycle', id, '前提が循環しています');
+      final unit = tree[n.unitId];
+      for (final r in seenReq) {
+        final pre = tree[r];
+        if (unit == null || pre == null || r == n.unitId) continue;
+        if (pre.subject != unit.subject) {
+          warn('prereq_cross_subject', n.unitId, '前提 $r は別の教科です（${pre.subject} → ${unit.subject}）。意図したものか確認してください');
+        } else if (pre.grade > unit.grade) {
+          warn('prereq_grade_inversion', n.unitId, '前提 $r は上の学年です（${pre.grade}年 → ${unit.grade}年）。向きが逆かもしれません');
+        }
+        // 別の前提の先でも辿れるなら、直接書かなくてよい
+        final via = [for (final o in seenReq) if (o != r && _reaches(o, r)) o];
+        if (via.isNotEmpty) {
+          warn('prereq_redundant', n.unitId, '前提 $r は ${via.first} の前提でもあるため、直接書かなくても同じ結果になります');
+        }
+      }
     }
     return [...issues.where((i) => i.isError), ...issues.where((i) => !i.isError)];
   }

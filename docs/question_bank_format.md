@@ -46,7 +46,10 @@ dart run tool/validate_bank.dart units.json questions.json
 - `requires`: 同じ単元ツリーの中の前提の単元。
 - `external`: 他アプリ（小学コレ！など）にある前提。**コードは共有せず、誘導（リンク）だけ**を持つ。`link` はストアのリンクやアプリ間リンクで、開くのはアプリ側。
 - 診断は `diagnoseBacktrace`。習熟度が基準（既定 0.6）未満の前提を weak、学習の記録が無い前提を unknown とし、「前提がすべて ok なのに自分は weak／unknown」の単元を出発点の候補にする。出発点が持つ `external` が誘導先になる。
-- 検証: `dart run tool/validate_bank.dart units.json questions.json prerequisites.json`（単元が無い・自分自身が前提・循環・重複・`external` の空欄）。
+- 検証: `dart run tool/validate_bank.dart units.json questions.json prerequisites.json`
+  - エラー: 単元が無い・自分自身が前提・循環（`a → b → c → a` と道筋を表示。同じ循環は 1 回）・重複・`external` の空欄。
+  - 警告（直すと分かりやすいが、動作には影響しない）: 冗長な前提（`prereq_redundant`: 別の前提の先でも辿れる）、学年の逆転（`prereq_grade_inversion`: 前提が上の学年）、別の教科の前提（`prereq_cross_subject`）、前提の重複（`prereq_requires_duplicate`）。
+  - 作成の進み具合: 「前提の定義: 12/40 末端単元（未定義: …）」と表示する。前提が本当に無い単元は定義しなくてよいので、これはエラーにしない。コードからは `PrerequisiteGraph.uncoveredLeaves(tree)`。
 
 ## 問題集 `questions.json`
 
@@ -88,7 +91,7 @@ dart run tool/validate_bank.dart units.json questions.json
 `duplicate_question_id` / `unknown_type` / `explanation_missing` / `bad_version` / `choices_duplicate` /
 `choices_too_few` / `answer_not_in_choices` / `numeric_answer_invalid` / `order_too_few` /
 `order_duplicate` / `order_choices_mismatch` / `tag_choice_missing` / `tag_on_answer` / `tag_format` /
-`unit_missing` / `prereq_unit_missing` / `prereq_requires_missing` / `prereq_self` / `prereq_cycle` / `prereq_duplicate` / `prereq_external_empty` / `duplicate_mistake_line_id` / `mistake_*`（元の問題・型・選択肢のつながり、セリフ・説明が空など）
+`unit_missing` / `prereq_unit_missing` / `prereq_requires_missing` / `prereq_self` / `prereq_cycle` / `prereq_duplicate` / `prereq_external_empty` / `prereq_redundant` / `prereq_grade_inversion` / `prereq_cross_subject` / `prereq_requires_duplicate` / `duplicate_mistake_line_id` / `mistake_*`（元の問題・型・選択肢のつながり、セリフ・説明が空など）
 
 警告（品質上の注意）:
 `unit_no_estimate` / `difficulty_extreme` / `tags_ignored` / `unit_not_leaf` / `unit_empty`
