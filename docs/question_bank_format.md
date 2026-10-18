@@ -108,3 +108,11 @@ dart run tool/validate_bank.dart units.json questions.json
 - 得点は `AnswerResult.score`（0〜1）。`multi` は 合った項目数 ÷ 全項目数。正解に無い項目が混じると、その数だけ減る（思いつく語を全部書く当て推量を避ける。0 を下回らない）。同じ項目の重ね書き（別解を両方書く、同じ語を 2 回書く）は加点も減点もしない。全項目が合い、余分が無いときだけ `correct`。`text` ほかは正解 1・不正解 0。
 - 模試の採点は `correct`（○×）で数える。部分点を模試の得点に使うかは、運用で決める。
 - 検証コード: `text_answer_empty` / `text_alt_duplicate` / `multi_too_few` / `multi_item_empty` / `multi_item_separator` / `multi_ambiguous` / `choices_ignored`（警告）。
+
+## 問題集の差分更新（月次の配信用）
+全体を送り直さず、差分だけで更新できる。配信・保存はアプリ側で、基盤は「差分を作る・検査する・適用する」を持つ。
+- 作る: `BankDiff.between(今の問題, 新しい問題)`（追加・削除・変更）。コマンドは `dart run tool/diff_bank.dart <今の questions.json> <新しい questions.json> [<diff.json>]`。エラーがあれば差分ファイルを書かず終了コード 1。
+- 検査（`diff.check(今の問題)`）: 内容を変えたのに `version` が同じ（`changed_without_version_bump`、エラー）、`version` が下がった（`version_decreased`、エラー）、内容は同じなのに `version` だけ上がった（`version_bumped_without_change`、警告）。**内容を変えた問題は version を上げる**決まり（回答履歴は問題ID・版に結びつくため、古い内容の集計と混ざらないようにする）。
+- 適用: `diff.apply(手元の問題)`。変更は元の位置、追加は最後、削除は除く。手元が差分の元と違う（削除・変更する問題が無い、変更前の版が合わない、追加する問題がすでにある）と `StateError` で、途中まで当たった状態は返さない。差分は**順番に**当てる（1 か月飛ばすと版が合わず止まる）。適用後の問題集は、通常どおり `validateQuestionBank` で検証する。
+- ファイル: `diff.toJsonString()` / `BankDiff.parse(json)`。形式名 `chukore_kit.bank_diff`、版 1。別のファイル・壊れたファイル・新しい版は `FormatException`。
+
