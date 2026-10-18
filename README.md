@@ -49,7 +49,7 @@ flutter pub get && flutter analyze && flutter test
 
 1. `ChukoreStrings` を実装し、`forLocale` と `ChukoreStrings.supported` に足す。
 2. `dart run tool/export_strings.dart` で `docs/translation_review.csv`（全言語の全文言を並べた一覧）を更新する。**更新を忘れるとテストが失敗する。**
-3. `docs/translation_review.csv` をスプレッドシートで開き、ネイティブに確認してもらう（プレースホルダ `{subject}` `{points}` などは訳の中に残す）。
+3. `docs/translation_review.csv` をスプレッドシートで開き、ネイティブに確認してもらう（プレースホルダ `{subject}` `{points}` などは訳の中に残す）。 依頼書は [`docs/native_review_checklist.md`](docs/native_review_checklist.md)（観点、言語ごとの重点、数の読み上げの一覧の出し方、実機のフォント確認）。
 4. `flutter test`。全言語に対して、空の文言・プレースホルダの欠落・英語のまま残った訳・数の読み上げ（100〜999）・小数点の表記を検査する。英語と同語源で綴りが同じ文言（例: フランス語の `question`）は `test/l10n_consistency_test.dart` の `cognates` に言語限定で足す。
 
 ### フォント
