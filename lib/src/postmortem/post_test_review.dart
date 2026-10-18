@@ -4,21 +4,6 @@ import '../bank/question_bank.dart';
 import '../models/models.dart';
 import '../scope/unit_tree.dart';
 
-/// 失点の理由（本人が選ぶ）。
-enum LossReason {
-  /// 習っていない・分からなかった（理解不足）。
-  dontKnow,
-
-  /// 一度覚えたが忘れていた。
-  forgot,
-
-  /// 分かっていたのに取り違えた（ケアレス）。
-  careless,
-
-  /// 時間が足りなかった。
-  timeShort,
-}
-
 /// 実際のテストでの1単元ぶんの失点。
 class TestLoss {
   const TestLoss(this.unitId, this.lostPoints, this.reason);
