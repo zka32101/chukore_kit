@@ -1,6 +1,7 @@
 import '../models/models.dart';
 import '../planner/planner.dart';
 import '../review/spaced_review.dart';
+import '../weak/retry_set.dart';
 import '../weak/weak_notes.dart';
 
 /// 出題の枠。
@@ -164,24 +165,8 @@ PracticeSet pickPractice({
   if (focusMissing > 0) shortfall[PracticeSlot.focus] = focusMissing;
 
   // 弱点: 項目ごとの候補を作り、1 項目ずつ回して選ぶ
-  final entries = [
-    for (final e in buildWeakNotes(attempts, byId))
-      if (!e.overcome) e,
-  ]..sort((a, b) {
-      final c = b.confidentWrongCount.compareTo(a.confidentWrongCount);
-      if (c != 0) return c;
-      final d = b.lastWrongAt.compareTo(a.lastWrongAt);
-      return d != 0 ? d : a.key.compareTo(b.key);
-    });
   final lists = [
-    for (final e in entries)
-      [
-        for (final q in pool)
-          if (e.questionId != null
-              ? q.id == e.questionId
-              : q.misconceptionTags.values.contains(e.tag))
-            q,
-      ]..sort(rank),
+    for (final e in prioritizeWeak(buildWeakNotes(attempts, byId))) questionsForWeakEntry(e, pool)..sort(rank),
   ];
   var progressed = true;
   while (weak.length < plan.weak && progressed) {
