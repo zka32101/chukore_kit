@@ -104,15 +104,15 @@ void main() {
 
   group('単元ごとの偏り', () {
     test('単元の問題の「実測 − 基準」の平均。偏りの大きい順。回答が足りた問題だけ数える', () {
-      final qs = [q('a', 0.5), q('b', 0.5), q('c', 0.5, unit: 'u2'), q('d', 0.5, unit: 'u3')];
+      final qs = [q('a', 0.5, unit: 'u_big'), q('b', 0.5, unit: 'u_big'), q('c', 0.5, unit: 'a_small'), q('d', 0.5, unit: 'z_few')];
       final a = [
-        ...solved('a', 40, 32), // +0.3
-        ...solved('b', 40, 28, unit: 'u1'), // +0.2
-        ...solved('c', 40, 22, unit: 'u2'), // −? 0.55-0.5=+0.05
-        ...solved('d', 5, 5, unit: 'u3'), // 回答が足りない
+        ...solved('c', 40, 22, unit: 'a_small'), // +0.05
+        ...solved('a', 40, 32, unit: 'u_big'), // +0.3
+        ...solved('b', 40, 28, unit: 'u_big'), // +0.2
+        ...solved('d', 5, 5, unit: 'z_few'), // 回答が足りない
       ];
       final r = calibrateDifficulty(a, qs);
-      expect(r.units.map((u) => u.unitId), ['u1', 'u2']);
+      expect(r.units.map((u) => u.unitId), ['u_big', 'a_small'], reason: '単元ID順なら a_small が先になる');
       expect(r.units.first.meanGap, closeTo(0.25, 1e-9));
       expect(r.units.first.questions, 2);
     });
