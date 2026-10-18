@@ -42,6 +42,36 @@ abstract class ChukoreStrings {
   /// 一覧・確認用の識別子（地域で内容が違う言語は地域つき。例: `pt-BR`・`pt-PT`）。
   String get tag => languageCode;
 
+  /// その言語での言語名（設定画面の言語リストに出す。例: `日本語`・`Deutsch (Schweiz)`）。
+  /// 地域で内容が違う言語は地域つき。[tag] ごとに決まった名前を返す。
+  String get languageName => _languageNames[tag] ?? tag;
+
+  static const Map<String, String> _languageNames = {
+    'ja': '日本語',
+    'en': 'English',
+    'pt-BR': 'Português (Brasil)',
+    'pt-PT': 'Português (Portugal)',
+    'es': 'Español (España)',
+    'es-MX': 'Español (México)',
+    'fr': 'Français (France)',
+    'fr-BE': 'Français (Belgique)',
+    'ko': '한국어',
+    'id': 'Bahasa Indonesia',
+    'vi': 'Tiếng Việt',
+    'tr': 'Türkçe',
+    'th': 'ไทย',
+    'hi': 'हिन्दी',
+    'ar': 'العربية',
+    'ru': 'Русский',
+    'it': 'Italiano',
+    'nl': 'Nederlands',
+    'pl': 'Polski',
+    'de': 'Deutsch (Deutschland)',
+    'de-CH': 'Deutsch (Schweiz)',
+    'zh-Hans': '简体中文',
+    'zh-Hant': '繁體中文',
+  };
+
   /// 対応している文言の一覧（翻訳確認の書き出し・検査に使う）。言語を足したらここにも足す。
   static const List<ChukoreStrings> supported = [
     JaStrings(),

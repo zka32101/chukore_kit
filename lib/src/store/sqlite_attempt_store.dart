@@ -66,6 +66,13 @@ class SqliteAttemptStore implements AttemptStore {
     );
   }
 
+  /// 全件削除。`VACUUM` で空き領域も詰め、削除した行の内容がファイルに残らないようにする。
+  @override
+  Future<void> deleteAll() async {
+    _db.execute('DELETE FROM attempts');
+    _db.execute('VACUUM');
+  }
+
   @override
   Future<List<Attempt>> query({DateTime? from, DateTime? to, String? unitId}) async {
     final where = <String>[];
