@@ -183,6 +183,9 @@ abstract class ChukoreStrings {
   String get breakSlowing;
   String get breakRushing;
 
+  /// 問題の多い日が近づいたときの予告（数字を含まない、責めない一文）。決め方は [findPeakAhead]。
+  String get peakAhead;
+
   /// 暗記カードの自己採点ボタン（わからない・あやしい・わかった）と、カードをめくるボタン。
   String get cardAgain;
   String get cardHard;
@@ -308,6 +311,8 @@ class JaStrings extends ChukoreStrings {
   String get breakSlowing => '少し疲れてきたかな？ひと休みしよう';
   @override
   String get breakRushing => 'はやく答えすぎているかも。ゆっくり深呼吸して、問題をよく読もう';
+  @override
+  String get peakAhead => "あした以降に、問題の多い日があるよ。少しずつ先にやっておこう";
   @override
   String get cardAgain => 'わからない';
   @override
@@ -478,6 +483,8 @@ class EnStrings extends ChukoreStrings {
   String get breakSlowing => 'Getting tired? Take a short break';
   @override
   String get breakRushing => 'Answering very fast. Take a breath and read each question carefully';
+  @override
+  String get peakAhead => "A busier day is coming up. Let’s get a little ahead of it";
   @override
   String get cardAgain => "Don't know";
   @override
@@ -677,6 +684,8 @@ class PtStrings extends ChukoreStrings {
   String get breakSlowing => 'Cansou um pouco? Faça uma pausa';
   @override
   String get breakRushing => 'Respondendo rápido demais. Respire e leia cada pergunta com calma';
+  @override
+  String get peakAhead => "Vem aí um dia com mais questões. Vamos adiantar um pouquinho";
   @override
   String get cardAgain => 'Não sei';
   @override
@@ -880,6 +889,8 @@ class EsStrings extends ChukoreStrings {
   String get breakSlowing => '¿Te estás cansando? Haz una pausa';
   @override
   String get breakRushing => 'Estás respondiendo muy rápido. Respira y lee cada pregunta con calma';
+  @override
+  String get peakAhead => "Se acerca un día con más preguntas. Vamos adelantando un poco";
   @override
   String get cardAgain => 'No lo sé';
   @override
@@ -1099,6 +1110,8 @@ class FrStrings extends ChukoreStrings {
   @override
   String get breakRushing => 'Vous répondez très vite. Respirez et lisez bien chaque question';
   @override
+  String get peakAhead => "Un jour plus chargé approche. Prenons un peu d’avance";
+  @override
   String get cardAgain => 'Je ne sais pas';
   @override
   String get cardHard => 'Hésitant';
@@ -1264,6 +1277,8 @@ class KoStrings extends ChukoreStrings {
   String get breakSlowing => '조금 피곤한가요? 잠깐 쉬어요';
   @override
   String get breakRushing => '너무 빨리 답하고 있어요. 숨을 고르고 문제를 잘 읽어 봐요';
+  @override
+  String get peakAhead => "문제가 많은 날이 다가오고 있어요. 조금씩 미리 해 둬요";
   @override
   String get cardAgain => '몰라요';
   @override
@@ -1455,6 +1470,8 @@ class ZhStrings extends ChukoreStrings {
   String get breakSlowing => _t('有点累了吗？休息一下吧', '有點累了嗎？休息一下吧');
   @override
   String get breakRushing => _t('答得太快了。深呼吸，仔细读题', '答得太快了。深呼吸，仔細讀題');
+  @override
+  String get peakAhead => _t('即将迎来题目较多的一天。提前做一点吧', '即將迎來題目較多的一天。提前做一點吧');
   @override
   String get cardAgain => _t('不会', '不會');
   @override
@@ -1702,6 +1719,8 @@ class IdStrings extends ChukoreStrings {
   @override
   String get breakRushing => 'Menjawab terlalu cepat. Tarik napas dan baca soal dengan teliti';
   @override
+  String get peakAhead => "Akan ada hari dengan lebih banyak soal. Yuk kerjakan sedikit lebih awal";
+  @override
   String get cardAgain => 'Tidak tahu';
   @override
   String get cardHard => 'Ragu';
@@ -1888,6 +1907,8 @@ class ViStrings extends ChukoreStrings {
   String get breakSlowing => 'Hơi mệt rồi à? Nghỉ một chút nhé';
   @override
   String get breakRushing => 'Bạn đang trả lời quá nhanh. Hít thở và đọc kỹ từng câu nhé';
+  @override
+  String get peakAhead => "Sắp có một ngày nhiều bài hơn. Mình làm trước một chút nhé";
   @override
   String get cardAgain => 'Chưa biết';
   @override
@@ -2076,6 +2097,8 @@ class DeStrings extends ChukoreStrings {
   @override
   String get breakRushing => 'Du antwortest sehr schnell. Atme durch und lies jede Frage genau';
   @override
+  String get peakAhead => "Bald kommt ein Tag mit mehr Aufgaben. Mach schon ein bisschen vor";
+  @override
   String get cardAgain => 'Weiß ich nicht';
   @override
   String get cardHard => 'Unsicher';
@@ -2240,6 +2263,8 @@ class TrStrings extends ChukoreStrings {
   String get breakSlowing => 'Yorulmaya mı başladın? Kısa bir mola ver';
   @override
   String get breakRushing => 'Çok hızlı cevap veriyorsun. Derin nefes al ve soruları dikkatle oku';
+  @override
+  String get peakAhead => "Yakında soruların daha çok olduğu bir gün geliyor. Biraz önceden yapalım";
   @override
   String get cardAgain => 'Bilmiyorum';
   @override
@@ -2411,6 +2436,8 @@ class ThStrings extends ChukoreStrings {
   @override
   String get breakRushing => 'ตอบเร็วเกินไปหรือเปล่า หายใจลึก ๆ แล้วอ่านโจทย์ให้ดีนะ';
   @override
+  String get peakAhead => "อีกไม่นานจะมีวันที่โจทย์เยอะขึ้น ทำล่วงหน้าไว้นิดหนึ่งนะ";
+  @override
   String get cardAgain => 'ไม่รู้';
   @override
   String get cardHard => 'ไม่แน่ใจ';
@@ -2581,6 +2608,8 @@ class HiStrings extends ChukoreStrings {
   String get breakSlowing => 'थकान लग रही है? थोड़ा आराम करें';
   @override
   String get breakRushing => 'आप बहुत जल्दी जवाब दे रहे हैं। गहरी साँस लें और सवाल ध्यान से पढ़ें';
+  @override
+  String get peakAhead => "जल्द ही ज़्यादा सवालों वाला दिन आने वाला है। थोड़ा पहले से कर लें";
   @override
   String get cardAgain => 'पता नहीं';
   @override
@@ -2773,6 +2802,8 @@ class ArStrings extends ChukoreStrings {
   String get breakSlowing => 'هل بدأتَ تتعب؟ خذ استراحة قصيرة';
   @override
   String get breakRushing => 'تجيب بسرعة كبيرة. تنفّس بعمق واقرأ كل سؤال بعناية';
+  @override
+  String get peakAhead => "يقترب يوم فيه أسئلة أكثر. لنتقدّم قليلًا من الآن";
   @override
   String get cardAgain => 'لا أعرف';
   @override
@@ -2969,6 +3000,8 @@ class RuStrings extends ChukoreStrings {
   @override
   String get breakRushing => 'Ответы слишком быстрые. Вдохни глубже и внимательно читай вопросы';
   @override
+  String get peakAhead => "Скоро день с большим количеством заданий. Давай чуть-чуть сделаем заранее";
+  @override
   String get cardAgain => 'Не знаю';
   @override
   String get cardHard => 'Сомневаюсь';
@@ -3164,6 +3197,8 @@ class ItStrings extends ChukoreStrings {
   @override
   String get breakRushing => 'Stai rispondendo molto in fretta. Respira e leggi bene ogni domanda';
   @override
+  String get peakAhead => "Si avvicina un giorno con più domande. Portiamoci un po’ avanti";
+  @override
   String get cardAgain => 'Non so';
   @override
   String get cardHard => 'Incerto';
@@ -3348,6 +3383,8 @@ class NlStrings extends ChukoreStrings {
   String get breakSlowing => 'Word je moe? Neem even pauze';
   @override
   String get breakRushing => 'Je antwoordt heel snel. Adem diep in en lees elke vraag goed';
+  @override
+  String get peakAhead => "Er komt een dag met meer vragen aan. Laten we alvast een beetje voorwerk doen";
   @override
   String get cardAgain => 'Weet ik niet';
   @override
@@ -3543,6 +3580,8 @@ class PlStrings extends ChukoreStrings {
   String get breakSlowing => 'Czujesz zmęczenie? Zrób krótką przerwę';
   @override
   String get breakRushing => 'Odpowiadasz bardzo szybko. Weź oddech i uważnie czytaj pytania';
+  @override
+  String get peakAhead => "Zbliża się dzień z większą liczbą zadań. Zrób trochę wcześniej";
   @override
   String get cardAgain => 'Nie wiem';
   @override
