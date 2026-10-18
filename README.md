@@ -15,6 +15,7 @@
 | 成長の見える化 | レーダー・自己ベスト・克服スタンプ・進化・成長カード `renderGrowthCardPng`・成長の年輪 |
 | 問題タイプ・画面部品 | 選択・地図タップ・図タップ・数値・並べ替え・年表の判定／`RegionTapMap`・`TimelineOrderList` |
 | 保護者・先生役 | 保護者ゲート `GateChallenge`・国ごとの年齢条件 `AgePolicy`・週次レポート `buildWeeklyReport`・先生役モード（まちがいキャラ） |
+| 引き継ぎ | 学習データの書き出し・取り込み `AttemptBackup`（回答履歴を1つの JSON に。二重取り込みなし、壊れたファイルは全体を拒否） |
 | 直前・当日・共有 | 直前プリント `buildLastMinuteSheet`・当日チェック `DayChecklist`・範囲カードの QR `encodeScope` |
 
 未実装: キャラ収集（キャラ案の確定待ち）、英語アプリとの結合。
