@@ -61,3 +61,4 @@ README の実装済み一覧の詳細。各項目の先頭は公開 API の名�
 - キャラ収集（キャラ案の確定待ち）、英語アプリとの結合。
 - 学習データの書き出しと取り込み（`AttemptBackup.export(attempts)` / `AttemptBackup.importInto(store, json)`）。機種変更やアプリの入れ直しの引き継ぎ用で、通信しない。入るのは回答履歴だけ（問題ID・単元ID・正誤・選んだ選択肢・時刻（UTC）・所要時間・モード・自信度）で、名前・ID・メール・生年月日は入らない。テスト日の予定・範囲はアプリが持つので含めない。取り込みは store に無い回答だけを足すので、同じファイルを何度入れても二重にならない（同じ問題・時刻・答え・モードは同一とみなす）。件数とチェック値を持ち、途中で切れた・書き換わったファイル、新しい版のファイル、1 件でも不正な行があるファイルは `FormatException` で、一部だけ戻る状態を作らない。ファイルの保存・共有はアプリ側。
 - 記述問題の判定（`text`・`multi`、`normalizeText`、`AnswerResult.score`）。短い記述は別解を `|` で並べ、表記ゆれ（全角・大文字・空白・文末の句読点・かなの種類）を吸収して比べる。複数の語を答える問題は順不同で、合った項目の割合を部分点（`score`）として返す。余分な項目は減点、重ね書きは無視。カタカナ指定の問題は `foldKana: false`。形式と検証コードは `docs/question_bank_format.md`。
+- 問題集の差分更新（`BankDiff.between` / `check` / `apply` / `toJsonString` / `BankDiff.parse`、`tool/diff_bank.dart`）。月次などの差分配信用。内容を変えたのに version を上げ忘れた問題をエラーにし、差分は順番にしか当たらない（元と違う問題集には StateError で、途中まで当たらない）。配信はアプリ側。詳細は `docs/question_bank_format.md`。
