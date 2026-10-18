@@ -56,6 +56,10 @@ Map<String, String> stringsCatalog(ChukoreStrings s) {
   m['reasonForgot'] = s.reasonForgot;
   m['reasonCareless'] = s.reasonCareless;
   m['reasonTimeShort'] = s.reasonTimeShort;
+  m['breakLong'] = s.breakLong;
+  m['breakMistakes'] = s.breakMistakes;
+  m['breakSlowing'] = s.breakSlowing;
+  m['breakRushing'] = s.breakRushing;
   m['ringsTitle'] = s.ringsTitle;
   for (final n in [0, 1, 2, 30]) {
     m['ringsSemantics($n)'] = s.ringsSemantics(n);
