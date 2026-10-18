@@ -64,8 +64,8 @@ void main() {
   test('全言語に予告の文言があり、数字を含まない', () {
     for (final s in ChukoreStrings.supported) {
       final l = s.languageCode;
-      expect(s.peakAhead.trim(), isNotEmpty, reason: '$l');
-      expect(RegExp(r'[0-9０-９]').hasMatch(s.peakAhead), isFalse, reason: '$l');
+      expect(s.peakAhead.trim(), isNotEmpty, reason: l);
+      expect(RegExp(r'[0-9０-９]').hasMatch(s.peakAhead), isFalse, reason: l);
     }
   });
 }
