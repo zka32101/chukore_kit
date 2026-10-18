@@ -37,4 +37,5 @@ export 'src/question/timeline.dart';
 export 'src/store/attempt_store.dart';
 export 'src/guardian/gate.dart';
 export 'src/guardian/age_policy.dart';
+export 'src/guardian/age_policy_table.dart';
 export 'src/guardian/report.dart';
