@@ -159,6 +159,13 @@ abstract class ChukoreStrings {
   String get nudgeTestSoon;
   String get nudgeReview;
   String get nudgeStreak;
+
+  /// 子ども本人が見る週のふりかえりの見出し（数字を含まない、責めない短い文）。決め方は [buildMyWeek]。
+  String get myWeekGrew;
+  String get myWeekOvercame;
+  String get myWeekKept;
+  String get myWeekStarted;
+  String get myWeekRest;
 }
 
 class JaStrings extends ChukoreStrings {
@@ -236,6 +243,16 @@ class JaStrings extends ChukoreStrings {
   String get nudgeReview => '忘れる前に、ちょっと復習しよう';
   @override
   String get nudgeStreak => '今日も少しだけやって、連続記録をのばそう';
+  @override
+  String get myWeekGrew => 'のびたところがあるよ！';
+  @override
+  String get myWeekOvercame => 'つまずきをのりこえたよ！';
+  @override
+  String get myWeekKept => 'こつこつ続けられたね';
+  @override
+  String get myWeekStarted => 'はじめの一歩、いいね！';
+  @override
+  String get myWeekRest => 'ひとやすみの週。またいつでも始めよう';
   @override
   String get ringsTitle => '成長の年輪';
   @override
@@ -370,6 +387,16 @@ class EnStrings extends ChukoreStrings {
   String get nudgeReview => 'A quick review keeps it fresh';
   @override
   String get nudgeStreak => 'Keep your streak going with a little practice today';
+  @override
+  String get myWeekGrew => 'You made progress this week!';
+  @override
+  String get myWeekOvercame => 'You got past a tricky spot!';
+  @override
+  String get myWeekKept => 'Nice and steady, keep it up';
+  @override
+  String get myWeekStarted => 'A great first step!';
+  @override
+  String get myWeekRest => 'A quiet week. Start again whenever you like';
   @override
   String get ringsTitle => 'Growth rings';
   @override
@@ -533,6 +560,16 @@ class PtStrings extends ChukoreStrings {
   String get nudgeReview => 'Uma revisão rápida ajuda a não esquecer';
   @override
   String get nudgeStreak => 'Mantenha sua sequência com um pouco de prática hoje';
+  @override
+  String get myWeekGrew => 'Você progrediu esta semana!';
+  @override
+  String get myWeekOvercame => 'Você superou um ponto difícil!';
+  @override
+  String get myWeekKept => 'Constância é tudo, continue assim';
+  @override
+  String get myWeekStarted => 'Um ótimo primeiro passo!';
+  @override
+  String get myWeekRest => 'Uma semana tranquila. Recomece quando quiser';
   @override
   String get ringsTitle => 'Anéis de crescimento';
   @override
@@ -700,6 +737,16 @@ class EsStrings extends ChukoreStrings {
   String get nudgeReview => 'Un repaso rápido ayuda a no olvidar';
   @override
   String get nudgeStreak => 'Mantén tu racha con un poco de práctica hoy';
+  @override
+  String get myWeekGrew => '¡Avanzaste esta semana!';
+  @override
+  String get myWeekOvercame => '¡Superaste un punto difícil!';
+  @override
+  String get myWeekKept => 'Constante y firme, sigue así';
+  @override
+  String get myWeekStarted => '¡Un gran primer paso!';
+  @override
+  String get myWeekRest => 'Una semana tranquila. Empieza de nuevo cuando quieras';
   @override
   String get ringsTitle => 'Anillos de crecimiento';
   @override
@@ -883,6 +930,16 @@ class FrStrings extends ChukoreStrings {
   @override
   String get nudgeStreak => "Gardez votre série avec un peu d'entraînement aujourd'hui";
   @override
+  String get myWeekGrew => 'Vous avez progressé cette semaine$_nb!';
+  @override
+  String get myWeekOvercame => 'Vous avez dépassé un point difficile$_nb!';
+  @override
+  String get myWeekKept => 'Régulier et constant, continuez comme ça';
+  @override
+  String get myWeekStarted => 'Un beau premier pas$_nb!';
+  @override
+  String get myWeekRest => 'Une semaine tranquille. Reprenez quand vous voulez';
+  @override
   String get ringsTitle => 'Anneaux de croissance';
   @override
   String ringsSemantics(int totalDays) =>
@@ -1012,6 +1069,16 @@ class KoStrings extends ChukoreStrings {
   String get nudgeReview => '잊기 전에 잠깐 복습해 봐요';
   @override
   String get nudgeStreak => '오늘도 조금만 해서 연속 기록을 이어 가요';
+  @override
+  String get myWeekGrew => '이번 주에 실력이 늘었어요!';
+  @override
+  String get myWeekOvercame => '어려운 부분을 넘어섰어요!';
+  @override
+  String get myWeekKept => '꾸준히 잘하고 있어요';
+  @override
+  String get myWeekStarted => '멋진 첫걸음이에요!';
+  @override
+  String get myWeekRest => '조용한 한 주였어요. 언제든 다시 시작해요';
   @override
   String get ringsTitle => '성장 나이테';
   @override
@@ -1167,6 +1234,16 @@ class ZhStrings extends ChukoreStrings {
   String get nudgeReview => _t('快速复习一下，就不容易忘记', '快速複習一下，就不容易忘記');
   @override
   String get nudgeStreak => _t('今天也练一点，保持连续记录', '今天也練一點，保持連續記錄');
+  @override
+  String get myWeekGrew => _t('这周有进步啦！', '這週有進步囉！');
+  @override
+  String get myWeekOvercame => _t('你克服了一个难点！', '你克服了一個難點！');
+  @override
+  String get myWeekKept => _t('一步一个脚印，继续加油', '一步一個腳印，繼續加油');
+  @override
+  String get myWeekStarted => _t('漂亮的第一步！', '漂亮的第一步！');
+  @override
+  String get myWeekRest => _t('安静的一周。想开始时随时再来', '安靜的一週。想開始時隨時再來');
   @override
   String get ringsTitle => _t('成长年轮', '成長年輪');
   @override
@@ -1377,6 +1454,16 @@ class IdStrings extends ChukoreStrings {
   String get nudgeReview => 'Ulasan singkat membantu agar tidak lupa';
   @override
   String get nudgeStreak => 'Pertahankan rentetan harimu dengan sedikit latihan hari ini';
+  @override
+  String get myWeekGrew => 'Kamu membuat kemajuan minggu ini!';
+  @override
+  String get myWeekOvercame => 'Kamu berhasil melewati bagian yang sulit!';
+  @override
+  String get myWeekKept => 'Stabil dan konsisten, pertahankan ya';
+  @override
+  String get myWeekStarted => 'Langkah pertama yang bagus!';
+  @override
+  String get myWeekRest => 'Minggu yang tenang. Mulai lagi kapan saja';
 }
 
 class ViStrings extends ChukoreStrings {
@@ -1528,6 +1615,16 @@ class ViStrings extends ChukoreStrings {
   String get nudgeReview => 'Ôn nhanh một chút để không quên nhé';
   @override
   String get nudgeStreak => 'Luyện một chút hôm nay để giữ chuỗi ngày liên tiếp nhé';
+  @override
+  String get myWeekGrew => 'Tuần này bạn đã tiến bộ!';
+  @override
+  String get myWeekOvercame => 'Bạn đã vượt qua một chỗ khó!';
+  @override
+  String get myWeekKept => 'Đều đặn và vững vàng, cứ thế nhé';
+  @override
+  String get myWeekStarted => 'Một bước đầu thật tốt!';
+  @override
+  String get myWeekRest => 'Một tuần nhẹ nhàng. Bắt đầu lại bất cứ lúc nào';
 }
 
 /// ドイツ語。[swiss] が true なら スイス・リヒテンシュタイン式（小数点は `.`、ß を使わず ss）。
@@ -1679,6 +1776,16 @@ class DeStrings extends ChukoreStrings {
   String get nudgeReview => 'Eine kurze Wiederholung hilft gegen das Vergessen';
   @override
   String get nudgeStreak => 'Halte deine Serie mit ein bisschen Übung heute am Laufen';
+  @override
+  String get myWeekGrew => 'Du hast diese Woche Fortschritte gemacht!';
+  @override
+  String get myWeekOvercame => 'Du hast eine knifflige Stelle gemeistert!';
+  @override
+  String get myWeekKept => 'Schön gleichmäßig, bleib dran';
+  @override
+  String get myWeekStarted => 'Ein toller erster Schritt!';
+  @override
+  String get myWeekRest => 'Eine ruhige Woche. Fang an, wann du möchtest';
 }
 
 /// トルコ語。数詞は分けて書き、100 は「yüz」・1000 は「bin」（「bir yüz」「bir bin」とは言わない）。
@@ -1808,6 +1915,16 @@ class TrStrings extends ChukoreStrings {
   String get nudgeReview => 'Kısa bir tekrar unutmayı önler';
   @override
   String get nudgeStreak => 'Bugün biraz çalışarak serini sürdür';
+  @override
+  String get myWeekGrew => 'Bu hafta ilerleme kaydettin!';
+  @override
+  String get myWeekOvercame => 'Zor bir yeri aştın!';
+  @override
+  String get myWeekKept => 'Düzenli ve istikrarlı, böyle devam';
+  @override
+  String get myWeekStarted => 'Harika bir ilk adım!';
+  @override
+  String get myWeekRest => 'Sakin bir hafta. İstediğin zaman yeniden başla';
 }
 
 /// タイ語。年は仏暦（พ.ศ. = 西暦 + 543）を主にし、西暦（ค.ศ.）を添える。単語の間に空白を入れない。
@@ -1942,6 +2059,16 @@ class ThStrings extends ChukoreStrings {
   String get nudgeReview => 'ทบทวนสั้น ๆ ช่วยไม่ให้ลืมนะ';
   @override
   String get nudgeStreak => 'ทำสักนิดวันนี้ เพื่อต่อสถิติที่ทำติดต่อกัน';
+  @override
+  String get myWeekGrew => 'สัปดาห์นี้คุณก้าวหน้าขึ้นแล้ว!';
+  @override
+  String get myWeekOvercame => 'คุณผ่านจุดที่ยากไปได้แล้ว!';
+  @override
+  String get myWeekKept => 'สม่ำเสมอดีมาก ทำต่อไปนะ';
+  @override
+  String get myWeekStarted => 'ก้าวแรกที่ดีมาก!';
+  @override
+  String get myWeekRest => 'สัปดาห์ที่เงียบสงบ เริ่มใหม่ได้ทุกเมื่อ';
 }
 
 /// ヒンディー語。数詞は 1〜99 がすべて不規則なので、0〜99 を表で持つ。100 は「एक सौ」・1000 は「एक हज़ार」。
@@ -2077,6 +2204,16 @@ class HiStrings extends ChukoreStrings {
   String get nudgeReview => 'थोड़ा दोहराने से चीज़ें याद रहती हैं';
   @override
   String get nudgeStreak => 'आज थोड़ा अभ्यास करके अपना सिलसिला बनाए रखें';
+  @override
+  String get myWeekGrew => 'इस हफ़्ते आपने तरक्की की!';
+  @override
+  String get myWeekOvercame => 'आपने एक मुश्किल जगह पार कर ली!';
+  @override
+  String get myWeekKept => 'लगातार अच्छा चल रहा है, ऐसे ही चलते रहें';
+  @override
+  String get myWeekStarted => 'बहुत अच्छी पहली शुरुआत!';
+  @override
+  String get myWeekRest => 'यह हफ़्ता शांत रहा। जब चाहें फिर शुरू करें';
 }
 
 /// アラビア語（現代標準アラビア語）。右から左に書く。数字は西洋式（0〜9）で出し、
@@ -2233,6 +2370,16 @@ class ArStrings extends ChukoreStrings {
   String get nudgeReview => 'مراجعة سريعة تساعدك على عدم النسيان';
   @override
   String get nudgeStreak => 'حافظ على سلسلتك بقليل من التدريب اليوم';
+  @override
+  String get myWeekGrew => 'تقدّمتَ هذا الأسبوع!';
+  @override
+  String get myWeekOvercame => 'تجاوزتَ نقطة صعبة!';
+  @override
+  String get myWeekKept => 'ثبات جميل، واصل هكذا';
+  @override
+  String get myWeekStarted => 'خطوة أولى رائعة!';
+  @override
+  String get myWeekRest => 'أسبوع هادئ. ابدأ من جديد متى شئت';
 }
 
 /// ロシア語。複数形は 3 つ（1・2〜4・5 以上。11〜14 は 5 以上の形）。小数点はカンマ。
@@ -2392,6 +2539,16 @@ class RuStrings extends ChukoreStrings {
   String get nudgeReview => 'Короткое повторение помогает не забыть';
   @override
   String get nudgeStreak => 'Продолжи серию — позанимайся немного сегодня';
+  @override
+  String get myWeekGrew => 'На этой неделе есть прогресс!';
+  @override
+  String get myWeekOvercame => 'Трудное место пройдено!';
+  @override
+  String get myWeekKept => 'Спокойно и стабильно, так держать';
+  @override
+  String get myWeekStarted => 'Отличное начало!';
+  @override
+  String get myWeekRest => 'Спокойная неделя. Начни снова, когда захочешь';
 }
 
 /// イタリア語。複数形は 1 とそれ以外の 2 つ。小数点はカンマ。
@@ -2551,6 +2708,16 @@ class ItStrings extends ChukoreStrings {
   String get nudgeReview => 'Un ripasso veloce aiuta a non dimenticare';
   @override
   String get nudgeStreak => "Mantieni la tua serie con un po' di esercizio oggi";
+  @override
+  String get myWeekGrew => 'Questa settimana hai fatto progressi!';
+  @override
+  String get myWeekOvercame => 'Hai superato un punto difficile!';
+  @override
+  String get myWeekKept => 'Costante e regolare, continua così';
+  @override
+  String get myWeekStarted => 'Un ottimo primo passo!';
+  @override
+  String get myWeekRest => 'Una settimana tranquilla. Riparti quando vuoi';
 }
 
 /// オランダ語。複数形は 1 とそれ以外の 2 つ。小数点はカンマ（ベルギーのオランダ語も同じ）。
@@ -2700,6 +2867,16 @@ class NlStrings extends ChukoreStrings {
   String get nudgeReview => 'Een korte herhaling helpt om niets te vergeten';
   @override
   String get nudgeStreak => 'Houd je reeks vol met een beetje oefening vandaag';
+  @override
+  String get myWeekGrew => 'Je hebt deze week vooruitgang geboekt!';
+  @override
+  String get myWeekOvercame => 'Je hebt een lastig punt overwonnen!';
+  @override
+  String get myWeekKept => 'Mooi regelmatig, ga zo door';
+  @override
+  String get myWeekStarted => 'Een mooie eerste stap!';
+  @override
+  String get myWeekRest => 'Een rustige week. Begin weer wanneer je wilt';
 }
 
 /// ポーランド語。複数形は 3 つ（1・2〜4・それ以外。12〜14 は「それ以外」）。ロシア語と違い、21・101 などは
@@ -2859,4 +3036,14 @@ class PlStrings extends ChukoreStrings {
   String get nudgeReview => 'Krótka powtórka pomaga niczego nie zapomnieć';
   @override
   String get nudgeStreak => 'Podtrzymaj swoją serię, ćwicząc dziś trochę';
+  @override
+  String get myWeekGrew => 'W tym tygodniu są postępy!';
+  @override
+  String get myWeekOvercame => 'Trudne miejsce pokonane!';
+  @override
+  String get myWeekKept => 'Równo i spokojnie, tak trzymaj';
+  @override
+  String get myWeekStarted => 'Świetny pierwszy krok!';
+  @override
+  String get myWeekRest => 'Spokojny tydzień. Zacznij znowu, kiedy zechcesz';
 }
