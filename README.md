@@ -24,6 +24,7 @@
 | 段階ヒント | 問題の段階ヒント `hintIds` と、使ったヒントの数 `Attempt.hintsUsed`（自力の正解とヒントありの正解を区別し、習熟度・復習・克服に反映） |
 | 休憩 | 疲れと休憩の提案 `suggestBreak`（あてずっぽう・続けて誤答・遅くなった・長時間を見て、責めずに勧めるだけ） |
 | 暗記カード | 暗記カード学習 `card`（わからない／あやしい／わかった の自己採点を、正誤・自信度・復習の箱に変換。今日のカード `buildCardDeck`・学習の進み方 `CardSession`） |
+| 問題の質 | 実測の正答率と基準値のずれの検出 `calibrateDifficulty`（偶然とは言えないずれだけ。提案値を反映する `recalibrate`） |
 | ふりかえり | 子ども本人向けの週のふりかえり `buildMyWeek`（できたことだけを前に出す。少なかった週も責めない） |
 | 直前・当日・共有 | 直前プリント `buildLastMinuteSheet`・当日チェック `DayChecklist`・範囲カードの QR `encodeScope` |
 

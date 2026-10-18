@@ -86,6 +86,20 @@ class Question {
         if (hintIds.isNotEmpty) 'hintIds': hintIds,
       };
 
+  /// 内容の一部を変えた写しを作る（基準正答率の見直しなど）。内容を変えたら [version] を上げること。
+  Question copyWith({double? difficulty, int? version, List<String>? hintIds, Map<String, String>? misconceptionTags}) => Question(
+        id: id,
+        unitId: unitId,
+        type: type,
+        difficulty: difficulty ?? this.difficulty,
+        choices: choices,
+        answer: answer,
+        explanationId: explanationId,
+        misconceptionTags: misconceptionTags ?? this.misconceptionTags,
+        version: version ?? this.version,
+        hintIds: hintIds ?? this.hintIds,
+      );
+
   final String id;
   final String unitId;
   final String type;
