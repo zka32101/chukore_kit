@@ -23,6 +23,7 @@ abstract class ChukoreStrings {
       'ar' => const ArStrings(),
       'ru' => const RuStrings(),
       'it' => const ItStrings(),
+      'nl' => const NlStrings(),
       // スイス・リヒテンシュタインは小数点が `.`、ß を使わない（ss）
       'de' => DeStrings(swiss: parts.length > 1 && DeStrings.swissRegions.contains(parts[1])),
       'zh' => ZhStrings(traditional: ZhStrings.isTraditional(parts)),
@@ -56,6 +57,7 @@ abstract class ChukoreStrings {
     ArStrings(),
     RuStrings(),
     ItStrings(),
+    NlStrings(),
     DeStrings(),
     DeStrings(swiss: true),
     ZhStrings(),
@@ -2547,4 +2549,153 @@ class ItStrings extends ChukoreStrings {
   String get nudgeReview => 'Un ripasso veloce aiuta a non dimenticare';
   @override
   String get nudgeStreak => "Mantieni la tua serie con un po' di esercizio oggi";
+}
+
+/// オランダ語。複数形は 1 とそれ以外の 2 つ。小数点はカンマ（ベルギーのオランダ語も同じ）。
+/// 数の読み上げは一語に続ける形で、一の位を十の位の前に `en` でつなぐ
+/// （`eenentwintig`・`tweeëntwintig`。語末が e の `twee`・`drie` は `ën` になる）。
+class NlStrings extends ChukoreStrings {
+  const NlStrings();
+
+  static const _ones = ['', 'een', 'twee', 'drie', 'vier', 'vijf', 'zes', 'zeven', 'acht', 'negen'];
+  static const _teens = [
+    'tien', 'elf', 'twaalf', 'dertien', 'veertien', 'vijftien', 'zestien', 'zeventien', 'achttien', 'negentien',
+  ];
+  static const _tens = [
+    '', '', 'twintig', 'dertig', 'veertig', 'vijftig', 'zestig', 'zeventig', 'tachtig', 'negentig',
+  ];
+
+  @override
+  String get languageCode => 'nl';
+
+  @override
+  String get decimalSeparator => ',';
+
+  String _below100(int r) {
+    if (r < 10) return _ones[r];
+    if (r < 20) return _teens[r - 10];
+    final t = _tens[r ~/ 10], u = r % 10;
+    if (u == 0) return t;
+    final unit = _ones[u];
+    return '$unit${unit.endsWith('e') ? 'ën' : 'en'}$t';
+  }
+
+  @override
+  String gateNumberWords(int n) {
+    if (n < 1 || n > 9999) throw RangeError.range(n, 1, 9999, 'n');
+    final th = n ~/ 1000, rest = n % 1000, h = rest ~/ 100, r = rest % 100;
+    return [
+      if (th == 1) 'duizend' else if (th > 1) '${_ones[th]}duizend',
+      if (h == 1) 'honderd' else if (h > 1) '${_ones[h]}honderd',
+      if (r > 0) _below100(r),
+    ].join();
+  }
+
+  static String _c(int n, String one, String many) => n == 1 ? one : many;
+
+  @override
+  String cardTitle(String subject) => '$subject · Voortgangskaart';
+  @override
+  String get headlinePersonalBest => 'Nieuw persoonlijk record!';
+  @override
+  String get headlineFirst => 'Een mooie start';
+  @override
+  String headlineUp(String points) => '+$points ten opzichte van vorige keer';
+  @override
+  String get headlineSame => 'Stabiel, net als vorige keer';
+  @override
+  String get headlineDown => 'Laten we vanaf hier weer groeien';
+  @override
+  String nextLevel(String points) =>
+      points == '1' ? 'Nog 1 punt tot het volgende niveau' : 'Nog $points punten tot het volgende niveau';
+  @override
+  String get topLevel => 'Hoogste niveau bereikt!';
+  @override
+  String streakDays(int days) => days == 1 ? '1 dag op rij' : '$days dagen op rij';
+  @override
+  String get statStamps => 'Overwonnen';
+  @override
+  String get statSolvable => 'Nu kan ik oplossen';
+  @override
+  String solvableValue(int count) => _c(count, '1 vraag', '$count vragen');
+  @override
+  String cardSemantics(String headline, String level) => 'Voortgangskaart. $headline. Niveau $level';
+  @override
+  String get mapSemantics => 'Kaart. Tik om je antwoord te kiezen';
+  @override
+  String formatYear(int year) => year < 0 ? '${-year} v.Chr.' : '$year n.Chr.';
+  @override
+  String reportHeader(int activeDays, int attempts) =>
+      'Deze week: ${_c(activeDays, '1 dag', '$activeDays dagen')} / ${_c(attempts, '1 vraag', '$attempts vragen')}';
+  @override
+  String get reportImprovedTitle => 'Dit is deze week verbeterd:';
+  @override
+  String reportItem(String title, int b, int a) => '- $title ($b% -> $a%)';
+  @override
+  String get reportEmpty => 'Deze week zijn er nog geen nieuwe verbeteringen. Ga gewoon in je eigen tempo verder.';
+  @override
+  String get scopeQrTitle => 'Deel de leerstof van de toets';
+  @override
+  String get scopeQrHint =>
+      'Vrienden of familie kunnen dit scannen om dezelfde leerstof in te stellen. Er staan geen namen of resultaten in.';
+  @override
+  String get scopeQrSemantics => 'QR-code van de leerstof van de toets';
+  @override
+  String get checklistTitle => 'Controlelijst voor de toetsdag';
+  @override
+  String checklistProgress(int done, int total) => '$done van $total klaar';
+  @override
+  String get checklistAllDone => 'Alles klaar. Succes!';
+  @override
+  String get fiveMinuteTitle => 'Kaart voor de laatste 5 minuten';
+  @override
+  List<(String, String)> get checklistDefaults => [
+        ('pencil', 'Pennen en potloden'),
+        ('eraser', 'Gum'),
+        ('ruler', 'Liniaal en passer'),
+        ('watch', 'Horloge'),
+        ('tissue', 'Zakdoekjes'),
+        ('notes', 'Samenvatting'),
+      ];
+  @override
+  String get sheetTitle => 'Laatste herhalingsblad';
+  @override
+  String get sheetQuestion => 'Vraag';
+  @override
+  String get sheetAnswer => 'Antwoord';
+  @override
+  String get sheetExplanation => 'Uitleg';
+  @override
+  String get sheetEmpty => 'Er valt nu niets te verbeteren. Goed gedaan!';
+  @override
+  String get markCorrect => 'juist';
+  @override
+  String get markWrong => 'onjuist';
+  @override
+  String get ringsTitle => 'Groeiringen';
+  @override
+  String ringsSemantics(int totalDays) =>
+      'Groeiringen. In totaal ${_c(totalDays, '1 dag', '$totalDays dagen')} studie';
+  @override
+  String ringsLatestMonth(String month, int days) =>
+      'Laatste maand, $month: ${_c(days, '1 dag', '$days dagen')} studie';
+  @override
+  String get deviationLabel => 'Scoreindex van de app';
+  @override
+  String deviationRange(String low, String high) => '$low–$high';
+  @override
+  String get deviationNote =>
+      'Een grove index die alleen binnen deze app geldt, waarbij 50 het gemiddelde van een referentiegroep is. Het is geen landelijke ranglijst.';
+  @override
+  String get teacherPrompt => 'Wat klopt hier niet? Verbeter de fout';
+  @override
+  String get teacherCorrect => 'Juist! Je hebt het verbeterd';
+  @override
+  String get teacherWrong => 'Bijna! Lees het nog een keer';
+  @override
+  String get nudgeTestSoon => 'De toets komt dichterbij. Oefen vandaag een klein beetje';
+  @override
+  String get nudgeReview => 'Een korte herhaling helpt om niets te vergeten';
+  @override
+  String get nudgeStreak => 'Houd je reeks vol met een beetje oefening vandaag';
 }
