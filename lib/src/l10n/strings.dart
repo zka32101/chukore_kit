@@ -1,4 +1,5 @@
 import '../models/models.dart';
+import '../question/card.dart';
 
 /// ユーザーに見せる文言と、国ごとに違う表記の集まり。
 /// 対応言語を増やすときは [ChukoreStrings] を実装して [ChukoreStrings.forLocale] に足す。
@@ -182,6 +183,19 @@ abstract class ChukoreStrings {
   String get breakSlowing;
   String get breakRushing;
 
+  /// 暗記カードの自己採点ボタン（わからない・あやしい・わかった）と、カードをめくるボタン。
+  String get cardAgain;
+  String get cardHard;
+  String get cardGood;
+  String get cardFlip;
+
+  /// [CardRating] に合うボタンのラベル。
+  String cardRatingLabel(CardRating r) => switch (r) {
+        CardRating.again => cardAgain,
+        CardRating.hard => cardHard,
+        CardRating.good => cardGood,
+      };
+
   /// [LossReason] に合うラベル。
   String reasonLabel(LossReason r) => switch (r) {
         LossReason.dontKnow => reasonDontKnow,
@@ -294,6 +308,14 @@ class JaStrings extends ChukoreStrings {
   String get breakSlowing => '少し疲れてきたかな？ひと休みしよう';
   @override
   String get breakRushing => 'はやく答えすぎているかも。ゆっくり深呼吸して、問題をよく読もう';
+  @override
+  String get cardAgain => 'わからない';
+  @override
+  String get cardHard => 'あやしい';
+  @override
+  String get cardGood => 'わかった';
+  @override
+  String get cardFlip => 'めくる';
   @override
   String get ringsTitle => '成長の年輪';
   @override
@@ -456,6 +478,14 @@ class EnStrings extends ChukoreStrings {
   String get breakSlowing => 'Getting tired? Take a short break';
   @override
   String get breakRushing => 'Answering very fast. Take a breath and read each question carefully';
+  @override
+  String get cardAgain => "Don't know";
+  @override
+  String get cardHard => 'Not sure';
+  @override
+  String get cardGood => 'Got it';
+  @override
+  String get cardFlip => 'Flip';
   @override
   String get ringsTitle => 'Growth rings';
   @override
@@ -647,6 +677,14 @@ class PtStrings extends ChukoreStrings {
   String get breakSlowing => 'Cansou um pouco? Faça uma pausa';
   @override
   String get breakRushing => 'Respondendo rápido demais. Respire e leia cada pergunta com calma';
+  @override
+  String get cardAgain => 'Não sei';
+  @override
+  String get cardHard => 'Em dúvida';
+  @override
+  String get cardGood => 'Entendi';
+  @override
+  String get cardFlip => 'Virar';
   @override
   String get ringsTitle => 'Anéis de crescimento';
   @override
@@ -842,6 +880,14 @@ class EsStrings extends ChukoreStrings {
   String get breakSlowing => '¿Te estás cansando? Haz una pausa';
   @override
   String get breakRushing => 'Estás respondiendo muy rápido. Respira y lee cada pregunta con calma';
+  @override
+  String get cardAgain => 'No lo sé';
+  @override
+  String get cardHard => 'Dudoso';
+  @override
+  String get cardGood => 'Lo sé';
+  @override
+  String get cardFlip => 'Girar';
   @override
   String get ringsTitle => 'Anillos de crecimiento';
   @override
@@ -1053,6 +1099,14 @@ class FrStrings extends ChukoreStrings {
   @override
   String get breakRushing => 'Vous répondez très vite. Respirez et lisez bien chaque question';
   @override
+  String get cardAgain => 'Je ne sais pas';
+  @override
+  String get cardHard => 'Hésitant';
+  @override
+  String get cardGood => 'Je sais';
+  @override
+  String get cardFlip => 'Retourner';
+  @override
   String get ringsTitle => 'Anneaux de croissance';
   @override
   String ringsSemantics(int totalDays) =>
@@ -1210,6 +1264,14 @@ class KoStrings extends ChukoreStrings {
   String get breakSlowing => '조금 피곤한가요? 잠깐 쉬어요';
   @override
   String get breakRushing => '너무 빨리 답하고 있어요. 숨을 고르고 문제를 잘 읽어 봐요';
+  @override
+  String get cardAgain => '몰라요';
+  @override
+  String get cardHard => '헷갈려요';
+  @override
+  String get cardGood => '알아요';
+  @override
+  String get cardFlip => '뒤집기';
   @override
   String get ringsTitle => '성장 나이테';
   @override
@@ -1393,6 +1455,14 @@ class ZhStrings extends ChukoreStrings {
   String get breakSlowing => _t('有点累了吗？休息一下吧', '有點累了嗎？休息一下吧');
   @override
   String get breakRushing => _t('答得太快了。深呼吸，仔细读题', '答得太快了。深呼吸，仔細讀題');
+  @override
+  String get cardAgain => _t('不会', '不會');
+  @override
+  String get cardHard => _t('不确定', '不確定');
+  @override
+  String get cardGood => _t('会了', '會了');
+  @override
+  String get cardFlip => _t('翻面', '翻面');
   @override
   String get ringsTitle => _t('成长年轮', '成長年輪');
   @override
@@ -1631,6 +1701,14 @@ class IdStrings extends ChukoreStrings {
   String get breakSlowing => 'Mulai lelah? Istirahat sebentar ya';
   @override
   String get breakRushing => 'Menjawab terlalu cepat. Tarik napas dan baca soal dengan teliti';
+  @override
+  String get cardAgain => 'Tidak tahu';
+  @override
+  String get cardHard => 'Ragu';
+  @override
+  String get cardGood => 'Tahu';
+  @override
+  String get cardFlip => 'Balik';
 }
 
 class ViStrings extends ChukoreStrings {
@@ -1810,6 +1888,14 @@ class ViStrings extends ChukoreStrings {
   String get breakSlowing => 'Hơi mệt rồi à? Nghỉ một chút nhé';
   @override
   String get breakRushing => 'Bạn đang trả lời quá nhanh. Hít thở và đọc kỹ từng câu nhé';
+  @override
+  String get cardAgain => 'Chưa biết';
+  @override
+  String get cardHard => 'Chưa chắc';
+  @override
+  String get cardGood => 'Biết rồi';
+  @override
+  String get cardFlip => 'Lật';
 }
 
 /// ドイツ語。[swiss] が true なら スイス・リヒテンシュタイン式（小数点は `.`、ß を使わず ss）。
@@ -1989,6 +2075,14 @@ class DeStrings extends ChukoreStrings {
   String get breakSlowing => 'Wirst du müde? Mach eine kurze Pause';
   @override
   String get breakRushing => 'Du antwortest sehr schnell. Atme durch und lies jede Frage genau';
+  @override
+  String get cardAgain => 'Weiß ich nicht';
+  @override
+  String get cardHard => 'Unsicher';
+  @override
+  String get cardGood => 'Weiß ich';
+  @override
+  String get cardFlip => 'Umdrehen';
 }
 
 /// トルコ語。数詞は分けて書き、100 は「yüz」・1000 は「bin」（「bir yüz」「bir bin」とは言わない）。
@@ -2146,6 +2240,14 @@ class TrStrings extends ChukoreStrings {
   String get breakSlowing => 'Yorulmaya mı başladın? Kısa bir mola ver';
   @override
   String get breakRushing => 'Çok hızlı cevap veriyorsun. Derin nefes al ve soruları dikkatle oku';
+  @override
+  String get cardAgain => 'Bilmiyorum';
+  @override
+  String get cardHard => 'Emin değilim';
+  @override
+  String get cardGood => 'Biliyorum';
+  @override
+  String get cardFlip => 'Çevir';
 }
 
 /// タイ語。年は仏暦（พ.ศ. = 西暦 + 543）を主にし、西暦（ค.ศ.）を添える。単語の間に空白を入れない。
@@ -2308,6 +2410,14 @@ class ThStrings extends ChukoreStrings {
   String get breakSlowing => 'เริ่มเหนื่อยแล้วหรือเปล่า? พักสักหน่อยนะ';
   @override
   String get breakRushing => 'ตอบเร็วเกินไปหรือเปล่า หายใจลึก ๆ แล้วอ่านโจทย์ให้ดีนะ';
+  @override
+  String get cardAgain => 'ไม่รู้';
+  @override
+  String get cardHard => 'ไม่แน่ใจ';
+  @override
+  String get cardGood => 'รู้แล้ว';
+  @override
+  String get cardFlip => 'พลิกการ์ด';
 }
 
 /// ヒンディー語。数詞は 1〜99 がすべて不規則なので、0〜99 を表で持つ。100 は「एक सौ」・1000 は「एक हज़ार」。
@@ -2471,6 +2581,14 @@ class HiStrings extends ChukoreStrings {
   String get breakSlowing => 'थकान लग रही है? थोड़ा आराम करें';
   @override
   String get breakRushing => 'आप बहुत जल्दी जवाब दे रहे हैं। गहरी साँस लें और सवाल ध्यान से पढ़ें';
+  @override
+  String get cardAgain => 'पता नहीं';
+  @override
+  String get cardHard => 'पक्का नहीं';
+  @override
+  String get cardGood => 'पता है';
+  @override
+  String get cardFlip => 'पलटें';
 }
 
 /// アラビア語（現代標準アラビア語）。右から左に書く。数字は西洋式（0〜9）で出し、
@@ -2655,6 +2773,14 @@ class ArStrings extends ChukoreStrings {
   String get breakSlowing => 'هل بدأتَ تتعب؟ خذ استراحة قصيرة';
   @override
   String get breakRushing => 'تجيب بسرعة كبيرة. تنفّس بعمق واقرأ كل سؤال بعناية';
+  @override
+  String get cardAgain => 'لا أعرف';
+  @override
+  String get cardHard => 'غير متأكد';
+  @override
+  String get cardGood => 'أعرف';
+  @override
+  String get cardFlip => 'اقلب';
 }
 
 /// ロシア語。複数形は 3 つ（1・2〜4・5 以上。11〜14 は 5 以上の形）。小数点はカンマ。
@@ -2842,6 +2968,14 @@ class RuStrings extends ChukoreStrings {
   String get breakSlowing => 'Начинаешь уставать? Сделай небольшой перерыв';
   @override
   String get breakRushing => 'Ответы слишком быстрые. Вдохни глубже и внимательно читай вопросы';
+  @override
+  String get cardAgain => 'Не знаю';
+  @override
+  String get cardHard => 'Сомневаюсь';
+  @override
+  String get cardGood => 'Знаю';
+  @override
+  String get cardFlip => 'Перевернуть';
 }
 
 /// イタリア語。複数形は 1 とそれ以外の 2 つ。小数点はカンマ。
@@ -3029,6 +3163,14 @@ class ItStrings extends ChukoreStrings {
   String get breakSlowing => 'Ti stai stancando? Fai una breve pausa';
   @override
   String get breakRushing => 'Stai rispondendo molto in fretta. Respira e leggi bene ogni domanda';
+  @override
+  String get cardAgain => 'Non so';
+  @override
+  String get cardHard => 'Incerto';
+  @override
+  String get cardGood => 'So';
+  @override
+  String get cardFlip => 'Gira';
 }
 
 /// オランダ語。複数形は 1 とそれ以外の 2 つ。小数点はカンマ（ベルギーのオランダ語も同じ）。
@@ -3206,6 +3348,14 @@ class NlStrings extends ChukoreStrings {
   String get breakSlowing => 'Word je moe? Neem even pauze';
   @override
   String get breakRushing => 'Je antwoordt heel snel. Adem diep in en lees elke vraag goed';
+  @override
+  String get cardAgain => 'Weet ik niet';
+  @override
+  String get cardHard => 'Twijfel';
+  @override
+  String get cardGood => 'Weet ik';
+  @override
+  String get cardFlip => 'Omdraaien';
 }
 
 /// ポーランド語。複数形は 3 つ（1・2〜4・それ以外。12〜14 は「それ以外」）。ロシア語と違い、21・101 などは
@@ -3393,4 +3543,12 @@ class PlStrings extends ChukoreStrings {
   String get breakSlowing => 'Czujesz zmęczenie? Zrób krótką przerwę';
   @override
   String get breakRushing => 'Odpowiadasz bardzo szybko. Weź oddech i uważnie czytaj pytania';
+  @override
+  String get cardAgain => 'Nie wiem';
+  @override
+  String get cardHard => 'Niepewnie';
+  @override
+  String get cardGood => 'Wiem';
+  @override
+  String get cardFlip => 'Odwróć';
 }

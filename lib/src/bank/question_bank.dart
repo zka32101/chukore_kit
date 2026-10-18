@@ -23,7 +23,7 @@ class ValidationIssue {
 bool hasErrors(Iterable<ValidationIssue> issues) => issues.any((i) => i.isError);
 
 /// `checkAnswer` が扱う問題タイプ。
-const knownQuestionTypes = {'choice', 'map', 'numeric', 'order', 'timeline', 'text', 'multi'};
+const knownQuestionTypes = {'choice', 'map', 'numeric', 'order', 'timeline', 'text', 'multi', 'card'};
 
 final _thousands = RegExp(r'^-?\d{1,3}(,\d{3})+(\.\d+)?$');
 final _tagPattern = RegExp(r'^[a-z][a-z0-9_]*$');
@@ -183,6 +183,11 @@ List<ValidationIssue> validateQuestionBank({
           warn('text_alt_duplicate', q.id, '表記ゆれをそろえると同じになる別解があります: ${q.answer}');
         }
         if (q.choices.isNotEmpty) warn('choices_ignored', q.id, 'text では選択肢は使われません');
+      case 'card':
+        // answer は裏面（答え）の内容の ID か文。自己採点なので正解の照合には使わないが、空は誤り
+        if (q.answer.trim().isEmpty) err('card_answer_empty', q.id, 'card の answer（裏面）が空です');
+        if (q.choices.isNotEmpty) warn('choices_ignored', q.id, 'card では選択肢は使われません');
+        if (q.hintIds.isNotEmpty) warn('hints_ignored', q.id, 'card ではヒントは使われません');
       case 'multi':
         final items = multiItems(q.answer);
         if (items.length < 2) err('multi_too_few', q.id, 'multi は 2 項目以上（項目は ; で区切ります）。1 項目なら text にしてください');

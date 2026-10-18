@@ -67,7 +67,7 @@ dart run tool/validate_bank.dart units.json questions.json
 
 | 項目 | 内容 |
 |---|---|
-| `type` | `choice`（選択）／`map`（地図タップ。選択肢は領域ID）／`numeric`（数値。`choices` は空でよい）／`order`・`timeline`（並べ替え・年表。`answer` は正解順のIDをカンマ区切り、`choices` は同じID集合）／`text`（短い記述。`answer` は別解を `\|` で区切る。例 `東京\|とうきょう\|Tokyo`。`choices` は空）／`multi`（複数の語を答える。`answer` は項目を `;`、各項目の別解を `\|` で区切る。例 `織田信長\|のぶなが;豊臣秀吉\|ひでよし;徳川家康`。順不同・部分点あり。`choices` は空） |
+| `type` | `choice`（選択）／`map`（地図タップ。選択肢は領域ID）／`numeric`（数値。`choices` は空でよい）／`order`・`timeline`（並べ替え・年表。`answer` は正解順のIDをカンマ区切り、`choices` は同じID集合）／`card`（暗記カード。`answer` は裏面の内容の ID か文。自己採点なので照合には使わない。`choices` は空）／`text`（短い記述。`answer` は別解を `\|` で区切る。例 `東京\|とうきょう\|Tokyo`。`choices` は空）／`multi`（複数の語を答える。`answer` は項目を `;`、各項目の別解を `\|` で区切る。例 `織田信長\|のぶなが;豊臣秀吉\|ひでよし;徳川家康`。順不同・部分点あり。`choices` は空） |
 | `difficulty` | 基準正答率 0〜1（アプリ内偏差値の換算に使う）。0 と 1 は警告 |
 | `misconceptionTags` | 誤答の選択肢ID → 誤解の型（小文字・数字・`_`）。**正解の選択肢には付けない** |
 | `explanationId` | 解説の ID（解説の本文は別データ） |
@@ -121,4 +121,9 @@ dart run tool/validate_bank.dart units.json questions.json
 - 検証コード: `hint_id_empty`・`hint_duplicate`（エラー）、`hint_is_explanation`・`hints_too_many`（警告。3 段までを目安に）。
 - ヒントを足す・変える・並べ替えるのは問題の内容の変更なので、差分更新では `version` を上げる。
 - 使ったヒントの数は回答（`Attempt.hintsUsed`）に残り、ヒントを使った正解は習熟度への加点が小さくなる（`docs/features.md`）。模試ではヒントを出さない。
+
+## 暗記カード（`type: card`）
+表面は問題の内容（`id` に対応する問題データ）、裏面は `answer`、解説は `explanationId`。子どもは表を見て思い出し、めくって裏を見たあと、自分で「わからない／あやしい／わかった」を選ぶ（`CardRating`）。自己採点は回答の `chosenId`（`again`・`hard`・`good`）と、正誤・自信度・理由に変換して残る（`docs/features.md`）。
+- 検証コード: `card_answer_empty`（エラー）、`choices_ignored`・`hints_ignored`（警告）。
+- 模試には出さない。今日のカードは `buildCardDeck`、学習の進み方は `CardSession`。
 

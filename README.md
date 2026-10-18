@@ -13,7 +13,7 @@
 | 計画・目標 | 学習時間の見積もり `estimateDayTimes`・目標点からの逆算 `buildGoalPlan` |
 | 模試・振り返り | 模試 `buildMockExam`／`scoreMockExam`・履歴比較 `compareMockExams`・テスト後の振り返り `buildPostTestReview`・本番の点数の比較 `compareRealTests` |
 | 成長の見える化 | レーダー・自己ベスト・克服スタンプ・進化・成長カード `renderGrowthCardPng`・成長の年輪 |
-| 問題タイプ・画面部品 | 選択・地図タップ・図タップ・数値・記述（別解・部分点）・並べ替え・年表の判定／`RegionTapMap`・`TimelineOrderList` |
+| 問題タイプ・画面部品 | 選択・地図タップ・図タップ・数値・記述（別解・部分点）・暗記カード・並べ替え・年表の判定／`RegionTapMap`・`TimelineOrderList` |
 | 保護者・先生役 | 保護者ゲート `GateChallenge`・国ごとの年齢条件 `AgePolicy`・週次レポート `buildWeeklyReport`・先生役モード（まちがいキャラ） |
 | 引き継ぎ | 学習データの書き出し・取り込み `AttemptBackup`（回答履歴を1つの JSON に。二重取り込みなし、壊れたファイルは全体を拒否） |
 | 通知 | 学習を促す通知の判定 `decideNudge`（テスト接近・復習・連続記録。1 日 1 件、うるさくしない）・通知を出す時間帯の提案 `suggestNudgeHour`（履歴から。端末内）・各言語の文言 |
@@ -23,6 +23,7 @@
 | 誤答の理由 | 間違えた理由の自己申告 `Attempt.reason`（本人の申告をケアレス判定より優先。集計は `summarizeMistakeReasons`） |
 | 段階ヒント | 問題の段階ヒント `hintIds` と、使ったヒントの数 `Attempt.hintsUsed`（自力の正解とヒントありの正解を区別し、習熟度・復習・克服に反映） |
 | 休憩 | 疲れと休憩の提案 `suggestBreak`（あてずっぽう・続けて誤答・遅くなった・長時間を見て、責めずに勧めるだけ） |
+| 暗記カード | 暗記カード学習 `card`（わからない／あやしい／わかった の自己採点を、正誤・自信度・復習の箱に変換。今日のカード `buildCardDeck`・学習の進み方 `CardSession`） |
 | ふりかえり | 子ども本人向けの週のふりかえり `buildMyWeek`（できたことだけを前に出す。少なかった週も責めない） |
 | 直前・当日・共有 | 直前プリント `buildLastMinuteSheet`・当日チェック `DayChecklist`・範囲カードの QR `encodeScope` |
 
