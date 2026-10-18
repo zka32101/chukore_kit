@@ -9,6 +9,7 @@ export 'src/scope/unit_tree.dart';
 export 'src/planner/planner.dart';
 export 'src/planner/multi_planner.dart';
 export 'src/assess/mastery.dart';
+export 'src/assess/hint_usage.dart';
 export 'src/assess/assess.dart';
 export 'src/assess/deviation_policy.dart';
 export 'src/assess/exam_stats.dart';

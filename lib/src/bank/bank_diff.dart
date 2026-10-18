@@ -140,6 +140,7 @@ bool _sameContent(Question a, Question b) =>
     a.answer == b.answer &&
     a.explanationId == b.explanationId &&
     _listEq(a.choices, b.choices) &&
+    _listEq(a.hintIds, b.hintIds) &&
     _mapEq(a.misconceptionTags, b.misconceptionTags);
 
 bool _listEq(List<String> a, List<String> b) {

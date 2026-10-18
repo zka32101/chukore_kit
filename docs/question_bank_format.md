@@ -116,3 +116,9 @@ dart run tool/validate_bank.dart units.json questions.json
 - 適用: `diff.apply(手元の問題)`。変更は元の位置、追加は最後、削除は除く。手元が差分の元と違う（削除・変更する問題が無い、変更前の版が合わない、追加する問題がすでにある）と `StateError` で、途中まで当たった状態は返さない。差分は**順番に**当てる（1 か月飛ばすと版が合わず止まる）。適用後の問題集は、通常どおり `validateQuestionBank` で検証する。
 - ファイル: `diff.toJsonString()` / `BankDiff.parse(json)`。形式名 `chukore_kit.bank_diff`、版 1。別のファイル・壊れたファイル・新しい版は `FormatException`。
 
+## 段階ヒント（`hintIds`・省略可）
+問題に `"hintIds": ["hint_eq1_001_1", "hint_eq1_001_2"]` のように、浅いものから順のヒントの ID を書く（`explanationId` と同じく、本文は問題データ側で持つ）。
+- 検証コード: `hint_id_empty`・`hint_duplicate`（エラー）、`hint_is_explanation`・`hints_too_many`（警告。3 段までを目安に）。
+- ヒントを足す・変える・並べ替えるのは問題の内容の変更なので、差分更新では `version` を上げる。
+- 使ったヒントの数は回答（`Attempt.hintsUsed`）に残り、ヒントを使った正解は習熟度への加点が小さくなる（`docs/features.md`）。模試ではヒントを出さない。
+

@@ -21,6 +21,7 @@
 | 複数教科の計画 | 5 教科などの同時計画 `buildMultiPlan`（テストが近い・習熟度が低い教科を厚く、遠い教科も止めない） |
 | 解き直し | つまずき別の解き直しセット `buildRetrySets`（誤解の型ごとに、未出題の問題を先にして集める） |
 | 誤答の理由 | 間違えた理由の自己申告 `Attempt.reason`（本人の申告をケアレス判定より優先。集計は `summarizeMistakeReasons`） |
+| 段階ヒント | 問題の段階ヒント `hintIds` と、使ったヒントの数 `Attempt.hintsUsed`（自力の正解とヒントありの正解を区別し、習熟度・復習・克服に反映） |
 | ふりかえり | 子ども本人向けの週のふりかえり `buildMyWeek`（できたことだけを前に出す。少なかった週も責めない） |
 | 直前・当日・共有 | 直前プリント `buildLastMinuteSheet`・当日チェック `DayChecklist`・範囲カードの QR `encodeScope` |
 

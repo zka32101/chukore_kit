@@ -155,6 +155,12 @@ List<ValidationIssue> validateQuestionBank({
       warn('difficulty_extreme', q.id, '基準正答率が ${q.difficulty}（アプリ内偏差値の換算で分散が 0 になります）');
     }
 
+    // 段階ヒント
+    if (q.hintIds.any((h) => h.trim().isEmpty)) err('hint_id_empty', q.id, 'hintIds に空の ID があります');
+    if (q.hintIds.toSet().length != q.hintIds.length) err('hint_duplicate', q.id, 'hintIds に重複があります');
+    if (q.hintIds.contains(q.explanationId)) warn('hint_is_explanation', q.id, 'hintIds に解説（explanationId）と同じ ID があります');
+    if (q.hintIds.length > 4) warn('hints_too_many', q.id, 'ヒントが ${q.hintIds.length} 段あります（3 段までを目安に）');
+
     final uniqueChoices = q.choices.toSet();
     if (uniqueChoices.length != q.choices.length) err('choices_duplicate', q.id, '選択肢が重複しています');
 

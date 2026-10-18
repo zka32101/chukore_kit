@@ -45,6 +45,7 @@ class Question {
     required this.explanationId,
     this.misconceptionTags = const {},
     this.version = 1,
+    this.hintIds = const [],
   }) : assert(difficulty >= 0 && difficulty <= 1);
 
   /// 基準正答率の範囲外（assert はリリースビルドで無効なので、読み込み時にも明示的に確かめる）。
@@ -69,6 +70,7 @@ class Question {
             e.key as String: e.value as String,
         },
         version: (j['version'] as int?) ?? 1,
+        hintIds: [for (final h in (j['hintIds'] as List? ?? const [])) h as String],
       );
 
   Map<String, dynamic> toJson() => {
@@ -81,6 +83,7 @@ class Question {
         'explanationId': explanationId,
         if (misconceptionTags.isNotEmpty) 'misconceptionTags': misconceptionTags,
         'version': version,
+        if (hintIds.isNotEmpty) 'hintIds': hintIds,
       };
 
   final String id;
@@ -96,6 +99,10 @@ class Question {
   /// 誤答選択肢ID → 誤解の型（例: sign_error）。
   final Map<String, String> misconceptionTags;
   final int version;
+
+  /// 段階ヒントの ID（浅いものから順に。本文は問題データ側。`explanationId` と同じ扱い）。無ければ空。
+  /// 1 つ目は考え方、2 つ目は途中の式、のように少しずつ答えに近づける。
+  final List<String> hintIds;
 }
 
 /// 誤答・失点の理由（本人が選ぶ）。回答（[Attempt.reason]）にも、テスト後の振り返りにも使う。
@@ -124,6 +131,7 @@ class Attempt {
     this.mode = 'practice',
     this.confident,
     this.reason,
+    this.hintsUsed = 0,
   });
 
   final String questionId;
@@ -140,6 +148,10 @@ class Attempt {
   /// 間違えた理由の自己申告（誤答のときだけ。答えなくてもよいので null のことが多い）。
   /// 申告があれば、ケアレスミスの推定（`classifyMistakes`）より優先する。
   final LossReason? reason;
+
+  /// 答える前に見たヒントの数（0 = 使わなかった）。ヒントを使った正解は、習熟度への加点を小さくする
+  /// （`defaultHintCredits`）。模試ではヒントを出さない。
+  final int hintsUsed;
 }
 
 class Mastery {
