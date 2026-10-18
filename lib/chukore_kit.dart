@@ -24,6 +24,7 @@ export 'src/teacher/teacher_mode.dart';
 export 'src/bank/question_bank.dart';
 export 'src/bank/bank_diff.dart';
 export 'src/nudge/nudge.dart';
+export 'src/practice/question_picker.dart';
 export 'src/prereq/prerequisites.dart';
 export 'src/sheet/last_minute_sheet.dart';
 export 'src/dayof/day_of.dart';
