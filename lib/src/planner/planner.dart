@@ -143,9 +143,7 @@ PlanResult buildPlan({
     final left = dayCount - 1 - i;
     final last = left <= config.lastMinuteDays;
     final r = last ? config.lastMinuteRatios : config.ratios;
-    final focus = (total * r.focus).round();
-    final weak = (total * r.weak).round();
-    final review = math.max(0, total - focus - weak);
+    final (:focus, :weak, :review) = splitDay(total, r);
     totalQuantity += total;
     days.add(DayPlan(
       date: dates[i],
@@ -173,7 +171,17 @@ PlanResult buildPlan({
   return PlanResult(days, over, over ? priority : const []);
 }
 
-/// 最大剰余法で [total] を重みに比例配分する（同率は単元ID順）。
+/// 1 日の問題数 [total] を、重点・弱点・復習に分ける。合計は必ず [total] に一致する
+/// （四捨五入で重点と弱点が両方切り上がっても、合計を超えない。超える分は弱点から削る）。
+({int focus, int weak, int review}) splitDay(int total, PlanRatios r) {
+  final focus = math.min(total, (total * r.focus).round());
+  final weak = math.min(total - focus, (total * r.weak).round());
+  return (focus: focus, weak: weak, review: total - focus - weak);
+}
+
+/// 最大剰余法で [total] を重みに比例配分する（同率はキー順）。0 になった項目は含めない。
+Map<String, int> allocateByWeight(int total, Map<String, double> weights) => _allocate(total, weights);
+
 Map<String, int> _allocate(int total, Map<String, double> weights) {
   if (total <= 0 || weights.isEmpty) return {};
   final sum = weights.values.fold<double>(0, (s, w) => s + w);
