@@ -44,7 +44,14 @@ void main(List<String> args) {
         issues.add(ValidationIssue(IssueSeverity.error, 'malformed', '${(n as Map?)?['unitId'] ?? '?'}', 'prerequisite を読めません: $e'));
       }
     }
-    issues.addAll(PrerequisiteGraph(raw).validate(UnitTree(unitsJson['version'] as int? ?? 1, units), rawNodes: raw));
+    final tree = UnitTree(unitsJson['version'] as int? ?? 1, units);
+    final graph = PrerequisiteGraph(raw);
+    issues.addAll(graph.validate(tree, rawNodes: raw));
+    // 作成の進み具合（前提の定義がまだ無い末端の単元。エラーではない）
+    final leaves = tree.allLeaves();
+    final todo = graph.uncoveredLeaves(tree);
+    stdout.writeln('前提の定義: ${leaves.length - todo.length}/${leaves.length} 末端単元'
+        '${todo.isEmpty ? '' : '（未定義: ${todo.map((u) => u.id).join(', ')}）'}');
   }
 
   for (final i in issues) {

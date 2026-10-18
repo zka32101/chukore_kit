@@ -12,6 +12,7 @@ UnitTree _tree(List<String> ids) =>
     UnitTree(1, [for (final id in ids) Unit(id: id, subject: 'math', grade: 1, title: id, estimatedQuestions: 5)]);
 
 void main() {
+  authoringTests();
   // 一次方程式(eq) ← 文字式(expr) ← 正負の数(neg) ← [小学: 分数の計算]
   final graph = PrerequisiteGraph([
     const PrereqNode('eq', requires: ['expr']),
@@ -159,3 +160,92 @@ void main() {
     expect(r.rootCauses, isNotEmpty);
   });
 }
+
+/// 作成支援の警告・循環の道筋・作成の進み具合。
+void authoringTests() {
+  UnitTree tree(List<(String, String, int)> us) =>
+      UnitTree(1, [for (final (id, subj, g) in us) Unit(id: id, subject: subj, grade: g, title: id, estimatedQuestions: 5)]);
+
+  List<ValidationIssue> check(UnitTree t, List<PrereqNode> ns) => PrerequisiteGraph(ns).validate(t, rawNodes: ns);
+  List<String> warnCodes(UnitTree t, List<PrereqNode> ns) =>
+      [for (final i in check(t, ns)) if (!i.isError) i.code];
+
+  group('作成支援', () {
+    final t = tree([('a', 'math', 1), ('b', 'math', 1), ('c', 'math', 1), ('d', 'math', 2)]);
+
+    test('循環は道筋つきで、同じ循環を 1 回だけ報告する', () {
+      final issues = check(t, const [
+        PrereqNode('b', requires: ['c']),
+        PrereqNode('c', requires: ['a']),
+        PrereqNode('a', requires: ['b']),
+      ]).where((i) => i.code == 'prereq_cycle').toList();
+      expect(issues.length, 1);
+      expect(issues.single.subjectId, 'a');
+      expect(issues.single.message, contains('a → b → c → a'));
+    });
+
+    test('2 つの循環はそれぞれ 1 回', () {
+      final issues = check(t, const [
+        PrereqNode('a', requires: ['b']),
+        PrereqNode('b', requires: ['a']),
+        PrereqNode('c', requires: ['d']),
+        PrereqNode('d', requires: ['c']),
+      ]).where((i) => i.code == 'prereq_cycle').map((i) => i.subjectId).toList();
+      expect(issues, ['a', 'c']);
+    });
+
+    test('冗長な前提（別の前提の先でも辿れる）は警告', () {
+      expect(
+        warnCodes(t, const [
+          PrereqNode('c', requires: ['a', 'b']),
+          PrereqNode('b', requires: ['a']),
+        ]),
+        ['prereq_redundant'],
+      );
+      // ひし形は冗長ではない
+      expect(
+        warnCodes(t, const [
+          PrereqNode('d', requires: ['b', 'c']),
+          PrereqNode('b', requires: ['a']),
+          PrereqNode('c', requires: ['a']),
+        ]),
+        isEmpty,
+      );
+    });
+
+    test('学年の逆転・別の教科・前提の重複は警告（エラーではない）', () {
+      final t2 = tree([('m1', 'math', 1), ('m2', 'math', 2), ('e1', 'english', 1)]);
+      final grade = check(t2, const [PrereqNode('m1', requires: ['m2'])]);
+      expect(grade.map((i) => i.code), ['prereq_grade_inversion']);
+      expect(hasErrors(grade), isFalse);
+      expect(warnCodes(t2, const [PrereqNode('m2', requires: ['e1'])]), ['prereq_cross_subject']);
+      expect(warnCodes(t2, const [PrereqNode('m2', requires: ['m1', 'm1'])]), ['prereq_requires_duplicate']);
+      // 同じ学年・同じ教科は警告なし
+      expect(warnCodes(t, const [PrereqNode('b', requires: ['a'])]), isEmpty);
+    });
+
+    test('エラーが先、警告があとに並ぶ', () {
+      final issues = check(t2(), const [
+        PrereqNode('m1', requires: ['m2']),
+        PrereqNode('m2', requires: ['zzz']),
+      ]);
+      expect(issues.map((i) => i.isError).toList(), [true, false]);
+    });
+
+    test('前提の定義がまだ無い末端の単元を返す（親の単元は数えない）', () {
+      final t3 = UnitTree(1, const [
+        Unit(id: 'p', subject: 'math', grade: 1, title: 'p'),
+        Unit(id: 'x', subject: 'math', grade: 1, title: 'x', parentId: 'p', order: 1),
+        Unit(id: 'y', subject: 'math', grade: 1, title: 'y', parentId: 'p', order: 2),
+      ]);
+      expect(PrerequisiteGraph(const [PrereqNode('x')]).uncoveredLeaves(t3).map((u) => u.id), ['y']);
+      expect(PrerequisiteGraph(const []).uncoveredLeaves(t3).map((u) => u.id), ['x', 'y']);
+      expect(PrerequisiteGraph(const [PrereqNode('p'), PrereqNode('x'), PrereqNode('y')]).uncoveredLeaves(t3), isEmpty);
+    });
+  });
+}
+
+UnitTree t2() => UnitTree(1, const [
+      Unit(id: 'm1', subject: 'math', grade: 1, title: 'm1'),
+      Unit(id: 'm2', subject: 'math', grade: 2, title: 'm2'),
+    ]);
