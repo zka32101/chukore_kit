@@ -24,7 +24,8 @@ class SqliteAttemptStore implements AttemptStore {
         elapsed_ms INTEGER NOT NULL DEFAULT 0,
         mode TEXT NOT NULL DEFAULT 'practice',
         confident INTEGER,
-        reason TEXT
+        reason TEXT,
+        hints_used INTEGER NOT NULL DEFAULT 0
       );
       CREATE INDEX IF NOT EXISTS idx_attempts_unit ON attempts(unit_id, answered_at);
       CREATE INDEX IF NOT EXISTS idx_attempts_time ON attempts(answered_at);
@@ -35,19 +36,21 @@ class SqliteAttemptStore implements AttemptStore {
     if (!columns.contains('confident')) _db.execute('ALTER TABLE attempts ADD COLUMN confident INTEGER');
     // 版 2 → 3: 間違えた理由の自己申告の列を足す。
     if (!columns.contains('reason')) _db.execute('ALTER TABLE attempts ADD COLUMN reason TEXT');
+    // 版 3 → 4: 見たヒントの数の列を足す。
+    if (!columns.contains('hints_used')) _db.execute('ALTER TABLE attempts ADD COLUMN hints_used INTEGER NOT NULL DEFAULT 0');
     if (version < schemaVersion) _db.execute('PRAGMA user_version = $schemaVersion');
   }
 
   /// テーブル構成の版。列を足すときは上げて、移行を書く。
-  static const schemaVersion = 3;
+  static const schemaVersion = 4;
 
   final Database _db;
 
   @override
   Future<void> add(Attempt a) async {
     _db.execute(
-      'INSERT INTO attempts (question_id, unit_id, correct, chosen_id, answered_at, elapsed_ms, mode, confident, reason) '
-      'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      'INSERT INTO attempts (question_id, unit_id, correct, chosen_id, answered_at, elapsed_ms, mode, confident, reason, hints_used) '
+      'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
       [
         a.questionId,
         a.unitId,
@@ -58,6 +61,7 @@ class SqliteAttemptStore implements AttemptStore {
         a.mode,
         a.confident == null ? null : (a.confident! ? 1 : 0),
         a.reason?.name,
+        a.hintsUsed,
       ],
     );
   }
@@ -96,6 +100,7 @@ class SqliteAttemptStore implements AttemptStore {
           confident: switch (r['confident'] as int?) { null => null, final c => c == 1 },
           // 知らない値（将来の版で足された理由など）は読み飛ばして null にする
           reason: LossReason.values.where((x) => x.name == r['reason']).firstOrNull,
+          hintsUsed: r['hints_used'] as int,
         ),
     ];
   }

@@ -33,7 +33,8 @@ bool isOvercome(
 }) {
   if (chronological.length < streak) return false;
   final tail = chronological.sublist(chronological.length - streak);
-  if (!tail.every((a) => a.correct)) return false;
+  // ヒントを使った正解は、克服の連続正解に数えない（自力で解けて初めて克服）
+  if (!tail.every((a) => a.correct && a.hintsUsed == 0)) return false;
   return tail.map((a) => dateOnly(a.answeredAt)).toSet().length >= minDays;
 }
 

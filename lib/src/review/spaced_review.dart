@@ -67,7 +67,8 @@ Map<String, ReviewState> buildReviewStates(
     if (a.correct) {
       final b = box[q];
       // 自信なしの正解はまぐれかもしれないので、箱を上げない（初回は 0 のまま）
-      if (a.confident == false) {
+      // ヒントを使った正解も同じ（自力で解けたとは言えない）
+      if (a.confident == false || a.hintsUsed > 0) {
         box[q] = b ?? 0;
         continue;
       }

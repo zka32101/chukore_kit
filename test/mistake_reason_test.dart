@@ -74,7 +74,7 @@ void main() {
       await store.add(wrong('new', reason: LossReason.careless, minute: 5));
       final got = await store.query();
       expect(got.map((a) => (a.questionId, a.reason, a.confident)), [('old', null, true), ('new', LossReason.careless, null)]);
-      expect(db.select('PRAGMA user_version').first.values.first, 3);
+      expect(db.select('PRAGMA user_version').first.values.first, SqliteAttemptStore.schemaVersion);
     });
 
     test('知らない理由の値（将来の版で足されたもの）は読み飛ばして null にする', () async {
