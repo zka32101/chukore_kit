@@ -1,4 +1,5 @@
 import '../models/models.dart';
+import '../question/text_match.dart';
 import '../scope/unit_tree.dart';
 import '../teacher/teacher_mode.dart';
 
@@ -22,7 +23,7 @@ class ValidationIssue {
 bool hasErrors(Iterable<ValidationIssue> issues) => issues.any((i) => i.isError);
 
 /// `checkAnswer` が扱う問題タイプ。
-const knownQuestionTypes = {'choice', 'map', 'numeric', 'order', 'timeline'};
+const knownQuestionTypes = {'choice', 'map', 'numeric', 'order', 'timeline', 'text', 'multi'};
 
 final _thousands = RegExp(r'^-?\d{1,3}(,\d{3})+(\.\d+)?$');
 final _tagPattern = RegExp(r'^[a-z][a-z0-9_]*$');
@@ -168,6 +169,36 @@ List<ValidationIssue> validateQuestionBank({
         } else if (q.answer.contains(',') && !_thousands.hasMatch(q.answer.trim())) {
           warn('numeric_answer_comma', q.id, '正解はピリオド区切りで書いてください（桁区切り以外のカンマは無視されます）: ${q.answer}');
         }
+      case 'text':
+        final alts = textAlternatives(q.answer);
+        if (alts.any((a) => normalizeText(a).isEmpty)) {
+          err('text_answer_empty', q.id, '正解（別解）が空です: "${q.answer}"（別解は | で区切ります）');
+        } else if (alts.map(normalizeText).toSet().length != alts.length) {
+          warn('text_alt_duplicate', q.id, '表記ゆれをそろえると同じになる別解があります: ${q.answer}');
+        }
+        if (q.choices.isNotEmpty) warn('choices_ignored', q.id, 'text では選択肢は使われません');
+      case 'multi':
+        final items = multiItems(q.answer);
+        if (items.length < 2) err('multi_too_few', q.id, 'multi は 2 項目以上（項目は ; で区切ります）。1 項目なら text にしてください');
+        final seen = <String, int>{};
+        for (var i = 0; i < items.length; i++) {
+          if (items[i].any((a) => normalizeText(a).isEmpty)) {
+            err('multi_item_empty', q.id, '${i + 1} 番目の項目（別解）が空です: "${q.answer}"');
+            continue;
+          }
+          for (final a in items[i]) {
+            if (RegExp(r'[;；、,，\n\r]').hasMatch(a)) {
+              err('multi_item_separator', q.id, '項目 "$a" に区切り文字（; 、 , 改行）が入っています。入力の区切りと区別できません');
+            }
+            final n = normalizeText(a);
+            final other = seen[n];
+            if (other != null && other != i) {
+              err('multi_ambiguous', q.id, '"$a" が ${other + 1} 番目と ${i + 1} 番目の項目の両方に当たります');
+            }
+            seen[n] = i;
+          }
+        }
+        if (q.choices.isNotEmpty) warn('choices_ignored', q.id, 'multi では選択肢は使われません');
       case 'order' || 'timeline':
         final ids = q.answer.split(',').map((e) => e.trim()).toList();
         if (ids.length < 2) err('order_too_few', q.id, '並べ替えは2つ以上');

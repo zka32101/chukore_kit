@@ -67,7 +67,7 @@ dart run tool/validate_bank.dart units.json questions.json
 
 | 項目 | 内容 |
 |---|---|
-| `type` | `choice`（選択）／`map`（地図タップ。選択肢は領域ID）／`numeric`（数値。`choices` は空でよい）／`order`・`timeline`（並べ替え・年表。`answer` は正解順のIDをカンマ区切り、`choices` は同じID集合） |
+| `type` | `choice`（選択）／`map`（地図タップ。選択肢は領域ID）／`numeric`（数値。`choices` は空でよい）／`order`・`timeline`（並べ替え・年表。`answer` は正解順のIDをカンマ区切り、`choices` は同じID集合）／`text`（短い記述。`answer` は別解を `\|` で区切る。例 `東京\|とうきょう\|Tokyo`。`choices` は空）／`multi`（複数の語を答える。`answer` は項目を `;`、各項目の別解を `\|` で区切る。例 `織田信長\|のぶなが;豊臣秀吉\|ひでよし;徳川家康`。順不同・部分点あり。`choices` は空） |
 | `difficulty` | 基準正答率 0〜1（アプリ内偏差値の換算に使う）。0 と 1 は警告 |
 | `misconceptionTags` | 誤答の選択肢ID → 誤解の型（小文字・数字・`_`）。**正解の選択肢には付けない** |
 | `explanationId` | 解説の ID（解説の本文は別データ） |
@@ -100,3 +100,11 @@ dart run tool/validate_bank.dart units.json questions.json
 
 数学の SymPy による検算や、英語の語彙リスト照合は Dart ではなく別ツールで行う（設計書 §12-4 の 8）。
 このツールが見るのは、形式とつながり（上の検証コード）まで。
+
+## 記述問題（`text`・`multi`）の判定
+- 比べる前に表記ゆれをそろえる（`normalizeText`）: 全角の英数記号→半角、英字は小文字、空白の並びは 1 つ、文末の句読点（`。.、,!?`）は除く、カタカナ→ひらがな、各地の数字→0〜9、引用符・ハイフン類の違い。語順や途中の記号は変えない（`a lot` と `alot` は別）。
+- カタカナで書く指定の問題は、`checkAnswer(..., foldKana: false)` でカタカナとひらがなを区別する。
+- `multi`: 入力の区切りは `;`・`；`・`、`・`,`・`，`・改行。正解の項目には、これらの区切り文字を入れない（`multi_item_separator`）。
+- 得点は `AnswerResult.score`（0〜1）。`multi` は 合った項目数 ÷ 全項目数。正解に無い項目が混じると、その数だけ減る（思いつく語を全部書く当て推量を避ける。0 を下回らない）。同じ項目の重ね書き（別解を両方書く、同じ語を 2 回書く）は加点も減点もしない。全項目が合い、余分が無いときだけ `correct`。`text` ほかは正解 1・不正解 0。
+- 模試の採点は `correct`（○×）で数える。部分点を模試の得点に使うかは、運用で決める。
+- 検証コード: `text_answer_empty` / `text_alt_duplicate` / `multi_too_few` / `multi_item_empty` / `multi_item_separator` / `multi_ambiguous` / `choices_ignored`（警告）。
