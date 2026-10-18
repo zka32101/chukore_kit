@@ -30,6 +30,7 @@
 | 模試のあと | 模試の結果から「次の一手」 `planNextSteps`（落とした単元 → 前提をさかのぼった出発点 → その単元の順と、解き直しセット）。他アプリへの誘導も引き継ぐ |
 | 計画 | 山場の予告 `findPeakAhead`（数日先に問題の多い日があるとき、責めない一文 `peakAhead`（18言語）で知らせる材料） |
 | アクセシビリティ | 色のコントラスト比の検証 `contrastRatio`・`meetsTextContrast`・`meetsGraphicContrast`（WCAG AA）、長い文章を読みやすい長さに分ける `splitForReading` |
+| アクセシビリティ | 色覚シミュレーション `simulateColorVision`・色の違い `colorDifference`・配色の検査 `confusablePairs`（[`docs/accessibility_colors.md`](docs/accessibility_colors.md)）。暫定値の検証計画は [`docs/softlaunch_validation_plan.md`](docs/softlaunch_validation_plan.md) |
 | ふりかえり | 子ども本人向けの週のふりかえり `buildMyWeek`（できたことだけを前に出す。少なかった週も責めない） |
 | 直前・当日・共有 | 直前プリント `buildLastMinuteSheet`・当日チェック `DayChecklist`・範囲カードの QR `encodeScope` |
 

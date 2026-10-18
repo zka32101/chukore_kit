@@ -24,6 +24,7 @@ export 'src/insight/next_steps.dart';
 export 'src/insight/tag_drafts.dart';
 export 'src/planner/peak_preview.dart';
 export 'src/a11y/contrast.dart';
+export 'src/a11y/color_vision.dart';
 export 'src/a11y/reading_chunks.dart';
 export 'src/confidence/confidence.dart';
 export 'src/review/spaced_review.dart';
