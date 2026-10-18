@@ -14,6 +14,9 @@ enum ChildFeature {
 
   /// 範囲カード（QR）の共有。
   scopeShare,
+
+  /// 子ども本人が自分の学習を振り返る画面（週のふりかえり）。自分の記録だけで、共有・送信しない。
+  selfReview,
 }
 
 /// 機能の使わせ方。
@@ -47,12 +50,13 @@ class AgePolicy {
   final Map<ChildFeature, Access> childAccess;
 
   /// 現行の方針（仮）。偏差値は出さない。成長カードの共有・週次レポートは保護者ゲートのあと。
-  /// 範囲カードの共有は、法務確認が済むまで出さない。
+  /// 範囲カードの共有は、法務確認が済むまで出さない。子ども本人の振り返り（自分の記録を自分で見るだけ）は使える。
   static const defaultChildAccess = {
     ChildFeature.deviation: Access.hidden,
     ChildFeature.growthCardShare: Access.needsGuardianGate,
     ChildFeature.weeklyReport: Access.needsGuardianGate,
     ChildFeature.scopeShare: Access.hidden,
+    ChildFeature.selfReview: Access.allowed,
   };
 
   /// 地域コード（`JP`・`us`・`en-US` の `US` など）に合う方針。[overrides] に無い地域は現行の方針。
