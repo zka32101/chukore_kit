@@ -176,6 +176,12 @@ abstract class ChukoreStrings {
   String get reasonCareless;
   String get reasonTimeShort;
 
+  /// 休憩を勧める文言（責めない短い文。数字を含まない）。決め方は [suggestBreak]。
+  String get breakLong;
+  String get breakMistakes;
+  String get breakSlowing;
+  String get breakRushing;
+
   /// [LossReason] に合うラベル。
   String reasonLabel(LossReason r) => switch (r) {
         LossReason.dontKnow => reasonDontKnow,
@@ -280,6 +286,14 @@ class JaStrings extends ChukoreStrings {
   String get reasonCareless => 'うっかり';
   @override
   String get reasonTimeShort => '時間が足りなかった';
+  @override
+  String get breakLong => 'ずっとがんばっているね。ちょっと休んで水を飲もう';
+  @override
+  String get breakMistakes => 'つづけて間違えちゃったね。ひと休みしてからもう一度やろう';
+  @override
+  String get breakSlowing => '少し疲れてきたかな？ひと休みしよう';
+  @override
+  String get breakRushing => 'はやく答えすぎているかも。ゆっくり深呼吸して、問題をよく読もう';
   @override
   String get ringsTitle => '成長の年輪';
   @override
@@ -434,6 +448,14 @@ class EnStrings extends ChukoreStrings {
   String get reasonCareless => 'A careless slip';
   @override
   String get reasonTimeShort => 'I ran out of time';
+  @override
+  String get breakLong => 'You have worked hard. Take a short break and have some water';
+  @override
+  String get breakMistakes => 'A few misses in a row. Take a short break, then try again';
+  @override
+  String get breakSlowing => 'Getting tired? Take a short break';
+  @override
+  String get breakRushing => 'Answering very fast. Take a breath and read each question carefully';
   @override
   String get ringsTitle => 'Growth rings';
   @override
@@ -617,6 +639,14 @@ class PtStrings extends ChukoreStrings {
   String get reasonCareless => 'Distração';
   @override
   String get reasonTimeShort => 'Faltou tempo';
+  @override
+  String get breakLong => 'Você estudou bastante. Faça uma pausa e beba água';
+  @override
+  String get breakMistakes => 'Alguns erros seguidos. Faça uma pausa e tente de novo';
+  @override
+  String get breakSlowing => 'Cansou um pouco? Faça uma pausa';
+  @override
+  String get breakRushing => 'Respondendo rápido demais. Respire e leia cada pergunta com calma';
   @override
   String get ringsTitle => 'Anéis de crescimento';
   @override
@@ -804,6 +834,14 @@ class EsStrings extends ChukoreStrings {
   String get reasonCareless => 'Un descuido';
   @override
   String get reasonTimeShort => 'Me faltó tiempo';
+  @override
+  String get breakLong => 'Has trabajado mucho. Haz una pausa y bebe agua';
+  @override
+  String get breakMistakes => 'Varios fallos seguidos. Descansa un momento y vuelve a intentarlo';
+  @override
+  String get breakSlowing => '¿Te estás cansando? Haz una pausa';
+  @override
+  String get breakRushing => 'Estás respondiendo muy rápido. Respira y lee cada pregunta con calma';
   @override
   String get ringsTitle => 'Anillos de crecimiento';
   @override
@@ -1007,6 +1045,14 @@ class FrStrings extends ChukoreStrings {
   @override
   String get reasonTimeShort => 'Pas assez de temps';
   @override
+  String get breakLong => 'Vous avez bien travaillé. Faites une pause et buvez un peu d’eau';
+  @override
+  String get breakMistakes => "Quelques erreurs d'affilée. Faites une courte pause, puis réessayez";
+  @override
+  String get breakSlowing => 'Un peu fatigué$_nb? Faites une courte pause';
+  @override
+  String get breakRushing => 'Vous répondez très vite. Respirez et lisez bien chaque question';
+  @override
   String get ringsTitle => 'Anneaux de croissance';
   @override
   String ringsSemantics(int totalDays) =>
@@ -1156,6 +1202,14 @@ class KoStrings extends ChukoreStrings {
   String get reasonCareless => '실수했어요';
   @override
   String get reasonTimeShort => '시간이 부족했어요';
+  @override
+  String get breakLong => '열심히 했어요. 잠깐 쉬면서 물을 마셔요';
+  @override
+  String get breakMistakes => '연속으로 틀렸어요. 잠깐 쉬었다가 다시 해 봐요';
+  @override
+  String get breakSlowing => '조금 피곤한가요? 잠깐 쉬어요';
+  @override
+  String get breakRushing => '너무 빨리 답하고 있어요. 숨을 고르고 문제를 잘 읽어 봐요';
   @override
   String get ringsTitle => '성장 나이테';
   @override
@@ -1331,6 +1385,14 @@ class ZhStrings extends ChukoreStrings {
   String get reasonCareless => _t('粗心', '粗心');
   @override
   String get reasonTimeShort => _t('时间不够', '時間不夠');
+  @override
+  String get breakLong => _t('学了很久了。休息一下，喝点水吧', '學了很久了。休息一下，喝點水吧');
+  @override
+  String get breakMistakes => _t('连续错了几题。先休息一下再试试', '連續錯了幾題。先休息一下再試試');
+  @override
+  String get breakSlowing => _t('有点累了吗？休息一下吧', '有點累了嗎？休息一下吧');
+  @override
+  String get breakRushing => _t('答得太快了。深呼吸，仔细读题', '答得太快了。深呼吸，仔細讀題');
   @override
   String get ringsTitle => _t('成长年轮', '成長年輪');
   @override
@@ -1561,6 +1623,14 @@ class IdStrings extends ChukoreStrings {
   String get reasonCareless => 'Ceroboh';
   @override
   String get reasonTimeShort => 'Waktu kurang';
+  @override
+  String get breakLong => 'Kamu sudah belajar keras. Istirahat sebentar dan minum air ya';
+  @override
+  String get breakMistakes => 'Beberapa kali salah berturut-turut. Istirahat sebentar, lalu coba lagi';
+  @override
+  String get breakSlowing => 'Mulai lelah? Istirahat sebentar ya';
+  @override
+  String get breakRushing => 'Menjawab terlalu cepat. Tarik napas dan baca soal dengan teliti';
 }
 
 class ViStrings extends ChukoreStrings {
@@ -1732,6 +1802,14 @@ class ViStrings extends ChukoreStrings {
   String get reasonCareless => 'Mình bất cẩn';
   @override
   String get reasonTimeShort => 'Không đủ thời gian';
+  @override
+  String get breakLong => 'Bạn đã học chăm chỉ rồi. Nghỉ một chút và uống nước nhé';
+  @override
+  String get breakMistakes => 'Sai liên tiếp vài câu. Nghỉ một chút rồi thử lại nhé';
+  @override
+  String get breakSlowing => 'Hơi mệt rồi à? Nghỉ một chút nhé';
+  @override
+  String get breakRushing => 'Bạn đang trả lời quá nhanh. Hít thở và đọc kỹ từng câu nhé';
 }
 
 /// ドイツ語。[swiss] が true なら スイス・リヒテンシュタイン式（小数点は `.`、ß を使わず ss）。
@@ -1903,6 +1981,14 @@ class DeStrings extends ChukoreStrings {
   String get reasonCareless => 'Flüchtigkeitsfehler';
   @override
   String get reasonTimeShort => 'Zu wenig Zeit';
+  @override
+  String get breakLong => 'Du hast fleißig gelernt. Mach eine kurze Pause und trink etwas';
+  @override
+  String get breakMistakes => 'Ein paar Fehler hintereinander. Mach kurz Pause und versuch es dann noch einmal';
+  @override
+  String get breakSlowing => 'Wirst du müde? Mach eine kurze Pause';
+  @override
+  String get breakRushing => 'Du antwortest sehr schnell. Atme durch und lies jede Frage genau';
 }
 
 /// トルコ語。数詞は分けて書き、100 は「yüz」・1000 は「bin」（「bir yüz」「bir bin」とは言わない）。
@@ -2052,6 +2138,14 @@ class TrStrings extends ChukoreStrings {
   String get reasonCareless => 'Dikkatsizlik';
   @override
   String get reasonTimeShort => 'Zaman yetmedi';
+  @override
+  String get breakLong => 'Çok çalıştın. Kısa bir mola ver ve su iç';
+  @override
+  String get breakMistakes => 'Üst üste birkaç hata oldu. Kısa bir mola ver, sonra tekrar dene';
+  @override
+  String get breakSlowing => 'Yorulmaya mı başladın? Kısa bir mola ver';
+  @override
+  String get breakRushing => 'Çok hızlı cevap veriyorsun. Derin nefes al ve soruları dikkatle oku';
 }
 
 /// タイ語。年は仏暦（พ.ศ. = 西暦 + 543）を主にし、西暦（ค.ศ.）を添える。単語の間に空白を入れない。
@@ -2206,6 +2300,14 @@ class ThStrings extends ChukoreStrings {
   String get reasonCareless => 'สะเพร่า';
   @override
   String get reasonTimeShort => 'เวลาไม่พอ';
+  @override
+  String get breakLong => 'ตั้งใจเรียนมาเยอะแล้ว พักสักหน่อยและดื่มน้ำนะ';
+  @override
+  String get breakMistakes => 'ผิดติดกันหลายข้อ พักสักครู่แล้วลองใหม่นะ';
+  @override
+  String get breakSlowing => 'เริ่มเหนื่อยแล้วหรือเปล่า? พักสักหน่อยนะ';
+  @override
+  String get breakRushing => 'ตอบเร็วเกินไปหรือเปล่า หายใจลึก ๆ แล้วอ่านโจทย์ให้ดีนะ';
 }
 
 /// ヒンディー語。数詞は 1〜99 がすべて不規則なので、0〜99 を表で持つ。100 は「एक सौ」・1000 は「एक हज़ार」。
@@ -2361,6 +2463,14 @@ class HiStrings extends ChukoreStrings {
   String get reasonCareless => 'लापरवाही हो गई';
   @override
   String get reasonTimeShort => 'समय कम पड़ा';
+  @override
+  String get breakLong => 'आपने काफ़ी मेहनत की है। थोड़ा आराम करें और पानी पिएँ';
+  @override
+  String get breakMistakes => 'लगातार कुछ गलतियाँ हुईं। थोड़ा रुकें, फिर दोबारा कोशिश करें';
+  @override
+  String get breakSlowing => 'थकान लग रही है? थोड़ा आराम करें';
+  @override
+  String get breakRushing => 'आप बहुत जल्दी जवाब दे रहे हैं। गहरी साँस लें और सवाल ध्यान से पढ़ें';
 }
 
 /// アラビア語（現代標準アラビア語）。右から左に書く。数字は西洋式（0〜9）で出し、
@@ -2537,6 +2647,14 @@ class ArStrings extends ChukoreStrings {
   String get reasonCareless => 'خطأ بسبب السهو';
   @override
   String get reasonTimeShort => 'لم يكفِ الوقت';
+  @override
+  String get breakLong => 'لقد تعبتَ كثيرًا في الدراسة. خذ استراحة قصيرة واشرب ماء';
+  @override
+  String get breakMistakes => 'عدة أخطاء متتالية. خذ استراحة قصيرة ثم حاول مرة أخرى';
+  @override
+  String get breakSlowing => 'هل بدأتَ تتعب؟ خذ استراحة قصيرة';
+  @override
+  String get breakRushing => 'تجيب بسرعة كبيرة. تنفّس بعمق واقرأ كل سؤال بعناية';
 }
 
 /// ロシア語。複数形は 3 つ（1・2〜4・5 以上。11〜14 は 5 以上の形）。小数点はカンマ。
@@ -2716,6 +2834,14 @@ class RuStrings extends ChukoreStrings {
   String get reasonCareless => 'Невнимательность';
   @override
   String get reasonTimeShort => 'Не хватило времени';
+  @override
+  String get breakLong => 'Много сделано! Сделай небольшой перерыв и выпей воды';
+  @override
+  String get breakMistakes => 'Несколько ошибок подряд. Передохни и попробуй ещё раз';
+  @override
+  String get breakSlowing => 'Начинаешь уставать? Сделай небольшой перерыв';
+  @override
+  String get breakRushing => 'Ответы слишком быстрые. Вдохни глубже и внимательно читай вопросы';
 }
 
 /// イタリア語。複数形は 1 とそれ以外の 2 つ。小数点はカンマ。
@@ -2895,6 +3021,14 @@ class ItStrings extends ChukoreStrings {
   String get reasonCareless => 'Una distrazione';
   @override
   String get reasonTimeShort => 'Mi è mancato il tempo';
+  @override
+  String get breakLong => "Hai studiato tanto. Fai una breve pausa e bevi un po' d'acqua";
+  @override
+  String get breakMistakes => 'Qualche errore di fila. Fai una breve pausa, poi riprova';
+  @override
+  String get breakSlowing => 'Ti stai stancando? Fai una breve pausa';
+  @override
+  String get breakRushing => 'Stai rispondendo molto in fretta. Respira e leggi bene ogni domanda';
 }
 
 /// オランダ語。複数形は 1 とそれ以外の 2 つ。小数点はカンマ（ベルギーのオランダ語も同じ）。
@@ -3064,6 +3198,14 @@ class NlStrings extends ChukoreStrings {
   String get reasonCareless => 'Slordigheidje';
   @override
   String get reasonTimeShort => 'Te weinig tijd';
+  @override
+  String get breakLong => 'Je hebt hard gewerkt. Neem even pauze en drink wat water';
+  @override
+  String get breakMistakes => 'Een paar fouten achter elkaar. Neem even pauze en probeer het opnieuw';
+  @override
+  String get breakSlowing => 'Word je moe? Neem even pauze';
+  @override
+  String get breakRushing => 'Je antwoordt heel snel. Adem diep in en lees elke vraag goed';
 }
 
 /// ポーランド語。複数形は 3 つ（1・2〜4・それ以外。12〜14 は「それ以外」）。ロシア語と違い、21・101 などは
@@ -3243,4 +3385,12 @@ class PlStrings extends ChukoreStrings {
   String get reasonCareless => 'Nieuwaga';
   @override
   String get reasonTimeShort => 'Zabrakło czasu';
+  @override
+  String get breakLong => 'Dużo już zrobione. Zrób krótką przerwę i napij się wody';
+  @override
+  String get breakMistakes => 'Kilka błędów z rzędu. Zrób krótką przerwę i spróbuj jeszcze raz';
+  @override
+  String get breakSlowing => 'Czujesz zmęczenie? Zrób krótką przerwę';
+  @override
+  String get breakRushing => 'Odpowiadasz bardzo szybko. Weź oddech i uważnie czytaj pytania';
 }
