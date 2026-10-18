@@ -20,6 +20,7 @@ export 'src/weak/careless.dart';
 export 'src/insight/misconception_trends.dart';
 export 'src/insight/difficulty_calibration.dart';
 export 'src/insight/distractor_analysis.dart';
+export 'src/insight/next_steps.dart';
 export 'src/confidence/confidence.dart';
 export 'src/review/spaced_review.dart';
 export 'src/time/study_time.dart';
