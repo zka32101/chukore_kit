@@ -28,6 +28,7 @@
 | 問題の質 | 誤答の選択肢の分析 `analyzeDistractors`（型の無い人気の誤答＝新しい誤解の型の候補／選ばれない誤答／正解より人気の誤答） |
 | 模試のあと | 模試の結果から「次の一手」 `planNextSteps`（落とした単元 → 前提をさかのぼった出発点 → その単元の順と、解き直しセット）。他アプリへの誘導も引き継ぐ |
 | 計画 | 山場の予告 `findPeakAhead`（数日先に問題の多い日があるとき、責めない一文 `peakAhead`（18言語）で知らせる材料） |
+| アクセシビリティ | 色のコントラスト比の検証 `contrastRatio`・`meetsTextContrast`・`meetsGraphicContrast`（WCAG AA）、長い文章を読みやすい長さに分ける `splitForReading` |
 | ふりかえり | 子ども本人向けの週のふりかえり `buildMyWeek`（できたことだけを前に出す。少なかった週も責めない） |
 | 直前・当日・共有 | 直前プリント `buildLastMinuteSheet`・当日チェック `DayChecklist`・範囲カードの QR `encodeScope` |
 
