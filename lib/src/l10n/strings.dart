@@ -147,6 +147,12 @@ abstract class ChukoreStrings {
   String get teacherPrompt;
   String get teacherCorrect;
   String get teacherWrong;
+
+  /// 学習を促す通知の文言（数字を含めない短い文。回数や日数は呼び出し側が添える）。
+  /// 責める言い方はしない。決め方は [decideNudge]。
+  String get nudgeTestSoon;
+  String get nudgeReview;
+  String get nudgeStreak;
 }
 
 class JaStrings extends ChukoreStrings {
@@ -218,6 +224,12 @@ class JaStrings extends ChukoreStrings {
   String get teacherCorrect => '正解！ちゃんと直せたね';
   @override
   String get teacherWrong => 'おしい！もう一度、よく読んでみよう';
+  @override
+  String get nudgeTestSoon => 'テストが近づいてきたよ。今日の分、少しだけやってみよう';
+  @override
+  String get nudgeReview => '忘れる前に、ちょっと復習しよう';
+  @override
+  String get nudgeStreak => '今日も少しだけやって、連続記録をのばそう';
   @override
   String get ringsTitle => '成長の年輪';
   @override
@@ -346,6 +358,12 @@ class EnStrings extends ChukoreStrings {
   String get teacherCorrect => 'Correct! You fixed it';
   @override
   String get teacherWrong => 'Almost! Read it once more';
+  @override
+  String get nudgeTestSoon => 'Your test is getting close. Try a little today';
+  @override
+  String get nudgeReview => 'A quick review keeps it fresh';
+  @override
+  String get nudgeStreak => 'Keep your streak going with a little practice today';
   @override
   String get ringsTitle => 'Growth rings';
   @override
@@ -503,6 +521,12 @@ class PtStrings extends ChukoreStrings {
   String get teacherCorrect => 'Correto! Você corrigiu';
   @override
   String get teacherWrong => 'Quase! Leia mais uma vez';
+  @override
+  String get nudgeTestSoon => 'A prova está chegando. Faça um pouquinho hoje';
+  @override
+  String get nudgeReview => 'Uma revisão rápida ajuda a não esquecer';
+  @override
+  String get nudgeStreak => 'Mantenha sua sequência com um pouco de prática hoje';
   @override
   String get ringsTitle => 'Anéis de crescimento';
   @override
@@ -664,6 +688,12 @@ class EsStrings extends ChukoreStrings {
   String get teacherCorrect => '¡Correcto! Lo corregiste';
   @override
   String get teacherWrong => '¡Casi! Léelo una vez más';
+  @override
+  String get nudgeTestSoon => 'El examen se acerca. Practica un poquito hoy';
+  @override
+  String get nudgeReview => 'Un repaso rápido ayuda a no olvidar';
+  @override
+  String get nudgeStreak => 'Mantén tu racha con un poco de práctica hoy';
   @override
   String get ringsTitle => 'Anillos de crecimiento';
   @override
@@ -841,6 +871,12 @@ class FrStrings extends ChukoreStrings {
   @override
   String get teacherWrong => 'Presque$_nb! Relisez encore une fois';
   @override
+  String get nudgeTestSoon => "L'examen approche. Faites un petit exercice aujourd'hui";
+  @override
+  String get nudgeReview => 'Une courte révision aide à ne pas oublier';
+  @override
+  String get nudgeStreak => "Gardez votre série avec un peu d'entraînement aujourd'hui";
+  @override
   String get ringsTitle => 'Anneaux de croissance';
   @override
   String ringsSemantics(int totalDays) =>
@@ -964,6 +1000,12 @@ class KoStrings extends ChukoreStrings {
   String get teacherCorrect => '정답! 잘 고쳤어요';
   @override
   String get teacherWrong => '아깝다! 한 번 더 읽어 봐요';
+  @override
+  String get nudgeTestSoon => '시험이 다가오고 있어요. 오늘도 조금만 해 봐요';
+  @override
+  String get nudgeReview => '잊기 전에 잠깐 복습해 봐요';
+  @override
+  String get nudgeStreak => '오늘도 조금만 해서 연속 기록을 이어 가요';
   @override
   String get ringsTitle => '성장 나이테';
   @override
@@ -1113,6 +1155,12 @@ class ZhStrings extends ChukoreStrings {
   String get teacherCorrect => _t('答对了！你改正了', '答對了！你改正了');
   @override
   String get teacherWrong => _t('差一点！再读一遍吧', '差一點！再讀一遍吧');
+  @override
+  String get nudgeTestSoon => _t('考试快到了，今天也练一点吧', '考試快到了，今天也練一點吧');
+  @override
+  String get nudgeReview => _t('快速复习一下，就不容易忘记', '快速複習一下，就不容易忘記');
+  @override
+  String get nudgeStreak => _t('今天也练一点，保持连续记录', '今天也練一點，保持連續記錄');
   @override
   String get ringsTitle => _t('成长年轮', '成長年輪');
   @override
@@ -1317,6 +1365,12 @@ class IdStrings extends ChukoreStrings {
   String get teacherCorrect => 'Benar! Kamu berhasil memperbaikinya';
   @override
   String get teacherWrong => 'Hampir! Baca sekali lagi';
+  @override
+  String get nudgeTestSoon => 'Ujian sudah dekat. Latihan sedikit hari ini ya';
+  @override
+  String get nudgeReview => 'Ulasan singkat membantu agar tidak lupa';
+  @override
+  String get nudgeStreak => 'Pertahankan rentetan harimu dengan sedikit latihan hari ini';
 }
 
 class ViStrings extends ChukoreStrings {
@@ -1462,6 +1516,12 @@ class ViStrings extends ChukoreStrings {
   String get teacherCorrect => 'Đúng rồi! Bạn đã sửa được';
   @override
   String get teacherWrong => 'Gần đúng! Hãy đọc lại một lần nữa';
+  @override
+  String get nudgeTestSoon => 'Bài kiểm tra sắp đến rồi. Hôm nay luyện một chút nhé';
+  @override
+  String get nudgeReview => 'Ôn nhanh một chút để không quên nhé';
+  @override
+  String get nudgeStreak => 'Luyện một chút hôm nay để giữ chuỗi ngày liên tiếp nhé';
 }
 
 /// ドイツ語。[swiss] が true なら スイス・リヒテンシュタイン式（小数点は `.`、ß を使わず ss）。
@@ -1607,6 +1667,12 @@ class DeStrings extends ChukoreStrings {
   String get teacherCorrect => 'Richtig! Du hast es verbessert';
   @override
   String get teacherWrong => 'Fast! Lies noch einmal nach';
+  @override
+  String get nudgeTestSoon => 'Die Prüfung rückt näher. Übe heute ein bisschen';
+  @override
+  String get nudgeReview => 'Eine kurze Wiederholung hilft gegen das Vergessen';
+  @override
+  String get nudgeStreak => 'Halte deine Serie mit ein bisschen Übung heute am Laufen';
 }
 
 /// トルコ語。数詞は分けて書き、100 は「yüz」・1000 は「bin」（「bir yüz」「bir bin」とは言わない）。
@@ -1730,6 +1796,12 @@ class TrStrings extends ChukoreStrings {
   String get teacherCorrect => 'Doğru! Düzeltmeyi başardın';
   @override
   String get teacherWrong => 'Neredeyse! Bir kez daha oku';
+  @override
+  String get nudgeTestSoon => 'Sınav yaklaşıyor. Bugün biraz çalış';
+  @override
+  String get nudgeReview => 'Kısa bir tekrar unutmayı önler';
+  @override
+  String get nudgeStreak => 'Bugün biraz çalışarak serini sürdür';
 }
 
 /// タイ語。年は仏暦（พ.ศ. = 西暦 + 543）を主にし、西暦（ค.ศ.）を添える。単語の間に空白を入れない。
@@ -1858,6 +1930,12 @@ class ThStrings extends ChukoreStrings {
   String get teacherCorrect => 'ถูกต้อง! แก้ได้แล้ว';
   @override
   String get teacherWrong => 'เกือบแล้ว! อ่านอีกครั้งนะ';
+  @override
+  String get nudgeTestSoon => 'ใกล้สอบแล้ว วันนี้ลองทำสักนิดนะ';
+  @override
+  String get nudgeReview => 'ทบทวนสั้น ๆ ช่วยไม่ให้ลืมนะ';
+  @override
+  String get nudgeStreak => 'ทำสักนิดวันนี้ เพื่อต่อสถิติที่ทำติดต่อกัน';
 }
 
 /// ヒンディー語。数詞は 1〜99 がすべて不規則なので、0〜99 を表で持つ。100 は「एक सौ」・1000 は「एक हज़ार」。
@@ -1987,6 +2065,12 @@ class HiStrings extends ChukoreStrings {
   String get teacherCorrect => 'सही! आपने इसे सुधार दिया';
   @override
   String get teacherWrong => 'लगभग! एक बार फिर पढ़ें';
+  @override
+  String get nudgeTestSoon => 'परीक्षा पास आ रही है। आज थोड़ा अभ्यास करें';
+  @override
+  String get nudgeReview => 'थोड़ा दोहराने से चीज़ें याद रहती हैं';
+  @override
+  String get nudgeStreak => 'आज थोड़ा अभ्यास करके अपना सिलसिला बनाए रखें';
 }
 
 /// アラビア語（現代標準アラビア語）。右から左に書く。数字は西洋式（0〜9）で出し、
@@ -2137,6 +2221,12 @@ class ArStrings extends ChukoreStrings {
   String get teacherCorrect => 'صحيح! لقد صححته';
   @override
   String get teacherWrong => 'تقريبا! اقرأ مرة أخرى';
+  @override
+  String get nudgeTestSoon => 'اقترب الاختبار. تدرّب قليلاً اليوم';
+  @override
+  String get nudgeReview => 'مراجعة سريعة تساعدك على عدم النسيان';
+  @override
+  String get nudgeStreak => 'حافظ على سلسلتك بقليل من التدريب اليوم';
 }
 
 /// ロシア語。複数形は 3 つ（1・2〜4・5 以上。11〜14 は 5 以上の形）。小数点はカンマ。
@@ -2290,4 +2380,10 @@ class RuStrings extends ChukoreStrings {
   String get teacherCorrect => 'Верно! Ты исправил(а) ошибку';
   @override
   String get teacherWrong => 'Почти! Прочитай ещё раз';
+  @override
+  String get nudgeTestSoon => 'Экзамен приближается. Позанимайся немного сегодня';
+  @override
+  String get nudgeReview => 'Короткое повторение помогает не забыть';
+  @override
+  String get nudgeStreak => 'Продолжи серию — позанимайся немного сегодня';
 }

@@ -43,6 +43,9 @@ Map<String, String> stringsCatalog(ChukoreStrings s) {
   m['teacherPrompt'] = s.teacherPrompt;
   m['teacherCorrect'] = s.teacherCorrect;
   m['teacherWrong'] = s.teacherWrong;
+  m['nudgeTestSoon'] = s.nudgeTestSoon;
+  m['nudgeReview'] = s.nudgeReview;
+  m['nudgeStreak'] = s.nudgeStreak;
   m['ringsTitle'] = s.ringsTitle;
   for (final n in [0, 1, 2, 30]) {
     m['ringsSemantics($n)'] = s.ringsSemantics(n);
