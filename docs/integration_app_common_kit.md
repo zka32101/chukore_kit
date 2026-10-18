@@ -51,7 +51,7 @@ final allowed = policyTable.allows(age, ChildFeature.weeklyReport);
 | 学習計画・設定・同意 | `SharedPreferencesEraser` と `ConsentStore.clear()` |
 | 匿名集計に送った分 | **端末側からは特定できない**（個人を結びつけない設計のため）。説明に「すでに送った統計は取り消せない」を書く |
 
-→ **基盤に足すもの（案）**: `SqliteAttemptStore` に、データベースを閉じて消す `deleteAll()` があるか確認し、無ければ足す（実装は小さい。テストで「削除後に空」を固定）。
+→ **基盤に足すもの（案）**: `SqliteAttemptStore` に全削除（`deleteAll()`）は**まだ無い**（確認済み）ので足す（実装は小さい。テストで「削除後に空」を固定）。
 
 ## 5. つなぎ目 ④: 設定画面と言語
 
@@ -79,7 +79,7 @@ chukore_kit は2つのキットに**依存しない**（中核を軽く保つ。
 
 ## 8. 次の作業（優先順）
 
-1. [ ] `SqliteAttemptStore` の全削除（`deleteAll()` の有無の確認と追加）— chukore_kit、小さい。
+1. [ ] `SqliteAttemptStore` の全削除 `deleteAll()` の追加（現状は無い）— chukore_kit、小さい。
 2. [ ] `ChukoreStrings` の言語名（設定画面の言語リスト用）— chukore_kit、18言語+CSV。
 3. [ ] `app_common_kit` の `ConsentCategory.learningStats` と同意文言 — **法務確認後**。
 4. [ ] `ChildFeature.dataSharing` と送る束の関数 — **法務確認後**。
