@@ -6,7 +6,7 @@ import 'attempt_store.dart';
 /// 学習データ（回答履歴）の書き出しと取り込み。機種変更やアプリの入れ直しの引き継ぎ用で、
 /// クラウドや通信は使わない。ファイルの受け渡し（共有・保存）はアプリ側。
 ///
-/// ファイルに入るのは回答履歴だけ（問題ID・単元ID・正誤・選んだ選択肢・時刻・所要時間・モード・自信度）。
+/// ファイルに入るのは回答履歴だけ（問題ID・単元ID・正誤・選んだ選択肢・時刻・所要時間・モード・自信度・間違えた理由）。
 /// 名前・ID・メール・生年月日は入らない。時刻は UTC。
 /// テスト日の予定や範囲はアプリが持つので、ここには含めない。
 class AttemptBackup {
@@ -85,12 +85,13 @@ class AttemptBackup {
         'ms': a.elapsedMs,
         'm': a.mode,
         if (a.confident != null) 'cf': a.confident,
+        if (a.reason != null) 'rs': a.reason!.name,
       };
 
   static Attempt _fromJson(Object? j, int index) {
     FormatException bad(String why) => FormatException('バックアップの ${index + 1} 件目が不正です（$why）');
     if (j is! Map) throw bad('形');
-    final q = j['q'], u = j['u'], ok = j['ok'], c = j['c'], t = j['t'], ms = j['ms'], m = j['m'], cf = j['cf'];
+    final q = j['q'], u = j['u'], ok = j['ok'], c = j['c'], t = j['t'], ms = j['ms'], m = j['m'], cf = j['cf'], rs = j['rs'];
     if (q is! String || q.isEmpty) throw bad('問題ID');
     if (u is! String || u.isEmpty) throw bad('単元ID');
     if (ok is! bool) throw bad('正誤');
@@ -100,6 +101,8 @@ class AttemptBackup {
     if (ms is! int || ms < 0) throw bad('所要時間');
     if (m is! String || m.isEmpty) throw bad('モード');
     if (cf != null && cf is! bool) throw bad('自信度');
+    final reason = rs == null ? null : LossReason.values.where((x) => x.name == rs).firstOrNull;
+    if (rs != null && reason == null) throw bad('間違えた理由');
     return Attempt(
       questionId: q,
       unitId: u,
@@ -109,6 +112,7 @@ class AttemptBackup {
       elapsedMs: ms,
       mode: m,
       confident: cf as bool?,
+      reason: reason,
     );
   }
 

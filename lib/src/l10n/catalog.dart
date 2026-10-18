@@ -51,6 +51,11 @@ Map<String, String> stringsCatalog(ChukoreStrings s) {
   m['myWeekKept'] = s.myWeekKept;
   m['myWeekStarted'] = s.myWeekStarted;
   m['myWeekRest'] = s.myWeekRest;
+  m['reasonPrompt'] = s.reasonPrompt;
+  m['reasonDontKnow'] = s.reasonDontKnow;
+  m['reasonForgot'] = s.reasonForgot;
+  m['reasonCareless'] = s.reasonCareless;
+  m['reasonTimeShort'] = s.reasonTimeShort;
   m['ringsTitle'] = s.ringsTitle;
   for (final n in [0, 1, 2, 30]) {
     m['ringsSemantics($n)'] = s.ringsSemantics(n);

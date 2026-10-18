@@ -1,3 +1,5 @@
+import '../models/models.dart';
+
 /// ユーザーに見せる文言と、国ごとに違う表記の集まり。
 /// 対応言語を増やすときは [ChukoreStrings] を実装して [ChukoreStrings.forLocale] に足す。
 abstract class ChukoreStrings {
@@ -166,6 +168,21 @@ abstract class ChukoreStrings {
   String get myWeekKept;
   String get myWeekStarted;
   String get myWeekRest;
+
+  /// 間違えたあとに理由を聞く文言（答えなくてもよい）と、選択肢のラベル。
+  String get reasonPrompt;
+  String get reasonDontKnow;
+  String get reasonForgot;
+  String get reasonCareless;
+  String get reasonTimeShort;
+
+  /// [LossReason] に合うラベル。
+  String reasonLabel(LossReason r) => switch (r) {
+        LossReason.dontKnow => reasonDontKnow,
+        LossReason.forgot => reasonForgot,
+        LossReason.careless => reasonCareless,
+        LossReason.timeShort => reasonTimeShort,
+      };
 }
 
 class JaStrings extends ChukoreStrings {
@@ -253,6 +270,16 @@ class JaStrings extends ChukoreStrings {
   String get myWeekStarted => 'はじめの一歩、いいね！';
   @override
   String get myWeekRest => 'ひとやすみの週。またいつでも始めよう';
+  @override
+  String get reasonPrompt => 'どうして間違えたかな？（答えなくてもいいよ）';
+  @override
+  String get reasonDontKnow => 'わからなかった';
+  @override
+  String get reasonForgot => '忘れていた';
+  @override
+  String get reasonCareless => 'うっかり';
+  @override
+  String get reasonTimeShort => '時間が足りなかった';
   @override
   String get ringsTitle => '成長の年輪';
   @override
@@ -397,6 +424,16 @@ class EnStrings extends ChukoreStrings {
   String get myWeekStarted => 'A great first step!';
   @override
   String get myWeekRest => 'A quiet week. Start again whenever you like';
+  @override
+  String get reasonPrompt => 'Why did it go wrong? (You can skip this)';
+  @override
+  String get reasonDontKnow => "I didn't know it";
+  @override
+  String get reasonForgot => 'I forgot';
+  @override
+  String get reasonCareless => 'A careless slip';
+  @override
+  String get reasonTimeShort => 'I ran out of time';
   @override
   String get ringsTitle => 'Growth rings';
   @override
@@ -570,6 +607,16 @@ class PtStrings extends ChukoreStrings {
   String get myWeekStarted => 'Um ótimo primeiro passo!';
   @override
   String get myWeekRest => 'Uma semana tranquila. Recomece quando quiser';
+  @override
+  String get reasonPrompt => 'Por que errou? (pode pular)';
+  @override
+  String get reasonDontKnow => 'Não sabia';
+  @override
+  String get reasonForgot => 'Esqueci';
+  @override
+  String get reasonCareless => 'Distração';
+  @override
+  String get reasonTimeShort => 'Faltou tempo';
   @override
   String get ringsTitle => 'Anéis de crescimento';
   @override
@@ -747,6 +794,16 @@ class EsStrings extends ChukoreStrings {
   String get myWeekStarted => '¡Un gran primer paso!';
   @override
   String get myWeekRest => 'Una semana tranquila. Empieza de nuevo cuando quieras';
+  @override
+  String get reasonPrompt => '¿Por qué fallaste? (puedes omitirlo)';
+  @override
+  String get reasonDontKnow => 'No lo sabía';
+  @override
+  String get reasonForgot => 'Lo olvidé';
+  @override
+  String get reasonCareless => 'Un descuido';
+  @override
+  String get reasonTimeShort => 'Me faltó tiempo';
   @override
   String get ringsTitle => 'Anillos de crecimiento';
   @override
@@ -940,6 +997,16 @@ class FrStrings extends ChukoreStrings {
   @override
   String get myWeekRest => 'Une semaine tranquille. Reprenez quand vous voulez';
   @override
+  String get reasonPrompt => 'Pourquoi cette erreur$_nb? (facultatif)';
+  @override
+  String get reasonDontKnow => 'Je ne savais pas';
+  @override
+  String get reasonForgot => "J'ai oublié";
+  @override
+  String get reasonCareless => 'Une étourderie';
+  @override
+  String get reasonTimeShort => 'Pas assez de temps';
+  @override
   String get ringsTitle => 'Anneaux de croissance';
   @override
   String ringsSemantics(int totalDays) =>
@@ -1079,6 +1146,16 @@ class KoStrings extends ChukoreStrings {
   String get myWeekStarted => '멋진 첫걸음이에요!';
   @override
   String get myWeekRest => '조용한 한 주였어요. 언제든 다시 시작해요';
+  @override
+  String get reasonPrompt => '왜 틀렸을까요? (건너뛰어도 돼요)';
+  @override
+  String get reasonDontKnow => '몰랐어요';
+  @override
+  String get reasonForgot => '잊어버렸어요';
+  @override
+  String get reasonCareless => '실수했어요';
+  @override
+  String get reasonTimeShort => '시간이 부족했어요';
   @override
   String get ringsTitle => '성장 나이테';
   @override
@@ -1244,6 +1321,16 @@ class ZhStrings extends ChukoreStrings {
   String get myWeekStarted => _t('漂亮的第一步！', '漂亮的第一步！');
   @override
   String get myWeekRest => _t('安静的一周。想开始时随时再来', '安靜的一週。想開始時隨時再來');
+  @override
+  String get reasonPrompt => _t('为什么做错了？（可以跳过）', '為什麼做錯了？（可以跳過）');
+  @override
+  String get reasonDontKnow => _t('不会', '不會');
+  @override
+  String get reasonForgot => _t('忘记了', '忘記了');
+  @override
+  String get reasonCareless => _t('粗心', '粗心');
+  @override
+  String get reasonTimeShort => _t('时间不够', '時間不夠');
   @override
   String get ringsTitle => _t('成长年轮', '成長年輪');
   @override
@@ -1464,6 +1551,16 @@ class IdStrings extends ChukoreStrings {
   String get myWeekStarted => 'Langkah pertama yang bagus!';
   @override
   String get myWeekRest => 'Minggu yang tenang. Mulai lagi kapan saja';
+  @override
+  String get reasonPrompt => 'Kenapa salah? (boleh dilewati)';
+  @override
+  String get reasonDontKnow => 'Belum tahu';
+  @override
+  String get reasonForgot => 'Lupa';
+  @override
+  String get reasonCareless => 'Ceroboh';
+  @override
+  String get reasonTimeShort => 'Waktu kurang';
 }
 
 class ViStrings extends ChukoreStrings {
@@ -1625,6 +1722,16 @@ class ViStrings extends ChukoreStrings {
   String get myWeekStarted => 'Một bước đầu thật tốt!';
   @override
   String get myWeekRest => 'Một tuần nhẹ nhàng. Bắt đầu lại bất cứ lúc nào';
+  @override
+  String get reasonPrompt => 'Vì sao bị sai? (có thể bỏ qua)';
+  @override
+  String get reasonDontKnow => 'Mình chưa biết';
+  @override
+  String get reasonForgot => 'Mình quên';
+  @override
+  String get reasonCareless => 'Mình bất cẩn';
+  @override
+  String get reasonTimeShort => 'Không đủ thời gian';
 }
 
 /// ドイツ語。[swiss] が true なら スイス・リヒテンシュタイン式（小数点は `.`、ß を使わず ss）。
@@ -1786,6 +1893,16 @@ class DeStrings extends ChukoreStrings {
   String get myWeekStarted => 'Ein toller erster Schritt!';
   @override
   String get myWeekRest => 'Eine ruhige Woche. Fang an, wann du möchtest';
+  @override
+  String get reasonPrompt => 'Warum ging es schief? (Überspringen ist okay)';
+  @override
+  String get reasonDontKnow => 'Wusste ich nicht';
+  @override
+  String get reasonForgot => 'Vergessen';
+  @override
+  String get reasonCareless => 'Flüchtigkeitsfehler';
+  @override
+  String get reasonTimeShort => 'Zu wenig Zeit';
 }
 
 /// トルコ語。数詞は分けて書き、100 は「yüz」・1000 は「bin」（「bir yüz」「bir bin」とは言わない）。
@@ -1925,6 +2042,16 @@ class TrStrings extends ChukoreStrings {
   String get myWeekStarted => 'Harika bir ilk adım!';
   @override
   String get myWeekRest => 'Sakin bir hafta. İstediğin zaman yeniden başla';
+  @override
+  String get reasonPrompt => 'Neden yanlış oldu? (Atlayabilirsin)';
+  @override
+  String get reasonDontKnow => 'Bilmiyordum';
+  @override
+  String get reasonForgot => 'Unuttum';
+  @override
+  String get reasonCareless => 'Dikkatsizlik';
+  @override
+  String get reasonTimeShort => 'Zaman yetmedi';
 }
 
 /// タイ語。年は仏暦（พ.ศ. = 西暦 + 543）を主にし、西暦（ค.ศ.）を添える。単語の間に空白を入れない。
@@ -2069,6 +2196,16 @@ class ThStrings extends ChukoreStrings {
   String get myWeekStarted => 'ก้าวแรกที่ดีมาก!';
   @override
   String get myWeekRest => 'สัปดาห์ที่เงียบสงบ เริ่มใหม่ได้ทุกเมื่อ';
+  @override
+  String get reasonPrompt => 'ทำไมถึงผิดนะ? (ข้ามได้)';
+  @override
+  String get reasonDontKnow => 'ไม่รู้';
+  @override
+  String get reasonForgot => 'ลืม';
+  @override
+  String get reasonCareless => 'สะเพร่า';
+  @override
+  String get reasonTimeShort => 'เวลาไม่พอ';
 }
 
 /// ヒンディー語。数詞は 1〜99 がすべて不規則なので、0〜99 を表で持つ。100 は「एक सौ」・1000 は「एक हज़ार」。
@@ -2214,6 +2351,16 @@ class HiStrings extends ChukoreStrings {
   String get myWeekStarted => 'बहुत अच्छी पहली शुरुआत!';
   @override
   String get myWeekRest => 'यह हफ़्ता शांत रहा। जब चाहें फिर शुरू करें';
+  @override
+  String get reasonPrompt => 'गलती क्यों हुई? (छोड़ सकते हैं)';
+  @override
+  String get reasonDontKnow => 'पता नहीं था';
+  @override
+  String get reasonForgot => 'याद नहीं रहा';
+  @override
+  String get reasonCareless => 'लापरवाही हो गई';
+  @override
+  String get reasonTimeShort => 'समय कम पड़ा';
 }
 
 /// アラビア語（現代標準アラビア語）。右から左に書く。数字は西洋式（0〜9）で出し、
@@ -2380,6 +2527,16 @@ class ArStrings extends ChukoreStrings {
   String get myWeekStarted => 'خطوة أولى رائعة!';
   @override
   String get myWeekRest => 'أسبوع هادئ. ابدأ من جديد متى شئت';
+  @override
+  String get reasonPrompt => 'لماذا حدث الخطأ؟ (يمكنك التخطي)';
+  @override
+  String get reasonDontKnow => 'لم أكن أعرف';
+  @override
+  String get reasonForgot => 'نسيت';
+  @override
+  String get reasonCareless => 'خطأ بسبب السهو';
+  @override
+  String get reasonTimeShort => 'لم يكفِ الوقت';
 }
 
 /// ロシア語。複数形は 3 つ（1・2〜4・5 以上。11〜14 は 5 以上の形）。小数点はカンマ。
@@ -2549,6 +2706,16 @@ class RuStrings extends ChukoreStrings {
   String get myWeekStarted => 'Отличное начало!';
   @override
   String get myWeekRest => 'Спокойная неделя. Начни снова, когда захочешь';
+  @override
+  String get reasonPrompt => 'Почему не получилось? (можно пропустить)';
+  @override
+  String get reasonDontKnow => 'Не знаю этого';
+  @override
+  String get reasonForgot => 'Забылось';
+  @override
+  String get reasonCareless => 'Невнимательность';
+  @override
+  String get reasonTimeShort => 'Не хватило времени';
 }
 
 /// イタリア語。複数形は 1 とそれ以外の 2 つ。小数点はカンマ。
@@ -2718,6 +2885,16 @@ class ItStrings extends ChukoreStrings {
   String get myWeekStarted => 'Un ottimo primo passo!';
   @override
   String get myWeekRest => 'Una settimana tranquilla. Riparti quando vuoi';
+  @override
+  String get reasonPrompt => 'Perché è andata male? (puoi saltare)';
+  @override
+  String get reasonDontKnow => 'Non lo sapevo';
+  @override
+  String get reasonForgot => "L'avevo dimenticato";
+  @override
+  String get reasonCareless => 'Una distrazione';
+  @override
+  String get reasonTimeShort => 'Mi è mancato il tempo';
 }
 
 /// オランダ語。複数形は 1 とそれ以外の 2 つ。小数点はカンマ（ベルギーのオランダ語も同じ）。
@@ -2877,6 +3054,16 @@ class NlStrings extends ChukoreStrings {
   String get myWeekStarted => 'Een mooie eerste stap!';
   @override
   String get myWeekRest => 'Een rustige week. Begin weer wanneer je wilt';
+  @override
+  String get reasonPrompt => 'Waarom ging het mis? (overslaan mag)';
+  @override
+  String get reasonDontKnow => 'Wist ik niet';
+  @override
+  String get reasonForgot => 'Vergeten';
+  @override
+  String get reasonCareless => 'Slordigheidje';
+  @override
+  String get reasonTimeShort => 'Te weinig tijd';
 }
 
 /// ポーランド語。複数形は 3 つ（1・2〜4・それ以外。12〜14 は「それ以外」）。ロシア語と違い、21・101 などは
@@ -3046,4 +3233,14 @@ class PlStrings extends ChukoreStrings {
   String get myWeekStarted => 'Świetny pierwszy krok!';
   @override
   String get myWeekRest => 'Spokojny tydzień. Zacznij znowu, kiedy zechcesz';
+  @override
+  String get reasonPrompt => 'Dlaczego się nie udało? (możesz pominąć)';
+  @override
+  String get reasonDontKnow => 'Tego nie umiem';
+  @override
+  String get reasonForgot => 'Wyleciało mi z głowy';
+  @override
+  String get reasonCareless => 'Nieuwaga';
+  @override
+  String get reasonTimeShort => 'Zabrakło czasu';
 }

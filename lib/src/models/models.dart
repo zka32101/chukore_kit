@@ -98,6 +98,21 @@ class Question {
   final int version;
 }
 
+/// 誤答・失点の理由（本人が選ぶ）。回答（[Attempt.reason]）にも、テスト後の振り返りにも使う。
+enum LossReason {
+  /// 習っていない・分からなかった（理解不足）。
+  dontKnow,
+
+  /// 一度覚えたが忘れていた。
+  forgot,
+
+  /// 分かっていたのに取り違えた（ケアレス）。
+  careless,
+
+  /// 時間が足りなかった。
+  timeShort,
+}
+
 class Attempt {
   const Attempt({
     required this.questionId,
@@ -108,6 +123,7 @@ class Attempt {
     this.elapsedMs = 0,
     this.mode = 'practice',
     this.confident,
+    this.reason,
   });
 
   final String questionId;
@@ -120,6 +136,10 @@ class Attempt {
 
   /// 回答時の自信（true = 自信あり、false = 自信なし、null = 聞いていない）。
   final bool? confident;
+
+  /// 間違えた理由の自己申告（誤答のときだけ。答えなくてもよいので null のことが多い）。
+  /// 申告があれば、ケアレスミスの推定（`classifyMistakes`）より優先する。
+  final LossReason? reason;
 }
 
 class Mastery {
