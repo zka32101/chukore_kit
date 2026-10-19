@@ -223,6 +223,10 @@ abstract class ChukoreStrings {
   String get talkStarted;
   String get talkRest;
 
+  /// 前日・当日に出す一言（新しいことを増やさない、落ち着いて。数字を含まない）。使い方は [guardLastDays]。
+  String get eveNotice;
+  String get testDayNotice;
+
   /// 暗記カードの自己採点ボタン（わからない・あやしい・わかった）と、カードをめくるボタン。
   String get cardAgain;
   String get cardHard;
@@ -360,6 +364,10 @@ class JaStrings extends ChukoreStrings {
   String get talkStarted => 'はじめの一歩が出ています。少しでも十分です。「やってみたんだね」と声をかけましょう';
   @override
   String get talkRest => '今週はお休みでした。責めずに、「いつでも始められるよ」と伝えましょう';
+  @override
+  String get eveNotice => 'あしたはテスト。新しいことは増やさず、やったところの見直しだけにしよう';
+  @override
+  String get testDayNotice => 'きょうはテスト。軽く見直すだけで大丈夫。いつもどおりにね';
   @override
   String get cardAgain => 'わからない';
   @override
@@ -542,6 +550,10 @@ class EnStrings extends ChukoreStrings {
   String get talkStarted => 'A first step has been taken, and a little is enough. Try saying "You gave it a go"';
   @override
   String get talkRest => 'This was a rest week. No blame; just let them know they can start any time';
+  @override
+  String get eveNotice => 'The test is tomorrow. No new material now; just look back over what you have already done';
+  @override
+  String get testDayNotice => 'The test is today. A light look back is plenty. Just be yourself';
   @override
   String get cardAgain => "Don't know";
   @override
@@ -753,6 +765,10 @@ class PtStrings extends ChukoreStrings {
   String get talkStarted => 'O primeiro passo foi dado, e um pouco já basta. Experimente dizer "Você tentou"';
   @override
   String get talkRest => 'Esta foi uma semana de descanso. Sem cobrança; diga que ele pode começar quando quiser';
+  @override
+  String get eveNotice => 'A prova é amanhã. Sem conteúdo novo agora; só revise o que você já estudou';
+  @override
+  String get testDayNotice => 'A prova é hoje. Uma revisão leve basta. Fique tranquilo, como sempre';
   @override
   String get cardAgain => 'Não sei';
   @override
@@ -968,6 +984,10 @@ class EsStrings extends ChukoreStrings {
   String get talkStarted => 'Se dio el primer paso, y con poco basta. Pruebe a decir «Lo intentaste»';
   @override
   String get talkRest => 'Esta fue una semana de descanso. Sin reproches; dígale que puede empezar cuando quiera';
+  @override
+  String get eveNotice => 'El examen es mañana. Nada nuevo ahora; solo repasa lo que ya hiciste';
+  @override
+  String get testDayNotice => 'El examen es hoy. Un repaso ligero es suficiente. Como siempre, con calma';
   @override
   String get cardAgain => 'No lo sé';
   @override
@@ -1199,6 +1219,10 @@ class FrStrings extends ChukoreStrings {
   @override
   String get talkRest => 'Ce fut une semaine de repos. Sans reproche ; dites simplement qu’il peut recommencer quand il veut';
   @override
+  String get eveNotice => 'Le contrôle est demain. Rien de nouveau maintenant ; revois seulement ce que tu as déjà fait';
+  @override
+  String get testDayNotice => 'Le contrôle est aujourd’hui. Une relecture légère suffit. Comme d’habitude, en confiance';
+  @override
   String get cardAgain => 'Je ne sais pas';
   @override
   String get cardHard => 'Hésitant';
@@ -1376,6 +1400,10 @@ class KoStrings extends ChukoreStrings {
   String get talkStarted => '첫걸음을 뗐어요. 조금이어도 충분해요. "해 봤구나"라고 말해 주세요';
   @override
   String get talkRest => '이번 주는 쉬었어요. 탓하지 말고 "언제든 시작할 수 있어"라고 전해 주세요';
+  @override
+  String get eveNotice => '내일은 시험이에요. 새로운 건 늘리지 말고, 했던 부분만 다시 살펴봐요';
+  @override
+  String get testDayNotice => '오늘은 시험이에요. 가볍게 훑어보는 것으로 충분해요. 평소처럼 해요';
   @override
   String get cardAgain => '몰라요';
   @override
@@ -1579,6 +1607,10 @@ class ZhStrings extends ChukoreStrings {
   String get talkStarted => _t('迈出了第一步，一点点就足够。可以说“你试过了呢”', '踏出了第一步，一點點就足夠。可以說「你試過了呢」');
   @override
   String get talkRest => _t('这周休息了。不必责备，告诉孩子随时都可以重新开始', '這週休息了。不必責備，告訴孩子隨時都可以重新開始');
+  @override
+  String get eveNotice => _t('明天考试。现在不再学新的，只回顾已经做过的内容就好', '明天考試。現在不再學新的，只回顧已經做過的內容就好');
+  @override
+  String get testDayNotice => _t('今天考试。轻轻回顾一下就足够了，和平时一样就好', '今天考試。輕輕回顧一下就足夠了，和平常一樣就好');
   @override
   String get cardAgain => _t('不会', '不會');
   @override
@@ -1838,6 +1870,10 @@ class IdStrings extends ChukoreStrings {
   @override
   String get talkRest => 'Pekan ini istirahat. Tanpa menyalahkan; katakan bahwa ia bisa mulai kapan saja';
   @override
+  String get eveNotice => 'Ujian besok. Tidak perlu materi baru; cukup ulangi yang sudah dikerjakan';
+  @override
+  String get testDayNotice => 'Ujian hari ini. Mengulang ringan saja sudah cukup. Tenang seperti biasa';
+  @override
   String get cardAgain => 'Tidak tahu';
   @override
   String get cardHard => 'Ragu';
@@ -2036,6 +2072,10 @@ class ViStrings extends ChukoreStrings {
   String get talkStarted => 'Con đã bước những bước đầu, và một chút cũng đủ. Thử nói "Con đã thử rồi nhỉ"';
   @override
   String get talkRest => 'Tuần này con nghỉ. Đừng trách; hãy cho con biết có thể bắt đầu lại bất cứ lúc nào';
+  @override
+  String get eveNotice => 'Ngày mai là bài kiểm tra. Đừng học thêm điều mới, chỉ xem lại những gì đã làm';
+  @override
+  String get testDayNotice => 'Hôm nay là bài kiểm tra. Xem lại nhẹ nhàng là đủ. Cứ bình tĩnh như mọi khi';
   @override
   String get cardAgain => 'Chưa biết';
   @override
@@ -2236,6 +2276,10 @@ class DeStrings extends ChukoreStrings {
   @override
   String get talkRest => 'Das war eine Pausenwoche. Ohne Vorwurf; sagen Sie, dass es jederzeit wieder anfangen kann';
   @override
+  String get eveNotice => 'Morgen ist die Prüfung. Nichts Neues mehr; schau nur noch durch, was du schon gemacht hast';
+  @override
+  String get testDayNotice => 'Heute ist die Prüfung. Ein kurzer Blick zurück genügt. Bleib ganz du selbst';
+  @override
   String get cardAgain => 'Weiß ich nicht';
   @override
   String get cardHard => 'Unsicher';
@@ -2412,6 +2456,10 @@ class TrStrings extends ChukoreStrings {
   String get talkStarted => 'İlk adım atıldı ve azı da yeter. “Denemişsin” demeyi deneyin';
   @override
   String get talkRest => 'Bu hafta dinlenme haftasıydı. Suçlamadan, istediği zaman başlayabileceğini söyleyin';
+  @override
+  String get eveNotice => 'Sınav yarın. Yeni konu eklemeyelim; sadece yaptıklarımıza göz atalım';
+  @override
+  String get testDayNotice => 'Sınav bugün. Hafifçe göz atmak yeterli. Her zamanki gibi sakin ol';
   @override
   String get cardAgain => 'Bilmiyorum';
   @override
@@ -2595,6 +2643,10 @@ class ThStrings extends ChukoreStrings {
   @override
   String get talkRest => 'สัปดาห์นี้พัก ไม่ต้องตำหนิ บอกลูกว่าเริ่มใหม่ได้ทุกเมื่อ';
   @override
+  String get eveNotice => 'พรุ่งนี้สอบแล้ว ไม่ต้องเพิ่มเรื่องใหม่ ทบทวนเฉพาะที่เคยทำก็พอ';
+  @override
+  String get testDayNotice => 'วันนี้สอบแล้ว ทบทวนเบา ๆ ก็เพียงพอ ทำตัวตามปกติได้เลย';
+  @override
   String get cardAgain => 'ไม่รู้';
   @override
   String get cardHard => 'ไม่แน่ใจ';
@@ -2777,6 +2829,10 @@ class HiStrings extends ChukoreStrings {
   String get talkStarted => 'पहला कदम उठ गया है, और थोड़ा भी काफ़ी है। कहकर देखें, "तुमने कोशिश की"';
   @override
   String get talkRest => 'इस हफ़्ते आराम रहा। बिना दोष दिए बताएँ कि वह कभी भी फिर से शुरू कर सकता है';
+  @override
+  String get eveNotice => 'कल परीक्षा है। अब कुछ नया नहीं; बस जो पहले कर चुके हैं उसे एक बार देख लें';
+  @override
+  String get testDayNotice => 'आज परीक्षा है। हल्का दोहराना काफ़ी है। हमेशा की तरह शांत रहें';
   @override
   String get cardAgain => 'पता नहीं';
   @override
@@ -2981,6 +3037,10 @@ class ArStrings extends ChukoreStrings {
   String get talkStarted => 'تمّت الخطوة الأولى، والقليل يكفي. جرّب أن تقول «لقد حاولت»';
   @override
   String get talkRest => 'كان هذا أسبوع راحة. دون لوم؛ أخبره أنه يستطيع البدء في أي وقت';
+  @override
+  String get eveNotice => 'الاختبار غدًا. لا مواد جديدة الآن؛ يكفي أن تراجع ما أنجزته من قبل';
+  @override
+  String get testDayNotice => 'الاختبار اليوم. مراجعة خفيفة تكفي. كن هادئًا كالمعتاد';
   @override
   String get cardAgain => 'لا أعرف';
   @override
@@ -3189,6 +3249,10 @@ class RuStrings extends ChukoreStrings {
   @override
   String get talkRest => 'Эта неделя была отдыхом. Без упрёков; скажите, что начать можно в любой момент';
   @override
+  String get eveNotice => 'Контрольная завтра. Новое сейчас не берём; просто повтори то, что уже делал';
+  @override
+  String get testDayNotice => 'Контрольная сегодня. Лёгкого повторения достаточно. Всё как обычно, спокойно';
+  @override
   String get cardAgain => 'Не знаю';
   @override
   String get cardHard => 'Сомневаюсь';
@@ -3396,6 +3460,10 @@ class ItStrings extends ChukoreStrings {
   @override
   String get talkRest => 'Questa è stata una settimana di pausa. Senza rimproveri; gli dica che può ricominciare quando vuole';
   @override
+  String get eveNotice => 'Il compito è domani. Niente di nuovo ora; ripassa solo ciò che hai già fatto';
+  @override
+  String get testDayNotice => 'Il compito è oggi. Basta un ripasso leggero. Come sempre, con calma';
+  @override
   String get cardAgain => 'Non so';
   @override
   String get cardHard => 'Incerto';
@@ -3592,6 +3660,10 @@ class NlStrings extends ChukoreStrings {
   String get talkStarted => 'De eerste stap is gezet, en een beetje is genoeg. Zeg bijvoorbeeld: „Je hebt het geprobeerd”';
   @override
   String get talkRest => 'Dit was een rustweek. Zonder verwijt; laat weten dat je op elk moment kunt beginnen';
+  @override
+  String get eveNotice => 'De toets is morgen. Nu niets nieuws meer; kijk alleen terug op wat je al gedaan hebt';
+  @override
+  String get testDayNotice => 'De toets is vandaag. Even licht terugkijken is genoeg. Gewoon zoals altijd';
   @override
   String get cardAgain => 'Weet ik niet';
   @override
@@ -3799,6 +3871,10 @@ class PlStrings extends ChukoreStrings {
   String get talkStarted => 'Pierwszy krok został zrobiony, a niewiele wystarczy. Powiedz: „Spróbowałeś”';
   @override
   String get talkRest => 'To był tydzień przerwy. Bez wyrzutów; powiedz, że można zacząć w każdej chwili';
+  @override
+  String get eveNotice => 'Sprawdzian jest jutro. Nic nowego teraz; wystarczy przejrzeć to, co już zrobiłeś';
+  @override
+  String get testDayNotice => 'Sprawdzian jest dziś. Lekkie przejrzenie wystarczy. Spokojnie, jak zawsze';
   @override
   String get cardAgain => 'Nie wiem';
   @override
