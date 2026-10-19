@@ -216,6 +216,13 @@ abstract class ChukoreStrings {
   /// 問題の多い日が近づいたときの予告（数字を含まない、責めない一文）。決め方は [findPeakAhead]。
   String get peakAhead;
 
+  /// 保護者への「声かけ」の提案（責めない、結果より取り組みをほめる、他の子や先週と比べない。数字を含まない）。決め方は [suggestGuardianTalk]。
+  String get talkGrew;
+  String get talkOvercame;
+  String get talkSteady;
+  String get talkStarted;
+  String get talkRest;
+
   /// 暗記カードの自己採点ボタン（わからない・あやしい・わかった）と、カードをめくるボタン。
   String get cardAgain;
   String get cardHard;
@@ -343,6 +350,16 @@ class JaStrings extends ChukoreStrings {
   String get breakRushing => 'はやく答えすぎているかも。ゆっくり深呼吸して、問題をよく読もう';
   @override
   String get peakAhead => "あした以降に、問題の多い日があるよ。少しずつ先にやっておこう";
+  @override
+  String get talkGrew => '伸びたところを、お子さんに教えてもらいましょう。「どうやったの？」と聞いてみてください';
+  @override
+  String get talkOvercame => 'つまずきを乗りこえました。結果よりも、取り組んだことをほめましょう';
+  @override
+  String get talkSteady => 'こつこつ続けられています。続けていること自体をほめましょう';
+  @override
+  String get talkStarted => 'はじめの一歩が出ています。少しでも十分です。「やってみたんだね」と声をかけましょう';
+  @override
+  String get talkRest => '今週はお休みでした。責めずに、「いつでも始められるよ」と伝えましょう';
   @override
   String get cardAgain => 'わからない';
   @override
@@ -515,6 +532,16 @@ class EnStrings extends ChukoreStrings {
   String get breakRushing => 'Answering very fast. Take a breath and read each question carefully';
   @override
   String get peakAhead => "A busier day is coming up. Let’s get a little ahead of it";
+  @override
+  String get talkGrew => 'Ask your child to teach you what improved. "How did you do it?" is a good start';
+  @override
+  String get talkOvercame => 'Your child got past a stumbling block. Praise the effort rather than the result';
+  @override
+  String get talkSteady => 'Your child is keeping at it steadily. Praise the steady effort itself';
+  @override
+  String get talkStarted => 'A first step has been taken, and a little is enough. Try saying "You gave it a go"';
+  @override
+  String get talkRest => 'This was a rest week. No blame; just let them know they can start any time';
   @override
   String get cardAgain => "Don't know";
   @override
@@ -716,6 +743,16 @@ class PtStrings extends ChukoreStrings {
   String get breakRushing => 'Respondendo rápido demais. Respire e leia cada pergunta com calma';
   @override
   String get peakAhead => "Vem aí um dia com mais questões. Vamos adiantar um pouquinho";
+  @override
+  String get talkGrew => 'Peça para seu filho ensinar o que melhorou. "Como você fez?" é um bom começo';
+  @override
+  String get talkOvercame => 'Seu filho superou uma dificuldade. Elogie o esforço, mais do que o resultado';
+  @override
+  String get talkSteady => 'Seu filho está sendo constante. Elogie a constância em si';
+  @override
+  String get talkStarted => 'O primeiro passo foi dado, e um pouco já basta. Experimente dizer "Você tentou"';
+  @override
+  String get talkRest => 'Esta foi uma semana de descanso. Sem cobrança; diga que ele pode começar quando quiser';
   @override
   String get cardAgain => 'Não sei';
   @override
@@ -921,6 +958,16 @@ class EsStrings extends ChukoreStrings {
   String get breakRushing => 'Estás respondiendo muy rápido. Respira y lee cada pregunta con calma';
   @override
   String get peakAhead => "Se acerca un día con más preguntas. Vamos adelantando un poco";
+  @override
+  String get talkGrew => 'Pida a su hijo que le enseñe lo que mejoró. «¿Cómo lo hiciste?» es un buen comienzo';
+  @override
+  String get talkOvercame => 'Su hijo superó un obstáculo. Elogie el esfuerzo más que el resultado';
+  @override
+  String get talkSteady => 'Su hijo se mantiene constante. Elogie la constancia en sí';
+  @override
+  String get talkStarted => 'Se dio el primer paso, y con poco basta. Pruebe a decir «Lo intentaste»';
+  @override
+  String get talkRest => 'Esta fue una semana de descanso. Sin reproches; dígale que puede empezar cuando quiera';
   @override
   String get cardAgain => 'No lo sé';
   @override
@@ -1142,6 +1189,16 @@ class FrStrings extends ChukoreStrings {
   @override
   String get peakAhead => "Un jour plus chargé approche. Prenons un peu d’avance";
   @override
+  String get talkGrew => 'Demandez à votre enfant de vous expliquer ce qui s’est amélioré. « Comment as-tu fait ? » est un bon début';
+  @override
+  String get talkOvercame => 'Votre enfant a surmonté une difficulté. Félicitez l’effort plutôt que le résultat';
+  @override
+  String get talkSteady => 'Votre enfant persévère régulièrement. Félicitez la régularité elle-même';
+  @override
+  String get talkStarted => 'Un premier pas a été fait, et un peu suffit. Essayez de dire « Tu as essayé »';
+  @override
+  String get talkRest => 'Ce fut une semaine de repos. Sans reproche ; dites simplement qu’il peut recommencer quand il veut';
+  @override
   String get cardAgain => 'Je ne sais pas';
   @override
   String get cardHard => 'Hésitant';
@@ -1309,6 +1366,16 @@ class KoStrings extends ChukoreStrings {
   String get breakRushing => '너무 빨리 답하고 있어요. 숨을 고르고 문제를 잘 읽어 봐요';
   @override
   String get peakAhead => "문제가 많은 날이 다가오고 있어요. 조금씩 미리 해 둬요";
+  @override
+  String get talkGrew => '좋아진 부분을 아이에게 가르쳐 달라고 해 보세요. "어떻게 했어?"라고 물어보면 좋아요';
+  @override
+  String get talkOvercame => '어려움을 이겨 냈어요. 결과보다 노력을 칭찬해 주세요';
+  @override
+  String get talkSteady => '꾸준히 이어 가고 있어요. 꾸준함 자체를 칭찬해 주세요';
+  @override
+  String get talkStarted => '첫걸음을 뗐어요. 조금이어도 충분해요. "해 봤구나"라고 말해 주세요';
+  @override
+  String get talkRest => '이번 주는 쉬었어요. 탓하지 말고 "언제든 시작할 수 있어"라고 전해 주세요';
   @override
   String get cardAgain => '몰라요';
   @override
@@ -1502,6 +1569,16 @@ class ZhStrings extends ChukoreStrings {
   String get breakRushing => _t('答得太快了。深呼吸，仔细读题', '答得太快了。深呼吸，仔細讀題');
   @override
   String get peakAhead => _t('即将迎来题目较多的一天。提前做一点吧', '即將迎來題目較多的一天。提前做一點吧');
+  @override
+  String get talkGrew => _t('请孩子教教你哪里进步了。问一句“你是怎么做到的？”就是好的开始', '請孩子教教你哪裡進步了。問一句「你是怎麼做到的？」就是好的開始');
+  @override
+  String get talkOvercame => _t('孩子克服了一个难点。比起结果，更要表扬努力', '孩子克服了一個難點。比起結果，更要稱讚努力');
+  @override
+  String get talkSteady => _t('孩子在坚持学习。表扬坚持本身', '孩子在持續學習。稱讚持續本身');
+  @override
+  String get talkStarted => _t('迈出了第一步，一点点就足够。可以说“你试过了呢”', '踏出了第一步，一點點就足夠。可以說「你試過了呢」');
+  @override
+  String get talkRest => _t('这周休息了。不必责备，告诉孩子随时都可以重新开始', '這週休息了。不必責備，告訴孩子隨時都可以重新開始');
   @override
   String get cardAgain => _t('不会', '不會');
   @override
@@ -1751,6 +1828,16 @@ class IdStrings extends ChukoreStrings {
   @override
   String get peakAhead => "Akan ada hari dengan lebih banyak soal. Yuk kerjakan sedikit lebih awal";
   @override
+  String get talkGrew => 'Minta anak mengajari Anda apa yang membaik. "Bagaimana caramu?" adalah awal yang baik';
+  @override
+  String get talkOvercame => 'Anak berhasil melewati kesulitan. Pujilah usahanya, bukan hanya hasilnya';
+  @override
+  String get talkSteady => 'Anak belajar dengan tekun. Pujilah ketekunannya itu sendiri';
+  @override
+  String get talkStarted => 'Langkah pertama sudah diambil, dan sedikit pun cukup. Coba katakan "Kamu sudah mencoba"';
+  @override
+  String get talkRest => 'Pekan ini istirahat. Tanpa menyalahkan; katakan bahwa ia bisa mulai kapan saja';
+  @override
   String get cardAgain => 'Tidak tahu';
   @override
   String get cardHard => 'Ragu';
@@ -1939,6 +2026,16 @@ class ViStrings extends ChukoreStrings {
   String get breakRushing => 'Bạn đang trả lời quá nhanh. Hít thở và đọc kỹ từng câu nhé';
   @override
   String get peakAhead => "Sắp có một ngày nhiều bài hơn. Mình làm trước một chút nhé";
+  @override
+  String get talkGrew => 'Hãy nhờ con dạy lại phần đã tiến bộ. Hỏi "Con làm thế nào vậy?" là một khởi đầu tốt';
+  @override
+  String get talkOvercame => 'Con đã vượt qua một khó khăn. Hãy khen sự cố gắng hơn là kết quả';
+  @override
+  String get talkSteady => 'Con đang học đều đặn. Hãy khen chính sự đều đặn đó';
+  @override
+  String get talkStarted => 'Con đã bước những bước đầu, và một chút cũng đủ. Thử nói "Con đã thử rồi nhỉ"';
+  @override
+  String get talkRest => 'Tuần này con nghỉ. Đừng trách; hãy cho con biết có thể bắt đầu lại bất cứ lúc nào';
   @override
   String get cardAgain => 'Chưa biết';
   @override
@@ -2129,6 +2226,16 @@ class DeStrings extends ChukoreStrings {
   @override
   String get peakAhead => "Bald kommt ein Tag mit mehr Aufgaben. Mach schon ein bisschen vor";
   @override
+  String get talkGrew => 'Lassen Sie sich von Ihrem Kind zeigen, was besser geworden ist. „Wie hast du das gemacht?“ ist ein guter Anfang';
+  @override
+  String get talkOvercame => 'Ihr Kind hat eine Hürde überwunden. Loben Sie die Mühe mehr als das Ergebnis';
+  @override
+  String get talkSteady => 'Ihr Kind bleibt beständig dabei. Loben Sie die Beständigkeit selbst';
+  @override
+  String get talkStarted => 'Der erste Schritt ist getan, und wenig reicht schon. Sagen Sie z. B.: „Du hast es versucht“';
+  @override
+  String get talkRest => 'Das war eine Pausenwoche. Ohne Vorwurf; sagen Sie, dass es jederzeit wieder anfangen kann';
+  @override
   String get cardAgain => 'Weiß ich nicht';
   @override
   String get cardHard => 'Unsicher';
@@ -2295,6 +2402,16 @@ class TrStrings extends ChukoreStrings {
   String get breakRushing => 'Çok hızlı cevap veriyorsun. Derin nefes al ve soruları dikkatle oku';
   @override
   String get peakAhead => "Yakında soruların daha çok olduğu bir gün geliyor. Biraz önceden yapalım";
+  @override
+  String get talkGrew => 'Çocuğunuzdan neyin geliştiğini size öğretmesini isteyin. “Nasıl yaptın?” iyi bir başlangıçtır';
+  @override
+  String get talkOvercame => 'Çocuğunuz bir zorluğu aştı. Sonuçtan çok çabayı övün';
+  @override
+  String get talkSteady => 'Çocuğunuz düzenli devam ediyor. Düzenli devam etmenin kendisini övün';
+  @override
+  String get talkStarted => 'İlk adım atıldı ve azı da yeter. “Denemişsin” demeyi deneyin';
+  @override
+  String get talkRest => 'Bu hafta dinlenme haftasıydı. Suçlamadan, istediği zaman başlayabileceğini söyleyin';
   @override
   String get cardAgain => 'Bilmiyorum';
   @override
@@ -2468,6 +2585,16 @@ class ThStrings extends ChukoreStrings {
   @override
   String get peakAhead => "อีกไม่นานจะมีวันที่โจทย์เยอะขึ้น ทำล่วงหน้าไว้นิดหนึ่งนะ";
   @override
+  String get talkGrew => 'ลองให้ลูกสอนว่าอะไรดีขึ้น การถามว่า "ทำได้ยังไง" เป็นจุดเริ่มต้นที่ดี';
+  @override
+  String get talkOvercame => 'ลูกผ่านอุปสรรคมาได้แล้ว ชมความพยายามมากกว่าผลลัพธ์';
+  @override
+  String get talkSteady => 'ลูกทำต่อเนื่องสม่ำเสมอ ชมความสม่ำเสมอนั้นเอง';
+  @override
+  String get talkStarted => 'ก้าวแรกเริ่มแล้ว และแค่นิดเดียวก็พอ ลองพูดว่า "ลองทำดูแล้วนะ"';
+  @override
+  String get talkRest => 'สัปดาห์นี้พัก ไม่ต้องตำหนิ บอกลูกว่าเริ่มใหม่ได้ทุกเมื่อ';
+  @override
   String get cardAgain => 'ไม่รู้';
   @override
   String get cardHard => 'ไม่แน่ใจ';
@@ -2640,6 +2767,16 @@ class HiStrings extends ChukoreStrings {
   String get breakRushing => 'आप बहुत जल्दी जवाब दे रहे हैं। गहरी साँस लें और सवाल ध्यान से पढ़ें';
   @override
   String get peakAhead => "जल्द ही ज़्यादा सवालों वाला दिन आने वाला है। थोड़ा पहले से कर लें";
+  @override
+  String get talkGrew => 'बच्चे से पूछें कि क्या बेहतर हुआ और उसे आपको सिखाने दें। "तुमने यह कैसे किया?" एक अच्छी शुरुआत है';
+  @override
+  String get talkOvercame => 'बच्चे ने एक मुश्किल पार कर ली। नतीजे से ज़्यादा कोशिश की तारीफ़ करें';
+  @override
+  String get talkSteady => 'बच्चा लगातार जुटा हुआ है। इस निरंतरता की ही तारीफ़ करें';
+  @override
+  String get talkStarted => 'पहला कदम उठ गया है, और थोड़ा भी काफ़ी है। कहकर देखें, "तुमने कोशिश की"';
+  @override
+  String get talkRest => 'इस हफ़्ते आराम रहा। बिना दोष दिए बताएँ कि वह कभी भी फिर से शुरू कर सकता है';
   @override
   String get cardAgain => 'पता नहीं';
   @override
@@ -2834,6 +2971,16 @@ class ArStrings extends ChukoreStrings {
   String get breakRushing => 'تجيب بسرعة كبيرة. تنفّس بعمق واقرأ كل سؤال بعناية';
   @override
   String get peakAhead => "يقترب يوم فيه أسئلة أكثر. لنتقدّم قليلًا من الآن";
+  @override
+  String get talkGrew => 'اطلب من طفلك أن يعلّمك ما الذي تحسّن. سؤال «كيف فعلت ذلك؟» بداية جيدة';
+  @override
+  String get talkOvercame => 'تجاوز طفلك عقبة. امدح الجهد أكثر من النتيجة';
+  @override
+  String get talkSteady => 'طفلك مستمر بانتظام. امدح هذا الاستمرار نفسه';
+  @override
+  String get talkStarted => 'تمّت الخطوة الأولى، والقليل يكفي. جرّب أن تقول «لقد حاولت»';
+  @override
+  String get talkRest => 'كان هذا أسبوع راحة. دون لوم؛ أخبره أنه يستطيع البدء في أي وقت';
   @override
   String get cardAgain => 'لا أعرف';
   @override
@@ -3032,6 +3179,16 @@ class RuStrings extends ChukoreStrings {
   @override
   String get peakAhead => "Скоро день с большим количеством заданий. Давай чуть-чуть сделаем заранее";
   @override
+  String get talkGrew => 'Попросите ребёнка рассказать, что стало лучше. «Как у тебя получилось?» — хорошее начало';
+  @override
+  String get talkOvercame => 'Ребёнок преодолел трудность. Хвалите усилия, а не только результат';
+  @override
+  String get talkSteady => 'Ребёнок занимается регулярно. Хвалите саму регулярность';
+  @override
+  String get talkStarted => 'Первый шаг сделан, и немного — это достаточно. Скажите: «Ты попробовал»';
+  @override
+  String get talkRest => 'Эта неделя была отдыхом. Без упрёков; скажите, что начать можно в любой момент';
+  @override
   String get cardAgain => 'Не знаю';
   @override
   String get cardHard => 'Сомневаюсь';
@@ -3229,6 +3386,16 @@ class ItStrings extends ChukoreStrings {
   @override
   String get peakAhead => "Si avvicina un giorno con più domande. Portiamoci un po’ avanti";
   @override
+  String get talkGrew => 'Chieda a suo figlio di spiegarle cosa è migliorato. «Come hai fatto?» è un buon inizio';
+  @override
+  String get talkOvercame => 'Suo figlio ha superato una difficoltà. Lodi l’impegno più del risultato';
+  @override
+  String get talkSteady => 'Suo figlio procede con costanza. Lodi la costanza in sé';
+  @override
+  String get talkStarted => 'Il primo passo è fatto, e basta anche poco. Provi a dire «Ci hai provato»';
+  @override
+  String get talkRest => 'Questa è stata una settimana di pausa. Senza rimproveri; gli dica che può ricominciare quando vuole';
+  @override
   String get cardAgain => 'Non so';
   @override
   String get cardHard => 'Incerto';
@@ -3415,6 +3582,16 @@ class NlStrings extends ChukoreStrings {
   String get breakRushing => 'Je antwoordt heel snel. Adem diep in en lees elke vraag goed';
   @override
   String get peakAhead => "Er komt een dag met meer vragen aan. Laten we alvast een beetje voorwerk doen";
+  @override
+  String get talkGrew => 'Vraag je kind uit te leggen wat beter ging. „Hoe heb je dat gedaan?” is een mooi begin';
+  @override
+  String get talkOvercame => 'Je kind heeft een struikelblok overwonnen. Prijs de inzet meer dan het resultaat';
+  @override
+  String get talkSteady => 'Je kind blijft er trouw mee bezig. Prijs die volharding zelf';
+  @override
+  String get talkStarted => 'De eerste stap is gezet, en een beetje is genoeg. Zeg bijvoorbeeld: „Je hebt het geprobeerd”';
+  @override
+  String get talkRest => 'Dit was een rustweek. Zonder verwijt; laat weten dat je op elk moment kunt beginnen';
   @override
   String get cardAgain => 'Weet ik niet';
   @override
@@ -3612,6 +3789,16 @@ class PlStrings extends ChukoreStrings {
   String get breakRushing => 'Odpowiadasz bardzo szybko. Weź oddech i uważnie czytaj pytania';
   @override
   String get peakAhead => "Zbliża się dzień z większą liczbą zadań. Zrób trochę wcześniej";
+  @override
+  String get talkGrew => 'Poproś dziecko, by opowiedziało, co poszło lepiej. „Jak ci się to udało?” to dobry początek';
+  @override
+  String get talkOvercame => 'Dziecko pokonało trudność. Pochwal wysiłek, a nie tylko wynik';
+  @override
+  String get talkSteady => 'Dziecko uczy się systematycznie. Pochwal samą systematyczność';
+  @override
+  String get talkStarted => 'Pierwszy krok został zrobiony, a niewiele wystarczy. Powiedz: „Spróbowałeś”';
+  @override
+  String get talkRest => 'To był tydzień przerwy. Bez wyrzutów; powiedz, że można zacząć w każdej chwili';
   @override
   String get cardAgain => 'Nie wiem';
   @override
