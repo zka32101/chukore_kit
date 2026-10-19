@@ -43,6 +43,7 @@ export 'src/nudge/nudge.dart';
 export 'src/session/break_suggestion.dart';
 export 'src/nudge/nudge_hour.dart';
 export 'src/practice/question_picker.dart';
+export 'src/practice/eve_guard.dart';
 export 'src/prereq/prerequisites.dart';
 export 'src/sheet/last_minute_sheet.dart';
 export 'src/dayof/day_of.dart';
