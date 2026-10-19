@@ -229,3 +229,34 @@ int _tie(int seed, String id) {
   x = ((x ^ (x >> 12)) * 0x297A2D39) & 0x7FFFFFFF;
   return x ^ (x >> 15);
 }
+
+/// 出題の並びを「混ぜ練習」にする。同じ単元の問題が続かないよう、単元を順に回して並べ直す。
+/// 同じ型の問題が続くと、考えずに答えを覚えて通れてしまうため（単元をまたいで混ぜると定着しやすい）。
+///
+/// - 先頭の復習枠（`review`）はそのまま先頭に置く（短い想起から始めるため）
+/// - 残りは、単元の最初に出てくる順で 1 問ずつ回す。**単元の中の順は変えない**（やさしい順を保つ）
+/// - 1 つの単元だけが残ったときは、続けて出す（同じ単元が続くのは避けられないときだけ）
+/// - 問題の集まり・枠・[PracticeSet.shortfall] は変えない。同じ入力なら同じ結果
+PracticeSet interleaveByUnit(PracticeSet set) {
+  final head = <PickedQuestion>[];
+  var i = 0;
+  while (i < set.items.length && set.items[i].slot == PracticeSlot.review) {
+    head.add(set.items[i++]);
+  }
+  final byUnit = <String, List<PickedQuestion>>{};
+  for (final item in set.items.skip(i)) {
+    byUnit.putIfAbsent(item.question.unitId, () => []).add(item);
+  }
+  final queues = byUnit.values.map((l) => l.iterator).toList();
+  final mixed = <PickedQuestion>[];
+  var active = [...queues]..removeWhere((q) => !q.moveNext());
+  while (active.isNotEmpty) {
+    final next = <Iterator<PickedQuestion>>[];
+    for (final q in active) {
+      mixed.add(q.current);
+      if (q.moveNext()) next.add(q);
+    }
+    active = next;
+  }
+  return PracticeSet(items: [...head, ...mixed], shortfall: set.shortfall);
+}
