@@ -41,6 +41,13 @@ class GuardedPractice {
       };
 }
 
+/// テストまでの日数 [daysLeft] から、前日・当日の区分を返す（それ以外は [EveNotice.none]）。
+EveNotice eveNoticeOf(int daysLeft) => switch (daysLeft) {
+      1 => EveNotice.eve,
+      0 => EveNotice.testDay,
+      _ => EveNotice.none,
+    };
+
 /// 前日・当日は、**新しいことを増やさず**、解いたことのある問題の見直しだけにする。不安からの詰め込みを抑える。
 ///
 /// - テストまで 1 日（前日）と 0 日（当日）に限り効く。それ以外は [set] をそのまま返す
@@ -56,11 +63,7 @@ GuardedPractice guardLastDays(
   required Iterable<Attempt> attempts,
   EveGuardConfig config = const EveGuardConfig(),
 }) {
-  final notice = switch (plan.daysLeft) {
-    1 => EveNotice.eve,
-    0 => EveNotice.testDay,
-    _ => EveNotice.none,
-  };
+  final notice = eveNoticeOf(plan.daysLeft);
   if (notice == EveNotice.none) return GuardedPractice(set: set, notice: notice, removedNew: 0, trimmed: 0);
 
   final seen = {for (final a in attempts) a.questionId};
