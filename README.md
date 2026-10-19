@@ -6,6 +6,8 @@
 
 詳細（使い方・判定の基準・注意点）は [`docs/features.md`](docs/features.md)。
 
+変更履歴は [`CHANGELOG.md`](CHANGELOG.md)、リリース手順（タグでの固定・戻し方）は [`docs/release.md`](docs/release.md)。
+
 | 分野 | 主な API |
 | --- | --- |
 | 土台 | モデル・単元ツリー・テスト日逆算 `buildPlan`・習熟度・到達レベル・アプリ内偏差値（段階1・2）・回答履歴ストア（メモリ／SQLite）・問題集の検証 `validateQuestionBank` |
