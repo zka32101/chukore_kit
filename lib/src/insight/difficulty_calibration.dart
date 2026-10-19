@@ -102,7 +102,7 @@ CalibrationReport calibrateDifficulty(
     measured++;
     final q = byId[id]!;
     final p = (right[id] ?? 0) / n;
-    final (low, high) = _wilson(p, n, z);
+    final (low, high) = wilsonInterval(p, n, z);
     (byUnit[q.unitId] ??= []).add(p - q.difficulty);
     final outside = q.difficulty < low || q.difficulty > high;
     if (outside && (p - q.difficulty).abs() >= minGap) {
@@ -131,8 +131,8 @@ CalibrationReport calibrateDifficulty(
   return CalibrationReport(drifts: drifts, units: units, measured: measured);
 }
 
-/// Wilson の信頼区間（成功率 [p]、試行 [n]、[z] は 95% で 1.96）。
-(double, double) _wilson(double p, int n, double z) {
+/// Wilson の信頼区間（成功率 [p]、試行 [n]、[z] は 95% で 1.96）。復習間隔の調整（`tuneReviewIntervals`）でも使う。
+(double, double) wilsonInterval(double p, int n, double z) {
   final z2 = z * z;
   final denom = 1 + z2 / n;
   final center = (p + z2 / (2 * n)) / denom;
