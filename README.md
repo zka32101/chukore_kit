@@ -6,6 +6,8 @@
 
 詳細（使い方・判定の基準・注意点）は [`docs/features.md`](docs/features.md)。
 
+動かして試す: `dart run example/day_flow.dart`（1 日の流れを、基盤の部品だけで通しで動かす例。計画 → 「今日」→ 出題 → 回答 → 復習 → 週のふりかえり → 保護者への声かけ → バックアップ → 全削除。アプリ側の結線の手本で、テスト `test/example_day_flow_test.dart` が壊れを見張る）。
+
 変更履歴は [`CHANGELOG.md`](CHANGELOG.md)、リリース手順（タグでの固定・戻し方）は [`docs/release.md`](docs/release.md)。
 
 | 分野 | 主な API |
