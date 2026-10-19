@@ -37,6 +37,7 @@
 | 問題の質 | 実測の正答率と基準値のずれの検出 `calibrateDifficulty`（偶然とは言えないずれだけ。提案値を反映する `recalibrate`） |
 | 問題の質 | 誤答の選択肢の分析 `analyzeDistractors`（型の無い人気の誤答＝新しい誤解の型の候補／選ばれない誤答／正解より人気の誤答） |
 | 問題の質 | 誤解の型の下書き `suggestTagDrafts`／採用した型の反映 `applyTagDrafts`（version を上げる）。回答の匿名集計の設計案は [`docs/anonymous_data_collection.md`](docs/anonymous_data_collection.md) |
+| 問題の質 | 品質レポート `buildQualityReport`／`dart run tool/quality_report.dart`（匿名で集めた回答の束から、難易度のずれ・誤答の選択肢・型の候補・復習間隔の提案を Markdown 1枚に） |
 | 模試のあと | 模試の結果から「次の一手」 `planNextSteps`（落とした単元 → 前提をさかのぼった出発点 → その単元の順と、解き直しセット）。他アプリへの誘導も引き継ぐ |
 | 計画 | 山場の予告 `findPeakAhead`（数日先に問題の多い日があるとき、責めない一文 `peakAhead`（18言語）で知らせる材料） |
 | アクセシビリティ | 色のコントラスト比の検証 `contrastRatio`・`meetsTextContrast`・`meetsGraphicContrast`（WCAG AA）、長い文章を読みやすい長さに分ける `splitForReading` |

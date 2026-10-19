@@ -25,6 +25,7 @@ export 'src/insight/tag_drafts.dart';
 export 'src/insight/review_tuning.dart';
 export 'src/insight/root_causes.dart';
 export 'src/insight/capacity.dart';
+export 'src/insight/quality_report.dart';
 export 'src/planner/peak_preview.dart';
 export 'src/a11y/contrast.dart';
 export 'src/a11y/color_vision.dart';
