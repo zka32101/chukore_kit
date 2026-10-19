@@ -6,6 +6,7 @@
 
 - 「今日」の画面の窓口 `buildTodayCard`、前日/当日の区分 `eveNoticeOf` を公開
 - 問題集の品質レポート `buildQualityReport` と `tool/quality_report.dart`
+- 1 日の流れの例 `example/day_flow.dart`（結線の手本。テストで見張る）
 
 ## [0.2.0] - 2026-10-19
 
