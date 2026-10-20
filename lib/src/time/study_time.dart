@@ -1,5 +1,6 @@
 import '../models/models.dart';
 import '../planner/planner.dart';
+import '../util/median.dart';
 
 /// 1問あたりにかかる時間の見積もり（本人の履歴から）。
 class PaceModel {
@@ -15,12 +16,6 @@ class PaceModel {
   final bool measured;
 
   double secondsFor(String unitId) => secondsByUnit[unitId] ?? overallSeconds;
-}
-
-double _median(List<int> xs) {
-  final s = [...xs]..sort();
-  final m = s.length ~/ 2;
-  return s.length.isOdd ? s[m].toDouble() : (s[m - 1] + s[m]) / 2;
 }
 
 /// 回答履歴から 1問あたりの時間を求める。所要時間 0（未計測）と [maxSeconds] 超（席を離れた等）は除く。
@@ -44,9 +39,9 @@ PaceModel buildPace(
     {
       if (measured)
         for (final e in byUnit.entries)
-          if (e.value.length >= minSamples) e.key: _median(e.value) / 1000,
+          if (e.value.length >= minSamples) e.key: median(e.value) / 1000,
     },
-    measured ? _median(all) / 1000 : defaultSeconds,
+    measured ? median(all) / 1000 : defaultSeconds,
     measured: measured,
   );
 }

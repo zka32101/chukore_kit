@@ -1,5 +1,6 @@
 import '../models/models.dart';
 import 'mock_exam.dart';
+import '../util/median.dart';
 
 /// 時間配分の全体の傾向。優先は ranOutOfTime > spareTime > slowOnFew > balanced。
 enum TimingPattern {
@@ -116,9 +117,7 @@ MockTiming analyzeMockTiming(MockExam exam, MockExamResult result, {MockTimingCo
   if (limitMs != null && exam.questions.isNotEmpty) {
     fair = (limitMs / exam.questions.length).round();
   } else {
-    final ms = [for (final a in timed) a.elapsedMs]..sort();
-    final mid = ms.length ~/ 2;
-    fair = ms.length.isOdd ? ms[mid] : ((ms[mid - 1] + ms[mid]) / 2).round();
+    fair = median([for (final a in timed) a.elapsedMs]).round();
   }
 
   final slow = [
