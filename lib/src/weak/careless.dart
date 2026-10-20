@@ -1,4 +1,5 @@
 import '../models/models.dart';
+import '../util/median.dart';
 
 /// ケアレスミスと見なした理由。
 enum CarelessReason {
@@ -25,13 +26,6 @@ class MistakeVerdict {
   final Set<CarelessReason> reasons;
 
   bool get careless => reasons.isNotEmpty;
-}
-
-double? _median(List<int> xs) {
-  if (xs.isEmpty) return null;
-  final s = [...xs]..sort();
-  final m = s.length ~/ 2;
-  return s.length.isOdd ? s[m].toDouble() : (s[m - 1] + s[m]) / 2;
 }
 
 /// 誤答を「ケアレスミスの疑い」と「理解不足の疑い」に分ける。あくまで目安（確定ではない）。
@@ -62,8 +56,8 @@ List<MistakeVerdict> classifyMistakes(
   }
   double? baseline(String unitId) {
     final u = byUnit[unitId] ?? const <int>[];
-    if (u.length >= minSamples) return _median(u);
-    return all.length >= minSamples ? _median(all) : null;
+    if (u.length >= minSamples) return u.isEmpty ? null : median(u);
+    return all.length >= minSamples && all.isNotEmpty ? median(all) : null;
   }
 
   // 同じ問題の「次の回答」を引けるようにする

@@ -1,5 +1,6 @@
 import '../l10n/strings.dart';
 import '../models/models.dart';
+import '../util/median.dart';
 
 /// 休憩を勧める理由。優先は [rushing] > [mistakeStreak] > [slowingDown] > [longSession]。
 enum BreakReason {
@@ -128,17 +129,11 @@ BreakSuggestion? suggestBreak(
   // 途中から遅くなった（所要時間が計れている回答だけ）
   final timed = [for (final a in session) if (a.elapsedMs > 0 && a.elapsedMs <= 5 * 60 * 1000) a.elapsedMs];
   if (timed.length >= config.minAnswersForSlow) {
-    final first = _median(timed.sublist(0, 5)), last = _median(timed.sublist(timed.length - 5));
+    final first = median(timed.sublist(0, 5)), last = median(timed.sublist(timed.length - 5));
     if (first > 0 && last >= first * config.slowRatio) return make(BreakReason.slowingDown);
   }
 
   // 長く続けている
   if (minutes >= config.maxSessionMinutes) return make(BreakReason.longSession);
   return null;
-}
-
-double _median(List<int> xs) {
-  final s = [...xs]..sort();
-  final m = s.length ~/ 2;
-  return s.length.isOdd ? s[m].toDouble() : (s[m - 1] + s[m]) / 2;
 }

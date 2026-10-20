@@ -1,5 +1,6 @@
 import '../models/models.dart';
 import '../planner/planner.dart';
+import '../util/median.dart';
 
 enum CapacityAction {
   /// 学習した日が少なく、判断しない。
@@ -79,9 +80,7 @@ CapacitySuggestion suggestCapacity(
     return CapacitySuggestion(
         action: CapacityAction.insufficient, current: current, suggested: current, typical: 0, activeDays: perDay.length);
   }
-  final counts = perDay.values.toList()..sort();
-  final mid = counts.length ~/ 2;
-  final typical = counts.length.isOdd ? counts[mid] : ((counts[mid - 1] + counts[mid]) / 2).round();
+  final typical = median(perDay.values).round();
 
   final diff = typical - current;
   final dead = (current * 0.1).round().clamp(1, 1 << 30);

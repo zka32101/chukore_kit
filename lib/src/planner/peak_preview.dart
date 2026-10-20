@@ -1,4 +1,5 @@
 import 'planner.dart';
+import '../util/median.dart';
 
 /// これから来る「山場」（ほかの日より問題数が多い日）の予告。
 class PeakPreview {
@@ -30,9 +31,7 @@ PeakPreview? findPeakAhead(
   final base = DateTime(today.year, today.month, today.day);
   final totals = [for (final d in days) if (d.total > 0 && !d.lastMinute) d.total]..sort();
   if (totals.isEmpty) return null;
-  final typical = totals.length.isOdd
-      ? totals[totals.length ~/ 2]
-      : ((totals[totals.length ~/ 2 - 1] + totals[totals.length ~/ 2]) / 2).round();
+  final typical = median(totals).round();
   for (final d in days) {
     final ahead = DateTime(d.date.year, d.date.month, d.date.day).difference(base).inDays;
     if (ahead < 1 || ahead > lookahead || d.lastMinute) continue;
