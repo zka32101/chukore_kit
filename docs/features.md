@@ -11,6 +11,7 @@ README の実装済み一覧の詳細。各項目の先頭は公開 API の名�
 - SQLite 保存: `package:chukore_kit/chukore_kit_sqlite.dart`（sqlite3。コード生成なし）。
 - アプリ内偏差値 段階2の計算部（exam_stats 互換の3値集計。送受信はアプリがコールバックで注入）。
 - 問題集・単元ツリーの JSON 形式と検証（`parseQuestionBank`・`validateQuestionBank`・`validateUnitList`、`dart run tool/validate_bank.dart`）。形式は `docs/question_bank_format.md`。
+- ネイティブ確認の依頼の道具（`reviewPacketCsv`・`numberWordsTsv`・`reviewBoundaryNumbers`・`stringsKeyGroup`・`tool/export_review_packets.dart`）。言語ごとに、確認シート CSV（key・まとまり・日本語・English・この言語・長さ〔日本語に対する文字数の比〕・残すもの〔プレースホルダ〕・直した文言・理由）と、数の読み上げの境目の数 TSV を書き出す。`dart run tool/export_review_packets.dart [出力先] [言語タグ ...]`（既定 `build/native_review`、git の管理外）。依頼書は `docs/native_review_checklist.md`。
 
 ## 復習・弱点
 

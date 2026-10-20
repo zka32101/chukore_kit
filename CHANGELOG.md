@@ -55,6 +55,7 @@
 
 ### 例・整理
 - 1 日の流れの例 `example/day_flow.dart`（結線の手本。テストで見張る）(#91)
+- ネイティブ確認の依頼の道具: 言語ごとの確認シート `reviewPacketCsv`・数の読み上げ `numberWordsTsv` と、書き出すコマンド `tool/export_review_packets.dart`（#95）
 - 内部の整理: 中央値の計算 6 か所を 1 つ（`lib/src/util/median.dart`、非公開）にまとめた（挙動は変わらない）。直接のテストが無かった `allocateByWeight`・`wilsonInterval`・`eveNoticeOf`・`overcomeStampCount` にテストを追加 (#92)
 - ドキュメント: `docs/features.md` を分野ごとの節に整理し、目次を付けた (#93)
 
