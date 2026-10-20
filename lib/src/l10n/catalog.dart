@@ -113,3 +113,52 @@ String stringsCatalogCsv([List<ChukoreStrings> languages = ChukoreStrings.suppor
   }
   return b.toString();
 }
+
+/// キー `checklistDefault(id)` や `nudgeReview` から、文言のまとまり（接頭辞。最初の小文字の連なり）を取り出す。
+String stringsKeyGroup(String key) {
+  for (final p in _twoWordGroups) {
+    if (key.startsWith(p)) return p;
+  }
+  return RegExp(r'^[a-z]+').firstMatch(key)?.group(0) ?? key;
+}
+
+/// 単語 2 つでひとまとまりの接頭辞（`myWeekGrew` を `my` ではなく `myWeek` にまとめる）。
+const _twoWordGroups = ['myWeek', 'scopeQr', 'fiveMinute', 'testDay'];
+
+final _placeholder = RegExp(r'\{[A-Za-z]+\}');
+
+/// ネイティブの人に渡す、1 言語ぶんの確認シート（CSV）。列は
+/// `key, まとまり, 日本語, English, <この言語>, 長さ, 残すもの, 直した文言, 理由`。
+/// - 「長さ」= この言語の文字数 ÷ 日本語の文字数（ボタンに入るか・折り返すかの目安。日本語は漢字で短いので 3 倍くらいまでは普通）
+/// - 「残すもの」= 訳の中に残すプレースホルダ（`{subject}` など）
+/// - 最後の 2 列は、直したい文言と理由を書いてもらう欄（空）
+String reviewPacketCsv(ChukoreStrings language) {
+  String q(String v) => '"${v.replaceAll('"', '""')}"';
+  final ja = stringsCatalog(ChukoreStrings.forLocale('ja'));
+  final en = stringsCatalog(ChukoreStrings.forLocale('en'));
+  final mine = stringsCatalog(language);
+  final b = StringBuffer()
+    ..writeln(['key', 'まとまり', '日本語', 'English', language.tag, '長さ', '残すもの', '直した文言', '理由'].map(q).join(','));
+  for (final key in mine.keys) {
+    final text = mine[key] ?? '';
+    final base = ja[key] ?? '';
+    final ratio = base.isEmpty ? '' : (text.runes.length / base.runes.length).toStringAsFixed(1);
+    final keep = _placeholder.allMatches(base).map((m) => m.group(0)).toSet().join(' ');
+    b.writeln([key, stringsKeyGroup(key), base, en[key] ?? '', text, ratio, keep, '', ''].map(q).join(','));
+  }
+  return b.toString();
+}
+
+/// 保護者ゲートの数の読み上げのうち、境目になる数（確認はこれを中心に）。
+const reviewBoundaryNumbers = [
+  1, 2, 9, 10, 11, 12, 13, 19, 20, 21, 22, 30, 40, 99, 100, 101, 110, 111, 200, 999, 1000, 1001, 1100, 1999, 2000, 2021, 9999 //
+];
+
+/// 数の読み上げの確認用 TSV（`数<タブ>読み`）。[numbers] 省略時は境目の数 [reviewBoundaryNumbers]。
+String numberWordsTsv(ChukoreStrings language, [Iterable<int>? numbers]) {
+  final b = StringBuffer();
+  for (final n in numbers ?? reviewBoundaryNumbers) {
+    b.writeln('$n\t${language.gateNumberWords(n)}');
+  }
+  return b.toString();
+}
