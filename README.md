@@ -8,6 +8,8 @@
 
 動かして試す: `dart run example/day_flow.dart`（1 日の流れを、基盤の部品だけで通しで動かす例。計画 → 「今日」→ 出題 → 回答 → 復習 → 週のふりかえり → 保護者への声かけ → バックアップ → 全削除。アプリ側の結線の手本で、テスト `test/example_day_flow_test.dart` が壊れを見張る）。
 
+速度の確認: `dart run tool/bench.dart [件数]`（回答 10 万件での各関数の時間。既定の目安は 1 秒未満。`test/scale_test.dart` が 2 乗の遅さの再発を見張る）。
+
 変更履歴は [`CHANGELOG.md`](CHANGELOG.md)、リリース手順（タグでの固定・戻し方）は [`docs/release.md`](docs/release.md)。
 
 | 分野 | 主な API |

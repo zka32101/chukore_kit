@@ -75,17 +75,31 @@ List<RetrySet> buildRetrySets({
     includeOvercome: includeOvercome,
   );
 
+  // 間違えた回答を 1 回だけ走査して、項目ごとの「間違えた問題と最後に間違えた日時」を作る
+  // （項目ごとに全履歴を走査すると、履歴の件数 × 項目数に比例して遅くなる。10 万件で数秒）
+  final missedByTag = <String, Map<String, DateTime>>{}; // 誤解の型 → 問題ID → 最後に間違えた日時
+  final missedUntagged = <String, DateTime>{}; // 型の付かない誤答 → 問題ID → 最後に間違えた日時
+  for (final a in all) {
+    if (a.correct) continue;
+    final q = byId[a.questionId];
+    if (q == null) continue;
+    final tag = a.chosenId == null ? null : q.misconceptionTags[a.chosenId];
+    if (tag == null) {
+      missedUntagged[q.id] = a.answeredAt;
+    } else {
+      (missedByTag[tag] ??= {})[q.id] = a.answeredAt;
+    }
+  }
+
   final out = <RetrySet>[];
   for (final e in entries) {
     // この項目で間違えた問題と、最後に間違えた日時
-    final missed = <String, DateTime>{};
-    for (final a in all) {
-      if (a.correct) continue;
-      final q = byId[a.questionId];
-      if (q == null) continue;
-      final tag = a.chosenId == null ? null : q.misconceptionTags[a.chosenId];
-      final hit = e.questionId != null ? q.id == e.questionId && tag == null : tag == e.tag;
-      if (hit) missed[q.id] = a.answeredAt;
+    final Map<String, DateTime> missed;
+    if (e.questionId != null) {
+      final qid = e.questionId!;
+      missed = missedUntagged.containsKey(qid) ? {qid: missedUntagged[qid]!} : const {};
+    } else {
+      missed = missedByTag[e.tag] ?? const {};
     }
 
     int group(Question q) => !lastAnswered.containsKey(q.id) ? 0 : (missed.containsKey(q.id) ? 1 : 2);
