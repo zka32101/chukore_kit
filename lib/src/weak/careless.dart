@@ -54,11 +54,14 @@ List<MistakeVerdict> classifyMistakes(
       all.add(a.elapsedMs);
     }
   }
-  double? baseline(String unitId) {
-    final u = byUnit[unitId] ?? const <int>[];
-    if (u.length >= minSamples) return u.isEmpty ? null : median(u);
-    return all.length >= minSamples && all.isNotEmpty ? median(all) : null;
-  }
+  // 単元ごとの中央値は、誤答のたびに求めると履歴の件数の 2 乗に比例して遅くなる（10 万件で十数秒）ので、1 度だけ求める
+  final overall = all.length >= minSamples && all.isNotEmpty ? median(all) : null;
+  final baselines = <String, double?>{};
+  double? baseline(String unitId) => baselines.putIfAbsent(unitId, () {
+        final u = byUnit[unitId] ?? const <int>[];
+        if (u.length >= minSamples) return u.isEmpty ? null : median(u);
+        return overall;
+      });
 
   // 同じ問題の「次の回答」を引けるようにする
   final nextOfQuestion = <Attempt, Attempt>{};
