@@ -1,0 +1,1 @@
+{"format":"chukore_kit.backup","version":1,"exportedAt":"2026-09-02T00:00:00.000Z","count":2,"checksum":"7b8bb8c1","attempts":[{"q":"q1","u":"u1","ok":true,"t":"2026-09-01T03:00:00.000Z","ms":1500,"m":"practice"},{"q":"q2","u":"u1","ok":false,"c":"b","t":"2026-09-01T03:01:00.000Z","ms":2500,"m":"mock"}]}
