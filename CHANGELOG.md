@@ -4,6 +4,7 @@
 
 ## [未リリース]
 
+- 克服の戻りの分析 `analyzeRelapses`（再発した割合・日数。克服の基準を見直す根拠）
 - 速度の修正: 回答が 10 万件の履歴で、`classifyMistakes`（約 13 秒 → 0.2 秒）と `buildRetrySets`（約 16 秒 → 0.4 秒）が履歴の件数の 2 乗に比例して遅くなっていたのを直した（結果は同じ）。長く使った子の端末で固まる恐れがあった。`tool/bench.dart` で全関数の時間を測れ、`test/scale_test.dart` が 2 乗の遅さの再発を見張る
 - 次にやる単元の提案 `suggestNextUnits`
 - 互換性の固定: 旧版の SQLite（版 1〜3）の移行と、バックアップ形式 v1 の固定ファイル（`test/fixtures/`）をテストで守る

@@ -14,6 +14,7 @@ export 'src/assess/assess.dart';
 export 'src/assess/deviation_policy.dart';
 export 'src/assess/exam_stats.dart';
 export 'src/weak/weak_notes.dart';
+export 'src/weak/relapse.dart';
 export 'src/weak/retry_set.dart';
 export 'src/weak/mistake_reasons.dart';
 export 'src/weak/careless.dart';
