@@ -4,6 +4,7 @@
 
 ## [未リリース]
 
+- 地域プロファイル `RegionProfile` / `RegionProfileTable`（年齢の線に加え、保護者同意・1日の利用時間上限・広告/トラッキング・課金手段・保持日数・必須の通知を地域ごとの JSON で渡す。書き間違いは `FormatException`、既定は最も厳しい側。数値は法務確認後に入れる）。サンプルは `docs/region_profiles/example.json`
 - 克服の戻りの分析 `analyzeRelapses`（再発した割合・日数。克服の基準を見直す根拠）
 - 速度の修正: 回答が 10 万件の履歴で、`classifyMistakes`（約 13 秒 → 0.2 秒）と `buildRetrySets`（約 16 秒 → 0.4 秒）が履歴の件数の 2 乗に比例して遅くなっていたのを直した（結果は同じ）。長く使った子の端末で固まる恐れがあった。`tool/bench.dart` で全関数の時間を測れ、`test/scale_test.dart` が 2 乗の遅さの再発を見張る
 - 次にやる単元の提案 `suggestNextUnits`
