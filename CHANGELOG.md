@@ -4,6 +4,9 @@
 
 ## [未リリース]
 
+- `StudyDay.shift`/`shiftAttempts`: 回答の時刻と「今」を境界の分だけ戻して渡すと、既存の全関数（連続日数・週の集計・復習など）が学習日で数える（API は変えていない）
+- L10n 品質ゲート: `lib/src/ui` に日本語の直書きがないことを見張るテスト、年輪の図・年表の並べ替えの全言語 200% 文字拡大テスト
+- 国別カリキュラムパック `CurriculumPack`（単元の木に、その国の学習基準の項目コードを対応づける。学年の範囲・コードの形・網羅すべき項目を検査する `validate`）。サンプル `docs/curriculum_packs/example_BR.json` は形の例で内容は仮（BNCC の実データは現地の確認後）
 - 差し替え用の入口 `Clock`/`ConsentStore`（既定は同意なし）/`NotificationScheduler`/`EntitlementReader` と、学習日の境界 `StudyDay`（深夜の学習を前日に数える設定。既存の関数への組み込みはこれから）
 - 地域プロファイル `RegionProfile` / `RegionProfileTable`（年齢の線に加え、保護者同意・1日の利用時間上限・広告/トラッキング・課金手段・保持日数・必須の通知を地域ごとの JSON で渡す。書き間違いは `FormatException`、既定は最も厳しい側。数値は法務確認後に入れる）。サンプルは `docs/region_profiles/example.json`
 - 克服の戻りの分析 `analyzeRelapses`（再発した割合・日数。克服の基準を見直す根拠）

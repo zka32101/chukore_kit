@@ -1,6 +1,8 @@
 /// アプリ側が実装して差し替える入口（基盤は実装を持たず、契約だけを決める）。
 library;
 
+import '../models/models.dart';
+
 /// 現在時刻。テストや日付をまたぐ検証で差し替える。
 abstract class Clock {
   DateTime now();
@@ -81,7 +83,30 @@ class StudyDay {
 
   /// [t] が属する学習日（時刻は 0 時）。
   DateTime of(DateTime t) {
-    final shifted = t.subtract(Duration(hours: startHour));
+    final shifted = shift(t);
     return DateTime(shifted.year, shifted.month, shifted.day);
   }
+
+  /// 時刻を境界の分だけ戻す。基盤の日付ごとの計算（連続日数・週の集計・復習など）は暦の日付で数えるので、
+  /// 回答の時刻と「今」の**両方**をこれで変換して渡すと、学習日で数えた結果になる。
+  DateTime shift(DateTime t) => startHour == 0 ? t : t.subtract(Duration(hours: startHour));
+
+  /// 回答の時刻を [shift] したものに置き換えた一覧（元は変えない）。
+  List<Attempt> shiftAttempts(Iterable<Attempt> attempts) => [
+    for (final a in attempts)
+      startHour == 0
+          ? a
+          : Attempt(
+              questionId: a.questionId,
+              unitId: a.unitId,
+              correct: a.correct,
+              answeredAt: shift(a.answeredAt),
+              chosenId: a.chosenId,
+              elapsedMs: a.elapsedMs,
+              mode: a.mode,
+              confident: a.confident,
+              reason: a.reason,
+              hintsUsed: a.hintsUsed,
+            ),
+  ];
 }

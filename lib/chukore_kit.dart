@@ -6,6 +6,7 @@ export 'src/l10n/digits.dart';
 export 'src/l10n/strings.dart';
 export 'src/models/models.dart';
 export 'src/scope/unit_tree.dart';
+export 'src/scope/curriculum_pack.dart';
 export 'src/planner/planner.dart';
 export 'src/planner/multi_planner.dart';
 export 'src/assess/mastery.dart';
