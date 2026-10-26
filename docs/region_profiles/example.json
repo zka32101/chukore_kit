@@ -1,0 +1,14 @@
+{
+  "default": {},
+  "regions": {
+    "BR": {
+      "age": {"childUnder": 18},
+      "guardianConsentRequired": true,
+      "dailyLimitMinutes": 120,
+      "purchaseMethods": ["pix_one_time"],
+      "retentionDays": 365,
+      "requiredNotices": ["privacy_br", "guardian_consent"]
+    },
+    "JP": {"age": {"childUnder": 13}}
+  }
+}
