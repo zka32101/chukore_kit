@@ -1,6 +1,6 @@
 # chukore_kit
 
-ちゅうコレ！専用の共通部品（非公開）。仕様: `chukore_kit_仕様_v0_2.md`。
+ちゅうコレ！（中学）専用の共通部品（非公開。小学コレ！とは共通にしない。方針は [`docs/design_principles.md`](docs/design_principles.md)）。仕様: `chukore_kit_仕様_v0_2.md`。
 
 ## 実装済みの機能
 
