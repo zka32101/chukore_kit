@@ -9,12 +9,38 @@ class MockScore {
   final double score;
 }
 
-/// 実際の定期テストの点数（本人が入力する）。
+/// 本番のテストの種類。種類をまたいで点を比べない（難しさが違う）。
+enum RealTestKind {
+  /// 学校の定期テスト。
+  regular,
+
+  /// 模試。
+  mock,
+
+  /// その他。
+  other,
+}
+
+/// 実際のテストの点数（本人が入力する）。
+///
+/// [score] は [maxScore] 満点での点（既定は 100 点満点）。満点が違うテスト（0〜10 点制、500 点満点など）は、
+/// [ratio]（点 ÷ 満点）や [normalizedScore]（100 点満点換算）で比べる。
 class RealTestRecord {
-  const RealTestRecord(this.date, this.score);
+  const RealTestRecord(this.date, this.score, {this.maxScore = 100, this.kind = RealTestKind.regular});
 
   final DateTime date;
   final double score;
+  final double maxScore;
+  final RealTestKind kind;
+
+  /// 点が正しい範囲か（満点が正で、点が 0 以上満点以下）。
+  bool get isValid => maxScore > 0 && score >= 0 && score <= maxScore;
+
+  /// 点 ÷ 満点（0〜1）。範囲外の入力でも 0〜1 に収める。
+  double get ratio => maxScore > 0 ? (score / maxScore).clamp(0.0, 1.0) : 0.0;
+
+  /// 100 点満点換算。
+  double get normalizedScore => ratio * 100;
 }
 
 /// 1回分の比較結果。
@@ -52,15 +78,20 @@ List<RealTestComparison> compareRealTests(
   final out = <RealTestComparison>[];
   final past = <double>[];
   for (final r in reals) {
-    final before = [for (final m in mocks) if (m.date.isBefore(r.date)) m.score];
-    out.add(RealTestComparison(
-      record: r,
-      realLevel: judgeLevel([r.score], thresholds: thresholds).level,
-      mockLevel: before.isEmpty ? null : judgeLevel(before, thresholds: thresholds).level,
-      deltaFromPrevious: past.isEmpty ? null : r.score - past.last,
-      isPersonalBest: isPersonalBest(past, r.score),
-    ));
-    past.add(r.score);
+    final before = [
+      for (final m in mocks)
+        if (m.date.isBefore(r.date)) m.score,
+    ];
+    out.add(
+      RealTestComparison(
+        record: r,
+        realLevel: judgeLevel([r.normalizedScore], thresholds: thresholds).level,
+        mockLevel: before.isEmpty ? null : judgeLevel(before, thresholds: thresholds).level,
+        deltaFromPrevious: past.isEmpty ? null : r.normalizedScore - past.last,
+        isPersonalBest: isPersonalBest(past, r.normalizedScore),
+      ),
+    );
+    past.add(r.normalizedScore);
   }
   return out;
 }

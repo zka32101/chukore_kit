@@ -51,6 +51,7 @@ README の実装済み一覧の詳細。各項目の先頭は公開 API の名�
 - 成長機能の計算部（G2レーダー・G3自己ベスト・G4スタンプ・G5できるようになった数・G6進化）。
 - 成長カード（`GrowthCardData`・`GrowthCardView`・`renderGrowthCardPng`。名前/ID/メール欄なし、13歳未満はゲート通過後のみ共有）。
 - 成長機能 v1.1（G7 成長の年輪 `buildGrowthRings`・`GrowthRingsView`、G8 本番の点数の記録 `compareRealTests`、G9 アプリ内偏差値の表示ポリシー `deviationDisplay`・`formatDeviationRange`）。
+- 本番の点の変化 `buildOutcomeSummary`・`OutcomeSummary`・`OutcomeChange`（設計は [`score_outcome_measurement.md`](score_outcome_measurement.md)）。本人が入力した本番の点（`RealTestRecord` は満点 `maxScore` と種類 `RealTestKind` を持ち、満点が違うテストは比 `ratio` で比べる）の変化を端末内で求める。前回との差が**ノイズ幅（既定 3 点）以内なら「ほぼ同じ」**で、超えたときだけ上がった／下がった。前回が無ければ使う前の点 `baseline` と比べ、それも無ければ最初の記録。種類（定期／模試）をまたがず、点が範囲外の記録は数えない（`skipped`）。テスト前 28 日間の学習日数・問題数（`StudyDay` の学習日）を添える。**本人にだけ見せるもので、基盤は集めない・送らない**。`compareRealTests` も満点が違う記録を 100 点換算で比べる（満点 100 なら従来どおり）。
 
 - 成長の年輪の読み上げ（`GrowthRingsView.semanticsLabel`・`ChukoreStrings.ringsLatestMonth`）。合計の学習日数に加えて、最新の月の学習日数（月は `2026-10` の形）も伝える。休んだ月（0 日）もそのまま伝える。図の太さが見えない人にも、最近の学習の様子が分かるようにするため。全 12 言語・17 列。
 
