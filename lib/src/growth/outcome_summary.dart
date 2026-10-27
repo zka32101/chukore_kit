@@ -29,6 +29,7 @@ class OutcomeEntry {
     required this.deltaFromBaseline,
     required this.activeDays,
     required this.questions,
+    this.comparedToBaseline = false,
   });
 
   final RealTestRecord record;
@@ -39,6 +40,9 @@ class OutcomeEntry {
 
   /// 使う前の点との比の差。使う前の点が無ければ null。
   final double? deltaFromBaseline;
+
+  /// 比べた相手が、使う前の点か（前回の本番ではなく）。
+  final bool comparedToBaseline;
 
   /// テスト前の期間に学習した日数（学習日で数える）。
   final int activeDays;
@@ -132,6 +136,7 @@ OutcomeSummary buildOutcomeSummary(
         deltaFromBaseline: baseRatio == null ? null : r.ratio - baseRatio,
         activeDays: days,
         questions: questions,
+        comparedToBaseline: prev == null && baseRatio != null,
       ),
     );
     prev = r.ratio;

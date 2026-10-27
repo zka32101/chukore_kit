@@ -87,7 +87,9 @@
 - ストアのデータ申告（成績の区分を送る場合の扱い）。
 - 国ごとの年齢の線（韓国 14歳未満、ブラジル LGPD 第14条など）。
 
-## 9. 作る順序
+## 9. 作る順序（状況）
+
+実装済み: 1・2（`RealTestRecord` の満点・種類、`buildOutcomeSummary`）、4 の変換と 5 の集計の関数（`buildOutcomeReports`・`tallyOutcomes`）。**送信の仕組みは基盤に無く、法務確認と保護者の同意が済むまでアプリは使わない。** 未実装: 3（振り返りの流れへの点の入力。アプリ側の画面と文言）。
 
 1. `RealTestRecord` に `maxScore`・`kind` を追加し、比率で比べる（互換テストつき）。
 2. `buildOutcomeSummary`（端末内。変化・使った量・ノイズ幅）。
