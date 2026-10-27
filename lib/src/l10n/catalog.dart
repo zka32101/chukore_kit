@@ -66,6 +66,14 @@ Map<String, String> stringsCatalog(ChukoreStrings s) {
   m['talkSteady'] = s.talkSteady;
   m['talkStarted'] = s.talkStarted;
   m['talkRest'] = s.talkRest;
+  m['outcomeAsk'] = s.outcomeAsk;
+  m['outcomeSkip'] = s.outcomeSkip;
+  m['outcomeBaselineAsk'] = s.outcomeBaselineAsk;
+  m['outcomeFirst'] = s.outcomeFirst;
+  m['outcomeUp'] = s.outcomeUp;
+  m['outcomeSame'] = s.outcomeSame;
+  m['outcomeDown'] = s.outcomeDown;
+  m['outcomeDisclaimer'] = s.outcomeDisclaimer;
   m['eveNotice'] = s.eveNotice;
   m['testDayNotice'] = s.testDayNotice;
   m['cardAgain'] = s.cardAgain;

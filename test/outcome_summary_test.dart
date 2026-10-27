@@ -7,6 +7,7 @@ RealTestRecord t(int month, double score, {double max = 100, RealTestKind kind =
 Attempt a(DateTime when) => Attempt(questionId: 'q', unitId: 'u', correct: true, answeredAt: when);
 
 void main() {
+  outcomeMessages();
   group('RealTestRecord', () {
     test('満点が違っても、比と100点換算で比べられる', () {
       expect(t(5, 7.5, max: 10).ratio, 0.75);
@@ -120,6 +121,37 @@ void main() {
         buildOutcomeSummary([test0], attempts, studyDay: const StudyDay(startHour: 4)).entries.single.activeDays,
         1,
       );
+    });
+  });
+}
+
+void outcomeMessages() {
+  group('outcomeMessage（全言語）', () {
+    test('4つの変化すべてに、空でない一言があり、数字を含まない。点を入れる案内は入れなくてよいと伝える', () {
+      for (final s in ChukoreStrings.supported) {
+        for (final c in OutcomeChange.values) {
+          final m = outcomeMessage(c, s);
+          expect(m.trim(), isNotEmpty, reason: '${s.tag} $c');
+          expect(RegExp(r'[0-9０-９]').hasMatch(m), false, reason: '${s.tag} $c: 点や日数の数字を含めない');
+        }
+        expect(s.outcomeAsk.trim(), isNotEmpty, reason: s.tag);
+        expect(s.outcomeSkip.trim(), isNotEmpty, reason: s.tag);
+        expect(s.outcomeBaselineAsk.trim(), isNotEmpty, reason: s.tag);
+        expect(s.outcomeDisclaimer.trim(), isNotEmpty, reason: s.tag);
+      }
+    });
+
+    test('下がったときの文言は、責めずに一緒に見る形（日本語・英語で固定）', () {
+      expect(outcomeMessage(OutcomeChange.down, const JaStrings()), contains('大丈夫'));
+      expect(outcomeMessage(OutcomeChange.down, const EnStrings()), contains('okay'));
+    });
+
+    test('結果を保証する言い方をしない（免責がある・上がったとき"約束"などを言わない）', () {
+      expect(const JaStrings().outcomeDisclaimer, contains('約束するものではない'));
+      expect(const EnStrings().outcomeDisclaimer, contains('does not promise'));
+      for (final s in ChukoreStrings.supported) {
+        expect(outcomeMessage(OutcomeChange.up, s), isNot(contains('保証')), reason: s.tag);
+      }
     });
   });
 }
