@@ -16,7 +16,7 @@ class AnswerResult {
 
 /// 数値入力の正規化。全角・マイナス記号の違い・桁区切りを吸収する。
 /// [decimalSeparator] が `,` の国（欧州など）では `.` を桁区切り、`,` を小数点として読む。
-String _normalize(String s, String decimalSeparator) {
+String normalizeNumberInput(String s, String decimalSeparator) {
   var t = normalizeDigits(s.trim())
       .replaceAll('．', '.')
       .replaceAll('，', ',')
@@ -49,8 +49,8 @@ AnswerResult checkAnswer(
       final ok = input == q.answer;
       return AnswerResult(ok, misconceptionTag: ok ? null : q.misconceptionTags[input]);
     case 'numeric':
-      final got = double.tryParse(_normalize(input, decimalSeparator));
-      final want = double.tryParse(_normalize(q.answer, '.'));
+      final got = double.tryParse(normalizeNumberInput(input, decimalSeparator));
+      final want = double.tryParse(normalizeNumberInput(q.answer, '.'));
       final ok = got != null && want != null && (got - want).abs() <= tolerance;
       return AnswerResult(ok);
     case 'order':

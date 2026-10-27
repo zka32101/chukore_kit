@@ -4,6 +4,7 @@
 
 ## [未リリース]
 
+- 点を聞くタイミングの判定 `decideScorePrompt`（テスト日の翌日から14日以内に1回だけ・1日1回まで・聞いたら二度と聞かない）と入力の読み取り `parseScoreInput`。数値入力の正規化 `normalizeNumberInput` を公開
 - 本番の点まわりの文言 `outcomeAsk` / `outcomeSkip` / `outcomeBaselineAsk` / `outcomeFirst` / `outcomeUp` / `outcomeSame` / `outcomeDown` / `outcomeDisclaimer`（18言語。責めず、結果を保証しない。`outcomeMessage(change, strings)` で変化に添える一言を引く）。**ネイティブ確認は未実施**（`docs/translation_review.csv` に追加済み）
 - 匿名の報告 `buildOutcomeReports`（点・日付を持たない粗い区分）と集計 `tallyOutcomes`（30 件未満のマスは返さない）。送信の仕組みは無く、法務確認まで使わない
 - 本番の点の変化 `buildOutcomeSummary`（端末内。ノイズ幅・使う前の点との比較・使った量）。`RealTestRecord` に満点 `maxScore` と種類 `RealTestKind` を追加（既存の呼び出しは変わらない）
