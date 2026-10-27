@@ -4,6 +4,7 @@
 
 ## [未リリース]
 
+- 本番の点の変化を測る設計案 `docs/score_outcome_measurement.md`（端末内で本人に見せる→匿名の区分だけ集める→訴求は最後。落とし穴と法務確認の項目、作る順序）
 - コンセプトを「気づいたら、点が上がっている。」に決定（`docs/competitive_research_middle_school.md` §4.2、`docs/design_principles.md`）。結果は保証せず、海外は偏差値でなく「点・成績」で訴求
 - 中学数学の海外競合調査と、差別化・コンセプト・価値の再定義案 `docs/competitive_research_middle_school.md`（ブラジル・トルコ・インドネシア・韓国。事実と推測を分け、未取得を明記）
 - 設計方針 `docs/design_principles.md`（中学専用・小学と共通にしない・守ること・中学の指標）。海外版との対応表の「重複の整理」を、小学とは共通にしない前提に訂正
