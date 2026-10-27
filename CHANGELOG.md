@@ -4,6 +4,7 @@
 
 ## [未リリース]
 
+- 本番の点まわりの文言 `outcomeAsk` / `outcomeSkip` / `outcomeBaselineAsk` / `outcomeFirst` / `outcomeUp` / `outcomeSame` / `outcomeDown` / `outcomeDisclaimer`（18言語。責めず、結果を保証しない。`outcomeMessage(change, strings)` で変化に添える一言を引く）。**ネイティブ確認は未実施**（`docs/translation_review.csv` に追加済み）
 - 匿名の報告 `buildOutcomeReports`（点・日付を持たない粗い区分）と集計 `tallyOutcomes`（30 件未満のマスは返さない）。送信の仕組みは無く、法務確認まで使わない
 - 本番の点の変化 `buildOutcomeSummary`（端末内。ノイズ幅・使う前の点との比較・使った量）。`RealTestRecord` に満点 `maxScore` と種類 `RealTestKind` を追加（既存の呼び出しは変わらない）
 - 本番の点の変化を測る設計案 `docs/score_outcome_measurement.md`（端末内で本人に見せる→匿名の区分だけ集める→訴求は最後。落とし穴と法務確認の項目、作る順序）

@@ -12,6 +12,8 @@ void main() {
     // 英語と同じ「N question(s)」。question はフランス語でも同じ綴り
     // フランス語の correct / incorrect も英語と同じ綴り
     'fr': {'solvableValue(1)', 'solvableValue(2)', 'solvableValue(5)', 'markCorrect', 'markWrong', 'sheetQuestion'},
+    // オランダ語の「あとで」は英語と同じ綴り（Later）
+    'nl': {'outcomeSkip'},
   };
 
   /// アラビア語の「2」は双数（يومان・سؤالان）で、数字を使わず語で言うのが正しい。
@@ -96,8 +98,11 @@ void main() {
     final f = File('docs/translation_review.csv');
     expect(f.existsSync(), isTrue, reason: '`dart run tool/export_strings.dart` で書き出す');
     final onDisk = f.readAsStringSync().replaceFirst('﻿', '');
-    expect(onDisk, stringsCatalogCsv(),
-        reason: '文言を変えたら `dart run tool/export_strings.dart` で docs/translation_review.csv を更新する');
+    expect(
+      onDisk,
+      stringsCatalogCsv(),
+      reason: '文言を変えたら `dart run tool/export_strings.dart` で docs/translation_review.csv を更新する',
+    );
   });
 
   test('CSV は引用符・改行を含む文言でも崩れない', () {

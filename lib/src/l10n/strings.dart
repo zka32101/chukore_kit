@@ -223,6 +223,30 @@ abstract class ChukoreStrings {
   String get talkStarted;
   String get talkRest;
 
+  /// 本番の点を入れるかの案内（入れなくてよい）。
+  String get outcomeAsk;
+
+  /// 点の入力を今はしない。
+  String get outcomeSkip;
+
+  /// 使い始める前の点を任意で聞く。
+  String get outcomeBaselineAsk;
+
+  /// 最初の記録（比べる相手がまだ無い）。
+  String get outcomeFirst;
+
+  /// 前より上がった（ノイズ幅を超えて）。
+  String get outcomeUp;
+
+  /// ほぼ同じ。
+  String get outcomeSame;
+
+  /// 前より下がった。責めない。
+  String get outcomeDown;
+
+  /// 自分で入れた記録で、結果の保証ではない。
+  String get outcomeDisclaimer;
+
   /// 前日・当日に出す一言（新しいことを増やさない、落ち着いて。数字を含まない）。使い方は [guardLastDays]。
   String get eveNotice;
   String get testDayNotice;
@@ -364,6 +388,22 @@ class JaStrings extends ChukoreStrings {
   String get talkStarted => 'はじめの一歩が出ています。少しでも十分です。「やってみたんだね」と声をかけましょう';
   @override
   String get talkRest => '今週はお休みでした。責めずに、「いつでも始められるよ」と伝えましょう';
+  @override
+  String get outcomeAsk => 'テストの点を入れてみる？ 入れなくても大丈夫だよ';
+  @override
+  String get outcomeSkip => 'あとで';
+  @override
+  String get outcomeBaselineAsk => '使い始める前の、いちばん最近のテストの点があれば入れてね。なくても大丈夫だよ';
+  @override
+  String get outcomeFirst => '記録したよ。次のテストのときに、並べて見られるよ';
+  @override
+  String get outcomeUp => '前より点が上がったね。やったね！';
+  @override
+  String get outcomeSame => '前とほぼ同じだったよ。続けているのがすごいよ';
+  @override
+  String get outcomeDown => '今回は前より低かったよ。大丈夫、どこが難しかったか、いっしょに見てみよう';
+  @override
+  String get outcomeDisclaimer => '自分で入れた点の記録だよ。点が上がることを約束するものではないよ';
   @override
   String get eveNotice => 'あしたはテスト。新しいことは増やさず、やったところの見直しだけにしよう';
   @override
@@ -550,6 +590,22 @@ class EnStrings extends ChukoreStrings {
   String get talkStarted => 'A first step has been taken, and a little is enough. Try saying "You gave it a go"';
   @override
   String get talkRest => 'This was a rest week. No blame; just let them know they can start any time';
+  @override
+  String get outcomeAsk => 'Want to add your test score? It is fine to skip.';
+  @override
+  String get outcomeSkip => 'Later';
+  @override
+  String get outcomeBaselineAsk => 'If you have your most recent test score from before you started, add it. It is fine if you do not.';
+  @override
+  String get outcomeFirst => 'Saved. You can see it next to your next test.';
+  @override
+  String get outcomeUp => 'Your score is higher than last time. Nice work!';
+  @override
+  String get outcomeSame => 'About the same as last time. Sticking with it is great.';
+  @override
+  String get outcomeDown => 'It was lower this time. That is okay. Let us look at what felt hard together.';
+  @override
+  String get outcomeDisclaimer => 'This is a record of the scores you entered. It does not promise your score will go up.';
   @override
   String get eveNotice => 'The test is tomorrow. No new material now; just look back over what you have already done';
   @override
@@ -765,6 +821,22 @@ class PtStrings extends ChukoreStrings {
   String get talkStarted => 'O primeiro passo foi dado, e um pouco já basta. Experimente dizer "Você tentou"';
   @override
   String get talkRest => 'Esta foi uma semana de descanso. Sem cobrança; diga que ele pode começar quando quiser';
+  @override
+  String get outcomeAsk => 'Quer registrar a nota da sua prova? Pode pular, sem problema.';
+  @override
+  String get outcomeSkip => 'Depois';
+  @override
+  String get outcomeBaselineAsk => 'Se tiver a nota da sua prova mais recente, de antes de começar, pode registrar. Se não tiver, tudo bem.';
+  @override
+  String get outcomeFirst => 'Registrado. Você poderá ver ao lado da próxima prova.';
+  @override
+  String get outcomeUp => 'Sua nota subiu em relação à anterior. Parabéns!';
+  @override
+  String get outcomeSame => 'Ficou quase igual à anterior. Manter a constância é muito bom.';
+  @override
+  String get outcomeDown => 'Dessa vez foi mais baixa. Tudo bem. Vamos ver juntos o que foi difícil.';
+  @override
+  String get outcomeDisclaimer => 'Este é um registro das notas que você informou. Não é uma promessa de que a nota vai subir.';
   @override
   String get eveNotice => 'A prova é amanhã. Sem conteúdo novo agora; só revise o que você já estudou';
   @override
@@ -984,6 +1056,22 @@ class EsStrings extends ChukoreStrings {
   String get talkStarted => 'Se dio el primer paso, y con poco basta. Pruebe a decir «Lo intentaste»';
   @override
   String get talkRest => 'Esta fue una semana de descanso. Sin reproches; dígale que puede empezar cuando quiera';
+  @override
+  String get outcomeAsk => '¿Quieres anotar la nota de tu examen? Puedes saltarlo, no pasa nada.';
+  @override
+  String get outcomeSkip => 'Luego';
+  @override
+  String get outcomeBaselineAsk => 'Si tienes la nota de tu examen más reciente, de antes de empezar, puedes anotarla. Si no la tienes, no pasa nada.';
+  @override
+  String get outcomeFirst => 'Anotado. Podrás verlo junto a tu próximo examen.';
+  @override
+  String get outcomeUp => 'Tu nota subió respecto a la anterior. ¡Bien hecho!';
+  @override
+  String get outcomeSame => 'Quedó casi igual que la anterior. Mantener la constancia es muy valioso.';
+  @override
+  String get outcomeDown => 'Esta vez fue más baja. No pasa nada. Veamos juntos qué se te hizo difícil.';
+  @override
+  String get outcomeDisclaimer => 'Es un registro de las notas que anotaste tú. No promete que tu nota vaya a subir.';
   @override
   String get eveNotice => 'El examen es mañana. Nada nuevo ahora; solo repasa lo que ya hiciste';
   @override
@@ -1219,6 +1307,22 @@ class FrStrings extends ChukoreStrings {
   @override
   String get talkRest => 'Ce fut une semaine de repos. Sans reproche ; dites simplement qu’il peut recommencer quand il veut';
   @override
+  String get outcomeAsk => 'Veux-tu enregistrer ta note de contrôle\u00A0? Tu peux passer, ce n’est pas grave.';
+  @override
+  String get outcomeSkip => 'Plus tard';
+  @override
+  String get outcomeBaselineAsk => 'Si tu as la note de ton dernier contrôle, d’avant de commencer, tu peux l’enregistrer. Sinon, ce n’est pas grave.';
+  @override
+  String get outcomeFirst => 'C’est enregistré. Tu pourras la voir à côté de ton prochain contrôle.';
+  @override
+  String get outcomeUp => 'Ta note est plus haute que la dernière fois. Bravo\u00A0!';
+  @override
+  String get outcomeSame => 'À peu près pareil que la dernière fois. Rester régulier, c’est déjà très bien.';
+  @override
+  String get outcomeDown => 'Cette fois, c’est plus bas. Ce n’est pas grave. Regardons ensemble ce qui t’a semblé difficile.';
+  @override
+  String get outcomeDisclaimer => 'C’est un relevé des notes que tu as saisies toi-même. Il ne promet pas que ta note va monter.';
+  @override
   String get eveNotice => 'Le contrôle est demain. Rien de nouveau maintenant ; revois seulement ce que tu as déjà fait';
   @override
   String get testDayNotice => 'Le contrôle est aujourd’hui. Une relecture légère suffit. Comme d’habitude, en confiance';
@@ -1400,6 +1504,22 @@ class KoStrings extends ChukoreStrings {
   String get talkStarted => '첫걸음을 뗐어요. 조금이어도 충분해요. "해 봤구나"라고 말해 주세요';
   @override
   String get talkRest => '이번 주는 쉬었어요. 탓하지 말고 "언제든 시작할 수 있어"라고 전해 주세요';
+  @override
+  String get outcomeAsk => '시험 점수를 기록해 볼까요? 건너뛰어도 괜찮아요.';
+  @override
+  String get outcomeSkip => '나중에';
+  @override
+  String get outcomeBaselineAsk => '앱을 쓰기 전에 본 가장 최근 시험 점수가 있으면 적어 주세요. 없어도 괜찮아요.';
+  @override
+  String get outcomeFirst => '기록했어요. 다음 시험 때 나란히 볼 수 있어요.';
+  @override
+  String get outcomeUp => '지난번보다 점수가 올랐어요. 잘했어요!';
+  @override
+  String get outcomeSame => '지난번과 거의 비슷해요. 꾸준히 하고 있는 것만으로도 대단해요.';
+  @override
+  String get outcomeDown => '이번에는 지난번보다 낮았어요. 괜찮아요. 무엇이 어려웠는지 같이 살펴봐요.';
+  @override
+  String get outcomeDisclaimer => '직접 입력한 점수의 기록이에요. 점수가 오른다고 약속하는 것은 아니에요.';
   @override
   String get eveNotice => '내일은 시험이에요. 새로운 건 늘리지 말고, 했던 부분만 다시 살펴봐요';
   @override
@@ -1607,6 +1727,22 @@ class ZhStrings extends ChukoreStrings {
   String get talkStarted => _t('迈出了第一步，一点点就足够。可以说“你试过了呢”', '踏出了第一步，一點點就足夠。可以說「你試過了呢」');
   @override
   String get talkRest => _t('这周休息了。不必责备，告诉孩子随时都可以重新开始', '這週休息了。不必責備，告訴孩子隨時都可以重新開始');
+  @override
+  String get outcomeAsk => _t('要记录一下考试分数吗？不记录也没关系。', '要記錄一下考試分數嗎？不記錄也沒關係。');
+  @override
+  String get outcomeSkip => _t('以后再说', '以後再說');
+  @override
+  String get outcomeBaselineAsk => _t('如果有开始使用之前最近一次的考试分数，可以填一下。没有也没关系。', '如果有開始使用之前最近一次的考試分數，可以填一下。沒有也沒關係。');
+  @override
+  String get outcomeFirst => _t('已记录。下次考试后可以并排查看。', '已記錄。下次考試後可以並排查看。');
+  @override
+  String get outcomeUp => _t('分数比上次高了。真棒！', '分數比上次高了。真棒！');
+  @override
+  String get outcomeSame => _t('和上次差不多。能一直坚持就很了不起。', '和上次差不多。能一直堅持就很了不起。');
+  @override
+  String get outcomeDown => _t('这次比上次低一些。没关系，一起看看哪里有点难。', '這次比上次低一些。沒關係，一起看看哪裡有點難。');
+  @override
+  String get outcomeDisclaimer => _t('这是你自己填写的分数记录，并不保证分数一定会提高。', '這是你自己填寫的分數記錄，並不保證分數一定會提高。');
   @override
   String get eveNotice => _t('明天考试。现在不再学新的，只回顾已经做过的内容就好', '明天考試。現在不再學新的，只回顧已經做過的內容就好');
   @override
@@ -1870,6 +2006,22 @@ class IdStrings extends ChukoreStrings {
   @override
   String get talkRest => 'Pekan ini istirahat. Tanpa menyalahkan; katakan bahwa ia bisa mulai kapan saja';
   @override
+  String get outcomeAsk => 'Mau mencatat nilai ujianmu? Boleh dilewati, tidak apa-apa.';
+  @override
+  String get outcomeSkip => 'Nanti saja';
+  @override
+  String get outcomeBaselineAsk => 'Kalau punya nilai ujian terakhir sebelum mulai memakai aplikasi ini, boleh dicatat. Kalau tidak ada, tidak apa-apa.';
+  @override
+  String get outcomeFirst => 'Sudah dicatat. Kamu bisa melihatnya berdampingan dengan ujian berikutnya.';
+  @override
+  String get outcomeUp => 'Nilaimu naik dibanding sebelumnya. Bagus sekali!';
+  @override
+  String get outcomeSame => 'Hampir sama dengan sebelumnya. Tetap konsisten itu hebat.';
+  @override
+  String get outcomeDown => 'Kali ini lebih rendah dari sebelumnya. Tidak apa-apa. Yuk lihat bersama bagian mana yang terasa sulit.';
+  @override
+  String get outcomeDisclaimer => 'Ini catatan nilai yang kamu isi sendiri. Ini bukan janji bahwa nilaimu akan naik.';
+  @override
   String get eveNotice => 'Ujian besok. Tidak perlu materi baru; cukup ulangi yang sudah dikerjakan';
   @override
   String get testDayNotice => 'Ujian hari ini. Mengulang ringan saja sudah cukup. Tenang seperti biasa';
@@ -2072,6 +2224,22 @@ class ViStrings extends ChukoreStrings {
   String get talkStarted => 'Con đã bước những bước đầu, và một chút cũng đủ. Thử nói "Con đã thử rồi nhỉ"';
   @override
   String get talkRest => 'Tuần này con nghỉ. Đừng trách; hãy cho con biết có thể bắt đầu lại bất cứ lúc nào';
+  @override
+  String get outcomeAsk => 'Em có muốn ghi lại điểm bài kiểm tra không? Bỏ qua cũng không sao.';
+  @override
+  String get outcomeSkip => 'Để sau';
+  @override
+  String get outcomeBaselineAsk => 'Nếu có điểm bài kiểm tra gần nhất từ trước khi bắt đầu dùng, em có thể ghi vào. Không có cũng không sao.';
+  @override
+  String get outcomeFirst => 'Đã ghi lại. Em sẽ xem được cạnh bài kiểm tra tiếp theo.';
+  @override
+  String get outcomeUp => 'Điểm cao hơn lần trước rồi. Giỏi lắm!';
+  @override
+  String get outcomeSame => 'Gần như bằng lần trước. Giữ được sự đều đặn là rất tốt.';
+  @override
+  String get outcomeDown => 'Lần này thấp hơn lần trước. Không sao đâu. Cùng xem phần nào đã thấy khó nhé.';
+  @override
+  String get outcomeDisclaimer => 'Đây là bản ghi điểm do chính em nhập. Điều này không đảm bảo điểm sẽ tăng.';
   @override
   String get eveNotice => 'Ngày mai là bài kiểm tra. Đừng học thêm điều mới, chỉ xem lại những gì đã làm';
   @override
@@ -2276,6 +2444,22 @@ class DeStrings extends ChukoreStrings {
   @override
   String get talkRest => 'Das war eine Pausenwoche. Ohne Vorwurf; sagen Sie, dass es jederzeit wieder anfangen kann';
   @override
+  String get outcomeAsk => 'Möchtest du deine Punktzahl aus dem Test eintragen? Überspringen ist völlig in Ordnung.';
+  @override
+  String get outcomeSkip => 'Später';
+  @override
+  String get outcomeBaselineAsk => 'Wenn du die Punktzahl deines letzten Tests von vor dem Start hast, kannst du sie eintragen. Wenn nicht, ist das in Ordnung.';
+  @override
+  String get outcomeFirst => 'Gespeichert. Du kannst sie neben deinem nächsten Test ansehen.';
+  @override
+  String get outcomeUp => 'Deine Punktzahl ist höher als beim letzten Mal. Gut gemacht!';
+  @override
+  String get outcomeSame => 'Ungefähr wie beim letzten Mal. Dranzubleiben ist stark.';
+  @override
+  String get outcomeDown => 'Diesmal war es weniger als beim letzten Mal. Das ist in Ordnung. Schauen wir gemeinsam, was schwierig war.';
+  @override
+  String get outcomeDisclaimer => 'Das ist eine Aufzeichnung der Punkte, die du selbst eingetragen hast. Sie ist kein Versprechen, dass deine Punkte steigen.';
+  @override
   String get eveNotice => 'Morgen ist die Prüfung. Nichts Neues mehr; schau nur noch durch, was du schon gemacht hast';
   @override
   String get testDayNotice => 'Heute ist die Prüfung. Ein kurzer Blick zurück genügt. Bleib ganz du selbst';
@@ -2456,6 +2640,22 @@ class TrStrings extends ChukoreStrings {
   String get talkStarted => 'İlk adım atıldı ve azı da yeter. “Denemişsin” demeyi deneyin';
   @override
   String get talkRest => 'Bu hafta dinlenme haftasıydı. Suçlamadan, istediği zaman başlayabileceğini söyleyin';
+  @override
+  String get outcomeAsk => 'Sınav puanını kaydetmek ister misin? Atlayabilirsin, sorun değil.';
+  @override
+  String get outcomeSkip => 'Sonra';
+  @override
+  String get outcomeBaselineAsk => 'Kullanmaya başlamadan önceki en son sınav puanın varsa girebilirsin. Yoksa sorun değil.';
+  @override
+  String get outcomeFirst => 'Kaydedildi. Bir sonraki sınavınla yan yana görebilirsin.';
+  @override
+  String get outcomeUp => 'Puanın geçen seferden yüksek. Tebrikler!';
+  @override
+  String get outcomeSame => 'Geçen seferle hemen hemen aynı. Düzenli devam etmek harika.';
+  @override
+  String get outcomeDown => 'Bu sefer geçen seferden düşük oldu. Sorun değil. Hangi kısmın zor geldiğine birlikte bakalım.';
+  @override
+  String get outcomeDisclaimer => 'Bu, senin girdiğin puanların kaydıdır. Puanının artacağına dair bir söz değildir.';
   @override
   String get eveNotice => 'Sınav yarın. Yeni konu eklemeyelim; sadece yaptıklarımıza göz atalım';
   @override
@@ -2643,6 +2843,22 @@ class ThStrings extends ChukoreStrings {
   @override
   String get talkRest => 'สัปดาห์นี้พัก ไม่ต้องตำหนิ บอกลูกว่าเริ่มใหม่ได้ทุกเมื่อ';
   @override
+  String get outcomeAsk => 'อยากบันทึกคะแนนสอบไหม? ข้ามไปก็ไม่เป็นไรนะ';
+  @override
+  String get outcomeSkip => 'ไว้ทีหลัง';
+  @override
+  String get outcomeBaselineAsk => 'ถ้ามีคะแนนสอบครั้งล่าสุดก่อนเริ่มใช้ ใส่ไว้ได้เลย ถ้าไม่มีก็ไม่เป็นไร';
+  @override
+  String get outcomeFirst => 'บันทึกแล้ว ดูเทียบกับการสอบครั้งต่อไปได้';
+  @override
+  String get outcomeUp => 'คะแนนสูงกว่าครั้งที่แล้ว เก่งมาก!';
+  @override
+  String get outcomeSame => 'ใกล้เคียงครั้งที่แล้ว การทำต่อเนื่องก็เยี่ยมแล้ว';
+  @override
+  String get outcomeDown => 'ครั้งนี้ต่ำกว่าครั้งที่แล้ว ไม่เป็นไรนะ มาดูด้วยกันว่าส่วนไหนยาก';
+  @override
+  String get outcomeDisclaimer => 'นี่คือบันทึกคะแนนที่คุณกรอกเอง ไม่ได้รับรองว่าคะแนนจะเพิ่มขึ้น';
+  @override
   String get eveNotice => 'พรุ่งนี้สอบแล้ว ไม่ต้องเพิ่มเรื่องใหม่ ทบทวนเฉพาะที่เคยทำก็พอ';
   @override
   String get testDayNotice => 'วันนี้สอบแล้ว ทบทวนเบา ๆ ก็เพียงพอ ทำตัวตามปกติได้เลย';
@@ -2829,6 +3045,22 @@ class HiStrings extends ChukoreStrings {
   String get talkStarted => 'पहला कदम उठ गया है, और थोड़ा भी काफ़ी है। कहकर देखें, "तुमने कोशिश की"';
   @override
   String get talkRest => 'इस हफ़्ते आराम रहा। बिना दोष दिए बताएँ कि वह कभी भी फिर से शुरू कर सकता है';
+  @override
+  String get outcomeAsk => 'क्या अपने टेस्ट का स्कोर दर्ज करना है? छोड़ दें तो भी कोई बात नहीं।';
+  @override
+  String get outcomeSkip => 'बाद में';
+  @override
+  String get outcomeBaselineAsk => 'अगर इस्तेमाल शुरू करने से पहले का सबसे ताज़ा टेस्ट स्कोर है, तो दर्ज कर दें। न हो तो कोई बात नहीं।';
+  @override
+  String get outcomeFirst => 'दर्ज हो गया। अगले टेस्ट के साथ इसे देखा जा सकेगा।';
+  @override
+  String get outcomeUp => 'पिछली बार से स्कोर बढ़ा है। शाबाश!';
+  @override
+  String get outcomeSame => 'पिछली बार के लगभग बराबर है। लगातार लगे रहना बहुत अच्छी बात है।';
+  @override
+  String get outcomeDown => 'इस बार स्कोर पिछली बार से कम रहा। कोई बात नहीं। आइए साथ देखें कि कौन-सा हिस्सा मुश्किल लगा।';
+  @override
+  String get outcomeDisclaimer => 'यह आपके खुद दर्ज किए स्कोर का रिकॉर्ड है। यह स्कोर बढ़ने का वादा नहीं है।';
   @override
   String get eveNotice => 'कल परीक्षा है। अब कुछ नया नहीं; बस जो पहले कर चुके हैं उसे एक बार देख लें';
   @override
@@ -3037,6 +3269,22 @@ class ArStrings extends ChukoreStrings {
   String get talkStarted => 'تمّت الخطوة الأولى، والقليل يكفي. جرّب أن تقول «لقد حاولت»';
   @override
   String get talkRest => 'كان هذا أسبوع راحة. دون لوم؛ أخبره أنه يستطيع البدء في أي وقت';
+  @override
+  String get outcomeAsk => 'هل تريد تسجيل درجة اختبارك؟ يمكنك التخطي، ولا بأس بذلك.';
+  @override
+  String get outcomeSkip => 'لاحقًا';
+  @override
+  String get outcomeBaselineAsk => 'إذا كانت لديك درجة آخر اختبار قبل بدء الاستخدام فيمكنك إدخالها. وإن لم تكن لديك فلا بأس.';
+  @override
+  String get outcomeFirst => 'تم التسجيل. يمكنك مقارنتها مع اختبارك القادم.';
+  @override
+  String get outcomeUp => 'درجتك أعلى من المرة السابقة. أحسنت!';
+  @override
+  String get outcomeSame => 'قريبة جدًا من المرة السابقة. الاستمرار في حد ذاته رائع.';
+  @override
+  String get outcomeDown => 'كانت الدرجة هذه المرة أقل من السابقة. لا بأس. لنرَ معًا ما الذي بدا صعبًا.';
+  @override
+  String get outcomeDisclaimer => 'هذا سجل للدرجات التي أدخلتها بنفسك، وليس وعدًا بأن درجتك سترتفع.';
   @override
   String get eveNotice => 'الاختبار غدًا. لا مواد جديدة الآن؛ يكفي أن تراجع ما أنجزته من قبل';
   @override
@@ -3249,6 +3497,22 @@ class RuStrings extends ChukoreStrings {
   @override
   String get talkRest => 'Эта неделя была отдыхом. Без упрёков; скажите, что начать можно в любой момент';
   @override
+  String get outcomeAsk => 'Хочешь записать оценку за тест? Можно пропустить — ничего страшного.';
+  @override
+  String get outcomeSkip => 'Позже';
+  @override
+  String get outcomeBaselineAsk => 'Если у тебя есть результат последнего теста до начала занятий, можешь записать его. Если нет — ничего страшного.';
+  @override
+  String get outcomeFirst => 'Записано. Ты сможешь сравнить его со следующим тестом.';
+  @override
+  String get outcomeUp => 'Результат выше, чем в прошлый раз. Молодец!';
+  @override
+  String get outcomeSame => 'Почти так же, как в прошлый раз. Заниматься регулярно — уже здорово.';
+  @override
+  String get outcomeDown => 'В этот раз результат ниже, чем в прошлый. Ничего страшного. Давай вместе посмотрим, что оказалось трудным.';
+  @override
+  String get outcomeDisclaimer => 'Это запись результатов, которые введены тобой. Это не обещание, что результат вырастет.';
+  @override
   String get eveNotice => 'Контрольная завтра. Новое сейчас не берём; просто повтори то, что уже делал';
   @override
   String get testDayNotice => 'Контрольная сегодня. Лёгкого повторения достаточно. Всё как обычно, спокойно';
@@ -3460,6 +3724,22 @@ class ItStrings extends ChukoreStrings {
   @override
   String get talkRest => 'Questa è stata una settimana di pausa. Senza rimproveri; gli dica che può ricominciare quando vuole';
   @override
+  String get outcomeAsk => 'Vuoi registrare il punteggio del tuo compito? Puoi anche saltare, non c’è problema.';
+  @override
+  String get outcomeSkip => 'Più tardi';
+  @override
+  String get outcomeBaselineAsk => 'Se hai il punteggio dell’ultimo compito prima di iniziare, puoi inserirlo. Se non ce l’hai, non c’è problema.';
+  @override
+  String get outcomeFirst => 'Registrato. Potrai vederlo accanto al tuo prossimo compito.';
+  @override
+  String get outcomeUp => 'Il punteggio è più alto dell’ultima volta. Bravo!';
+  @override
+  String get outcomeSame => 'Quasi uguale all’ultima volta. Continuare con costanza è già una gran cosa.';
+  @override
+  String get outcomeDown => 'Stavolta è stato più basso dell’ultima volta. Non c’è problema. Guardiamo insieme cosa è sembrato difficile.';
+  @override
+  String get outcomeDisclaimer => 'Questo è un registro dei punteggi che hai inserito tu. Non è una promessa che il punteggio salga.';
+  @override
   String get eveNotice => 'Il compito è domani. Niente di nuovo ora; ripassa solo ciò che hai già fatto';
   @override
   String get testDayNotice => 'Il compito è oggi. Basta un ripasso leggero. Come sempre, con calma';
@@ -3660,6 +3940,22 @@ class NlStrings extends ChukoreStrings {
   String get talkStarted => 'De eerste stap is gezet, en een beetje is genoeg. Zeg bijvoorbeeld: „Je hebt het geprobeerd”';
   @override
   String get talkRest => 'Dit was een rustweek. Zonder verwijt; laat weten dat je op elk moment kunt beginnen';
+  @override
+  String get outcomeAsk => 'Wil je je toetscijfer noteren? Overslaan mag ook, geen probleem.';
+  @override
+  String get outcomeSkip => 'Later';
+  @override
+  String get outcomeBaselineAsk => 'Heb je het cijfer van je laatste toets van vóór je begon? Dan kun je het invullen. Zo niet, dan is dat prima.';
+  @override
+  String get outcomeFirst => 'Opgeslagen. Je kunt het naast je volgende toets bekijken.';
+  @override
+  String get outcomeUp => 'Je cijfer is hoger dan de vorige keer. Goed gedaan!';
+  @override
+  String get outcomeSame => 'Ongeveer hetzelfde als de vorige keer. Volhouden is al sterk.';
+  @override
+  String get outcomeDown => 'Deze keer was het lager dan de vorige keer. Dat is prima. Laten we samen kijken wat lastig was.';
+  @override
+  String get outcomeDisclaimer => 'Dit is een overzicht van de cijfers die je zelf hebt ingevuld. Het is geen belofte dat je cijfer omhoog gaat.';
   @override
   String get eveNotice => 'De toets is morgen. Nu niets nieuws meer; kijk alleen terug op wat je al gedaan hebt';
   @override
@@ -3871,6 +4167,22 @@ class PlStrings extends ChukoreStrings {
   String get talkStarted => 'Pierwszy krok został zrobiony, a niewiele wystarczy. Powiedz: „Spróbowałeś”';
   @override
   String get talkRest => 'To był tydzień przerwy. Bez wyrzutów; powiedz, że można zacząć w każdej chwili';
+  @override
+  String get outcomeAsk => 'Chcesz zapisać swój wynik ze sprawdzianu? Możesz pominąć, nic się nie stanie.';
+  @override
+  String get outcomeSkip => 'Później';
+  @override
+  String get outcomeBaselineAsk => 'Jeśli masz wynik ostatniego sprawdzianu sprzed rozpoczęcia, możesz go wpisać. Jeśli nie, nic się nie stanie.';
+  @override
+  String get outcomeFirst => 'Zapisano. Zobaczysz go obok kolejnego sprawdzianu.';
+  @override
+  String get outcomeUp => 'Wynik jest wyższy niż poprzednio. Brawo!';
+  @override
+  String get outcomeSame => 'Prawie tak samo jak poprzednio. Systematyczność to już duży sukces.';
+  @override
+  String get outcomeDown => 'Tym razem wynik jest niższy niż poprzednio. Nic się nie stało. Zobaczmy razem, co sprawiło trudność.';
+  @override
+  String get outcomeDisclaimer => 'To zapis wyników wpisanych przez Ciebie. Nie jest obietnicą, że wynik wzrośnie.';
   @override
   String get eveNotice => 'Sprawdzian jest jutro. Nic nowego teraz; wystarczy przejrzeć to, co już zrobiłeś';
   @override

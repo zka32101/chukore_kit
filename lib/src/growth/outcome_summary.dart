@@ -1,3 +1,4 @@
+import '../l10n/strings.dart';
 import '../models/models.dart';
 import '../ports/ports.dart';
 import 'real_tests.dart';
@@ -143,3 +144,12 @@ OutcomeSummary buildOutcomeSummary(
   }
   return OutcomeSummary(entries, skipped);
 }
+
+/// 変化に添える一言。責めない短い文で、点の数字は含まない。
+/// 上がったときも「上がることを約束するもの」にならないよう、結果の保証は書かない（免責は `outcomeDisclaimer`）。
+String outcomeMessage(OutcomeChange change, ChukoreStrings strings) => switch (change) {
+      OutcomeChange.first => strings.outcomeFirst,
+      OutcomeChange.up => strings.outcomeUp,
+      OutcomeChange.same => strings.outcomeSame,
+      OutcomeChange.down => strings.outcomeDown,
+    };
