@@ -15,6 +15,9 @@ enum ChildFeature {
   /// 範囲カード（QR）の共有。
   scopeShare,
 
+  /// 学習を促す通知（端末の外へ出る通知）。既定では子どもには出さない。
+  nudge,
+
   /// 子ども本人が自分の学習を振り返る画面（週のふりかえり）。自分の記録だけで、共有・送信しない。
   selfReview,
 }
@@ -56,6 +59,7 @@ class AgePolicy {
     ChildFeature.growthCardShare: Access.needsGuardianGate,
     ChildFeature.weeklyReport: Access.needsGuardianGate,
     ChildFeature.scopeShare: Access.hidden,
+    ChildFeature.nudge: Access.hidden,
     ChildFeature.selfReview: Access.allowed,
   };
 

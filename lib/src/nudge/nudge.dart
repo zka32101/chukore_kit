@@ -1,4 +1,5 @@
 import '../l10n/strings.dart';
+import '../guardian/age_policy.dart';
 import '../models/models.dart';
 
 /// 通知の種類。優先は [testSoon] > [review] > [streak]。
@@ -63,8 +64,8 @@ class NudgeSettings {
 /// - 一度も学習していない人には、テストが近いとき以外は出さない
 /// - 連続記録がすでに途切れているときは、連続記録の通知を出さない（責める形にしない）
 ///
-/// 日付はローカル暦日。通知を出す時刻・OS の許可・13歳未満への通知の可否（[AgePolicy] などで決める）は、
-/// アプリ側の責務。
+/// 日付はローカル暦日。通知を出す時刻・OS の許可は、アプリ側の責務。
+/// **子どもへの通知の可否は [decideNudgeFor] で決める**（この関数は年齢を見ない）。
 NudgeDecision? decideNudge({
   required DateTime today,
   required DateTime? lastPracticedOn,
@@ -110,3 +111,37 @@ String nudgeText(NudgeKind kind, ChukoreStrings s) => switch (kind) {
       NudgeKind.review => s.nudgeReview,
       NudgeKind.streak => s.nudgeStreak,
     };
+
+/// [decideNudge] に、年齢の方針（[ChildFeature.nudge]）の確認を足したもの。**子どもには、方針が許さない限り出さない（null）**。
+///
+/// - 子どもでない（[isChild] が偽）なら、そのまま [decideNudge]
+/// - 子どもで、方針が [Access.allowed] なら [decideNudge]
+/// - 子どもで、方針が [Access.needsGuardianGate] なら、[guardianApproved]（保護者ゲートを通して通知を許可してもらった）が真のときだけ
+/// - 方針が [Access.hidden]（既定）・書かれていない場合は、常に null
+NudgeDecision? decideNudgeFor(
+  AgePolicy policy, {
+  required bool isChild,
+  bool guardianApproved = false,
+  required DateTime today,
+  required DateTime? lastPracticedOn,
+  int streakDays = 0,
+  DateTime? testDate,
+  int dueReviews = 0,
+  DateTime? lastNudgedOn,
+  Iterable<BusyDay> busyDays = const [],
+  NudgeSettings settings = const NudgeSettings(),
+}) {
+  final access = policy.accessForChild(ChildFeature.nudge, isChild: isChild);
+  final ok = access == Access.allowed || (access == Access.needsGuardianGate && guardianApproved);
+  if (!ok) return null;
+  return decideNudge(
+    today: today,
+    lastPracticedOn: lastPracticedOn,
+    streakDays: streakDays,
+    testDate: testDate,
+    dueReviews: dueReviews,
+    lastNudgedOn: lastNudgedOn,
+    busyDays: busyDays,
+    settings: settings,
+  );
+}

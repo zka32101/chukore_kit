@@ -4,6 +4,8 @@
 
 ## [未リリース]
 
+- 子どもへの通知の既定を、基盤で守るようにした: `ChildFeature.nudge`（既定は子どもには非表示）と、年齢の方針を確認する `decideNudgeFor`（方針が許さない限り子どもには null。保護者ゲートのあとの方針なら、承認があるときだけ）。これまで `decideNudge` は年齢を見ず、子どもへの通知の可否はアプリ任せだったため、法務確認を行わない前提の記録（`legal_review_questions.md` §0）と食い違っていた。**アプリは `decideNudge` でなく `decideNudgeFor` を使うこと**。`AgePolicyTable` の JSON の `access` に `nudge` を書ける（書かなければ子どもには出さない）
+
 - 運営者の判断で法務確認は行わないことを記録（2026-10-28）。確認が要る機能（匿名の送信・集計、範囲カードの共有、13歳未満への通知、結果を示す訴求、海外展開）は有効にしない。範囲は `docs/legal_review_questions.md` §0、方針は `docs/design_principles.md` §2-9。基盤の既定の挙動は変えていない
 
 - `example/day_flow.dart` に、時間で選ぶ出題（`pickPracticeForMinutes`）と、本番の点の一連（使い始めに聞く → テスト後に1回だけ聞く → 変化 → 外へ出す場合の形）を追加。通しのテストで、聞いたら二度と聞かないことと、外へ出す形に点・日付・名前が無いことを守る
