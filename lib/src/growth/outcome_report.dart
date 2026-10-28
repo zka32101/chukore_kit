@@ -42,6 +42,7 @@ class OutcomeReport {
     required this.subject,
     required this.region,
     this.grade,
+    this.tuning = 1,
   });
 
   final OutcomeBand band;
@@ -58,6 +59,9 @@ class OutcomeReport {
   /// 学年（中1〜3 なら 1〜3）。無くてもよい。
   final int? grade;
 
+  /// この区分を決めたしきい値の版（`KitTuning.version`）。版が違う報告は、区分の境界が違うので混ぜて集計しない。
+  final int tuning;
+
   Map<String, Object?> toJson() => {
     'band': band.name,
     'baseline': hasBaseline,
@@ -66,6 +70,7 @@ class OutcomeReport {
     'subject': subject,
     'region': region,
     'grade': grade,
+    'tuning': tuning,
   };
 }
 
@@ -83,6 +88,7 @@ List<OutcomeReport> buildOutcomeReports(
   double big = 0.10,
   int midFrom = 4,
   int highFrom = 12,
+  int tuning = 1,
 }) {
   final code = AgePolicy.regionCode(region);
   if (code.isEmpty) throw ArgumentError('region must be a country code or locale');
@@ -98,6 +104,7 @@ List<OutcomeReport> buildOutcomeReports(
           subject: subject,
           region: code,
           grade: grade,
+          tuning: tuning,
         ),
   ];
 }
@@ -111,6 +118,7 @@ class OutcomeCell {
     required this.usage,
     required this.hasBaseline,
     required this.kind,
+    required this.tuning,
     required this.counts,
     required this.n,
     required this.upRate,
@@ -124,6 +132,9 @@ class OutcomeCell {
   final bool hasBaseline;
   final RealTestKind kind;
 
+  /// しきい値の版。
+  final int tuning;
+
   /// 区分ごとの件数。
   final Map<OutcomeBand, int> counts;
   final int n;
@@ -132,13 +143,13 @@ class OutcomeCell {
   final double upRate, upLow, upHigh;
 }
 
-/// 報告を集計する。**1マスが [minCell] 件に満たなければ、そのマスは返さない**（少数から個人が推測されないように）。
+/// 報告を集計する。しきい値の版（[OutcomeReport.tuning]）が違う報告は混ぜない。**1マスが [minCell] 件に満たなければ、そのマスは返さない**（少数から個人が推測されないように）。
 /// 並びは 件数の多い順 → 教科 → 国 → 学年 → 使った量。
 List<OutcomeCell> tallyOutcomes(Iterable<OutcomeReport> reports, {int minCell = 30}) {
   if (minCell < 1) throw ArgumentError('minCell must be positive');
   final groups = <String, List<OutcomeReport>>{};
   for (final r in reports) {
-    final key = '${r.subject}|${r.region}|${r.grade}|${r.usage.name}|${r.hasBaseline}|${r.kind.name}';
+    final key = '${r.subject}|${r.region}|${r.grade}|${r.usage.name}|${r.hasBaseline}|${r.kind.name}|${r.tuning}';
     (groups[key] ??= []).add(r);
   }
   final out = <OutcomeCell>[];
@@ -160,6 +171,7 @@ List<OutcomeCell> tallyOutcomes(Iterable<OutcomeReport> reports, {int minCell = 
         usage: first.usage,
         hasBaseline: first.hasBaseline,
         kind: first.kind,
+        tuning: first.tuning,
         counts: counts,
         n: g.length,
         upRate: p,

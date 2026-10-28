@@ -80,6 +80,7 @@ final Map<FunnelEventName, Map<String, _Allowed>> _specs = {
     'band': _Allowed.oneOf(_bandValues),
     'usage': _Allowed.oneOf(_usageValues),
     'baseline': const _Allowed.boolean(),
+    'tuning': const _Allowed.intRange(1, 9999),
   },
   FunnelEventName.baselineEntered: const {},
   FunnelEventName.postTestReviewReached: const {},
@@ -123,6 +124,7 @@ class FunnelEvent {
     'band': r.band.name,
     'usage': r.usage.name,
     'baseline': r.hasBaseline,
+    'tuning': r.tuning,
   });
 
   final FunnelEventName name;

@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "outcomeNoise": 0.03,
+  "outcomeBig": 0.1,
+  "usageMidFrom": 4,
+  "usageHighFrom": 12,
+  "lookbackDays": 28,
+  "promptWindowDays": 14,
+  "promptMatchDays": 3,
+  "minCell": 30,
+  "funnelMinN": 30
+}

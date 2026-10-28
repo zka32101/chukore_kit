@@ -61,6 +61,7 @@ export 'src/growth/real_tests.dart';
 export 'src/growth/outcome_summary.dart';
 export 'src/growth/outcome_report.dart';
 export 'src/growth/funnel_events.dart';
+export 'src/growth/kit_tuning.dart';
 export 'src/growth/score_entry.dart';
 export 'src/postmortem/post_test_review.dart';
 export 'src/question/answer.dart';

@@ -79,9 +79,9 @@ void main() {
       expect(() => buildOutcomeReports(s, subject: '', region: 'BR'), throwsArgumentError);
     });
 
-    test('送らない項目を持たない: JSON のキーは決まった7つだけ（点・満点・日付・名前などが増えたら落ちる）', () {
+    test('送らない項目を持たない: JSON のキーは決まった8つだけ（点・満点・日付・名前などが増えたら落ちる）', () {
       final j = rep().toJson();
-      expect(j.keys.toSet(), {'band', 'baseline', 'usage', 'kind', 'subject', 'region', 'grade'});
+      expect(j.keys.toSet(), {'band', 'baseline', 'usage', 'kind', 'subject', 'region', 'grade', 'tuning'});
       final text = j.toString();
       for (final bad in ['score', 'max', 'date', 'name', 'school', 'device', 'answer']) {
         expect(text.contains(bad), false, reason: bad);

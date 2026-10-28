@@ -104,6 +104,19 @@
 
 `funnelRates` は、点の入力率（入れた÷聞いた）と振り返りの到達率（進んだ÷入れた）を、95% 信頼区間つきで返す。**件数はイベントの数で人数ではない**（匿名のため）。分母が 30 未満の割合は返さない。`test_date_registered` と `aha_reached` は単位（回数と人数）が違うので、割合にしない。
 
+## 8.6 しきい値の設定束（`KitTuning`）
+
+この設計の暫定値（変化のノイズ幅 3点・大きい変化 10点・使った量の区分 4日と12日・使った量を数える28日・点を聞く期間14日・前後3日・集計の最小件数30）を **1つにまとめ、版をつけて記録する**。
+
+- 既定値は `docs/kit_tuning/default.json`（テストが `KitTuning()` の既定と一致することを守る）。JSON から読むときの書き間違い・範囲外・矛盾（big がノイズ幅以下など）は `FormatException`。
+- `KitTuning.outcomeSummary / outcomeReports / tally / rates / scorePrompt` が、このしきい値で各関数を呼ぶ。アプリは個別の引数を渡さず、`KitTuning` を1つ持つ。
+- **値を変えたら `version` を上げる**。区分の境界が変わるので、報告に版が入り（`OutcomeReport.tuning`、`score_entered` イベントの `tuning`）、**版が違う報告は集計で混ぜない**。
+- 変更の理由と日付は、下の「変更履歴」に残す。結果を見る前に決めて記録する（`global_rollout_criteria.md` と同じ運用）。
+
+| 版 | 日付 | 変更 | 理由 |
+|---|---|---|---|
+| 1 | 2026-10-28 | 初版（すべて暫定） | 結果を見る前に決めて記録するため |
+
 ## 9. 作る順序（状況）
 
 実装済み: 1・2（`RealTestRecord` の満点・種類、`buildOutcomeSummary`）、4 の変換と 5 の集計の関数（`buildOutcomeReports`・`tallyOutcomes`）。**送信の仕組みは基盤に無く、法務確認と保護者の同意が済むまでアプリは使わない。** 3 は基盤側の判定・文言が実装済み（`decideScorePrompt`・`parseScoreInput`・`outcomeMessage` と 18 言語の文言）。残りはアプリ側の画面への結線。
