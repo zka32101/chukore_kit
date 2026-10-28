@@ -48,6 +48,7 @@ export 'src/session/break_suggestion.dart';
 export 'src/session/today_card.dart';
 export 'src/nudge/nudge_hour.dart';
 export 'src/practice/question_picker.dart';
+export 'src/practice/timed_practice.dart';
 export 'src/practice/eve_guard.dart';
 export 'src/prereq/prerequisites.dart';
 export 'src/sheet/last_minute_sheet.dart';
