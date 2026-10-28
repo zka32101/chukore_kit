@@ -1,0 +1,22 @@
+{
+  "note": "形の例。日付は目安の仮で、現地の学校暦の確認のあとに入れる",
+  "regions": {
+    "JP": {
+      "windows": [
+        {"id": "term1_mid", "start": "05-20", "end": "06-05"},
+        {"id": "term1_final", "start": "07-01", "end": "07-12"},
+        {"id": "term2_mid", "start": "10-10", "end": "10-25"},
+        {"id": "term2_final", "start": "12-05", "end": "12-15"},
+        {"id": "year_end", "start": "02-15", "end": "03-05"}
+      ]
+    },
+    "BR": {
+      "windows": [
+        {"id": "bim1", "start": "04-10", "end": "04-25"},
+        {"id": "bim2", "start": "06-20", "end": "07-05"},
+        {"id": "bim3", "start": "09-10", "end": "09-25"},
+        {"id": "bim4", "start": "11-20", "end": "12-10"}
+      ]
+    }
+  }
+}

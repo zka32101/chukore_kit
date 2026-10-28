@@ -6,6 +6,7 @@
 |---|---|---|
 | 言語（文言） | `ChukoreStrings`（18言語・RTL）、`docs/translation_review.csv` | ✅ ネイティブ確認は人手待ち（[`native_review_checklist.md`](native_review_checklist.md)） |
 | 地域コンプライアンス | `RegionProfileTable`（年齢・保護者同意・利用時間・広告/トラッキング・課金手段・保持・必須通知）、`AgePolicyTable` | ✅ 数値は法務確認後（[`legal_review_questions.md`](legal_review_questions.md)） |
+| 試験の時期 | `ExamCalendar`（国ごとの定期テスト等の時期。中身は現地の学校暦の確認後） | ✅ 仕組み。データは未確認 |
 | 国別カリキュラム | `CurriculumPack`（単元の木 ↔ 学習基準コード、`validate`） | ✅ 仕組み。BNCC の実データは現地確認後 |
 | question | `QuestionBank`・`pickQuestions`・`interleaveByUnit` | ✅ |
 | progress | `AttemptStore`（SQLite・バックアップ・互換テスト） | ✅ |
