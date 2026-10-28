@@ -4,29 +4,37 @@
 
 ## [未リリース]
 
-- 国ごとの試験の時期のカレンダー `ExamCalendar`（`activeOn`・`upcoming`。中身は現地の学校暦の確認のあと）
-- しきい値の設定束 `KitTuning`（版つき。報告とイベントに版が入り、版が違う報告は集計で混ぜない）。`OutcomeReport` に `tuning`、`score_entered` イベントに `tuning` を追加
-- 匿名イベントの名前と許可項目 `FunnelEvent`（点・日付・名前を持てない）と、点の入力率・振り返りの到達率 `funnelRates`。送信の仕組みは無く、法務確認まで使わない
-- 分で選ぶ今日の出題 `pickPracticeForMinutes`（予算に収まるよう、比率を保って数を減らす。増やさない）
-- 点を聞くタイミングの判定 `decideScorePrompt`（テスト日の翌日から14日以内に1回だけ・1日1回まで・聞いたら二度と聞かない）と入力の読み取り `parseScoreInput`。数値入力の正規化 `normalizeNumberInput` を公開
-- 本番の点まわりの文言 `outcomeAsk` / `outcomeSkip` / `outcomeBaselineAsk` / `outcomeFirst` / `outcomeUp` / `outcomeSame` / `outcomeDown` / `outcomeDisclaimer`（18言語。責めず、結果を保証しない。`outcomeMessage(change, strings)` で変化に添える一言を引く）。**ネイティブ確認は未実施**（`docs/translation_review.csv` に追加済み）
-- 匿名の報告 `buildOutcomeReports`（点・日付を持たない粗い区分）と集計 `tallyOutcomes`（30 件未満のマスは返さない）。送信の仕組みは無く、法務確認まで使わない
-- 本番の点の変化 `buildOutcomeSummary`（端末内。ノイズ幅・使う前の点との比較・使った量）。`RealTestRecord` に満点 `maxScore` と種類 `RealTestKind` を追加（既存の呼び出しは変わらない）
-- 本番の点の変化を測る設計案 `docs/score_outcome_measurement.md`（端末内で本人に見せる→匿名の区分だけ集める→訴求は最後。落とし穴と法務確認の項目、作る順序）
-- コンセプトを「気づいたら、点が上がっている。」に決定（`docs/competitive_research_middle_school.md` §4.2、`docs/design_principles.md`）。結果は保証せず、海外は偏差値でなく「点・成績」で訴求
-- 中学数学の海外競合調査と、差別化・コンセプト・価値の再定義案 `docs/competitive_research_middle_school.md`（ブラジル・トルコ・インドネシア・韓国。事実と推測を分け、未取得を明記）
-- 設計方針 `docs/design_principles.md`（中学専用・小学と共通にしない・守ること・中学の指標）。海外版との対応表の「重複の整理」を、小学とは共通にしない前提に訂正
-- 海外展開の基準 `docs/global_rollout_criteria.md`（国ごとに人気の1教科から出し、基準を満たしたら2教科目。基準・止める条件・記録表）
-- 海外版との対応表 `docs/global_alignment.md`（部品ごとの状態と、残りの人手項目）
-- `StudyDay.shift`/`shiftAttempts`: 回答の時刻と「今」を境界の分だけ戻して渡すと、既存の全関数（連続日数・週の集計・復習など）が学習日で数える（API は変えていない）
-- L10n 品質ゲート: `lib/src/ui` に日本語の直書きがないことを見張るテスト、年輪の図・年表の並べ替えの全言語 200% 文字拡大テスト
-- 国別カリキュラムパック `CurriculumPack`（単元の木に、その国の学習基準の項目コードを対応づける。学年の範囲・コードの形・網羅すべき項目を検査する `validate`）。サンプル `docs/curriculum_packs/example_BR.json` は形の例で内容は仮（BNCC の実データは現地の確認後）
-- 差し替え用の入口 `Clock`/`ConsentStore`（既定は同意なし）/`NotificationScheduler`/`EntitlementReader` と、学習日の境界 `StudyDay`（深夜の学習を前日に数える設定。既存の関数への組み込みはこれから）
-- 地域プロファイル `RegionProfile` / `RegionProfileTable`（年齢の線に加え、保護者同意・1日の利用時間上限・広告/トラッキング・課金手段・保持日数・必須の通知を地域ごとの JSON で渡す。書き間違いは `FormatException`、既定は最も厳しい側。数値は法務確認後に入れる）。サンプルは `docs/region_profiles/example.json`
-- 克服の戻りの分析 `analyzeRelapses`（再発した割合・日数。克服の基準を見直す根拠）
-- 速度の修正: 回答が 10 万件の履歴で、`classifyMistakes`（約 13 秒 → 0.2 秒）と `buildRetrySets`（約 16 秒 → 0.4 秒）が履歴の件数の 2 乗に比例して遅くなっていたのを直した（結果は同じ）。長く使った子の端末で固まる恐れがあった。`tool/bench.dart` で全関数の時間を測れ、`test/scale_test.dart` が 2 乗の遅さの再発を見張る
-- 次にやる単元の提案 `suggestNextUnits`
-- 互換性の固定: 旧版の SQLite（版 1〜3）の移行と、バックアップ形式 v1 の固定ファイル（`test/fixtures/`）をテストで守る
+## [0.3.0] - 2026-10-28
+
+中学専用の基盤として、**本番の点の変化を測る一式**と、**海外対応の土台**（地域プロファイル・カリキュラムパック・試験カレンダー）を足した版。コンセプトは「気づいたら、点が上がっている。」。**公開 API を壊す変更はなく、SQLite のスキーマ版（4）・バックアップ形式（1）は 0.2.0 のまま**（移行は不要）。PR 番号は `zka32101/chukore_kit` のもの。
+
+### 本番の点の変化（設計: `docs/score_outcome_measurement.md`）
+- 本番の点の変化 `buildOutcomeSummary`（端末内。ノイズ幅・使う前の点との比較・使った量）。`RealTestRecord` に満点 `maxScore` と種類 `RealTestKind` を追加（既存の呼び出しは変わらない）(#110)
+- 点を聞くタイミング `decideScorePrompt`（テスト日の翌日から14日以内に1回だけ・1日1回まで・聞いたら二度と聞かない）と入力の読み取り `parseScoreInput`。数値入力の正規化 `normalizeNumberInput` を公開 (#113)
+- 点まわりの文言 8 つ（18言語。責めず、結果を保証しない）と `outcomeMessage`。**ネイティブ確認は未実施** (#112)
+- 匿名の報告 `buildOutcomeReports`（点・日付を持たない粗い区分）と集計 `tallyOutcomes`（30 件未満のマスは返さない）(#111)
+- 匿名イベントの名前と許可項目 `FunnelEvent`（点・日付・名前を持てない）と、点の入力率・振り返りの到達率 `funnelRates` (#115)
+- しきい値の設定束 `KitTuning`（版つき。報告とイベントに版が入り、版が違う報告は集計で混ぜない）(#116)
+- ※ 匿名の報告・イベント・集計は**送信の仕組みが無く、法務確認と保護者の同意が済むまでアプリは使わない**
+
+### 出題・計画
+- 分で選ぶ今日の出題 `pickPracticeForMinutes`（予算に収まるよう、比率を保って数を減らす。増やさない）(#114)
+- 次にやる単元の提案 `suggestNextUnits`、克服の戻りの分析 `analyzeRelapses` (#99)
+- `StudyDay.shift`/`shiftAttempts`: 回答の時刻と「今」を境界の分だけ戻して渡すと、既存の全関数が学習日で数える (#102)
+- 国ごとの試験の時期のカレンダー `ExamCalendar`（中身は現地の学校暦の確認のあと）(#117)
+
+### 海外対応の土台
+- 地域プロファイル `RegionProfile` / `RegionProfileTable`（年齢の線・保護者同意・利用時間上限・広告/トラッキング・課金手段・保持日数・必須の通知。既定は最も厳しい側。数値は法務確認後）(#100)
+- 国別カリキュラムパック `CurriculumPack`（単元の木に学習基準の項目コードを対応づけ、`validate` で整合・網羅を検査。BNCC の実データは現地の確認後）(#102)
+- 差し替え用の入口 `Clock`/`ConsentStore`（既定は同意なし）/`NotificationScheduler`/`EntitlementReader`、学習日の境界 `StudyDay` (#101)
+- L10n 品質ゲート: UI に日本語の直書きがないことと、年輪の図・年表の並べ替えの全言語 200% 文字拡大を、テストで見張る (#102)
+
+### 品質
+- 速度の修正: 回答が 10 万件の履歴で、`classifyMistakes`（約 13 秒 → 0.2 秒）と `buildRetrySets`（約 16 秒 → 0.4 秒）が履歴の件数の 2 乗に比例して遅くなっていたのを直した（結果は同じ）。`tool/bench.dart` と `test/scale_test.dart` で見張る
+- 互換性の固定: 旧版の SQLite（版 1〜3）の移行と、バックアップ形式 v1 の固定ファイルをテストで守る
+
+### ドキュメント
+- 設計方針 `design_principles.md`（中学専用・小学と共通にしない）、海外展開の基準 `global_rollout_criteria.md`、海外版との対応表 `global_alignment.md`、中学数学の海外競合調査 `competitive_research_middle_school.md`、本番の点を測る設計 `score_outcome_measurement.md` (#103〜#109)
 
 ## [0.2.0] - 2026-10-20
 
