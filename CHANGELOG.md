@@ -4,6 +4,7 @@
 
 ## [未リリース]
 
+- 国ごとの試験の時期のカレンダー `ExamCalendar`（`activeOn`・`upcoming`。中身は現地の学校暦の確認のあと）
 - しきい値の設定束 `KitTuning`（版つき。報告とイベントに版が入り、版が違う報告は集計で混ぜない）。`OutcomeReport` に `tuning`、`score_entered` イベントに `tuning` を追加
 - 匿名イベントの名前と許可項目 `FunnelEvent`（点・日付・名前を持てない）と、点の入力率・振り返りの到達率 `funnelRates`。送信の仕組みは無く、法務確認まで使わない
 - 分で選ぶ今日の出題 `pickPracticeForMinutes`（予算に収まるよう、比率を保って数を減らす。増やさない）

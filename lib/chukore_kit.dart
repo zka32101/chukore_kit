@@ -8,6 +8,7 @@ export 'src/models/models.dart';
 export 'src/scope/unit_tree.dart';
 export 'src/scope/curriculum_pack.dart';
 export 'src/planner/planner.dart';
+export 'src/planner/exam_calendar.dart';
 export 'src/planner/multi_planner.dart';
 export 'src/assess/mastery.dart';
 export 'src/assess/hint_usage.dart';
