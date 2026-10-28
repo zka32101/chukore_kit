@@ -75,6 +75,20 @@ Future<List<String>> runDay({DateTime? today, ChukoreStrings strings = const JaS
     '今日は 1 分だけ: ${timed.set.items.length} 問（見積もり ${timed.estimatedSeconds.round()} 秒 / 予算 ${timed.budgetSeconds} 秒、収まる: ${timed.fits}）',
   );
 
+  // 4c. 上の 3〜4b をまとめて 1 回で求める「今日の入口」（見出し・出題・点を聞くかを返す）。アプリはこちらを使うと結線が短い
+  final entrance = buildDailyHome(
+    now: day.add(const Duration(hours: 16)),
+    plan: plan.days,
+    questions: bank.questions,
+    mastery: mastery,
+    attempts: await store.query(),
+    testDate: testDate,
+    minutes: 5,
+  );
+  say(
+    '今日の入口: 出題 ${entrance.practice.items.length} 問 / 見積もり ${entrance.estimatedSeconds.round()} 秒（予算 ${entrance.budgetSeconds} 秒） / 見出し ${entrance.card.headline.name} / 点を聞く: ${entrance.scorePrompt?.kind.name ?? 'なし'}',
+  );
+
   // 5. 回答する（ここでは、最初の問題を間違え、あとは正解する）。自信の有無・ヒントも記録できる
   var t = day.add(const Duration(hours: 16));
   for (final (i, q) in guarded.set.questions.indexed) {
@@ -154,6 +168,19 @@ Future<List<String>> runDay({DateTime? today, ChukoreStrings strings = const JaS
   say('本番の点の変化: ${entry.change.name}（学習日 ${entry.activeDays} 日）/ ${outcomeMessage(entry.change, strings)}');
   final reports = tuning.outcomeReports(summary, subject: 'en', region: 'JP', grade: 1);
   say('外へ出す場合の形（区分だけ・点なし）: ${jsonEncode(FunnelEvent.scoreEntered(reports.single).toJson())}');
+  // 保護者への声かけ（点の変化）は、保護者向けレポートと同じ方針（子どもには保護者ゲートのあと）で見せる
+  final scoreTalk = suggestOutcomeTalkFor(policy, summary, isChild: policy.isChild(age), guardianApproved: true);
+  say('保護者への声かけ（点の変化）: ${scoreTalk?.text(strings) ?? '出さない'}');
+  // 子どもには、通知の既定は出さない（方針が許さない限り）。保護者の承認があっても方針が非表示なら出ない
+  final nudge = decideNudgeFor(
+    policy,
+    isChild: policy.isChild(age),
+    guardianApproved: true,
+    today: day,
+    lastPracticedOn: day.subtract(const Duration(days: 1)),
+    testDate: testDate.subtract(const Duration(days: 11)),
+  );
+  say('通知（$age 歳）: ${nudge == null ? '出さない' : nudge.kind.name}');
 
   // 10. 機種変更の引き継ぎ（書き出し → 別のストアに取り込み）と、全削除
   final file = AttemptBackup.export(attempts, now: t);
