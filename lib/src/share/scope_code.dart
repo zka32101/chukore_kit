@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import '../guardian/age_policy.dart';
 import '../models/models.dart';
 import '../scope/unit_tree.dart';
 
@@ -94,6 +95,27 @@ String encodeScope(UnitTree tree, {required Iterable<String> unitIds, DateTime? 
     if (testDate != null) _ymd(testDate),
   ];
   return parts.join('.');
+}
+
+/// [encodeScope] に、年齢の方針（[ChildFeature.scopeShare]）の確認を足したもの。**子どもには、方針が許さない限り符号を作らない（null）**。
+///
+/// - 子どもでない（[isChild] が偽）なら、そのまま [encodeScope]
+/// - 子どもで、方針が [Access.allowed] なら [encodeScope]
+/// - 子どもで、方針が [Access.needsGuardianGate] なら、[guardianApproved]（保護者ゲートを通した）が真のときだけ
+/// - 方針が [Access.hidden]（既定）・書かれていない場合は、常に null（範囲カードの共有は、既定では出さない）
+///
+/// 範囲に問題があるとき（教科・単元が不正）は、許可されていても [encodeScope] と同じく [ArgumentError]。
+String? encodeScopeFor(
+  AgePolicy policy,
+  UnitTree tree, {
+  required bool isChild,
+  bool guardianApproved = false,
+  required Iterable<String> unitIds,
+  DateTime? testDate,
+}) {
+  final access = policy.accessForChild(ChildFeature.scopeShare, isChild: isChild);
+  final ok = access == Access.allowed || (access == Access.needsGuardianGate && guardianApproved);
+  return ok ? encodeScope(tree, unitIds: unitIds, testDate: testDate) : null;
 }
 
 String _ymd(DateTime d) =>

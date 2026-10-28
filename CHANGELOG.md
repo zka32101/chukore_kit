@@ -4,6 +4,8 @@
 
 ## [未リリース]
 
+- 子どもへの範囲カード（QR）の既定を、基盤で守るようにした: 年齢の方針（`ChildFeature.scopeShare`、既定は子どもには非表示）を確認する `encodeScopeFor`（方針が許さない限り子どもには null。保護者ゲートのあとの方針なら、承認があるときだけ）。これまで `encodeScope` は年齢を見ず、方針の表にあるだけで基盤は何も守っていなかった（通知の `decideNudgeFor` と同じ種類の食い違い）。**アプリは符号を作るのに `encodeScopeFor` を使うこと**。`encodeScope` の挙動は変えていない
+
 - 「今日」の入口のまとめ `buildDailyHome`（見出し・今日の出題・時間の見積もり・前日/当日の制限・点を聞くかを 1 回で。時間の予算に収め、混ぜ、制限をかける。個別に呼んでも同じ結果）。`example/day_flow.dart` にも追加
 - 保護者への声かけ（点の変化）`suggestOutcomeTalk` / `suggestOutcomeTalkFor`（数字を含めず、取り組みを話題にし、責めない。保護者向けレポートと同じ年齢の方針）と、文言 `talkOutcomeFirst` / `Up` / `Same` / `Down`（18言語。**ネイティブ確認は未実施**）
 
