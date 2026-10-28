@@ -33,6 +33,7 @@ void main() {
         'band',
         'usage',
         'baseline',
+        'tuning',
       });
       expect(funnelEventKeys(FunnelEventName.scorePromptSkipped), {'subject', 'region', 'grade', 'kind'});
     });
@@ -44,6 +45,7 @@ void main() {
         'band': 'up',
         'usage': 'mid',
         'baseline': false,
+        'tuning': 1,
       });
       expect(e.props.values.every((v) => v is String || v is int || v is bool), true);
     });
@@ -120,6 +122,7 @@ void main() {
         'band': 'bigUp',
         'usage': 'high',
         'baseline': true,
+        'tuning': 1,
       });
     });
 
