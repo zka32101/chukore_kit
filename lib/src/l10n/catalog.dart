@@ -74,6 +74,10 @@ Map<String, String> stringsCatalog(ChukoreStrings s) {
   m['outcomeSame'] = s.outcomeSame;
   m['outcomeDown'] = s.outcomeDown;
   m['outcomeDisclaimer'] = s.outcomeDisclaimer;
+  m['talkOutcomeFirst'] = s.talkOutcomeFirst;
+  m['talkOutcomeUp'] = s.talkOutcomeUp;
+  m['talkOutcomeSame'] = s.talkOutcomeSame;
+  m['talkOutcomeDown'] = s.talkOutcomeDown;
   m['eveNotice'] = s.eveNotice;
   m['testDayNotice'] = s.testDayNotice;
   m['cardAgain'] = s.cardAgain;

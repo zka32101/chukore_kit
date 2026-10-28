@@ -247,6 +247,18 @@ abstract class ChukoreStrings {
   /// 自分で入れた記録で、結果の保証ではない。
   String get outcomeDisclaimer;
 
+  /// 保護者への声かけ: 本番の点を最初に記録した。数字を含めず、点数より取り組みを話題にする。
+  String get talkOutcomeFirst;
+
+  /// 保護者への声かけ: 前より点が上がった。数字を含めず、点数より取り組みを話題にする。
+  String get talkOutcomeUp;
+
+  /// 保護者への声かけ: 前回とほぼ同じ。数字を含めず、点数より取り組みを話題にする。
+  String get talkOutcomeSame;
+
+  /// 保護者への声かけ: 前より点が下がった。数字を含めず、点数より取り組みを話題にする。
+  String get talkOutcomeDown;
+
   /// 前日・当日に出す一言（新しいことを増やさない、落ち着いて。数字を含まない）。使い方は [guardLastDays]。
   String get eveNotice;
   String get testDayNotice;
@@ -404,6 +416,14 @@ class JaStrings extends ChukoreStrings {
   String get outcomeDown => '今回は前より低かったよ。大丈夫、どこが難しかったか、いっしょに見てみよう';
   @override
   String get outcomeDisclaimer => '自分で入れた点の記録だよ。点が上がることを約束するものではないよ';
+  @override
+  String get talkOutcomeFirst => 'テストの点を記録できました。次のテストのときに並べて見られます。点数よりも、取り組みの話をしてあげてください';
+  @override
+  String get talkOutcomeUp => 'テストの点が前より上がりました。点数よりも、続けてきたことをほめてあげましょう';
+  @override
+  String get talkOutcomeSame => '前回とほぼ同じでした。続けていること自体を認めて、「次はどこを伸ばしたい？」と聞いてみましょう';
+  @override
+  String get talkOutcomeDown => '今回は前回より低くなりました。責めずに、「どこが難しかった？」と一緒に見てあげましょう';
   @override
   String get eveNotice => 'あしたはテスト。新しいことは増やさず、やったところの見直しだけにしよう';
   @override
@@ -606,6 +626,14 @@ class EnStrings extends ChukoreStrings {
   String get outcomeDown => 'It was lower this time. That is okay. Let us look at what felt hard together.';
   @override
   String get outcomeDisclaimer => 'This is a record of the scores you entered. It does not promise your score will go up.';
+  @override
+  String get talkOutcomeFirst => 'The test score is recorded. You will be able to see it next to the next test. Talk about the effort rather than the score.';
+  @override
+  String get talkOutcomeUp => 'The test score is higher than last time. Praise the effort of keeping at it rather than the score itself.';
+  @override
+  String get talkOutcomeSame => 'About the same as last time. Recognize that they keep going, and ask, "What would you like to improve next?"';
+  @override
+  String get talkOutcomeDown => 'The score was lower this time. No blame; look together at what felt hard.';
   @override
   String get eveNotice => 'The test is tomorrow. No new material now; just look back over what you have already done';
   @override
@@ -837,6 +865,14 @@ class PtStrings extends ChukoreStrings {
   String get outcomeDown => 'Dessa vez foi mais baixa. Tudo bem. Vamos ver juntos o que foi difícil.';
   @override
   String get outcomeDisclaimer => 'Este é um registro das notas que você informou. Não é uma promessa de que a nota vai subir.';
+  @override
+  String get talkOutcomeFirst => 'A nota da prova foi registrada. Você poderá ver ao lado da próxima prova. Converse sobre o esforço, não só sobre a nota.';
+  @override
+  String get talkOutcomeUp => 'A nota está mais alta que a anterior. Elogie o esforço de continuar, mais do que a nota em si.';
+  @override
+  String get talkOutcomeSame => 'Ficou quase igual à anterior. Reconheça que a criança continua firme e pergunte: "O que você quer melhorar agora?"';
+  @override
+  String get talkOutcomeDown => 'Dessa vez a nota foi mais baixa. Sem cobrança; vejam juntos o que foi difícil.';
   @override
   String get eveNotice => 'A prova é amanhã. Sem conteúdo novo agora; só revise o que você já estudou';
   @override
@@ -1072,6 +1108,14 @@ class EsStrings extends ChukoreStrings {
   String get outcomeDown => 'Esta vez fue más baja. No pasa nada. Veamos juntos qué se te hizo difícil.';
   @override
   String get outcomeDisclaimer => 'Es un registro de las notas que anotaste tú. No promete que tu nota vaya a subir.';
+  @override
+  String get talkOutcomeFirst => 'Se registró la nota del examen. Podrán verla junto al próximo examen. Hable del esfuerzo más que de la nota.';
+  @override
+  String get talkOutcomeUp => 'La nota subió respecto a la anterior. Elogie el esfuerzo de seguir adelante más que la nota en sí.';
+  @override
+  String get talkOutcomeSame => 'Quedó casi igual que la anterior. Reconozca que sigue constante y pregunte: "¿Qué te gustaría mejorar ahora?"';
+  @override
+  String get talkOutcomeDown => 'Esta vez la nota fue más baja. Sin reproches; vean juntos qué se le hizo difícil.';
   @override
   String get eveNotice => 'El examen es mañana. Nada nuevo ahora; solo repasa lo que ya hiciste';
   @override
@@ -1323,6 +1367,14 @@ class FrStrings extends ChukoreStrings {
   @override
   String get outcomeDisclaimer => 'C’est un relevé des notes que tu as saisies toi-même. Il ne promet pas que ta note va monter.';
   @override
+  String get talkOutcomeFirst => 'La note du contrôle est enregistrée. Vous pourrez la voir à côté du prochain contrôle. Parlez de l’effort plutôt que de la note.';
+  @override
+  String get talkOutcomeUp => 'La note est plus haute que la dernière fois. Félicitez l’effort de continuer plutôt que la note elle-même.';
+  @override
+  String get talkOutcomeSame => 'À peu près pareil que la dernière fois. Reconnaissez la régularité de votre enfant et demandez-lui ce qu’il ou elle voudrait améliorer ensuite.';
+  @override
+  String get talkOutcomeDown => 'Cette fois, la note est plus basse. Sans reproche, regardez ensemble ce qui a semblé difficile.';
+  @override
   String get eveNotice => 'Le contrôle est demain. Rien de nouveau maintenant ; revois seulement ce que tu as déjà fait';
   @override
   String get testDayNotice => 'Le contrôle est aujourd’hui. Une relecture légère suffit. Comme d’habitude, en confiance';
@@ -1520,6 +1572,14 @@ class KoStrings extends ChukoreStrings {
   String get outcomeDown => '이번에는 지난번보다 낮았어요. 괜찮아요. 무엇이 어려웠는지 같이 살펴봐요.';
   @override
   String get outcomeDisclaimer => '직접 입력한 점수의 기록이에요. 점수가 오른다고 약속하는 것은 아니에요.';
+  @override
+  String get talkOutcomeFirst => '시험 점수가 기록되었어요. 다음 시험 때 나란히 볼 수 있어요. 점수보다 노력에 대해 이야기해 주세요.';
+  @override
+  String get talkOutcomeUp => '지난번보다 점수가 올랐어요. 점수 자체보다 꾸준히 해 온 노력을 칭찬해 주세요.';
+  @override
+  String get talkOutcomeSame => '지난번과 거의 비슷해요. 꾸준히 하고 있다는 점을 인정해 주고, "다음에는 어디를 키우고 싶어?"라고 물어보세요.';
+  @override
+  String get talkOutcomeDown => '이번에는 지난번보다 낮았어요. 탓하지 말고, 무엇이 어려웠는지 함께 살펴봐 주세요.';
   @override
   String get eveNotice => '내일은 시험이에요. 새로운 건 늘리지 말고, 했던 부분만 다시 살펴봐요';
   @override
@@ -1743,6 +1803,14 @@ class ZhStrings extends ChukoreStrings {
   String get outcomeDown => _t('这次比上次低一些。没关系，一起看看哪里有点难。', '這次比上次低一些。沒關係，一起看看哪裡有點難。');
   @override
   String get outcomeDisclaimer => _t('这是你自己填写的分数记录，并不保证分数一定会提高。', '這是你自己填寫的分數記錄，並不保證分數一定會提高。');
+  @override
+  String get talkOutcomeFirst => _t('考试分数已记录。下次考试时可以并排查看。比起分数，多聊聊孩子的努力吧。', '考試分數已記錄。下次考試時可以並排查看。比起分數，多聊聊孩子的努力吧。');
+  @override
+  String get talkOutcomeUp => _t('分数比上次高了。比起分数本身，更要夸奖孩子一直坚持的努力。', '分數比上次高了。比起分數本身，更要誇獎孩子一直堅持的努力。');
+  @override
+  String get talkOutcomeSame => _t('和上次差不多。肯定孩子一直在坚持，并问问“接下来想提高哪里？”', '和上次差不多。肯定孩子一直在堅持，並問問「接下來想提高哪裡？」');
+  @override
+  String get talkOutcomeDown => _t('这次比上次低一些。不要责备，和孩子一起看看哪里觉得难。', '這次比上次低一些。不要責備，和孩子一起看看哪裡覺得難。');
   @override
   String get eveNotice => _t('明天考试。现在不再学新的，只回顾已经做过的内容就好', '明天考試。現在不再學新的，只回顧已經做過的內容就好');
   @override
@@ -2022,6 +2090,14 @@ class IdStrings extends ChukoreStrings {
   @override
   String get outcomeDisclaimer => 'Ini catatan nilai yang kamu isi sendiri. Ini bukan janji bahwa nilaimu akan naik.';
   @override
+  String get talkOutcomeFirst => 'Nilai ujian sudah tercatat. Bisa dilihat berdampingan dengan ujian berikutnya. Bicarakan usahanya, bukan hanya nilainya.';
+  @override
+  String get talkOutcomeUp => 'Nilainya naik dibanding sebelumnya. Pujilah usaha untuk terus belajar, bukan hanya nilainya.';
+  @override
+  String get talkOutcomeSame => 'Hampir sama dengan sebelumnya. Hargai konsistensinya, lalu tanyakan: "Bagian mana yang ingin kamu tingkatkan berikutnya?"';
+  @override
+  String get talkOutcomeDown => 'Kali ini nilainya lebih rendah. Tanpa menyalahkan; lihat bersama bagian mana yang terasa sulit.';
+  @override
   String get eveNotice => 'Ujian besok. Tidak perlu materi baru; cukup ulangi yang sudah dikerjakan';
   @override
   String get testDayNotice => 'Ujian hari ini. Mengulang ringan saja sudah cukup. Tenang seperti biasa';
@@ -2240,6 +2316,14 @@ class ViStrings extends ChukoreStrings {
   String get outcomeDown => 'Lần này thấp hơn lần trước. Không sao đâu. Cùng xem phần nào đã thấy khó nhé.';
   @override
   String get outcomeDisclaimer => 'Đây là bản ghi điểm do chính em nhập. Điều này không đảm bảo điểm sẽ tăng.';
+  @override
+  String get talkOutcomeFirst => 'Đã ghi lại điểm bài kiểm tra. Có thể xem cạnh bài kiểm tra tiếp theo. Hãy trò chuyện về sự nỗ lực hơn là điểm số.';
+  @override
+  String get talkOutcomeUp => 'Điểm cao hơn lần trước. Hãy khen sự kiên trì của con hơn là bản thân điểm số.';
+  @override
+  String get talkOutcomeSame => 'Gần như bằng lần trước. Hãy ghi nhận con vẫn duy trì đều đặn, rồi hỏi: "Lần tới con muốn cải thiện phần nào?"';
+  @override
+  String get talkOutcomeDown => 'Lần này điểm thấp hơn. Đừng trách; hãy cùng con xem phần nào đã thấy khó.';
   @override
   String get eveNotice => 'Ngày mai là bài kiểm tra. Đừng học thêm điều mới, chỉ xem lại những gì đã làm';
   @override
@@ -2460,6 +2544,14 @@ class DeStrings extends ChukoreStrings {
   @override
   String get outcomeDisclaimer => 'Das ist eine Aufzeichnung der Punkte, die du selbst eingetragen hast. Sie ist kein Versprechen, dass deine Punkte steigen.';
   @override
+  String get talkOutcomeFirst => 'Die Punktzahl ist gespeichert. Sie lässt sich neben dem nächsten Test ansehen. Sprechen Sie über die Mühe, nicht nur über die Punkte.';
+  @override
+  String get talkOutcomeUp => 'Die Punktzahl ist höher als beim letzten Mal. Loben Sie das Dranbleiben mehr als die Punkte selbst.';
+  @override
+  String get talkOutcomeSame => 'Ungefähr wie beim letzten Mal. Erkennen Sie das Dranbleiben an und fragen Sie: „Was möchtest du als Nächstes verbessern?“';
+  @override
+  String get talkOutcomeDown => 'Diesmal war es weniger als beim letzten Mal. Ohne Vorwürfe; schauen Sie gemeinsam, was schwierig war.';
+  @override
   String get eveNotice => 'Morgen ist die Prüfung. Nichts Neues mehr; schau nur noch durch, was du schon gemacht hast';
   @override
   String get testDayNotice => 'Heute ist die Prüfung. Ein kurzer Blick zurück genügt. Bleib ganz du selbst';
@@ -2656,6 +2748,14 @@ class TrStrings extends ChukoreStrings {
   String get outcomeDown => 'Bu sefer geçen seferden düşük oldu. Sorun değil. Hangi kısmın zor geldiğine birlikte bakalım.';
   @override
   String get outcomeDisclaimer => 'Bu, senin girdiğin puanların kaydıdır. Puanının artacağına dair bir söz değildir.';
+  @override
+  String get talkOutcomeFirst => 'Sınav puanı kaydedildi. Bir sonraki sınavla yan yana görülebilir. Puandan çok çabadan söz edin.';
+  @override
+  String get talkOutcomeUp => 'Puan geçen seferden yüksek. Puanın kendisinden çok, çalışmaya devam etme çabasını övün.';
+  @override
+  String get talkOutcomeSame => 'Geçen seferle hemen hemen aynı. Düzenli devam etmeyi takdir edin ve "Bundan sonra neyi geliştirmek istersin?" diye sorun.';
+  @override
+  String get talkOutcomeDown => 'Bu sefer puan daha düşük. Suçlamadan, neyin zor geldiğine birlikte bakın.';
   @override
   String get eveNotice => 'Sınav yarın. Yeni konu eklemeyelim; sadece yaptıklarımıza göz atalım';
   @override
@@ -2859,6 +2959,14 @@ class ThStrings extends ChukoreStrings {
   @override
   String get outcomeDisclaimer => 'นี่คือบันทึกคะแนนที่คุณกรอกเอง ไม่ได้รับรองว่าคะแนนจะเพิ่มขึ้น';
   @override
+  String get talkOutcomeFirst => 'บันทึกคะแนนสอบแล้ว ดูเทียบกับการสอบครั้งต่อไปได้ ลองคุยเรื่องความพยายามมากกว่าคะแนน';
+  @override
+  String get talkOutcomeUp => 'คะแนนสูงกว่าครั้งที่แล้ว ชมความพยายามที่ทำต่อเนื่องมากกว่าตัวคะแนน';
+  @override
+  String get talkOutcomeSame => 'ใกล้เคียงครั้งที่แล้ว ชื่นชมที่ยังทำต่อเนื่อง แล้วลองถามว่า "ครั้งหน้าอยากพัฒนาส่วนไหน"';
+  @override
+  String get talkOutcomeDown => 'ครั้งนี้คะแนนต่ำกว่าครั้งที่แล้ว ไม่ต้องตำหนิ ลองดูด้วยกันว่าส่วนไหนยาก';
+  @override
   String get eveNotice => 'พรุ่งนี้สอบแล้ว ไม่ต้องเพิ่มเรื่องใหม่ ทบทวนเฉพาะที่เคยทำก็พอ';
   @override
   String get testDayNotice => 'วันนี้สอบแล้ว ทบทวนเบา ๆ ก็เพียงพอ ทำตัวตามปกติได้เลย';
@@ -3061,6 +3169,14 @@ class HiStrings extends ChukoreStrings {
   String get outcomeDown => 'इस बार स्कोर पिछली बार से कम रहा। कोई बात नहीं। आइए साथ देखें कि कौन-सा हिस्सा मुश्किल लगा।';
   @override
   String get outcomeDisclaimer => 'यह आपके खुद दर्ज किए स्कोर का रिकॉर्ड है। यह स्कोर बढ़ने का वादा नहीं है।';
+  @override
+  String get talkOutcomeFirst => 'टेस्ट का स्कोर दर्ज हो गया। अगले टेस्ट के साथ इसे देखा जा सकेगा। स्कोर से ज़्यादा मेहनत की बात कीजिए।';
+  @override
+  String get talkOutcomeUp => 'स्कोर पिछली बार से बढ़ा है। स्कोर से ज़्यादा लगातार मेहनत करने की तारीफ़ कीजिए।';
+  @override
+  String get talkOutcomeSame => 'पिछली बार के लगभग बराबर है। लगातार जुड़े रहने को सराहिए और पूछिए, "अगली बार किस हिस्से पर काम करना है?"';
+  @override
+  String get talkOutcomeDown => 'इस बार स्कोर पिछली बार से कम रहा। दोष मत दीजिए, साथ बैठकर देखिए कि कौन-सा हिस्सा मुश्किल लगा।';
   @override
   String get eveNotice => 'कल परीक्षा है। अब कुछ नया नहीं; बस जो पहले कर चुके हैं उसे एक बार देख लें';
   @override
@@ -3285,6 +3401,14 @@ class ArStrings extends ChukoreStrings {
   String get outcomeDown => 'كانت الدرجة هذه المرة أقل من السابقة. لا بأس. لنرَ معًا ما الذي بدا صعبًا.';
   @override
   String get outcomeDisclaimer => 'هذا سجل للدرجات التي أدخلتها بنفسك، وليس وعدًا بأن درجتك سترتفع.';
+  @override
+  String get talkOutcomeFirst => 'تم تسجيل درجة الاختبار. يمكن مقارنتها مع الاختبار القادم. تحدثوا عن الجهد أكثر من الدرجة.';
+  @override
+  String get talkOutcomeUp => 'الدرجة أعلى من المرة السابقة. امدحوا المثابرة على الدراسة أكثر من الدرجة نفسها.';
+  @override
+  String get talkOutcomeSame => 'قريبة جدًا من المرة السابقة. قدّروا استمرار الطفل، واسألوه: «ما الذي تريد تحسينه بعد ذلك؟»';
+  @override
+  String get talkOutcomeDown => 'كانت الدرجة هذه المرة أقل. دون لوم، انظروا معًا إلى ما بدا صعبًا.';
   @override
   String get eveNotice => 'الاختبار غدًا. لا مواد جديدة الآن؛ يكفي أن تراجع ما أنجزته من قبل';
   @override
@@ -3513,6 +3637,14 @@ class RuStrings extends ChukoreStrings {
   @override
   String get outcomeDisclaimer => 'Это запись результатов, которые введены тобой. Это не обещание, что результат вырастет.';
   @override
+  String get talkOutcomeFirst => 'Результат теста записан. Его можно будет сравнить со следующим тестом. Говорите об усилиях, а не только о баллах.';
+  @override
+  String get talkOutcomeUp => 'Результат выше, чем в прошлый раз. Хвалите за то, что ребёнок продолжает заниматься, а не только за баллы.';
+  @override
+  String get talkOutcomeSame => 'Почти так же, как в прошлый раз. Отметьте регулярность занятий и спросите: «Что хочешь улучшить дальше?»';
+  @override
+  String get talkOutcomeDown => 'В этот раз результат ниже. Без упрёков, вместе посмотрите, что оказалось трудным.';
+  @override
   String get eveNotice => 'Контрольная завтра. Новое сейчас не берём; просто повтори то, что уже делал';
   @override
   String get testDayNotice => 'Контрольная сегодня. Лёгкого повторения достаточно. Всё как обычно, спокойно';
@@ -3740,6 +3872,14 @@ class ItStrings extends ChukoreStrings {
   @override
   String get outcomeDisclaimer => 'Questo è un registro dei punteggi che hai inserito tu. Non è una promessa che il punteggio salga.';
   @override
+  String get talkOutcomeFirst => 'Il punteggio del compito è registrato. Si potrà vedere accanto al prossimo compito. Parlate dell’impegno, non solo del punteggio.';
+  @override
+  String get talkOutcomeUp => 'Il punteggio è più alto dell’ultima volta. Lodate la costanza più del punteggio in sé.';
+  @override
+  String get talkOutcomeSame => 'Quasi uguale all’ultima volta. Riconoscete la costanza e chiedete: «Cosa vorresti migliorare ora?»';
+  @override
+  String get talkOutcomeDown => 'Stavolta è stato più basso. Senza rimproveri, guardate insieme cosa è sembrato difficile.';
+  @override
   String get eveNotice => 'Il compito è domani. Niente di nuovo ora; ripassa solo ciò che hai già fatto';
   @override
   String get testDayNotice => 'Il compito è oggi. Basta un ripasso leggero. Come sempre, con calma';
@@ -3956,6 +4096,14 @@ class NlStrings extends ChukoreStrings {
   String get outcomeDown => 'Deze keer was het lager dan de vorige keer. Dat is prima. Laten we samen kijken wat lastig was.';
   @override
   String get outcomeDisclaimer => 'Dit is een overzicht van de cijfers die je zelf hebt ingevuld. Het is geen belofte dat je cijfer omhoog gaat.';
+  @override
+  String get talkOutcomeFirst => 'Het toetscijfer is opgeslagen. Je kunt het naast de volgende toets bekijken. Praat over de inzet, niet alleen over het cijfer.';
+  @override
+  String get talkOutcomeUp => 'Het cijfer is hoger dan de vorige keer. Prijs het volhouden meer dan het cijfer zelf.';
+  @override
+  String get talkOutcomeSame => 'Ongeveer hetzelfde als de vorige keer. Waardeer het volhouden en vraag: "Wat wil je hierna verbeteren?"';
+  @override
+  String get talkOutcomeDown => 'Deze keer was het lager. Zonder verwijten, kijk samen wat lastig was.';
   @override
   String get eveNotice => 'De toets is morgen. Nu niets nieuws meer; kijk alleen terug op wat je al gedaan hebt';
   @override
@@ -4183,6 +4331,14 @@ class PlStrings extends ChukoreStrings {
   String get outcomeDown => 'Tym razem wynik jest niższy niż poprzednio. Nic się nie stało. Zobaczmy razem, co sprawiło trudność.';
   @override
   String get outcomeDisclaimer => 'To zapis wyników wpisanych przez Ciebie. Nie jest obietnicą, że wynik wzrośnie.';
+  @override
+  String get talkOutcomeFirst => 'Wynik sprawdzianu został zapisany. Będzie można zobaczyć go obok kolejnego sprawdzianu. Rozmawiajcie o wysiłku, nie tylko o wyniku.';
+  @override
+  String get talkOutcomeUp => 'Wynik jest wyższy niż poprzednio. Pochwalcie wytrwałość bardziej niż sam wynik.';
+  @override
+  String get talkOutcomeSame => 'Prawie tak samo jak poprzednio. Docenijcie systematyczność i zapytajcie: „Co chcesz poprawić następnym razem?”';
+  @override
+  String get talkOutcomeDown => 'Tym razem wynik jest niższy. Bez wyrzutów, zobaczcie razem, co sprawiło trudność.';
   @override
   String get eveNotice => 'Sprawdzian jest jutro. Nic nowego teraz; wystarczy przejrzeć to, co już zrobiłeś';
   @override

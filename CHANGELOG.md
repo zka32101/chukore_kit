@@ -4,6 +4,9 @@
 
 ## [未リリース]
 
+- 「今日」の入口のまとめ `buildDailyHome`（見出し・今日の出題・時間の見積もり・前日/当日の制限・点を聞くかを 1 回で。時間の予算に収め、混ぜ、制限をかける。個別に呼んでも同じ結果）。`example/day_flow.dart` にも追加
+- 保護者への声かけ（点の変化）`suggestOutcomeTalk` / `suggestOutcomeTalkFor`（数字を含めず、取り組みを話題にし、責めない。保護者向けレポートと同じ年齢の方針）と、文言 `talkOutcomeFirst` / `Up` / `Same` / `Down`（18言語。**ネイティブ確認は未実施**）
+
 - 子どもへの通知の既定を、基盤で守るようにした: `ChildFeature.nudge`（既定は子どもには非表示）と、年齢の方針を確認する `decideNudgeFor`（方針が許さない限り子どもには null。保護者ゲートのあとの方針なら、承認があるときだけ）。これまで `decideNudge` は年齢を見ず、子どもへの通知の可否はアプリ任せだったため、法務確認を行わない前提の記録（`legal_review_questions.md` §0）と食い違っていた。**アプリは `decideNudge` でなく `decideNudgeFor` を使うこと**。`AgePolicyTable` の JSON の `access` に `nudge` を書ける（書かなければ子どもには出さない）
 
 - 運営者の判断で法務確認は行わないことを記録（2026-10-28）。確認が要る機能（匿名の送信・集計、範囲カードの共有、13歳未満への通知、結果を示す訴求、海外展開）は有効にしない。範囲は `docs/legal_review_questions.md` §0、方針は `docs/design_principles.md` §2-9。基盤の既定の挙動は変えていない
