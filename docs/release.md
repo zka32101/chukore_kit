@@ -7,7 +7,7 @@ dependencies:
   chukore_kit:
     git:
       url: https://github.com/zka32101/chukore_kit
-      ref: v0.3.0
+      ref: v0.4.0
 ```
 
 ## 版を上げる前のチェック
@@ -41,3 +41,4 @@ dependencies:
 |---|---|---|---|
 | 0.2.0 | 4 | 1 | 最初の配布対象（タグ `v0.2.0`）|
 | 0.3.0 | 4 | 1 | 本番の点の変化・海外対応の土台（スキーマ・形式は変更なし）|
+| 0.4.0 | 4 | 1 | 子どもへの既定を基盤で守る（`decideNudgeFor`・`encodeScopeFor`）・入口のまとめ（スキーマ・形式は変更なし）|
