@@ -1,6 +1,6 @@
 name: chukore_kit
 description: "ちゅうコレ！専用の共通部品（範囲・テスト日逆算・評価）。"
-version: 0.3.0
+version: 0.4.0
 publish_to: 'none'
 
 environment:
