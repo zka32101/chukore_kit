@@ -1,12 +1,12 @@
 # chukore_kit
 
-ちゅうコレ！（中学）専用の共通部品（非公開。小学コレ！とは共通にしない。方針は [`docs/design_principles.md`](docs/design_principles.md)）。仕様: `chukore_kit_仕様_v0_2.md`。
+ちゅうコレ！（中学）専用の共通部品（公開リポジトリ。小学コレ！とは共通にしない。方針は [`docs/design_principles.md`](docs/design_principles.md)）。仕様: `chukore_kit_仕様_v0_2.md`。
 
 ## 実装済みの機能
 
 詳細（使い方・判定の基準・注意点）は [`docs/features.md`](docs/features.md)。
 
-動かして試す: `dart run example/day_flow.dart`（1 日の流れを、基盤の部品だけで通しで動かす例。計画 → 「今日」→ 出題 → 回答 → 復習 → 週のふりかえり → 保護者への声かけ → バックアップ → 全削除。アプリ側の結線の手本で、テスト `test/example_day_flow_test.dart` が壊れを見張る）。
+動かして試す: `dart run example/day_flow.dart`（1 日の流れを、基盤の部品だけで通しで動かす例。計画 → 「今日」→ 出題（時間で選ぶ「今日は 1 分だけ」を含む）→ 回答 → 復習 → 週のふりかえり → 保護者への声かけ → 本番の点（使う前の点 → テスト後に聞く → 変化 → 外へ出す場合の形）→ バックアップ → 全削除。アプリ側の結線の手本で、テスト `test/example_day_flow_test.dart` が壊れを見張る）。
 
 速度の確認: `dart run tool/bench.dart [件数]`（回答 10 万件での各関数の時間。既定の目安は 1 秒未満。`test/scale_test.dart` が 2 乗の遅さの再発を見張る）。
 
