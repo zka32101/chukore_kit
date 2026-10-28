@@ -4,6 +4,7 @@
 
 ## [未リリース]
 
+- 匿名イベントの名前と許可項目 `FunnelEvent`（点・日付・名前を持てない）と、点の入力率・振り返りの到達率 `funnelRates`。送信の仕組みは無く、法務確認まで使わない
 - 分で選ぶ今日の出題 `pickPracticeForMinutes`（予算に収まるよう、比率を保って数を減らす。増やさない）
 - 点を聞くタイミングの判定 `decideScorePrompt`（テスト日の翌日から14日以内に1回だけ・1日1回まで・聞いたら二度と聞かない）と入力の読み取り `parseScoreInput`。数値入力の正規化 `normalizeNumberInput` を公開
 - 本番の点まわりの文言 `outcomeAsk` / `outcomeSkip` / `outcomeBaselineAsk` / `outcomeFirst` / `outcomeUp` / `outcomeSame` / `outcomeDown` / `outcomeDisclaimer`（18言語。責めず、結果を保証しない。`outcomeMessage(change, strings)` で変化に添える一言を引く）。**ネイティブ確認は未実施**（`docs/translation_review.csv` に追加済み）

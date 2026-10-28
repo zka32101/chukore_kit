@@ -87,6 +87,23 @@
 - ストアのデータ申告（成績の区分を送る場合の扱い）。
 - 国ごとの年齢の線（韓国 14歳未満、ブラジル LGPD 第14条など）。
 
+## 8.5 数えるイベント（`FunnelEvent`）
+
+中学の指標（§6）の分母を、アプリが同じ名前・同じ項目で数えるための約束。**基盤は送らない。** 項目は許可リストにあるものだけで、点・日付・名前などは持てない（作ろうとすると `ArgumentError`）。
+
+| イベント（snake_case） | 追加の項目 | 数える単位 |
+|---|---|---|
+| `aha_reached` | – | 1人1回 |
+| `test_date_registered` | – | テスト日を登録するたび |
+| `score_prompt_shown` / `score_prompt_skipped` | `kind`（afterTest／baseline） | 1テストにつき1回（`decideScorePrompt` が保証） |
+| `score_entered` | `kind`・`band`・`usage`・`baseline`（`OutcomeReport` から作る） | 点を入れるたび |
+| `baseline_entered` | – | 1人1回 |
+| `post_test_review_reached` | – | 振り返りに進むたび |
+
+共通の項目: `subject`（英小文字）、`region`（大文字2文字）、`grade`（1〜3、任意）。
+
+`funnelRates` は、点の入力率（入れた÷聞いた）と振り返りの到達率（進んだ÷入れた）を、95% 信頼区間つきで返す。**件数はイベントの数で人数ではない**（匿名のため）。分母が 30 未満の割合は返さない。`test_date_registered` と `aha_reached` は単位（回数と人数）が違うので、割合にしない。
+
 ## 9. 作る順序（状況）
 
 実装済み: 1・2（`RealTestRecord` の満点・種類、`buildOutcomeSummary`）、4 の変換と 5 の集計の関数（`buildOutcomeReports`・`tallyOutcomes`）。**送信の仕組みは基盤に無く、法務確認と保護者の同意が済むまでアプリは使わない。** 3 は基盤側の判定・文言が実装済み（`decideScorePrompt`・`parseScoreInput`・`outcomeMessage` と 18 言語の文言）。残りはアプリ側の画面への結線。
