@@ -1,0 +1,346 @@
+{
+ "version": 1,
+ "questions": [
+  {
+   "id": "en1_be_001",
+   "unitId": "en1_be",
+   "type": "choice",
+   "difficulty": 0.85,
+   "choices": [
+    "am",
+    "is",
+    "are"
+   ],
+   "answer": "am",
+   "explanationId": "exp_en1_be_001",
+   "version": 1,
+   "misconceptionTags": {
+    "is": "be_agreement",
+    "are": "be_agreement"
+   }
+  },
+  {
+   "id": "en1_be_002",
+   "unitId": "en1_be",
+   "type": "choice",
+   "difficulty": 0.7,
+   "choices": [
+    "is",
+    "are",
+    "am"
+   ],
+   "answer": "are",
+   "explanationId": "exp_en1_be_002",
+   "version": 1,
+   "misconceptionTags": {
+    "is": "be_agreement",
+    "am": "be_agreement"
+   }
+  },
+  {
+   "id": "en1_be_003",
+   "unitId": "en1_be",
+   "type": "choice",
+   "difficulty": 0.6,
+   "choices": [
+    "is not",
+    "not is",
+    "does not"
+   ],
+   "answer": "is not",
+   "explanationId": "exp_en1_be_003",
+   "version": 1,
+   "misconceptionTags": {
+    "not is": "be_negative_order",
+    "does not": "be_with_do"
+   }
+  },
+  {
+   "id": "en1_be_004",
+   "unitId": "en1_be",
+   "type": "choice",
+   "difficulty": 0.55,
+   "choices": [
+    "Is he a teacher?",
+    "He is a teacher?",
+    "Does he a teacher?"
+   ],
+   "answer": "Is he a teacher?",
+   "explanationId": "exp_en1_be_004",
+   "version": 1,
+   "misconceptionTags": {
+    "Does he a teacher?": "be_with_do"
+   }
+  },
+  {
+   "id": "en1_verbs_001",
+   "unitId": "en1_verbs",
+   "type": "choice",
+   "difficulty": 0.62,
+   "choices": [
+    "goes",
+    "go",
+    "going"
+   ],
+   "answer": "goes",
+   "explanationId": "exp_en1_verbs_001",
+   "version": 1,
+   "misconceptionTags": {
+    "go": "third_person_s",
+    "going": "verb_ing_misuse"
+   }
+  },
+  {
+   "id": "en1_verbs_002",
+   "unitId": "en1_verbs",
+   "type": "choice",
+   "difficulty": 0.58,
+   "choices": [
+    "studies",
+    "studys",
+    "study"
+   ],
+   "answer": "studies",
+   "explanationId": "exp_en1_verbs_002",
+   "version": 1,
+   "misconceptionTags": {
+    "studys": "third_person_es_rule",
+    "study": "third_person_s"
+   }
+  },
+  {
+   "id": "en1_verbs_003",
+   "unitId": "en1_verbs",
+   "type": "choice",
+   "difficulty": 0.55,
+   "choices": [
+    "Do",
+    "Does",
+    "Are"
+   ],
+   "answer": "Do",
+   "explanationId": "exp_en1_verbs_003",
+   "version": 1,
+   "misconceptionTags": {
+    "Does": "do_does_mixup",
+    "Are": "be_with_do"
+   }
+  },
+  {
+   "id": "en1_verbs_004",
+   "unitId": "en1_verbs",
+   "type": "choice",
+   "difficulty": 0.5,
+   "choices": [
+    "doesn't like",
+    "don't like",
+    "isn't like"
+   ],
+   "answer": "doesn't like",
+   "explanationId": "exp_en1_verbs_004",
+   "version": 1,
+   "misconceptionTags": {
+    "don't like": "do_does_mixup",
+    "isn't like": "be_with_do"
+   }
+  },
+  {
+   "id": "en1_plural_001",
+   "unitId": "en1_plural",
+   "type": "choice",
+   "difficulty": 0.8,
+   "choices": [
+    "books",
+    "bookes",
+    "book"
+   ],
+   "answer": "books",
+   "explanationId": "exp_en1_plural_001",
+   "version": 1,
+   "misconceptionTags": {
+    "bookes": "plural_es_overuse",
+    "book": "plural_missing"
+   }
+  },
+  {
+   "id": "en1_plural_002",
+   "unitId": "en1_plural",
+   "type": "choice",
+   "difficulty": 0.6,
+   "choices": [
+    "boxes",
+    "boxs",
+    "boxies"
+   ],
+   "answer": "boxes",
+   "explanationId": "exp_en1_plural_002",
+   "version": 1,
+   "misconceptionTags": {
+    "boxs": "plural_es_rule",
+    "boxies": "plural_ies_overuse"
+   }
+  },
+  {
+   "id": "en1_plural_003",
+   "unitId": "en1_plural",
+   "type": "choice",
+   "difficulty": 0.45,
+   "choices": [
+    "children",
+    "childs",
+    "childrens"
+   ],
+   "answer": "children",
+   "explanationId": "exp_en1_plural_003",
+   "version": 1,
+   "misconceptionTags": {
+    "childs": "plural_irregular",
+    "childrens": "plural_irregular"
+   }
+  },
+  {
+   "id": "en1_imperative_001",
+   "unitId": "en1_imperative",
+   "type": "choice",
+   "difficulty": 0.75,
+   "choices": [
+    "Open",
+    "Opens",
+    "Be open"
+   ],
+   "answer": "Open",
+   "explanationId": "exp_en1_imperative_001",
+   "version": 1,
+   "misconceptionTags": {
+    "Opens": "imperative_s",
+    "Be open": "imperative_be"
+   }
+  },
+  {
+   "id": "en1_imperative_002",
+   "unitId": "en1_imperative",
+   "type": "choice",
+   "difficulty": 0.6,
+   "choices": [
+    "Don't run.",
+    "Not run.",
+    "No running."
+   ],
+   "answer": "Don't run.",
+   "explanationId": "exp_en1_imperative_002",
+   "version": 1,
+   "misconceptionTags": {
+    "Not run.": "imperative_negative",
+    "No running.": "imperative_negative"
+   }
+  },
+  {
+   "id": "en1_wh_001",
+   "unitId": "en1_wh",
+   "type": "choice",
+   "difficulty": 0.7,
+   "choices": [
+    "What",
+    "Where",
+    "Who"
+   ],
+   "answer": "What",
+   "explanationId": "exp_en1_wh_001",
+   "version": 1,
+   "misconceptionTags": {
+    "Where": "wh_choice",
+    "Who": "wh_choice"
+   }
+  },
+  {
+   "id": "en1_wh_002",
+   "unitId": "en1_wh",
+   "type": "choice",
+   "difficulty": 0.6,
+   "choices": [
+    "Where",
+    "When",
+    "Whose"
+   ],
+   "answer": "Where",
+   "explanationId": "exp_en1_wh_002",
+   "version": 1,
+   "misconceptionTags": {
+    "When": "wh_choice",
+    "Whose": "wh_choice"
+   }
+  },
+  {
+   "id": "en1_wh_003",
+   "unitId": "en1_wh",
+   "type": "choice",
+   "difficulty": 0.5,
+   "choices": [
+    "Who is she?",
+    "Who she is?",
+    "Who does she?"
+   ],
+   "answer": "Who is she?",
+   "explanationId": "exp_en1_wh_003",
+   "version": 1,
+   "misconceptionTags": {
+    "Who she is?": "wh_order",
+    "Who does she?": "be_with_do"
+   }
+  }
+ ],
+ "mistakeLines": [
+  {
+   "id": "ml_be_agreement_001",
+   "tag": "be_agreement",
+   "questionId": "en1_be_001",
+   "sourceChoiceId": "is",
+   "statement": "I is a student.",
+   "fixChoices": [
+    "I am a student.",
+    "I are a student."
+   ],
+   "correctChoice": "I am a student.",
+   "explanation": "I は am を使います。"
+  },
+  {
+   "id": "ml_third_person_s_001",
+   "tag": "third_person_s",
+   "questionId": "en1_verbs_001",
+   "sourceChoiceId": "go",
+   "statement": "He go to school every day.",
+   "fixChoices": [
+    "He goes to school every day.",
+    "He going to school every day."
+   ],
+   "correctChoice": "He goes to school every day.",
+   "explanation": "he / she / it の動詞には s をつけます。"
+  },
+  {
+   "id": "ml_do_does_mixup_001",
+   "tag": "do_does_mixup",
+   "questionId": "en1_verbs_003",
+   "sourceChoiceId": "Does",
+   "statement": "Does you play tennis?",
+   "fixChoices": [
+    "Do you play tennis?",
+    "Is you play tennis?"
+   ],
+   "correctChoice": "Do you play tennis?",
+   "explanation": "you のときは Does ではなく Do を使います。"
+  },
+  {
+   "id": "ml_plural_es_overuse_001",
+   "tag": "plural_es_overuse",
+   "questionId": "en1_plural_001",
+   "sourceChoiceId": "bookes",
+   "statement": "I have two bookes.",
+   "fixChoices": [
+    "I have two books.",
+    "I have two book."
+   ],
+   "correctChoice": "I have two books.",
+   "explanation": "ふつうは s だけをつけます。s, x, ch, sh で終わる語だけ es です。"
+  }
+ ]
+}

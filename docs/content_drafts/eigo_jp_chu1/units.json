@@ -1,0 +1,57 @@
+{
+ "version": 1,
+ "units": [
+  {
+   "id": "en1_grammar",
+   "subject": "en",
+   "grade": 1,
+   "title": "文法（中1前半）",
+   "order": 1
+  },
+  {
+   "id": "en1_be",
+   "subject": "en",
+   "grade": 1,
+   "parentId": "en1_grammar",
+   "title": "be動詞（am / is / are）",
+   "order": 1,
+   "estimatedQuestions": 20
+  },
+  {
+   "id": "en1_verbs",
+   "subject": "en",
+   "grade": 1,
+   "parentId": "en1_grammar",
+   "title": "一般動詞（三単現を含む）",
+   "order": 2,
+   "estimatedQuestions": 30
+  },
+  {
+   "id": "en1_plural",
+   "subject": "en",
+   "grade": 1,
+   "parentId": "en1_grammar",
+   "title": "名詞の複数形",
+   "order": 3,
+   "estimatedQuestions": 15
+  },
+  {
+   "id": "en1_imperative",
+   "subject": "en",
+   "grade": 1,
+   "parentId": "en1_grammar",
+   "title": "命令文",
+   "order": 4,
+   "estimatedQuestions": 10
+  },
+  {
+   "id": "en1_wh",
+   "subject": "en",
+   "grade": 1,
+   "parentId": "en1_grammar",
+   "title": "疑問詞（what / who / where ほか）",
+   "order": 5,
+   "estimatedQuestions": 20
+  }
+ ]
+}
