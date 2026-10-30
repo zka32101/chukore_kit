@@ -1,0 +1,39 @@
+{
+ "version": 1,
+ "prerequisites": [
+  {
+   "unitId": "en1_be",
+   "external": [
+    {
+     "id": "shogaku_english_basic",
+     "title": "小学英語: あいさつと自己紹介",
+     "link": "https://example.com/shogaku-kore"
+    }
+   ]
+  },
+  {
+   "unitId": "en1_verbs",
+   "requires": [
+    "en1_be"
+   ]
+  },
+  {
+   "unitId": "en1_plural",
+   "requires": [
+    "en1_be"
+   ]
+  },
+  {
+   "unitId": "en1_imperative",
+   "requires": [
+    "en1_verbs"
+   ]
+  },
+  {
+   "unitId": "en1_wh",
+   "requires": [
+    "en1_verbs"
+   ]
+  }
+ ]
+}
