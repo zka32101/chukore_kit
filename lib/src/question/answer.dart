@@ -1,4 +1,5 @@
 import '../l10n/digits.dart';
+import '../math/math_expr.dart';
 import '../models/models.dart';
 import 'text_match.dart';
 
@@ -30,7 +31,7 @@ String normalizeNumberInput(String s, String decimalSeparator) {
   return t;
 }
 
-/// 問題タイプ別の判定。type: `choice`（選択）／`map`（地図タップ）／`numeric`（数値入力）／`order`・`timeline`（並べ替え・年表。
+/// 問題タイプ別の判定。type: `choice`（選択）／`map`（地図タップ）／`numeric`（数値入力）／`expr`（数式。同じ値なら正解）／`order`・`timeline`（並べ替え・年表。
 /// answer は選択肢IDをカンマ区切りで並べた正解順）／`text`（短い記述。answer は別解を `|` で区切る）／
 /// `multi`（複数の項目を答える。answer は項目を `;`、各項目の別解を `|` で区切る。順不同・部分点あり）／
 /// `card`（暗記カード。入力は自己採点の名前 `good`・`hard`・`again`。`good`・`hard` を正解として数える）。
@@ -53,6 +54,9 @@ AnswerResult checkAnswer(
       final want = double.tryParse(normalizeNumberInput(q.answer, '.'));
       final ok = got != null && want != null && (got - want).abs() <= tolerance;
       return AnswerResult(ok);
+    case 'expr': // 数式: 式として同じ値になれば正解（2x+6 と 2(x+3) は同じ）
+      final a = MathExpr.tryParse(input), b = MathExpr.tryParse(q.answer);
+      return AnswerResult(a != null && b != null && MathExpr.equivalent(a, b));
     case 'order':
     case 'timeline': // 年表: 古い順に並べたID列
       final got = input.split(',').map((e) => e.trim()).toList();

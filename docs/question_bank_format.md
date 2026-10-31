@@ -67,7 +67,7 @@ dart run tool/validate_bank.dart units.json questions.json
 
 | 項目 | 内容 |
 |---|---|
-| `type` | `choice`（選択）／`map`（地図タップ。選択肢は領域ID）／`numeric`（数値。`choices` は空でよい）／`order`・`timeline`（並べ替え・年表。`answer` は正解順のIDをカンマ区切り、`choices` は同じID集合）／`card`（暗記カード。`answer` は裏面の内容の ID か文。自己採点なので照合には使わない。`choices` は空）／`text`（短い記述。`answer` は別解を `\|` で区切る。例 `東京\|とうきょう\|Tokyo`。`choices` は空）／`multi`（複数の語を答える。`answer` は項目を `;`、各項目の別解を `\|` で区切る。例 `織田信長\|のぶなが;豊臣秀吉\|ひでよし;徳川家康`。順不同・部分点あり。`choices` は空） |
+| `type` | `choice`（選択）／`map`（地図タップ。選択肢は領域ID）／`numeric`（数値。`choices` は空でよい）／`expr`（数式。`answer` は式で、入力と同じ値なら正解。`2x+6` と `2(x+3)`、`1/2` と `0.5` は同じ。`choices` は空。形の指定は未対応）／`order`・`timeline`（並べ替え・年表。`answer` は正解順のIDをカンマ区切り、`choices` は同じID集合）／`card`（暗記カード。`answer` は裏面の内容の ID か文。自己採点なので照合には使わない。`choices` は空）／`text`（短い記述。`answer` は別解を `\|` で区切る。例 `東京\|とうきょう\|Tokyo`。`choices` は空）／`multi`（複数の語を答える。`answer` は項目を `;`、各項目の別解を `\|` で区切る。例 `織田信長\|のぶなが;豊臣秀吉\|ひでよし;徳川家康`。順不同・部分点あり。`choices` は空） |
 | `difficulty` | 基準正答率 0〜1（アプリ内偏差値の換算に使う）。0 と 1 は警告 |
 | `misconceptionTags` | 誤答の選択肢ID → 誤解の型（小文字・数字・`_`）。**正解の選択肢には付けない** |
 | `explanationId` | 解説の ID（解説の本文は別データ） |

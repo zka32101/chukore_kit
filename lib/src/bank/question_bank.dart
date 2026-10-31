@@ -1,3 +1,4 @@
+import '../math/math_expr.dart';
 import '../models/models.dart';
 import '../question/text_match.dart';
 import '../scope/unit_tree.dart';
@@ -23,7 +24,7 @@ class ValidationIssue {
 bool hasErrors(Iterable<ValidationIssue> issues) => issues.any((i) => i.isError);
 
 /// `checkAnswer` が扱う問題タイプ。
-const knownQuestionTypes = {'choice', 'map', 'numeric', 'order', 'timeline', 'text', 'multi', 'card'};
+const knownQuestionTypes = {'choice', 'map', 'numeric', 'expr', 'order', 'timeline', 'text', 'multi', 'card'};
 
 final _thousands = RegExp(r'^-?\d{1,3}(,\d{3})+(\.\d+)?$');
 final _tagPattern = RegExp(r'^[a-z][a-z0-9_]*$');
@@ -174,6 +175,13 @@ List<ValidationIssue> validateQuestionBank({
           err('numeric_answer_invalid', q.id, '数値として読めない正解: ${q.answer}');
         } else if (q.answer.contains(',') && !_thousands.hasMatch(q.answer.trim())) {
           warn('numeric_answer_comma', q.id, '正解はピリオド区切りで書いてください（桁区切り以外のカンマは無視されます）: ${q.answer}');
+        }
+      case 'expr':
+        if (MathExpr.tryParse(q.answer) == null) {
+          err('expr_answer_invalid', q.id, '数式として読めない正解: ${q.answer}');
+        }
+        if (q.choices.isNotEmpty) {
+          warn('choices_ignored', q.id, 'expr では選択肢は使われません');
         }
       case 'text':
         final alts = textAlternatives(q.answer);
