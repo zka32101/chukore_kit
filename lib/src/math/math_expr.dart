@@ -2,7 +2,8 @@ import 'dart:math' as math;
 
 /// 数式（`2x+6`・`(x+3)^2`・`1/2`・`√2`）の読み取りと、同じ値かどうかの判定。
 /// 純粋な Dart で、式の文字列を木にして、決まった点で値を比べる（記号計算はしない）。
-/// 使える記号: 数・英小文字 1 字の変数・`+ - * / ^`・かっこ・`sqrt(…)`・`√`・円周率 `π`（`pi` とも書ける）。
+/// 使える記号: 数・英小文字 1 字の変数・`+ - * / ^`・かっこ・`sqrt(…)`・`√`・円周率 `π`（`pi` とも書ける）・
+/// `floor(…)`（切り捨て）・`ceil(…)`（切り上げ）・`mod(a, b)`（余り。b が正なら 0 以上 b 未満。b=0 は定義できない）。
 /// `2x`・`2(x+1)`・`(x+1)(x-1)` のような省略した掛け算も読む。`x2` や `2 3` は誤り。
 class MathExpr {
   MathExpr._(this._root, this.variables);
@@ -335,6 +336,42 @@ class _Sqrt extends _Node {
   void collect(Set<String> vars) => a.collect(vars);
 }
 
+class _Fn extends _Node {
+  _Fn(this.name, this.args);
+  final String name;
+  final List<_Node> args;
+
+  /// 誤差で整数の手前に落ちないよう、整数に十分近い値はその整数にそろえる。
+  static double _snap(double x) => (x - x.roundToDouble()).abs() < 1e-9 ? x.roundToDouble() : x;
+
+  @override
+  _Node bind(Map<String, double> v) => _Fn(name, [for (final a in args) a.bind(v)]);
+  @override
+  double eval(Map<String, double> v) {
+    final x = args[0].eval(v);
+    if (x.isNaN || x.isInfinite) return double.nan;
+    switch (name) {
+      case 'floor':
+        return _snap(x).floorToDouble();
+      case 'ceil':
+        return _snap(x).ceilToDouble();
+      default: // mod
+        final y = args[1].eval(v);
+        if (y.isNaN || y.isInfinite) return double.nan; // b=0 は Dart の % が NaN にする
+        return _snap(x) % _snap(y);
+    }
+  }
+
+  @override
+  void collect(Set<String> vars) {
+    for (final a in args) {
+      a.collect(vars);
+    }
+  }
+}
+
+const _fnNames = {'floor', 'ceil', 'mod'};
+
 const _superscripts = {'²': '2', '³': '3'};
 
 List<String> _tokenize(String source) {
@@ -374,6 +411,10 @@ List<String> _tokenize(String source) {
       if (double.tryParse(lit) == null) throw FormatException('数として読めません: $lit');
       out.add(lit);
       i = j;
+    } else if (_fnNames.any((f) => t.startsWith(f, i))) {
+      final f = _fnNames.firstWhere((f) => t.startsWith(f, i));
+      out.add(f);
+      i += f.length;
     } else if (t.startsWith('sqrt', i)) {
       out.add('sqrt');
       i += 4;
@@ -383,7 +424,7 @@ List<String> _tokenize(String source) {
     } else if (RegExp(r'[a-z]').hasMatch(c)) {
       out.add(c);
       i++;
-    } else if ('+-*/^()'.contains(c)) {
+    } else if ('+-*/^(),'.contains(c)) {
       out.add(c);
       i++;
     } else {
@@ -416,7 +457,7 @@ class _Parser {
     return n;
   }
 
-  bool _startsAtom(String? s) => s != null && (s == '(' || s == 'sqrt' || s == 'π' || RegExp(r'^[a-z]$').hasMatch(s));
+  bool _startsAtom(String? s) => s != null && (s == '(' || s == 'sqrt' || s == 'π' || _fnNames.contains(s) || RegExp(r'^[a-z]$').hasMatch(s));
 
   _Node _term() {
     var n = _unary();
@@ -473,6 +514,19 @@ class _Parser {
       if (peek != ')') throw const FormatException('かっこが閉じていません');
       i++;
       return _Sqrt(n);
+    }
+    if (_fnNames.contains(s)) {
+      if (peek != '(') throw FormatException('$s の後にはかっこが要ります');
+      i++;
+      final args = [_expr()];
+      if (s == 'mod') {
+        if (peek != ',') throw const FormatException('mod は mod(a, b) の形です');
+        i++;
+        args.add(_expr());
+      }
+      if (peek != ')') throw const FormatException('かっこが閉じていません');
+      i++;
+      return _Fn(s, args);
     }
     if (s == 'π') return _Pi();
     final d = double.tryParse(s);
