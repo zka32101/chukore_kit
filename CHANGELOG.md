@@ -4,6 +4,7 @@
 
 ## [未リリース]
 
+- 教科共通の体験 `Experience`（`sort` 仕分け・`link` つなぎ・`dial` ダイヤル・`balance` 天秤）・`ExperienceSet`・`validateExperiences`（仕様の読み取り・判定・検証。数学に依存しない `lib/src/experience`）。学びの設計の第 6 段
 - 学びの分析 `buildLearningFunnel`・`summarizeFunnel`・`summarizeBlockReads`・`skippedBlocks`・`lessonCheckMistakes`・`ineffectiveLessons`（学ぶ→体験→練習→テストの到達と止まっている段階、飛ばされるブロック、確認クイズの誤解の型、効かないレッスン。端末内の記録だけで計算）。学びの設計の第 5 段
 - 遊びのラウンド `buildPlayRound`・`PlayRound`・`PlayProgress`・`finishPlayRound`・`PlayRoundSummary`・`PlayReward`・`PlayClosing`（練習を 5〜10 問のラウンドにし、つながり・ごほうび・ひとこと・解き直し 1 問の提案。残機・順位・速さの点なし）。学びの設計の第 4 段
 - 単元テスト `buildUnitTest`・`scoreUnitTest`・`UnitTest`・`UnitTestResult`・`UnitTestLevel`（5〜15 問、やさしい:ふつう:難しい＝3:5:2、誤解の型を満遍なく、結果は 3 段階、履歴の mode は `unit_test`）。`scoreMockExam` に `mode` 引数。学びの設計の第 3 段

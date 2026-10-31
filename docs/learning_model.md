@@ -89,6 +89,7 @@
 | 理科 | 条件を変えて結果を見る（スライダーの `Exploration`: 力・電流・濃度）、実験の手順の並べ替え、観察の図選び |
 | 国語 | 文を並べ替える・つなぐ、漢字の部品を組み立てる、言葉の分類 |
 - 体験の仕様は教科共通の `Exploration` の種類を増やして持つ（`slider_graph`・`construction` に続き `balance`・`sort`・`link`・`dial`）。画面は教科アプリ側。
+  - **実装済み**（`lib/src/experience/experience.dart`、教科共通・数学に依存しない）: `Experience`（`experiences.json`・`ExperienceSet.parse`・`validateExperiences`）の 4 種。`sort`（入れ物に仕分け: `check` → 正しい／違う／まだ）、`link`（点を矢印・線でつなぐ: 過不足）、`dial`（目盛を回して目標に: 許容つき）、`balance`（天秤: 傾き・つりあい・解の探索）。レッスンの `explore` ブロックからは体験の ID を `LessonRefs.explorationIds` に入れて参照する。
 
 ### 4.2 遊び（`PlayRound`、案）
 **練習を遊びの形にする**だけで、問題と判定は③と同じ。
@@ -157,4 +158,4 @@
 5. `buildUnitTest`（誤解の型のカバー・難しさの配分・3 段階の結果）。**実装済み**（§6）。
 6. `PlayRound`（ラウンド・つながり・ごほうびの条件）。**実装済み**（§4.2）。
 7. 分析（`LearningFunnel`・`LessonEffect`・ブロックの読まれ方）。**実装済み**（§7。体験・遊びの効果の比較と保護者の週レポートは未）。
-8. 英語・社会・理科・国語の体験の種類（`balance`・`sort`・`link`・`dial`）。
+8. 英語・社会・理科・国語の体験の種類（`balance`・`sort`・`link`・`dial`）。**実装済み**（§4.1）。

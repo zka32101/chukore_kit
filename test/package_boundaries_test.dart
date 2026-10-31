@@ -45,6 +45,17 @@ void main() {
     expect(found, users);
   });
 
+  test('lib/src/experience（教科共通の体験）は数学にも Flutter にも依存しない', () {
+    const allowed = {'../bank/question_bank.dart', '../scope/unit_tree.dart'};
+    final files = Directory('lib/src/experience').listSync().whereType<File>().where((f) => f.path.endsWith('.dart'));
+    expect(files, isNotEmpty);
+    for (final f in files) {
+      for (final i in _imports(f)) {
+        expect(i.startsWith('../') ? allowed.contains(i) : i == 'dart:convert', isTrue, reason: '${f.path}: $i');
+      }
+    }
+  });
+
   test('画面部品の入口（chukore_kit_ui.dart）は core の入口から出していない', () {
     final core = File('lib/chukore_kit.dart').readAsStringSync();
     expect(core.contains('chukore_kit_ui'), isFalse);
