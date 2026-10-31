@@ -4,6 +4,8 @@
 
 ## [未リリース]
 
+- docs: 数学（中1）の問題の型 9 つ（`docs/content_drafts/suugaku_chu1/templates.json`: 同類項・かっこ・式の値・数量の関係・等式の性質・一次方程式×3）。全変種の判定をテストで確認
+
 - docs: ちゅうコレ！数学（中1）の単元ツリー・前提の草案（`docs/content_drafts/suugaku_chu1/`: 7分野・21単元、誤解の型の候補）。検証テスト付き
 
 - 数学の問題の型 `MathTemplate`・`TemplateSet`・`Variant`・`parseVariantId`・`validateTemplates` と `tool/expand_templates.dart`。係数を種で変えた変種を作り、答えと誤答（誤解の型つき）を式から計算する。検証 `template_unsatisfiable`・`template_expression_invalid`・`template_answer_dup`。見本 `docs/samples/templates.sample.json`
