@@ -54,6 +54,7 @@ export 'src/nudge/nudge_hour.dart';
 export 'src/practice/question_picker.dart';
 export 'src/practice/timed_practice.dart';
 export 'src/practice/eve_guard.dart';
+export 'src/practice/play_round.dart';
 export 'src/prereq/prerequisites.dart';
 export 'src/sheet/last_minute_sheet.dart';
 export 'src/dayof/day_of.dart';

@@ -96,6 +96,7 @@
 - ラウンドの終わりに「今日のひとこと」と、弱点があれば**1 問だけ解き直しを提案**（強制しない）。
 - 制限: ガチャ・順位・強制広告・時間ゲート課金は**置かない**（`docs/design_principles.md`）。子どもには保護者ゲートの外にあるものだけを出す。
 - `PlayRound` の基盤の仕事は、ラウンドの組み立て（出題器＋混ぜ練習）、つながりの計算、ごほうびの条件の判定（純粋な関数）。見た目・音・アニメは画面側。
+  - **実装済み**（`lib/src/practice/play_round.dart`）: `buildPlayRound`（練習の出題から 5〜10 問、単元を混ぜる）、`PlayProgress`（つながり・最長・立て直し。残機なし）、`finishPlayRound`（ごほうび `finished`/`link3`/`link5`/`comeback`、ひとこと `PlayClosing`、解き直し提案は 1 問）。
 
 ## 5. 「今日の学び」の決め方（`nextLearningStep`、案）
 単元ごとの状態から、**次の 1 手**を決める（`buildDailyHome` に組み込む）。
@@ -153,6 +154,6 @@
 3. `LessonProgress`・事前／事後の確認・`Attempt` の `lesson_check`。**実装済み**（§3.6）。
 4. `nextLearningStep`（`buildDailyHome` に組み込む）。**実装済み**（§5.1）。
 5. `buildUnitTest`（誤解の型のカバー・難しさの配分・3 段階の結果）。**実装済み**（§6）。
-6. `PlayRound`（ラウンド・つながり・ごほうびの条件）。
+6. `PlayRound`（ラウンド・つながり・ごほうびの条件）。**実装済み**（§4.2）。
 7. 分析（`LearningFunnel`・`LessonEffect`・ブロックの読まれ方）。
 8. 英語・社会・理科・国語の体験の種類（`balance`・`sort`・`link`・`dial`）。
