@@ -2,6 +2,7 @@ import 'package:chukore_kit/chukore_kit.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  listRenderTests();
   group('formatExact', () {
     test('整数・既約分数・書けない値', () {
       expect(formatExact(12), '12');
@@ -67,6 +68,48 @@ void main() {
       expect(() => evalConstraint('a', p), throwsFormatException);
       expect(() => evalConstraint('z > 0', p), throwsFormatException);
       expect(() => evalConstraint('a >', p), throwsFormatException);
+    });
+  });
+}
+
+void listRenderTests() {
+  group('数列の差し込み', () {
+    const lists = {
+      'L': [3.0, 8.0, 5.0, 8.0],
+    };
+    test('{L} はそのままの順、{~L} は小さい順', () {
+      expect(renderTemplateString('{L}', {}, lists: lists), '3, 8, 5, 8');
+      expect(renderTemplateString('{~L}', {}, lists: lists), '3, 5, 8, 8');
+      expect(renderTemplateString('データ: {L}。', {}, lists: lists), 'データ: 3, 8, 5, 8。');
+      expect(lists['L'], [3.0, 8.0, 5.0, 8.0]); // 元の並びは変わらない
+    });
+    test('小数・負の数・分数の値も書ける。書けない値は InexactValueException', () {
+      expect(
+        renderTemplateString(
+          '{L}',
+          {},
+          lists: {
+            'L': [-1, 0.5],
+          },
+        ),
+        '-1, 1/2',
+      );
+      expect(
+        () => renderTemplateString(
+          '{L}',
+          {},
+          lists: {
+            'L': [0.123456],
+          },
+        ),
+        throwsA(isA<InexactValueException>()),
+      );
+    });
+    test('ない数列・+ や & は FormatException', () {
+      expect(() => renderTemplateString('{M}', {}, lists: lists), throwsFormatException);
+      expect(() => renderTemplateString('{L}', {}), throwsFormatException);
+      expect(() => renderTemplateString('{+L}', {}, lists: lists), throwsFormatException);
+      expect(() => renderTemplateString('{&L}', {}, lists: lists), throwsFormatException);
     });
   });
 }

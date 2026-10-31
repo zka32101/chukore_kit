@@ -1136,6 +1136,288 @@
     }
    ],
    "explanationId": "exp_m1_func_graph_001"
+  },
+  {
+   "id": "m1_data_mean_001",
+   "templateVersion": 1,
+   "unitId": "m1_data_rep",
+   "type": "expr",
+   "difficulty": 0.7,
+   "params": {
+    "L": {
+     "list": {
+      "n": [
+       5,
+       9
+      ],
+      "int": [
+       30,
+       100
+      ]
+     }
+    }
+   },
+   "stats": {
+    "m": "mean(L)",
+    "d": "median(L)",
+    "s": "sum(L)"
+   },
+   "display": {
+    "data": "{L}"
+   },
+   "answer": "{m}",
+   "wrong": [
+    {
+     "expr": "{d}",
+     "tag": "mean_median_mixup"
+    },
+    {
+     "expr": "{s}",
+     "tag": "forgot_to_divide"
+    }
+   ],
+   "explanationId": "exp_m1_data_mean_001"
+  },
+  {
+   "id": "m1_data_median_001",
+   "templateVersion": 1,
+   "unitId": "m1_data_rep",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "L": {
+     "list": {
+      "n": [
+       6,
+       11
+      ],
+      "int": [
+       1,
+       40
+      ]
+     }
+    }
+   },
+   "stats": {
+    "m": "mean(L)",
+    "d": "median(L)",
+    "r": "range(L)"
+   },
+   "display": {
+    "data": "{L}"
+   },
+   "answer": "{d}",
+   "wrong": [
+    {
+     "expr": "{m}",
+     "tag": "mean_median_mixup"
+    },
+    {
+     "expr": "{r}",
+     "tag": "range_median_mixup"
+    }
+   ],
+   "explanationId": "exp_m1_data_median_001"
+  },
+  {
+   "id": "m1_data_mode_001",
+   "templateVersion": 1,
+   "unitId": "m1_data_rep",
+   "type": "expr",
+   "difficulty": 0.75,
+   "params": {
+    "L": {
+     "list": {
+      "n": [
+       9,
+       14
+      ],
+      "int": [
+       1,
+       6
+      ]
+     }
+    }
+   },
+   "stats": {
+    "o": "mode(L)",
+    "d": "median(L)",
+    "m": "mean(L)"
+   },
+   "display": {
+    "data": "{L}"
+   },
+   "answer": "{o}",
+   "wrong": [
+    {
+     "expr": "{d}",
+     "tag": "median_mode_mixup"
+    },
+    {
+     "expr": "{m}",
+     "tag": "mean_mode_mixup"
+    }
+   ],
+   "explanationId": "exp_m1_data_mode_001"
+  },
+  {
+   "id": "m1_data_range_001",
+   "templateVersion": 1,
+   "unitId": "m1_data_rep",
+   "type": "expr",
+   "difficulty": 0.8,
+   "params": {
+    "L": {
+     "list": {
+      "n": [
+       6,
+       10
+      ],
+      "int": [
+       1,
+       60
+      ]
+     }
+    }
+   },
+   "stats": {
+    "r": "range(L)",
+    "h": "max(L)",
+    "l": "min(L)"
+   },
+   "display": {
+    "data": "{L}"
+   },
+   "answer": "{r}",
+   "wrong": [
+    {
+     "expr": "{h}",
+     "tag": "max_instead_of_range"
+    },
+    {
+     "expr": "{h+l}",
+     "tag": "sum_instead_of_range"
+    }
+   ],
+   "explanationId": "exp_m1_data_range_001"
+  },
+  {
+   "id": "m1_data_class_001",
+   "templateVersion": 1,
+   "unitId": "m1_data_hist",
+   "type": "expr",
+   "difficulty": 0.65,
+   "params": {
+    "L": {
+     "list": {
+      "n": [
+       20,
+       30
+      ],
+      "int": [
+       0,
+       45
+      ]
+     }
+    },
+    "p": {
+     "int": [
+      0,
+      30
+     ]
+    },
+    "q": {
+     "int": [
+      10,
+      40
+     ]
+    }
+   },
+   "stats": {
+    "f": "count(L, p, q)",
+    "n": "count(L)"
+   },
+   "constraints": [
+    "q - p >= 5",
+    "q - p <= 10",
+    "f != 0",
+    "f != n"
+   ],
+   "display": {
+    "data": "{L}",
+    "class": "{p}以上{q}未満"
+   },
+   "answer": "{f}",
+   "wrong": [
+    {
+     "expr": "{n-f}",
+     "tag": "outside_class_count"
+    },
+    {
+     "expr": "{f+1}",
+     "tag": "off_by_one_count"
+    }
+   ],
+   "explanationId": "exp_m1_data_class_001"
+  },
+  {
+   "id": "m1_data_relfreq_001",
+   "templateVersion": 1,
+   "unitId": "m1_data_hist",
+   "type": "expr",
+   "difficulty": 0.55,
+   "params": {
+    "L": {
+     "list": {
+      "n": [
+       20,
+       30
+      ],
+      "int": [
+       0,
+       45
+      ]
+     }
+    },
+    "p": {
+     "int": [
+      0,
+      30
+     ]
+    },
+    "q": {
+     "int": [
+      10,
+      40
+     ]
+    }
+   },
+   "stats": {
+    "f": "count(L, p, q)",
+    "n": "count(L)"
+   },
+   "constraints": [
+    "q - p >= 5",
+    "q - p <= 10",
+    "f != 0",
+    "f != n"
+   ],
+   "display": {
+    "data": "{L}",
+    "class": "{p}以上{q}未満"
+   },
+   "answer": "{f/n}",
+   "wrong": [
+    {
+     "expr": "{f}",
+     "tag": "frequency_relative_mixup"
+    },
+    {
+     "expr": "{f/(n-f)}",
+     "tag": "ratio_to_rest"
+    }
+   ],
+   "explanationId": "exp_m1_data_relfreq_001"
   }
  ]
 }

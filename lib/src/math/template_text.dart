@@ -22,11 +22,12 @@ String? formatExact(double v) {
   return null;
 }
 
-/// 文字列中の `{…}` を、パラメータで計算した値に置き換える。
+/// 文字列中の `{…}` を、パラメータで計算した値に置き換える。数列（英大文字 1 字）は `{L}`（そのままの順）・`{~L}`（小さい順）で
+/// `3, 8, 5` のように差し込む。
 /// `{e}` 値、`{+e}` 符号つき（`+12`・`-12`・`+0`）、`{&e}` 負なら `(-3)` のようにかっこで囲む。
 /// `e` はパラメータ（英小文字 1 字）の四則・`^`・かっこ・`sqrt`。パラメータに無い文字は [FormatException]、
 /// 整数にも分数にも書けない値は [InexactValueException]。`{` と `}` 以外の文字はそのまま。
-String renderTemplateString(String template, Map<String, double> params) {
+String renderTemplateString(String template, Map<String, double> params, {Map<String, List<double>> lists = const {}}) {
   final out = StringBuffer();
   var i = 0;
   while (i < template.length) {
@@ -46,13 +47,22 @@ String renderTemplateString(String template, Map<String, double> params) {
       body = body.substring(1);
     }
     if (body.contains('{')) throw FormatException('{ が入れ子です: $template');
-    out.write(_render(body, mode, params));
+    out.write(_render(body, mode, params, lists));
     i = end + 1;
   }
   return out.toString();
 }
 
-String _render(String body, String mode, Map<String, double> params) {
+String _render(String body, String mode, Map<String, double> params, Map<String, List<double>> lists) {
+  final listRef = RegExp(r'^(~?)([A-Z])$').firstMatch(body);
+  if (listRef != null) {
+    if (mode.isNotEmpty) throw FormatException('数列には + や & は使えません: $body');
+    final data = lists[listRef.group(2)];
+    if (data == null) throw FormatException('数列にない名前です: ${listRef.group(2)}（$body）');
+    final items = [...data];
+    if (listRef.group(1) == '~') items.sort();
+    return items.map((v) => formatExact(v) ?? (throw InexactValueException(body))).join(', ');
+  }
   final e = MathExpr.parse(body);
   final unknown = e.variables.where((v) => !params.containsKey(v));
   if (unknown.isNotEmpty) throw FormatException('パラメータにない文字です: ${unknown.join()}（$body）');

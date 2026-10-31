@@ -4,6 +4,8 @@
 
 ## [未リリース]
 
+- 変種生成にデータの活用を追加: 数列のパラメータ（英大文字 1 字、`Variant.lists`）、集計 `stats`（sum・mean・median・mode・range・min・max・count）、数列の差し込み `{L}`・`{~L}`。数学（中1）の型にデータの 6 型（平均・中央値・最頻値・範囲・度数・相対度数）を追加（計 31 型）
+
 - docs: 図・グラフ・データの扱いの設計（`docs/math_figures_design.md`。図の仕様 `FigureSpec`、core が SVG を作る案、データの数列パラメータと集計関数、円周率 π の扱い。未実装）
 
 - 体験型の教材 `Exploration`・`ExplorationSet`・`ExplorationParam`・`validateExplorations`（`slider_graph`: 式のパラメータを動かすグラフ教材。グラフの点 `sample`、予想の答え合わせ、目標の達成判定 `goalReached`、目標に届くかの検証）と `MathExpr.bind`。見本 `docs/samples/explorations.sample.json`
