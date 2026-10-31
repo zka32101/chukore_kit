@@ -6,6 +6,7 @@ import '../scope/unit_tree.dart';
 import 'figure.dart';
 import 'math_expr.dart';
 import 'seeded_random.dart';
+import 'solid.dart';
 import 'template_text.dart';
 
 /// パラメータの範囲。整数 `{"int":[lo,hi]}` か、候補 `{"oneOf":[…]}`。
@@ -127,6 +128,46 @@ double _evalStat(
   }
 }
 
+/// 選択肢の図 1 つ。図の仕様 1 つか、式で番号を選ぶ複数の仕様（`{"pick": {"index": "式", "of": [図, …]}}`）。
+class FigureChoice {
+  const FigureChoice._(this.one, this.index, this.of);
+
+  final FigureTemplate? one;
+  final String? index;
+  final List<FigureTemplate> of;
+
+  factory FigureChoice.fromJson(String id, Object? j, Set<String> known) {
+    if (j is! Map) throw FormatException('$id: figures の値は図のオブジェクト');
+    if (j.containsKey('pick')) {
+      final p = j['pick'];
+      if (j.length != 1 ||
+          p is! Map ||
+          p.length != 2 ||
+          p['index'] is! String ||
+          p['of'] is! List ||
+          (p['of'] as List).length < 2) {
+        throw FormatException('$id: pick は {"index": 式, "of": [図, 図, …]}（図は 2 つ以上）');
+      }
+      final e = MathExpr.tryParse(p['index'] as String);
+      if (e == null || e.variables.any((v) => !known.contains(v))) {
+        throw FormatException('$id: pick の index が不正: ${p['index']}');
+      }
+      return FigureChoice._(null, p['index'] as String, [
+        for (final f in p['of'] as List) FigureTemplate.fromJson(Map<String, dynamic>.from(f as Map), known),
+      ]);
+    }
+    return FigureChoice._(FigureTemplate.fromJson(Map<String, dynamic>.from(j), known), null, const []);
+  }
+
+  Figure? resolve(Map<String, double> values, String Function(String) render) {
+    final one = this.one;
+    if (one != null) return one.resolve(values, render);
+    final i = MathExpr.parse(index!).eval(values);
+    if (i.isNaN || i != i.roundToDouble() || i < 0 || i >= of.length) return null;
+    return of[i.toInt()].resolve(values, render);
+  }
+}
+
 /// 型から作った 1 つの変種。
 class Variant {
   const Variant({
@@ -136,6 +177,7 @@ class Variant {
     required this.display,
     this.lists = const {},
     this.figure,
+    this.choiceFigures = const {},
   });
 
   /// 出題・判定に使う問題（ID は `{templateId}~{seed}`）。
@@ -144,6 +186,9 @@ class Variant {
 
   /// 図（型に `figure` があるとき）。画面が描くか、`figure.toSvg()` で SVG にする。
   final Figure? figure;
+
+  /// 選択肢が図の問題（型に `figures` があるとき）の、選択肢の ID → 図。`question.choices` の各 ID に対応する。
+  final Map<String, Figure> choiceFigures;
 
   /// 引いた数列（データの活用の型。画面が表・ヒストグラムを描くのに使う）。
   final Map<String, List<double>> lists;
@@ -177,6 +222,7 @@ class MathTemplate {
     required this.stats,
     required this.derived,
     required this.figure,
+    required this.figures,
     required this.constraints,
     required this.display,
     required this.answer,
@@ -200,6 +246,9 @@ class MathTemplate {
 
   /// 図の仕様（平面図形）。無ければ null。
   final FigureTemplate? figure;
+
+  /// 選択肢が図の問題の、選択肢の ID → 図の仕様（どれにするかを式で選ぶ `pick` もある）。
+  final Map<String, FigureChoice> figures;
   final List<String> constraints;
   final Map<String, String> display;
   final String answer;
@@ -220,6 +269,7 @@ class MathTemplate {
     'stats',
     'derived',
     'figure',
+    'figures',
     'constraints', //
     'display', 'answer', 'choices', 'wrong', 'explanationId',
   };
@@ -287,6 +337,21 @@ class MathTemplate {
     if (rawFigure != null && rawFigure is! Map) throw FormatException('$id: figure はオブジェクト');
     final constraints = [for (final c in (j['constraints'] as List? ?? const [])) c as String];
     final choices = [for (final c in (j['choices'] as List? ?? const [])) c as String];
+    final rawFigures = j['figures'];
+    final figures = <String, FigureChoice>{};
+    if (rawFigures != null) {
+      if (type != 'choice') throw FormatException('$id: figures は choice の型だけ');
+      if (rawFigures is! Map) throw FormatException('$id: figures は 選択肢の ID → 図');
+      if (choices.any((c) => c.contains('{')) ||
+          rawFigures.keys.toSet().difference(choices.toSet()).isNotEmpty ||
+          choices.toSet().difference(rawFigures.keys.toSet()).isNotEmpty) {
+        throw FormatException('$id: figures のキーは choices と同じ（choices は {…} を含めない ID）');
+      }
+      final known = {...params.keys, ...stats.keys, ...derived.keys};
+      for (final e in rawFigures.entries) {
+        figures[e.key as String] = FigureChoice.fromJson(id, e.value, known);
+      }
+    }
     if (type == 'choice' && choices.length < 2) throw FormatException('$id: choice の型は choices が 2 つ以上');
     if (type == 'expr' && choices.isNotEmpty) throw FormatException('$id: expr の型に choices は使えません');
     final wrong = <({String expr, String tag})>[];
@@ -308,6 +373,7 @@ class MathTemplate {
       lists: lists,
       stats: stats,
       derived: derived,
+      figures: figures,
       figure: rawFigure == null
           ? null
           : FigureTemplate.fromJson(Map<String, dynamic>.from(rawFigure as Map), {
@@ -428,6 +494,12 @@ class MathTemplate {
         shown[j] = t;
       }
     }
+    final choiceFigures = <String, Figure>{};
+    for (final e in figures.entries) {
+      final f = e.value.resolve(values, r);
+      if (f == null) return null; // 描けない図が選択肢にある
+      choiceFigures[e.key] = f;
+    }
     Figure? fig;
     if (figure != null) {
       fig = figure!.resolve(values, r);
@@ -435,6 +507,7 @@ class MathTemplate {
     }
     return Variant(
       figure: fig,
+      choiceFigures: choiceFigures,
       question: Question(
         id: '$id~$seed',
         unitId: unitId,
@@ -490,15 +563,23 @@ class TemplateSet {
 
 /// 型を検証する: 各型を種 1..[count] で展開し、展開した問題集に [validateQuestionBank] をかける。
 /// 型ごとのコード: `template_unsatisfiable`（制約が厳しすぎる、表示がすでに目標の形、など）・`template_expression_invalid`（エラー）、
-/// `template_answer_dup`（警告: 変種の答えが半分以上かぶる＝範囲が狭い）。
+/// `template_answer_dup`（警告: 変種の答え［選択肢が図の型は選択肢の並びと図］が半分以上かぶる＝範囲が狭い）、
+/// `template_net_mismatch`（エラー: 展開図の選択肢で、正解だけが立方体の展開図になっていない）。
 List<ValidationIssue> validateTemplates(TemplateSet set, {required UnitTree tree, int count = 40}) {
   final issues = <ValidationIssue>[];
   final questions = <Question>[];
   for (final t in set.templates) {
     final mine = <Question>[];
+    final looks = <String>[]; // 変種の見かけ（答え。選択肢が図の型は、選択肢の並びと図）
     try {
       for (var s = 1; s <= count; s++) {
-        mine.add(t.generate(s).question);
+        final v = t.generate(s);
+        mine.add(v.question);
+        looks.add(
+          t.figures.isEmpty
+              ? v.question.answer
+              : '${v.question.choices.join(',')}|${v.question.choices.map((c) => v.choiceFigures[c]!.toSvg()).join('|')}',
+        );
       }
     } on StateError catch (e) {
       issues.add(ValidationIssue(IssueSeverity.error, 'template_unsatisfiable', t.id, '$e'));
@@ -515,13 +596,17 @@ List<ValidationIssue> validateTemplates(TemplateSet set, {required UnitTree tree
       );
       continue;
     }
-    if (mine.map((q) => q.answer).toSet().length * 2 < count) {
+    final badNet = netMismatch(t, count);
+    if (badNet != null) {
+      issues.add(ValidationIssue(IssueSeverity.error, 'template_net_mismatch', t.id, badNet));
+    }
+    if (looks.toSet().length * 2 < count) {
       issues.add(
         ValidationIssue(
           IssueSeverity.warning,
           'template_answer_dup',
           t.id,
-          '$count 個の変種で答えが ${mine.map((q) => q.answer).toSet().length} 通りしかありません（パラメータの範囲が狭い）',
+          '$count 個の変種で${t.figures.isEmpty ? '答え' : '選択肢の図'}が ${looks.toSet().length} 通りしかありません（パラメータの範囲が狭い）',
         ),
       );
     }
@@ -529,4 +614,29 @@ List<ValidationIssue> validateTemplates(TemplateSet set, {required UnitTree tree
   }
   issues.addAll(validateQuestionBank(questions: questions, tree: tree));
   return issues;
+}
+
+/// 選択肢がすべて展開図（`net/cells`）の型で、正解の選択肢だけが立方体の展開図になっているか。違えば理由、よければ null。
+/// 選択肢の図が展開図でない型は見ない。
+String? netMismatch(MathTemplate t, int count) {
+  if (t.figures.isEmpty) return null;
+  for (var s = 1; s <= count; s++) {
+    final Variant v;
+    try {
+      v = t.generate(s);
+    } on StateError {
+      return null; // 生成できないことは別のコードで報告する
+    } on FormatException {
+      return null;
+    }
+    if (v.choiceFigures.isEmpty || v.choiceFigures.values.any((f) => f.cells == null)) return null;
+    final nets = [
+      for (final e in v.choiceFigures.entries)
+        if (isCubeNet(e.value.cells!)) e.key,
+    ];
+    if (nets.length != 1 || nets.single != v.question.answer) {
+      return '種 $s: 立方体の展開図になる選択肢が ${nets.isEmpty ? 'ありません' : nets.join('・')}（正解は ${v.question.answer}）';
+    }
+  }
+  return null;
 }

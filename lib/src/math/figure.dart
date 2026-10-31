@@ -187,7 +187,7 @@ class FigureTemplate {
         {for (final e in solid.labels.entries) e.key: render(e.value)},
       );
       if (built == null) return null;
-      return Figure._(viewBox, const {}, built.shapes, built.labels, altId);
+      return Figure._(viewBox, const {}, built.shapes, built.labels, altId, solid.cells);
     }
 
     final pts = <String, ({double x, double y})>{};
@@ -368,7 +368,10 @@ class FigureLabel {
 
 /// 値を入れた図。画面が [shapes]・[labels] から描くか、[toSvg] で SVG にする。
 class Figure {
-  const Figure._(this.viewBox, this.points, this.shapes, this.labels, this.altId);
+  const Figure._(this.viewBox, this.points, this.shapes, this.labels, this.altId, [this.cells]);
+
+  /// 展開図のマス（`net/cells` の図だけ）。立方体の展開図かどうかの検証（[isCubeNet]）に使う。
+  final List<({int col, int row})>? cells;
 
   /// 図形とラベルから図を作る（作図の途中経過など、型を通さない図）。
   const Figure.fromShapes({
@@ -377,6 +380,7 @@ class Figure {
     required this.labels,
     required this.altId,
     this.points = const {},
+    this.cells,
   });
 
   final List<double> viewBox;

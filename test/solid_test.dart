@@ -428,4 +428,374 @@ void main() {
       expect(() => t.generate(1), throwsStateError);
     });
   });
+
+  group('立方体の展開図 isCubeNet / net/cells', () {
+    ({int col, int row}) c(int col, int row) => (col: col, row: row);
+    List<({int col, int row})> cells(List<List<int>> l) => [for (final e in l) c(e[0], e[1])];
+
+    test('十字形・1-4-1・2-3-1・2-2-2・3-3 は展開図、2×3 の長方形・一直線・箱型は違う', () {
+      expect(
+        isCubeNet(
+          cells([
+            [1, 0],
+            [0, 1],
+            [1, 1],
+            [2, 1],
+            [3, 1],
+            [1, 2],
+          ]),
+        ),
+        isTrue,
+      ); // 1-4-1（十字）
+      expect(
+        isCubeNet(
+          cells([
+            [0, 0],
+            [0, 1],
+            [1, 1],
+            [2, 1],
+            [3, 1],
+            [3, 2],
+          ]),
+        ),
+        isTrue,
+      ); // 1-4-1（上と下が端）
+      expect(
+        isCubeNet(
+          cells([
+            [0, 0],
+            [1, 0],
+            [1, 1],
+            [2, 1],
+            [3, 1],
+            [3, 2],
+          ]),
+        ),
+        isTrue,
+      ); // 2-3-1
+      expect(
+        isCubeNet(
+          cells([
+            [0, 0],
+            [1, 0],
+            [1, 1],
+            [2, 1],
+            [2, 2],
+            [3, 2],
+          ]),
+        ),
+        isTrue,
+      ); // 階段 2-2-2
+      expect(
+        isCubeNet(
+          cells([
+            [0, 0],
+            [1, 0],
+            [2, 0],
+            [2, 1],
+            [3, 1],
+            [4, 1],
+          ]),
+        ),
+        isTrue,
+      ); // 3-3
+      expect(
+        isCubeNet(
+          cells([
+            [0, 0],
+            [1, 0],
+            [0, 1],
+            [1, 1],
+            [0, 2],
+            [1, 2],
+          ]),
+        ),
+        isFalse,
+      ); // 2×3
+      expect(
+        isCubeNet(
+          cells([
+            [0, 0],
+            [1, 0],
+            [2, 0],
+            [3, 0],
+            [4, 0],
+            [5, 0],
+          ]),
+        ),
+        isFalse,
+      ); // 一直線
+      expect(
+        isCubeNet(
+          cells([
+            [0, 0],
+            [1, 0],
+            [2, 0],
+            [3, 0],
+            [4, 0],
+            [2, 1],
+          ]),
+        ),
+        isFalse,
+      ); // 5 つの列＋1（面が重なる）
+      expect(
+        isCubeNet(
+          cells([
+            [0, 0],
+            [1, 0],
+            [0, 1],
+            [1, 1],
+            [2, 1],
+            [3, 1],
+          ]),
+        ),
+        isFalse,
+      ); // 2×2 を含む
+    });
+    test('マスの数が 6 でない・同じマスがある・つながっていない', () {
+      expect(
+        isCubeNet(
+          cells([
+            [0, 0],
+            [1, 0],
+            [2, 0],
+            [1, 1],
+            [1, 2],
+          ]),
+        ),
+        isFalse,
+      ); // 5 マス
+      expect(
+        isCubeNet(
+          cells([
+            [1, 0],
+            [0, 1],
+            [1, 1],
+            [2, 1],
+            [3, 1],
+            [1, 2],
+            [1, 3],
+          ]),
+        ),
+        isFalse,
+      ); // 7 マス
+      expect(
+        isCubeNet(
+          cells([
+            [0, 0],
+            [0, 0],
+            [1, 0],
+            [2, 0],
+            [3, 0],
+            [1, 1],
+          ]),
+        ),
+        isFalse,
+      ); // 重複
+      expect(
+        isCubeNet(
+          cells([
+            [0, 0],
+            [1, 0],
+            [2, 0],
+            [4, 0],
+            [5, 0],
+            [6, 0],
+          ]),
+        ),
+        isFalse,
+      ); // 離れている
+      expect(isCubeNet(const []), isFalse);
+    });
+    test('全 35 種類の六マスのうち、立方体の展開図は 11 種類。向き・裏返しに関わらず判定が同じ', () {
+      List<({int col, int row})> norm(List<({int col, int row})> l) {
+        final mc = l.map((e) => e.col).reduce(math.min), mr = l.map((e) => e.row).reduce(math.min);
+        return [for (final e in l) c(e.col - mc, e.row - mr)]
+          ..sort((a, b) => a.row != b.row ? a.row - b.row : a.col - b.col);
+      }
+
+      Set<String> variants(List<({int col, int row})> l) {
+        final out = <String>{};
+        for (final refl in [false, true]) {
+          for (var rot = 0; rot < 4; rot++) {
+            var cur = l;
+            if (refl) cur = [for (final e in cur) c(-e.col, e.row)];
+            for (var i = 0; i < rot; i++) {
+              cur = [for (final e in cur) c(-e.row, e.col)];
+            }
+            out.add(norm(cur).map((e) => '${e.col},${e.row}').join(';'));
+          }
+        }
+        return out;
+      }
+
+      var level = <String, List<({int col, int row})>>{
+        '0,0': [c(0, 0)],
+      };
+      for (var n = 1; n < 6; n++) {
+        final next = <String, List<({int col, int row})>>{};
+        for (final p in level.values) {
+          for (final e in p) {
+            for (final (dc, dr) in [(1, 0), (-1, 0), (0, 1), (0, -1)]) {
+              final q = c(e.col + dc, e.row + dr);
+              if (p.contains(q)) continue;
+              final grown = [...p, q];
+              final key = (variants(grown).toList()..sort()).first;
+              next[key] = grown;
+            }
+          }
+        }
+        level = next;
+      }
+      expect(level.length, 35);
+      expect(level.values.where(isCubeNet).length, 11);
+      // 同じ形の別の向きでも判定は同じ
+      for (final p in level.values) {
+        final base = isCubeNet(p);
+        expect(isCubeNet([for (final e in p) c(e.row, e.col)]), base); // 転置（裏返し＋回転）
+        expect(isCubeNet([for (final e in p) c(9 - e.col, e.row)]), base);
+      }
+    });
+    test('net/cells の図: マスの正方形。大きさは枠に収まり、Figure.cells に残る', () {
+      final t = FigureTemplate.fromJson({
+        'solid': {
+          'kind': 'cells',
+          'view': 'net',
+          'cells': [
+            [1, 0],
+            [0, 1],
+            [1, 1],
+            [2, 1],
+            [3, 1],
+            [1, 2],
+          ],
+        },
+        'altId': 'a',
+      }, {});
+      final f = t.resolve({}, (s) => s)!;
+      expect(f.shapes.length, 6);
+      expect(f.shapes.every((s) => s.kind == FigureShapeKind.poly), isTrue);
+      expect(f.cells, hasLength(6));
+      expect(f.cells!.first, (col: 1, row: 0));
+      final side = f.shapes.first.points[1].x - f.shapes.first.points[0].x;
+      expect(side, closeTo(18, 1e-9)); // 4 列なので 72 / 4 = 18（上限 18）
+      expectInside(f);
+      // 大きい展開図は 72 に収める（一直線 6 マスなら 12）
+      final line = FigureTemplate.fromJson({
+        'solid': {
+          'kind': 'cells',
+          'view': 'net',
+          'cells': [
+            [0, 0],
+            [1, 0],
+            [2, 0],
+            [3, 0],
+            [4, 0],
+            [5, 0],
+          ],
+        },
+        'altId': 'a',
+      }, {}).resolve({}, (s) => s)!;
+      expect(line.shapes.first.points[1].x - line.shapes.first.points[0].x, closeTo(12, 1e-9));
+      expectInside(line);
+      // 列が少ない展開図でも、1 マスは 18 まで（小さい図が大きくなりすぎない）
+      final small = FigureTemplate.fromJson({
+        'solid': {
+          'kind': 'cells',
+          'view': 'net',
+          'cells': [
+            [0, 0],
+            [1, 0],
+            [0, 1],
+          ],
+        },
+        'altId': 'a',
+      }, {}).resolve({}, (s) => s)!;
+      expect(small.shapes.first.points[1].x - small.shapes.first.points[0].x, closeTo(18, 1e-9));
+      // 他の図は cells を持たない
+      expect(make('cube', {'a': 3}, view: 'net')!.cells, isNull);
+    });
+    test('net/cells の書き間違いは FormatException', () {
+      Map<String, dynamic> spec(Map<String, dynamic> s) => {'solid': s, 'altId': 'a'};
+      final bad = <Map<String, dynamic>>[
+        spec({'kind': 'cells', 'view': 'net'}),
+        spec({'kind': 'cells', 'view': 'net', 'cells': <dynamic>[]}),
+        spec({
+          'kind': 'cells',
+          'view': 'net',
+          'cells': [
+            [0, 0],
+            [0, 0],
+          ],
+        }),
+        spec({
+          'kind': 'cells',
+          'view': 'net',
+          'cells': [
+            [0, 'a'],
+          ],
+        }),
+        spec({
+          'kind': 'cells',
+          'view': 'net',
+          'cells': [
+            [0, 10],
+          ],
+        }),
+        spec({
+          'kind': 'cells',
+          'view': 'net',
+          'cells': [
+            [-1, 0],
+          ],
+        }),
+        spec({
+          'kind': 'cells',
+          'view': 'net',
+          'cells': [
+            [0, 0, 0],
+          ],
+        }),
+        spec({
+          'kind': 'cells',
+          'view': 'net',
+          'cells': [
+            [0, 0],
+          ],
+          'dims': {'a': 'a'},
+        }),
+        spec({
+          'kind': 'cells',
+          'view': 'net',
+          'cells': [
+            [0, 0],
+          ],
+          'labels': {'a': 'x'},
+        }),
+        spec({
+          'kind': 'cells',
+          'view': 'solid',
+          'cells': [
+            [0, 0],
+          ],
+        }),
+        spec({
+          'kind': 'cube',
+          'view': 'net',
+          'dims': {'a': 'a'},
+          'cells': [
+            [0, 0],
+          ],
+        }),
+        spec({
+          'kind': 'cells',
+          'view': 'net',
+          'cells': List.generate(13, (i) => [i % 10, i ~/ 10]),
+        }),
+      ];
+      for (final b in bad) {
+        expect(() => ft(b), throwsFormatException, reason: b.toString());
+      }
+    });
+  });
 }

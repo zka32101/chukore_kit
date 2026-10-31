@@ -25,8 +25,8 @@ void main() {
     const dir = 'docs/content_drafts/suugaku_chu1';
     final tree = UnitTree.fromJson(jsonDecode(File('$dir/units.json').readAsStringSync()) as Map<String, dynamic>);
     final set = TemplateSet.parse(File('$dir/templates.json').readAsStringSync());
-    // 答えの取りうる値が少ない型（最頻値は 1〜6、階級の度数は 0〜数個）は、答えの種類が少ないのが性質
-    const fewAnswers = {'m1_data_mode_001', 'm1_data_class_001'};
+    // 答えの取りうる値が少ない型（最頻値は 1〜6、階級の度数は 0〜数個、比例のグラフは 4 通りの傾き）は、見かけの種類が少ないのが性質
+    const fewAnswers = {'m1_data_mode_001', 'm1_data_class_001', 'm1_func_graphchoice_001'};
     final issues = validateTemplates(
       set,
       tree: tree,
@@ -35,6 +35,12 @@ void main() {
     for (final v in set.expand()) {
       final q = v.question;
       expect(checkAnswer(q, q.answer).correct, isTrue, reason: q.id);
+      for (final f in v.choiceFigures.values) {
+        expect(f.toSvg(), startsWith('<svg'), reason: q.id);
+      }
+      if (v.choiceFigures.isNotEmpty) {
+        expect(v.choiceFigures.keys.toSet(), q.choices.toSet(), reason: q.id); // 選択肢の ID ごとに図がある
+      }
       final fig = v.figure;
       if (fig != null) {
         final svg = fig.toSvg();
