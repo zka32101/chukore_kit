@@ -1,6 +1,6 @@
 # 全教科共通の学びの設計: 学ぶ・体験する・解く・評価する・分析する
 
-> ステータス: 設計（未実装）。決定済みの要望: **全教科で、①教科書のように学ぶ、②体験・遊びで学ぶ、③問題を解いて理解する、④テストで評価する、⑤データで分析する、を入れる**。今の基盤は ③④⑤が厚く、②は数学だけ、**①（学ぶ）がまだ無い**。この文書は、5 つを 1 本の「学びの流れ」にまとめ、足りない部品（特に①）と実装の順を決める。先に決めたいことは §8。
+> ステータス: 設計。レッスンの形式・検証・進み具合（§3）は実装済み、遊び・`nextLearningStep`・単元テスト・分析（§4〜7）は未実装。決定済みの要望: **全教科で、①教科書のように学ぶ、②体験・遊びで学ぶ、③問題を解いて理解する、④テストで評価する、⑤データで分析する、を入れる**。今の基盤は ③④⑤が厚く、②は数学だけ、**①（学ぶ）がまだ無い**。この文書は、5 つを 1 本の「学びの流れ」にまとめ、足りない部品（特に①）と実装の順を決める。先に決めたいことは §8。
 
 ## 1. 1 つの単元の学びの流れ
 ```
@@ -71,6 +71,14 @@
 ### 3.5 本文の作り方
 基盤はレッスンの**本文を作らない**。コンテンツ側で、AI が下書き → 人が確認（指導要領・用語・やさしさ）→ 検証ツールで参照と途中式を確認、の流れ。数学・英語・理科の例題は型から機械で作れる（答えの食い違いが出ない）。
 
+### 3.6 実装したもの（`lib/src/lesson/`）
+- `Lesson`・`LessonBlock`（`hook`・`text`・`figure`・`formula`・`example`・`explore`・`check`・`pitfall`・`summary`）・`LessonSet.parse`（`lessons.json`。読めなければ `FormatException`）。`check` は 1〜3 問、`pre`（事前の確認）は 2 問まで、`summary` は 1〜4 行、`example` の途中式は 2〜12 行。**文言は ID だけ**（本文はコンテンツ側）。
+- `validateLessons(set, tree:, refs:, checker:)`: §3.3 のコードのうち `lesson_unit_missing`・`lesson_unit_not_leaf`・`lesson_ref_missing`・`lesson_example_mismatch`・`lesson_formula_unreadable`・`lesson_tag_unknown`・`lesson_no_check`（エラー）、`lesson_too_long`・`lesson_no_summary`・`lesson_first_not_hook`（警告）。参照先の一覧 `LessonRefs`（問題・型・体験・作図・誤解の型）は教科側が作って渡す。教科ごとの検査は `LessonChecker`（例題の途中式・式の読み取り）で、数学は `MathLessonChecker(TemplateSet)`。
+- **例題の検証**: 型 ID と種から変種を作り、途中式の行（`{a}x{+b}={c}` のように型の値を差し込む書き方）を描き出して `checkSolutionSteps` で 1 行ずつ確かめる。途中で式が変わる・目標に着かない・解の形まで整理していない・形（`form`）に合わない・**最後の行が型の答えと違う**、のどれかがあれば `lesson_example_mismatch`（どの行で何を間違えたかの誤解の型つき）。**例題の答えの書き間違いが、公開前に必ず見つかる。**
+- `LessonProgress`（端末内。読んだブロック・事前の確認・確認クイズの結果・完了日時。不変で、更新は新しい値）、`isComplete(lesson)`・`preRate`・`postRate`・`gain`（事前 → 事後の伸び）・JSON の往復（読めなければ `FormatException`）。`lessonCheckAttempt` は確認クイズの結果を `Attempt(mode: 'lesson_check')` にする（習熟度には、ふつうの回答として数える。読んだだけ・体験だけでは加点しない）。
+- `summarizeLessonEffects(progress, minLearners:)`: レッスンごとの記録の数・完了率・事前／事後の平均正答率・伸びの平均（§7「レッスンの効き目」の土台）。
+- 見本: `docs/content_drafts/suugaku_chu1/lessons.json`（等式の性質・一次方程式の解き方・同類項・三角形の内角の和の 4 レッスン）。
+
 ## 4. ②体験・遊びで学ぶ
 ### 4.1 体験（教科ごと）
 | 教科 | 体験の例 |
@@ -126,8 +134,8 @@
 
 ## 9. 実装の順（案）
 1. 途中式の判定（数学の段 6。例題の検証に使う）。**実装済み**（`checkSolutionSteps`。`docs/math_foundation.md` §10）。
-2. `Lesson`・`LessonSet`・`validateLessons`（形式と参照・例題の検証）。数学の一次方程式のレッスンの見本。
-3. `LessonProgress`・事前／事後の確認・`Attempt` の `lesson_check`。
+2. `Lesson`・`LessonSet`・`validateLessons`（形式と参照・例題の検証）。数学の一次方程式のレッスンの見本。**実装済み**（§3.6）。
+3. `LessonProgress`・事前／事後の確認・`Attempt` の `lesson_check`。**実装済み**（§3.6）。
 4. `nextLearningStep`（`buildDailyHome` に組み込む）。
 5. `buildUnitTest`（誤解の型のカバー・難しさの配分・3 段階の結果）。
 6. `PlayRound`（ラウンド・つながり・ごほうびの条件）。

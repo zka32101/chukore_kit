@@ -31,7 +31,12 @@ void main() {
   });
 
   test('core から lib/src/math を使っているのは、問題の判定と問題集の検証だけ', () {
-    const users = {'lib/src/question/answer.dart', 'lib/src/bank/question_bank.dart', 'lib/chukore_kit.dart'};
+    const users = {
+      'lib/src/question/answer.dart',
+      'lib/src/bank/question_bank.dart',
+      'lib/src/lesson/math_lesson_checker.dart', // 数学のレッスンの検査（教科ごとの検査は lesson 側に置き、math は lesson を知らない）
+      'lib/chukore_kit.dart',
+    };
     final found = <String>{};
     for (final e in Directory('lib').listSync(recursive: true)) {
       if (e is! File || !e.path.endsWith('.dart') || e.path.startsWith('lib/src/math/')) continue;
