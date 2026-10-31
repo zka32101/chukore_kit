@@ -4,6 +4,8 @@
 
 ## [未リリース]
 
+- docs: 数学の問題の変種生成 `MathTemplate` の設計（`docs/math_variants_design.md`。未実装）
+
 - 数式の答えの形の指定 `Question.form`（`expanded`・`factored`・`reduced_fraction`・`simplest_radical`）と `judgeExpr`・`ExprVerdict`・`MathExpr.hasForm`。値は合うが形が違う答えを区別。検証 `unknown_form`・`answer_form_mismatch`・`form_ignored`
 
 - 数式の問題タイプ `expr` と `MathExpr`（数式の読み取り・同値判定）。`2x+6` と `2(x+3)`、`1/2` と `0.5` を同じ値として判定。検証 `expr_answer_invalid`。設計は `docs/math_foundation.md`
