@@ -140,3 +140,10 @@ dart run tool/validate_bank.dart units.json questions.json
 - 判定は `judgeExpr(answer, input, form:)`: `correct`／`wrongForm`（値は合っている。画面では「値は合っています。形を整えよう」のように責めずに伝える）／`wrongValue`／`unreadable`。`checkAnswer` は `correct` のときだけ正解。
 - 検証コード: `unknown_form`・`answer_form_mismatch`（正解自体が形を満たさない）はエラー、`form_ignored`（expr 以外で指定）は警告。
 - `form` を足す・変えるのは問題の内容の変更なので、差分更新では `version` を上げる。
+
+## 数学の問題の型（変種生成）
+係数を種で変えた問題を機械で作る。型の形式・検証は [`math_variants_design.md`](math_variants_design.md)、見本は `docs/samples/templates.sample.json`。
+```
+dart run tool/expand_templates.dart units.json templates.json [questions.json] [変種の数]
+```
+変種の問題 ID は `{型のid}~{種}`（`parseVariantId` で分ける）。型の内容を変えたら `templateVersion` を上げる。

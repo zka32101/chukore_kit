@@ -27,7 +27,7 @@
       "id": "m1_expand_001", "templateVersion": 1, "unitId": "m1_expr",
       "type": "expr", "form": "expanded", "difficulty": 0.7,
       "params": {"a": {"int": [2, 9]}, "b": {"int": [-9, 9]}},
-      "constraints": ["b != 0", "a*a != b*b"],
+      "constraints": ["b != 0"],
       "display": {"expr": "{a}(x{+b})"},
       "answer": "{a}x{+a*b}",
       "wrong": [
@@ -40,6 +40,7 @@
 }
 ```
 - `{e}`: 式 `e`（パラメータの四則・かっこ）の値を整数または既約分数で差し込む。`{+e}`: 符号をつける（`+12`・`-12`）。`{&e}`: 負ならかっこで囲む（`(-3)`）。
+- `derived`: パラメータから計算する値（例 `"c": "a*k+b"`）。`display`・`answer`・`wrong`・`constraints` で使える。
 - `constraints`: `式 比較 式`（`== != < <= > >=`）。満たす値が出るまで引き直す（上限 50 回、無理なら `template_unsatisfiable`）。
 - 割り算の結果が整数にも既約分数にも書けない（循環小数など）なら引き直す。
 - `choice` の型は `choices`（式で書く）と `answer` を同じ書式で持つ。`wrong` の `tag` は選択肢の誤解のタグになる。
@@ -61,18 +62,17 @@
 - 同じ型を続けて出さない: `interleaveByUnit` の考え方を型にも使う案（`interleaveByTemplate`）。まず単元で混ぜるだけで足りるかを見る。
 - 直近に解いた種は避ける（既存の「3 日以内に正解した問題は出さない」が、問題 ID が違うので自然に効く）。
 
-## 7. 検証（`validate_bank` に追加）
+## 7. 検証（`validateTemplates`・`tool/expand_templates.dart`）
+各型を種 1..N（既定 40）で展開し、展開した問題集に通常の `validateQuestionBank` もかける（`answer_form_mismatch`・`unit_missing` など）。
 | コード | 内容 | 重さ |
 |---|---|---|
-| `template_unsatisfiable` | 制約を満たすパラメータが引けない | エラー |
-| `template_answer_form` | 展開した変種の答えが `form` を満たさない（種 1..N すべてを見る） | エラー |
-| `template_wrong_equals_answer` | 誤答の式が正解と同値になる種がある | エラー |
-| `template_wrong_duplicate` | 誤答どうしが同値になる種がある | 警告（その種では片方を外す） |
-| `template_degenerate` | 答えが表示の式と同じ（何もしなくても正解） | エラー |
-| `template_answer_dup` | N 個の変種で、答えが同じものが多い（範囲が狭すぎる） | 警告 |
-| `template_unknown_param` | 式に宣言されていない文字（`x` 以外の自由変数）がある | エラー |
+| `template_unsatisfiable` | 50 回引き直しても決まらない（制約が厳しい・値が分数で書けない・誤答が正解と同値になり続ける・選択肢が重複し続ける・表示の式がすでに目標の形） | エラー |
+| `template_expression_invalid` | `{…}` の式が読めない、宣言のない文字、答えが選択肢にない、誤答が選択肢にない | エラー |
+| `template_answer_dup` | N 個の変種で答えが半分以下の種類しかない（範囲が狭すぎる） | 警告 |
 
-展開した問題集には、通常の `validateQuestionBank` もそのままかける。
+- 読み込み（`TemplateSet.parse`）で、未知のキー・型違い・範囲外・`{` `}` の対応違い・式の宣言のない文字・id の重複を `FormatException` で止める。
+- **正解と同値になる誤答、誤答どうしの重複、選択肢の重複は、その種を引き直す**（その組み合わせのパラメータは出ない）。例: 見本の展開の型で `a=2,b=2` のとき `a+b==a*b` なので、誤答 2 が正解と同値になり、その組は引かれない。
+- 変種の `explanationId` は型で 1 つ。解説の本文は、`display` の数式を差し込むコンテンツ側で持つ。
 
 ## 8. やらないこと
 - 実行時に AI で問題を作らない（検証できないため）。
@@ -86,7 +86,7 @@
 3. **履歴の集計単位**: 習熟度は単元ごとのままでよいか。弱点ノートの誤解のタグは型をまたいで集計する（案: 型をまたぐ。同じ誤解は同じタグ名）。
 4. **対象の最初の単元**: 数学中 1 の「正負の数」「文字式」「一次方程式」のうち、型にしやすいのは文字式の展開・計算と方程式。正負の数は符号の誤解（`sign_flip`）の診断に向く。
 
-## 10. 実装の順（1・2 は実装済み）
+## 10. 実装の順（1〜4 は実装済み）
 1. `SeededRandom`・式の差し込み（`{e}`・`{+e}`・`{(e)}`）・制約・分数の書式（テスト: 同じ種で同じ結果、桁、符号、分数、Web 相当の 32bit 範囲）
 2. `expr` の誤答タグ（§4。既存の `checkAnswer` の拡張）
 3. `MathTemplate` の読み込みと `generate`
