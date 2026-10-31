@@ -471,6 +471,671 @@
     }
    ],
    "explanationId": "exp_m1_alg_rel_001"
+  },
+  {
+   "id": "m1_num_abs_001",
+   "templateVersion": 1,
+   "unitId": "m1_num_sign",
+   "type": "expr",
+   "difficulty": 0.85,
+   "params": {
+    "a": {
+     "int": [
+      -60,
+      -1
+     ]
+    }
+   },
+   "derived": {
+    "m": "sqrt(a*a)"
+   },
+   "display": {
+    "expr": "|{a}|"
+   },
+   "answer": "{m}",
+   "wrong": [
+    {
+     "expr": "{a}",
+     "tag": "abs_keeps_sign"
+    },
+    {
+     "expr": "{-m*2}",
+     "tag": "abs_negative"
+    }
+   ],
+   "explanationId": "exp_m1_num_abs_001"
+  },
+  {
+   "id": "m1_num_add_001",
+   "templateVersion": 1,
+   "unitId": "m1_num_add",
+   "type": "expr",
+   "difficulty": 0.55,
+   "params": {
+    "a": {
+     "int": [
+      -30,
+      30
+     ]
+    },
+    "b": {
+     "int": [
+      -30,
+      30
+     ]
+    }
+   },
+   "derived": {
+    "u": "sqrt(a*a)",
+    "v": "sqrt(b*b)",
+    "s": "a/u"
+   },
+   "constraints": [
+    "a != 0",
+    "b != 0",
+    "a*b < 0",
+    "a+b != 0"
+   ],
+   "display": {
+    "expr": "{&a}+{&b}"
+   },
+   "answer": "{a+b}",
+   "wrong": [
+    {
+     "expr": "{a+s*v}",
+     "tag": "add_abs_values"
+    },
+    {
+     "expr": "{u-v}",
+     "tag": "subtract_abs_values"
+    }
+   ],
+   "explanationId": "exp_m1_num_add_001"
+  },
+  {
+   "id": "m1_num_add_002",
+   "templateVersion": 1,
+   "unitId": "m1_num_add",
+   "type": "expr",
+   "difficulty": 0.8,
+   "params": {
+    "a": {
+     "int": [
+      -30,
+      30
+     ]
+    },
+    "b": {
+     "int": [
+      -30,
+      30
+     ]
+    }
+   },
+   "derived": {
+    "u": "sqrt(a*a)",
+    "v": "sqrt(b*b)",
+    "s": "a/u"
+   },
+   "constraints": [
+    "a != 0",
+    "b != 0",
+    "a*b > 0"
+   ],
+   "display": {
+    "expr": "{&a}+{&b}"
+   },
+   "answer": "{a+b}",
+   "wrong": [
+    {
+     "expr": "{-(a+b)}",
+     "tag": "sign_flip"
+    },
+    {
+     "expr": "{u-v}",
+     "tag": "subtract_abs_values"
+    }
+   ],
+   "explanationId": "exp_m1_num_add_002"
+  },
+  {
+   "id": "m1_num_sub_001",
+   "templateVersion": 1,
+   "unitId": "m1_num_add",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "a": {
+     "int": [
+      -15,
+      15
+     ]
+    },
+    "b": {
+     "int": [
+      -15,
+      15
+     ]
+    }
+   },
+   "constraints": [
+    "a != 0",
+    "b != 0",
+    "a != b"
+   ],
+   "display": {
+    "expr": "{&a}-{&b}"
+   },
+   "answer": "{a-b}",
+   "wrong": [
+    {
+     "expr": "{a+b}",
+     "tag": "sub_negative_sign"
+    },
+    {
+     "expr": "{b-a}",
+     "tag": "reverse_subtraction"
+    }
+   ],
+   "explanationId": "exp_m1_num_sub_001"
+  },
+  {
+   "id": "m1_num_mul_001",
+   "templateVersion": 1,
+   "unitId": "m1_num_mul",
+   "type": "expr",
+   "difficulty": 0.7,
+   "params": {
+    "a": {
+     "int": [
+      -12,
+      12
+     ]
+    },
+    "b": {
+     "int": [
+      -12,
+      12
+     ]
+    }
+   },
+   "constraints": [
+    "a != 0",
+    "b != 0",
+    "a != 1",
+    "b != 1",
+    "a != -1",
+    "b != -1"
+   ],
+   "display": {
+    "expr": "{&a}×{&b}"
+   },
+   "answer": "{a*b}",
+   "wrong": [
+    {
+     "expr": "{-a*b}",
+     "tag": "sign_rule_product"
+    },
+    {
+     "expr": "{a+b}",
+     "tag": "add_instead_of_multiply"
+    }
+   ],
+   "explanationId": "exp_m1_num_mul_001"
+  },
+  {
+   "id": "m1_num_div_001",
+   "templateVersion": 1,
+   "unitId": "m1_num_mul",
+   "type": "expr",
+   "difficulty": 0.65,
+   "params": {
+    "q": {
+     "int": [
+      -30,
+      30
+     ]
+    },
+    "b": {
+     "int": [
+      -12,
+      12
+     ]
+    }
+   },
+   "derived": {
+    "a": "q*b"
+   },
+   "constraints": [
+    "q != 0",
+    "b != 0",
+    "b != 1",
+    "b != -1",
+    "q != 1",
+    "q != -1"
+   ],
+   "display": {
+    "expr": "{&a}÷{&b}"
+   },
+   "answer": "{q}",
+   "wrong": [
+    {
+     "expr": "{-q}",
+     "tag": "sign_rule_quotient"
+    },
+    {
+     "expr": "{b/q}",
+     "tag": "divide_reversed"
+    }
+   ],
+   "explanationId": "exp_m1_num_div_001"
+  },
+  {
+   "id": "m1_num_pow_001",
+   "templateVersion": 1,
+   "unitId": "m1_num_mix",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "a": {
+     "int": [
+      2,
+      30
+     ]
+    }
+   },
+   "display": {
+    "expr": "-{a}^2"
+   },
+   "answer": "{-(a*a)}",
+   "wrong": [
+    {
+     "expr": "{a*a}",
+     "tag": "neg_square_sign"
+    },
+    {
+     "expr": "{-2*a}",
+     "tag": "square_as_double"
+    }
+   ],
+   "explanationId": "exp_m1_num_pow_001"
+  },
+  {
+   "id": "m1_num_pow_002",
+   "templateVersion": 1,
+   "unitId": "m1_num_mix",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "a": {
+     "int": [
+      2,
+      30
+     ]
+    }
+   },
+   "display": {
+    "expr": "({-a})^2"
+   },
+   "answer": "{a*a}",
+   "wrong": [
+    {
+     "expr": "{-(a*a)}",
+     "tag": "neg_square_sign"
+    },
+    {
+     "expr": "{-2*a}",
+     "tag": "square_as_double"
+    }
+   ],
+   "explanationId": "exp_m1_num_pow_002"
+  },
+  {
+   "id": "m1_num_mix_001",
+   "templateVersion": 1,
+   "unitId": "m1_num_mix",
+   "type": "expr",
+   "difficulty": 0.7,
+   "params": {
+    "a": {
+     "int": [
+      -9,
+      9
+     ]
+    },
+    "b": {
+     "int": [
+      2,
+      9
+     ]
+    },
+    "c": {
+     "int": [
+      2,
+      9
+     ]
+    }
+   },
+   "constraints": [
+    "a != 0"
+   ],
+   "display": {
+    "expr": "{a}{+b}×{c}"
+   },
+   "answer": "{a+b*c}",
+   "wrong": [
+    {
+     "expr": "{(a+b)*c}",
+     "tag": "order_of_operations"
+    }
+   ],
+   "explanationId": "exp_m1_num_mix_001"
+  },
+  {
+   "id": "m1_func_coord_001",
+   "templateVersion": 1,
+   "unitId": "m1_func_var",
+   "type": "expr",
+   "difficulty": 0.8,
+   "params": {
+    "a": {
+     "int": [
+      -20,
+      20
+     ]
+    },
+    "b": {
+     "int": [
+      -20,
+      20
+     ]
+    }
+   },
+   "constraints": [
+    "a != 0",
+    "b != 0",
+    "a != b"
+   ],
+   "display": {
+    "point": "P({a}, {b})"
+   },
+   "answer": "{b}",
+   "wrong": [
+    {
+     "expr": "{a}",
+     "tag": "coordinate_swap"
+    }
+   ],
+   "explanationId": "exp_m1_func_coord_001"
+  },
+  {
+   "id": "m1_func_prop_001",
+   "templateVersion": 1,
+   "unitId": "m1_func_prop",
+   "type": "expr",
+   "difficulty": 0.7,
+   "params": {
+    "a": {
+     "int": [
+      -9,
+      9
+     ]
+    },
+    "k": {
+     "int": [
+      -9,
+      9
+     ]
+    }
+   },
+   "constraints": [
+    "a != 0",
+    "k != 0",
+    "a != 1",
+    "a != -1",
+    "k != 1",
+    "k != -1"
+   ],
+   "display": {
+    "eq": "y={a}x",
+    "x": "{k}"
+   },
+   "answer": "{a*k}",
+   "wrong": [
+    {
+     "expr": "{a+k}",
+     "tag": "add_instead_of_multiply"
+    },
+    {
+     "expr": "{k/a}",
+     "tag": "divide_instead_of_multiply"
+    }
+   ],
+   "explanationId": "exp_m1_func_prop_001"
+  },
+  {
+   "id": "m1_func_prop_002",
+   "templateVersion": 1,
+   "unitId": "m1_func_prop",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "a": {
+     "int": [
+      -30,
+      30
+     ]
+    },
+    "k": {
+     "int": [
+      -12,
+      12
+     ]
+    }
+   },
+   "derived": {
+    "y": "a*k"
+   },
+   "constraints": [
+    "a != 0",
+    "k != 0",
+    "a != 1",
+    "a != -1",
+    "k != 1",
+    "k != -1"
+   ],
+   "display": {
+    "point": "x={k}, y={y}"
+   },
+   "answer": "{a}",
+   "wrong": [
+    {
+     "expr": "{y-k}",
+     "tag": "subtract_instead_of_divide"
+    },
+    {
+     "expr": "{k/y}",
+     "tag": "divide_reversed"
+    }
+   ],
+   "explanationId": "exp_m1_func_prop_002"
+  },
+  {
+   "id": "m1_func_inv_001",
+   "templateVersion": 1,
+   "unitId": "m1_func_inv",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "q": {
+     "int": [
+      -30,
+      30
+     ]
+    },
+    "k": {
+     "int": [
+      -12,
+      12
+     ]
+    }
+   },
+   "derived": {
+    "a": "q*k"
+   },
+   "constraints": [
+    "q != 0",
+    "k != 0",
+    "k != 1",
+    "k != -1",
+    "q != 1",
+    "q != -1"
+   ],
+   "display": {
+    "eq": "y={a}/x",
+    "x": "{k}"
+   },
+   "answer": "{q}",
+   "wrong": [
+    {
+     "expr": "{a*k}",
+     "tag": "prop_inv_mixup"
+    },
+    {
+     "expr": "{a-k}",
+     "tag": "subtract_instead_of_divide"
+    }
+   ],
+   "explanationId": "exp_m1_func_inv_001"
+  },
+  {
+   "id": "m1_func_inv_002",
+   "templateVersion": 1,
+   "unitId": "m1_func_inv",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "k": {
+     "int": [
+      -12,
+      12
+     ]
+    },
+    "q": {
+     "int": [
+      -12,
+      12
+     ]
+    }
+   },
+   "constraints": [
+    "k != 0",
+    "q != 0",
+    "k != 1",
+    "k != -1",
+    "q != 1",
+    "q != -1"
+   ],
+   "display": {
+    "point": "x={k}, y={q}"
+   },
+   "answer": "{k*q}",
+   "wrong": [
+    {
+     "expr": "{q/k}",
+     "tag": "divide_instead_of_multiply"
+    },
+    {
+     "expr": "{k+q}",
+     "tag": "add_instead_of_multiply"
+    }
+   ],
+   "explanationId": "exp_m1_func_inv_002"
+  },
+  {
+   "id": "m1_func_choice_001",
+   "templateVersion": 1,
+   "unitId": "m1_func_graph",
+   "type": "choice",
+   "difficulty": 0.8,
+   "params": {
+    "a": {
+     "int": [
+      2,
+      60
+     ]
+    }
+   },
+   "display": {
+    "note": "yがxに比例するもの"
+   },
+   "answer": "y={a}x",
+   "choices": [
+    "y={a}x",
+    "y={a}/x",
+    "y=x{+a}",
+    "y={a}-x"
+   ],
+   "wrong": [
+    {
+     "expr": "y={a}/x",
+     "tag": "prop_inv_mixup"
+    },
+    {
+     "expr": "y=x{+a}",
+     "tag": "linear_not_proportional"
+    },
+    {
+     "expr": "y={a}-x",
+     "tag": "linear_not_proportional"
+    }
+   ],
+   "explanationId": "exp_m1_func_choice_001"
+  },
+  {
+   "id": "m1_func_graph_001",
+   "templateVersion": 1,
+   "unitId": "m1_func_graph",
+   "type": "expr",
+   "difficulty": 0.5,
+   "params": {
+    "p": {
+     "int": [
+      -20,
+      20
+     ]
+    },
+    "q": {
+     "int": [
+      -20,
+      20
+     ]
+    }
+   },
+   "constraints": [
+    "p != 0",
+    "q != 0",
+    "p != q",
+    "p != -q",
+    "p != 1",
+    "p != -1"
+   ],
+   "display": {
+    "point": "({p}, {q})",
+    "x": "{-p}"
+   },
+   "answer": "{-q}",
+   "wrong": [
+    {
+     "expr": "{q}",
+     "tag": "sign_flip"
+    },
+    {
+     "expr": "{-p}",
+     "tag": "coordinate_swap"
+    }
+   ],
+   "explanationId": "exp_m1_func_graph_001"
   }
  ]
 }
