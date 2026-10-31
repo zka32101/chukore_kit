@@ -16,6 +16,7 @@ Question q(String answer) => Question(
 void main() {
   formTests();
   exprTagTests();
+  bindTests();
   group('読み取り', () {
     test('優先順位・右結合・単項マイナス', () {
       double v(String s, [Map<String, double> m = const {}]) => MathExpr.parse(s).eval(m);
@@ -264,5 +265,19 @@ void exprTagTests() {
       expect(codes(qt(tags)), isNot(contains('tag_choice_missing')));
       expect(codes(qt(tags)), isNot(contains('tags_ignored')));
     });
+  });
+}
+
+void bindTests() {
+  test('bind: 一部の変数だけ定数に置き換える（残りは変数のまま）', () {
+    final e = MathExpr.parse('a*x+b');
+    final bound = e.bind({'a': 2, 'b': 1});
+    expect(bound.variables, ['x']);
+    expect(bound.eval({'x': 3}), 7);
+    expect(e.bind({'a': 2}).variables, ['b', 'x']);
+    expect(e.bind({'z': 1}).variables, ['a', 'b', 'x']); // 無関係な名前は無視
+    expect(e.variables, ['a', 'b', 'x']); // 元の式は変わらない
+    expect(MathExpr.parse('-sqrt(a)/x^2').bind({'a': 16}).eval({'x': 2}), -1);
+    expect(MathExpr.equivalent(MathExpr.parse('a*x+b').bind({'a': 2, 'b': 2}), MathExpr.parse('2(x+1)')), isTrue);
   });
 }

@@ -31,6 +31,14 @@ class MathExpr {
     }
   }
 
+  /// 一部の変数を定数に置き換えた式（残りの変数はそのまま）。体験型で、パラメータを決めた式を比べるのに使う。
+  MathExpr bind(Map<String, double> values) {
+    final node = _root.bind(values);
+    final vars = <String>{};
+    node.collect(vars);
+    return MathExpr._(node, vars.toList()..sort());
+  }
+
   /// 変数に値を入れて計算する。0 での割り算・負の数の平方根などは NaN。
   double eval(Map<String, double> values) => _root.eval(values);
 
@@ -186,6 +194,7 @@ bool _isSimplestRadical(_Node n) {
 
 abstract class _Node {
   double eval(Map<String, double> v);
+  _Node bind(Map<String, double> v);
   void collect(Set<String> vars) {}
 }
 
@@ -194,6 +203,8 @@ class _Num extends _Node {
   final double v;
   @override
   double eval(Map<String, double> _) => v;
+  @override
+  _Node bind(Map<String, double> _) => this;
 }
 
 class _Var extends _Node {
@@ -202,6 +213,8 @@ class _Var extends _Node {
   @override
   double eval(Map<String, double> v) => v[name] ?? double.nan;
   @override
+  _Node bind(Map<String, double> v) => v.containsKey(name) ? _Num(v[name]!) : this;
+  @override
   void collect(Set<String> vars) => vars.add(name);
 }
 
@@ -209,6 +222,8 @@ class _Bin extends _Node {
   _Bin(this.op, this.a, this.b);
   final String op;
   final _Node a, b;
+  @override
+  _Node bind(Map<String, double> v) => _Bin(op, a.bind(v), b.bind(v));
   @override
   double eval(Map<String, double> v) {
     final x = a.eval(v), y = b.eval(v);
@@ -237,6 +252,8 @@ class _Neg extends _Node {
   _Neg(this.a);
   final _Node a;
   @override
+  _Node bind(Map<String, double> v) => _Neg(a.bind(v));
+  @override
   double eval(Map<String, double> v) => -a.eval(v);
   @override
   void collect(Set<String> vars) => a.collect(vars);
@@ -245,6 +262,8 @@ class _Neg extends _Node {
 class _Sqrt extends _Node {
   _Sqrt(this.a);
   final _Node a;
+  @override
+  _Node bind(Map<String, double> v) => _Sqrt(a.bind(v));
   @override
   double eval(Map<String, double> v) {
     final x = a.eval(v);
