@@ -4,6 +4,8 @@
 
 ## [未リリース]
 
+- docs: 図・グラフ・データの扱いの設計（`docs/math_figures_design.md`。図の仕様 `FigureSpec`、core が SVG を作る案、データの数列パラメータと集計関数、円周率 π の扱い。未実装）
+
 - 体験型の教材 `Exploration`・`ExplorationSet`・`ExplorationParam`・`validateExplorations`（`slider_graph`: 式のパラメータを動かすグラフ教材。グラフの点 `sample`、予想の答え合わせ、目標の達成判定 `goalReached`、目標に届くかの検証）と `MathExpr.bind`。見本 `docs/samples/explorations.sample.json`
 
 - docs/test: 数学の部品のパッケージ境界の方針（分けない・分ける条件）と、境界テスト `test/package_boundaries_test.dart`（`lib/src/math` が Flutter・他の core に依存しないこと）
