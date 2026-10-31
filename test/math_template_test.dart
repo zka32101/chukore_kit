@@ -31,6 +31,7 @@ MathTemplate tpl([Map<String, dynamic> over = const {}]) => MathTemplate.fromJso
 
 void main() {
   dataTests();
+  figureChoiceTests();
   group('サンプル（docs/samples）', () {
     test('検証エラー・警告なし。展開した問題集も通常の検証を通る', () {
       final issues = validateTemplates(sample, tree: tree);
@@ -659,6 +660,351 @@ void dataTests() {
         }),
         throwsFormatException,
       );
+    });
+  });
+}
+
+void figureChoiceTests() {
+  Map<String, dynamic> cellsFig(List<List<int>> c) => {
+    'solid': {'kind': 'cells', 'view': 'net', 'cells': c},
+    'altId': 'a',
+  };
+  final cross = [
+    [1, 0],
+    [0, 1],
+    [1, 1],
+    [2, 1],
+    [3, 1],
+    [1, 2],
+  ]; // 展開図
+  final box = [
+    [0, 0],
+    [1, 0],
+    [0, 1],
+    [1, 1],
+    [0, 2],
+    [1, 2],
+  ]; // 展開図でない（2×3）
+  final line = [
+    [0, 0],
+    [1, 0],
+    [2, 0],
+    [3, 0],
+    [4, 0],
+    [5, 0],
+  ]; // 展開図でない
+
+  Map<String, dynamic> fbase([Map<String, dynamic> over = const {}]) => {
+    'id': 'fc1',
+    'templateVersion': 1,
+    'unitId': 'm1_space_solid',
+    'type': 'choice',
+    'difficulty': 0.5,
+    'params': {
+      'a': {
+        'int': [0, 1],
+      },
+    },
+    'display': {'x': '{a}'},
+    'choices': ['ok', 'n1'],
+    'answer': 'ok',
+    'figures': {'ok': cellsFig(cross), 'n1': cellsFig(box)},
+    'wrong': [
+      {'expr': 'n1', 'tag': 'not_a_net'},
+    ],
+    'explanationId': 'e',
+    ...over,
+  };
+  MathTemplate ft(Map<String, dynamic> over) => MathTemplate.fromJson(fbase(over));
+
+  group('選択肢が図の問題', () {
+    test('選択肢の ID ごとに図がつき、並びは種で決まる。タグは誤答の ID に付く', () {
+      final t = ft({});
+      final seen = <String>{};
+      for (var s = 1; s <= 30; s++) {
+        final v = t.generate(s);
+        expect(v.question.choices.toSet(), {'ok', 'n1'});
+        expect(v.choiceFigures.keys.toSet(), {'ok', 'n1'});
+        expect(v.choiceFigures['ok']!.cells, hasLength(6));
+        expect(v.question.misconceptionTags, {'n1': 'not_a_net'});
+        expect(checkAnswer(v.question, 'ok').correct, isTrue);
+        expect(checkAnswer(v.question, 'n1').misconceptionTag, 'not_a_net');
+        seen.add(v.question.choices.first);
+      }
+      expect(seen, {'ok', 'n1'});
+      expect(t.generate(5).choiceFigures['ok']!.toSvg(), t.generate(5).choiceFigures['ok']!.toSvg());
+    });
+    test('pick: 式の値で図を選ぶ。範囲外・整数でない値は引き直し', () {
+      final t = ft({
+        'figures': {
+          'ok': {
+            'pick': {
+              'index': 'a',
+              'of': [cellsFig(cross), cellsFig(cross)],
+            },
+          },
+          'n1': cellsFig(box),
+        },
+      });
+      expect(t.generate(1).choiceFigures['ok'], isNotNull);
+      final out = ft({
+        'params': {
+          'a': {
+            'int': [2, 3],
+          },
+        },
+        'figures': {
+          'ok': {
+            'pick': {
+              'index': 'a',
+              'of': [cellsFig(cross), cellsFig(cross)],
+            },
+          },
+          'n1': cellsFig(box),
+        },
+      });
+      expect(() => out.generate(1), throwsStateError); // 添字が範囲外
+      final frac = ft({
+        'params': {
+          'a': {
+            'oneOf': [0.5],
+          },
+        },
+        'figures': {
+          'ok': {
+            'pick': {
+              'index': 'a',
+              'of': [cellsFig(cross), cellsFig(cross)],
+            },
+          },
+          'n1': cellsFig(box),
+        },
+      });
+      expect(() => frac.generate(1), throwsStateError);
+    });
+    test('pick で別の図を選ぶと、その図になる', () {
+      final t = ft({
+        'params': {
+          'a': {
+            'oneOf': [1],
+          },
+        },
+        'figures': {
+          'ok': {
+            'pick': {
+              'index': 'a',
+              'of': [cellsFig(box), cellsFig(cross)],
+            },
+          },
+          'n1': cellsFig(line),
+        },
+      });
+      expect(t.generate(1).choiceFigures['ok']!.cells!.length, 6);
+      expect(isCubeNet(t.generate(1).choiceFigures['ok']!.cells!), isTrue); // 添字 1 は十字
+    });
+    test('描けない図が選択肢にあれば引き直し（毎回なら StateError）', () {
+      final t = ft({
+        'figures': {
+          'ok': {
+            'viewBox': [0, 0, 100, 100],
+            'points': {
+              'A': [10, 10],
+              'B': [200, 10],
+            },
+            'altId': 'a',
+          },
+          'n1': cellsFig(box),
+        },
+      });
+      expect(() => t.generate(1), throwsStateError);
+    });
+    test('書き間違いは FormatException', () {
+      final bad = <Map<String, dynamic>>[
+        {'figures': 'x'},
+        {
+          'figures': {'ok': cellsFig(cross)},
+        }, // choices にある n1 がない
+        {
+          'figures': {'ok': cellsFig(cross), 'n1': cellsFig(box), 'n2': cellsFig(line)},
+        }, // 余分
+        {
+          'choices': ['{a}', 'n1'],
+          'figures': {'{a}': cellsFig(cross), 'n1': cellsFig(box)},
+          'answer': 'n1',
+        },
+        {
+          'figures': {'ok': 'x', 'n1': cellsFig(box)},
+        },
+        {
+          'figures': {
+            'ok': <String, dynamic>{'solid': 'x'},
+            'n1': cellsFig(box),
+          },
+        },
+        {
+          'figures': {
+            'ok': {
+              'pick': {
+                'index': 'a',
+                'of': [cellsFig(cross)],
+              },
+            }, // 図が 1 つ
+            'n1': cellsFig(box),
+          },
+        },
+        {
+          'figures': {
+            'ok': {
+              'pick': {
+                'index': 'z',
+                'of': [cellsFig(cross), cellsFig(box)],
+              },
+            }, // 宣言のない文字
+            'n1': cellsFig(box),
+          },
+        },
+        {
+          'figures': {
+            'ok': {
+              'pick': {
+                'index': 'a+',
+                'of': [cellsFig(cross), cellsFig(box)],
+              },
+            },
+            'n1': cellsFig(box),
+          },
+        },
+        {
+          'figures': {
+            'ok': {
+              'pick': {
+                'index': 'a',
+                'of': [cellsFig(cross), cellsFig(box)],
+                'extra': 1,
+              },
+            },
+            'n1': cellsFig(box),
+          },
+        },
+        {
+          'figures': {
+            'ok': {
+              'pick': {
+                'index': 'a',
+                'of': [cellsFig(cross), cellsFig(box)],
+              },
+              'extra': 1,
+            },
+            'n1': cellsFig(box),
+          },
+        },
+      ];
+      for (final b in bad) {
+        expect(() => ft(b), throwsFormatException, reason: b.toString());
+      }
+      // expr の型には figures は使えない
+      expect(() => ft({'type': 'expr', 'choices': <dynamic>[], 'answer': '{a}'}), throwsFormatException);
+      expect(
+        () => ft({'type': 'expr', 'choices': <dynamic>[], 'answer': '{a}', 'figures': <String, dynamic>{}}),
+        throwsFormatException,
+      );
+    });
+  });
+
+  group('展開図の選択肢の検証 template_net_mismatch', () {
+    final tree = UnitTree.fromJson({
+      'version': 1,
+      'units': [
+        {'id': 'm1_space_solid', 'subject': 'math', 'grade': 1, 'title': 'u', 'order': 1, 'estimatedQuestions': 5},
+      ],
+    });
+    List<String> codes(Map<String, dynamic> over) =>
+        validateTemplates(TemplateSet([ft(over)]), tree: tree, count: 10).map((i) => i.code).toList();
+
+    test('正解だけが展開図なら問題なし', () => expect(codes({}), isNot(contains('template_net_mismatch'))));
+    test('正解の図が展開図でなければエラー', () {
+      expect(
+        codes({
+          'answer': 'n1',
+          'wrong': [
+            {'expr': 'ok', 'tag': 'x_y'},
+          ],
+        }),
+        contains('template_net_mismatch'),
+      );
+    });
+    test('展開図になる選択肢が 2 つなら（どれが正解か決まらない）エラー', () {
+      expect(
+        codes({
+          'figures': {'ok': cellsFig(cross), 'n1': cellsFig(cross)},
+        }),
+        contains('template_net_mismatch'),
+      );
+    });
+    test('展開図になる選択肢が 1 つもなければエラー', () {
+      expect(
+        codes({
+          'figures': {'ok': cellsFig(box), 'n1': cellsFig(line)},
+        }),
+        contains('template_net_mismatch'),
+      );
+    });
+    test('答えの ID が同じでも、選択肢の図が 40 変種で十分に変わるか（変わらなければ警告）', () {
+      List<String> dup(Map<String, dynamic> over) => validateTemplates(
+        TemplateSet([ft(over)]),
+        tree: tree,
+      ).where((i) => i.code == 'template_answer_dup').map((i) => i.message).toList();
+      final fixed = dup({}); // 図が固定で、並びの 2 通りだけ
+      expect(fixed, hasLength(1));
+      expect(fixed.single, contains('選択肢の図が 2 通り'));
+      final many = dup({
+        'params': {
+          'a': {
+            'int': [0, 9],
+          },
+        },
+        'figures': {
+          'ok': {
+            'pick': {'index': 'a', 'of': List.filled(10, cellsFig(cross))},
+          },
+          'n1': cellsFig(box),
+        },
+      });
+      expect(many, hasLength(1)); // 同じ図が 10 個では見かけは変わらない
+    });
+    test('選択肢の図が展開図でない型（立体など）は検査しない', () {
+      final solid = {
+        'solid': {
+          'kind': 'sphere',
+          'dims': {'r': 1},
+        },
+        'altId': 'a',
+      };
+      expect(
+        codes({
+          'figures': {'ok': solid, 'n1': cellsFig(box)},
+        }),
+        isNot(contains('template_net_mismatch')),
+      );
+    });
+    test('pick で添字が変わっても全種を調べる（一部の種だけ誤りでもエラー）', () {
+      final t = {
+        'params': {
+          'a': {
+            'int': [0, 1],
+          },
+        },
+        'figures': {
+          'ok': {
+            'pick': {
+              'index': 'a',
+              'of': [cellsFig(cross), cellsFig(box)],
+            },
+          }, // a=1 のとき展開図でない
+          'n1': cellsFig(line),
+        },
+      };
+      expect(codes(t), contains('template_net_mismatch'));
     });
   });
 }

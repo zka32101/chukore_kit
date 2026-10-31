@@ -4,6 +4,8 @@
 
 ## [未リリース]
 
+- 選択肢が図の問題: 型の `figures`（選択肢の ID → 図、式で図を選ぶ `pick`）、`Variant.choiceFigures`、立方体の展開図の候補 `net/cells`、`isCubeNet`（立方体を転がして展開図か判定）、検証 `template_net_mismatch`。数学（中1）の型に展開図選び・円柱と円錐の見取り図選び・比例のグラフ選びの 4 型を追加（計 56 型）
+
 - 作図の体験型 `Construction`・`ConstructionSet`・`ConstructionState`・`ConstructionGoal`・`validateConstructions`（定規とコンパスの手順を 1 つずつ実行し、目標の直線が引けたかで判定。点は最初の点と交点だけ。垂直二等分線・角の二等分線・垂線）。`Figure.fromShapes`。見本 `docs/samples/constructions.sample.json`
 
 - 空間図形の図 `SolidSpec`（型の `figure.solid`: 直方体・円柱・円錐・球の斜投影、立方体・円柱・円錐の展開図。見えない辺は破線、寸法の比を保って枠に収める）と、図形に楕円・半楕円を追加。数学（中1）の型に空間図形 7 型を追加（計 52 型）

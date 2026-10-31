@@ -8,7 +8,10 @@ typedef _P = ({double x, double y});
 /// 立体は斜投影（奥行きは右上へ 45°・半分の長さ）、円の面は縦を 0.3 に縮めた楕円で描き、見えない辺は破線にする。
 /// 展開図（`view: net`）は平面に広げた形。図の大きさは枠（100 × 100）に収まるよう寸法の比を保って決める。
 class SolidSpec {
-  const SolidSpec._(this.kind, this.view, this.dims, this.labels);
+  const SolidSpec._(this.kind, this.view, this.dims, this.labels, [this.cells]);
+
+  /// 立方体の展開図の候補（`net/cells`）のマス（列, 行）。他の種類は null。
+  final List<({int col, int row})>? cells;
 
   final String kind;
   final String view;
@@ -28,6 +31,7 @@ class SolidSpec {
     'net/cube': ['a'],
     'net/cylinder': ['r', 'h'],
     'net/cone': ['r', 'h'],
+    'net/cells': <String>[],
   };
 
   /// ラベルに使える名前。
@@ -39,16 +43,35 @@ class SolidSpec {
     'net/cube': {'a'},
     'net/cylinder': {'r', 'h', 'w'},
     'net/cone': {'r', 'l'},
+    'net/cells': <String>{},
   };
 
   factory SolidSpec.fromJson(Map<String, dynamic> j, void Function(Object?, String) checkExpr) {
-    final extra = j.keys.where((k) => !const {'kind', 'view', 'dims', 'labels'}.contains(k));
+    final extra = j.keys.where((k) => !const {'kind', 'view', 'dims', 'labels', 'cells'}.contains(k));
     if (extra.isNotEmpty) throw FormatException('figure.solid: 未知のキー: ${extra.join(', ')}');
     final kind = j['kind'], view = j['view'] ?? 'solid';
     if (kind is! String || view is! String || !dimNames.containsKey('$view/$kind')) {
       throw FormatException('figure.solid: 未対応の種類: $view/$kind（${dimNames.keys.join('・')}）');
     }
     final key = '$view/$kind';
+    if (key == 'net/cells') {
+      // マスの並びだけで決まる展開図（立方体の展開図の選択肢など）。寸法・ラベルはない
+      if (j.containsKey('dims') || j.containsKey('labels')) {
+        throw const FormatException('figure.solid: net/cells に dims・labels は使えません');
+      }
+      final raw = j['cells'];
+      if (raw is! List || raw.isEmpty || raw.length > 12) throw const FormatException('figure.solid: cells は 1〜12 マス');
+      final cells = <({int col, int row})>[];
+      for (final c in raw) {
+        if (c is! List || c.length != 2 || c.any((e) => e is! int || e < 0 || e > 9)) {
+          throw FormatException('figure.solid: cells の各マスは [列, 行]（0〜9 の整数）: $c');
+        }
+        cells.add((col: c[0] as int, row: c[1] as int));
+      }
+      if (cells.toSet().length != cells.length) throw const FormatException('figure.solid: cells に同じマスがあります');
+      return SolidSpec._(kind, view, const {}, const {}, cells);
+    }
+    if (j.containsKey('cells')) throw const FormatException('figure.solid: cells は net/cells だけ');
     final rawDims = j['dims'];
     if (rawDims is! Map) throw const FormatException('figure.solid: dims が必要です');
     final want = dimNames[key]!;
@@ -134,6 +157,21 @@ class SolidSpec {
           ..add(FigureShape.ellipseHalf(p(50, 50), r, 0.3 * r, upper: true, dashed: true))
           ..add(FigureShape.seg(p(50, 50), p(50 + r, 50), dashed: true));
         label('r', 50 + r / 2, 50 - 2);
+      case 'net/cells':
+        final cs = cells!;
+        final cols = cs.map((c) => c.col).reduce(math.max) + 1, rows = cs.map((c) => c.row).reduce(math.max) + 1;
+        final u = math.min(18.0, 72 / math.max(cols, rows));
+        final x0 = 50 - cols * u / 2, y0 = 50 - rows * u / 2;
+        for (final c in cs) {
+          s.add(
+            FigureShape.poly([
+              p(x0 + c.col * u, y0 + c.row * u),
+              p(x0 + (c.col + 1) * u, y0 + c.row * u),
+              p(x0 + (c.col + 1) * u, y0 + (c.row + 1) * u),
+              p(x0 + c.col * u, y0 + (c.row + 1) * u),
+            ]),
+          );
+        }
       case 'net/cube':
         final u = 72 / 4, x0 = 50 - 2 * u, y0 = 50 - 1.5 * u;
         for (final (col, row) in const [(1, 0), (0, 1), (1, 1), (2, 1), (3, 1), (1, 2)]) {
@@ -180,4 +218,37 @@ class SolidSpec {
     }
     return (shapes: s, labels: l);
   }
+}
+
+/// マスの並び [cells]（列, 行）が、立方体の展開図になるか。6 マスで、辺でつながっていて、折りたたむと 6 面が重ならずにそろうとき真。
+/// 立方体を展開図の上で転がし、各マスに接する面がすべて違うかを調べる（回転・裏返しを含めて 35 種類の六マスのうち 11 種類が真）。
+bool isCubeNet(List<({int col, int row})> cells) {
+  if (cells.length != 6 || cells.toSet().length != 6) return false;
+  final set = cells.toSet();
+  final start = cells.first;
+  // 面の並び: 上・下・北・南・東・西
+  final state = <({int col, int row}), List<int>>{
+    start: [0, 1, 2, 3, 4, 5],
+  };
+  final stack = [start];
+  final bottoms = {1};
+  while (stack.isNotEmpty) {
+    final cur = stack.removeLast();
+    final f = state[cur]!;
+    final t = f[0], b = f[1], n = f[2], s = f[3], e = f[4], w = f[5];
+    for (final (dc, dr, next) in [
+      (1, 0, [w, e, n, s, t, b]), // 東へ転がす
+      (-1, 0, [e, w, n, s, b, t]), // 西へ
+      (0, 1, [n, s, b, t, e, w]), // 南へ（行が増える向き）
+      (0, -1, [s, n, t, b, e, w]), // 北へ
+    ]) {
+      final nx = (col: cur.col + dc, row: cur.row + dr);
+      if (set.contains(nx) && !state.containsKey(nx)) {
+        state[nx] = next;
+        stack.add(nx);
+        bottoms.add(next[1]);
+      }
+    }
+  }
+  return bottoms.length == 6; // 6 つの面がそろうのは、6 マスすべてに転がり着いたとき
 }
