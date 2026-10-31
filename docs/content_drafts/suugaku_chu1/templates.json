@@ -1752,6 +1752,550 @@
     }
    ],
    "explanationId": "exp_m1_space_vol_005"
+  },
+  {
+   "id": "m1_geo_angle_001",
+   "templateVersion": 1,
+   "unitId": "m1_geo_basic",
+   "type": "expr",
+   "difficulty": 0.75,
+   "params": {
+    "a": {
+     "int": [
+      25,
+      80
+     ]
+    },
+    "b": {
+     "int": [
+      25,
+      80
+     ]
+    }
+   },
+   "constraints": [
+    "a+b <= 150",
+    "a != b"
+   ],
+   "figure": {
+    "viewBox": [
+     0,
+     0,
+     100,
+     80
+    ],
+    "points": {
+     "A": [
+      10,
+      70
+     ],
+     "B": [
+      90,
+      70
+     ],
+     "C": [
+      "10+80*b/(a+b)",
+      12
+     ]
+    },
+    "draw": [
+     {
+      "poly": [
+       "A",
+       "B",
+       "C"
+      ]
+     }
+    ],
+    "marks": [
+     {
+      "angle": [
+       "B",
+       "A",
+       "C"
+      ],
+      "label": "{a}°"
+     },
+     {
+      "angle": [
+       "C",
+       "B",
+       "A"
+      ],
+      "label": "{b}°"
+     },
+     {
+      "angle": [
+       "A",
+       "C",
+       "B"
+      ],
+      "label": "x°"
+     }
+    ],
+    "names": true,
+    "altId": "fig_triangle_two_angles"
+   },
+   "display": {
+    "a": "{a}",
+    "b": "{b}"
+   },
+   "answer": "{180-a-b}",
+   "wrong": [
+    {
+     "expr": "{180-a}",
+     "tag": "ignore_one_angle"
+    },
+    {
+     "expr": "{a+b}",
+     "tag": "sum_instead_of_remainder"
+    },
+    {
+     "expr": "{360-a-b}",
+     "tag": "sum_360"
+    }
+   ],
+   "explanationId": "exp_m1_geo_angle_001"
+  },
+  {
+   "id": "m1_geo_angle_002",
+   "templateVersion": 1,
+   "unitId": "m1_geo_basic",
+   "type": "expr",
+   "difficulty": 0.8,
+   "params": {
+    "a": {
+     "int": [
+      20,
+      80
+     ]
+    }
+   },
+   "constraints": [
+    "a != 45",
+    "a != 90"
+   ],
+   "figure": {
+    "viewBox": [
+     0,
+     0,
+     100,
+     100
+    ],
+    "points": {
+     "O": [
+      50,
+      50
+     ],
+     "P": {
+      "polar": [
+       "O",
+       38,
+       0
+      ]
+     },
+     "Q": {
+      "polar": [
+       "O",
+       38,
+       "a"
+      ]
+     },
+     "R": {
+      "polar": [
+       "O",
+       38,
+       180
+      ]
+     },
+     "S": {
+      "polar": [
+       "O",
+       38,
+       "180+a"
+      ]
+     }
+    },
+    "draw": [
+     {
+      "seg": [
+       "P",
+       "R"
+      ]
+     },
+     {
+      "seg": [
+       "Q",
+       "S"
+      ]
+     }
+    ],
+    "marks": [
+     {
+      "angle": [
+       "P",
+       "O",
+       "Q"
+      ],
+      "label": "{a}°"
+     },
+     {
+      "angle": [
+       "R",
+       "O",
+       "S"
+      ],
+      "label": "x°"
+     }
+    ],
+    "names": false,
+    "altId": "fig_vertical_angles"
+   },
+   "display": {
+    "a": "{a}"
+   },
+   "answer": "{a}",
+   "wrong": [
+    {
+     "expr": "{180-a}",
+     "tag": "supplement_vs_vertical"
+    },
+    {
+     "expr": "{90-a}",
+     "tag": "complement_mixup"
+    }
+   ],
+   "explanationId": "exp_m1_geo_angle_002"
+  },
+  {
+   "id": "m1_geo_angle_003",
+   "templateVersion": 1,
+   "unitId": "m1_geo_basic",
+   "type": "expr",
+   "difficulty": 0.75,
+   "params": {
+    "a": {
+     "int": [
+      20,
+      80
+     ]
+    }
+   },
+   "constraints": [
+    "a != 45"
+   ],
+   "figure": {
+    "viewBox": [
+     0,
+     0,
+     100,
+     100
+    ],
+    "points": {
+     "O": [
+      50,
+      50
+     ],
+     "P": {
+      "polar": [
+       "O",
+       38,
+       0
+      ]
+     },
+     "Q": {
+      "polar": [
+       "O",
+       38,
+       "a"
+      ]
+     },
+     "R": {
+      "polar": [
+       "O",
+       38,
+       180
+      ]
+     },
+     "S": {
+      "polar": [
+       "O",
+       38,
+       "180+a"
+      ]
+     }
+    },
+    "draw": [
+     {
+      "seg": [
+       "P",
+       "R"
+      ]
+     },
+     {
+      "seg": [
+       "Q",
+       "S"
+      ]
+     }
+    ],
+    "marks": [
+     {
+      "angle": [
+       "P",
+       "O",
+       "Q"
+      ],
+      "label": "{a}°"
+     },
+     {
+      "angle": [
+       "Q",
+       "O",
+       "R"
+      ],
+      "label": "x°"
+     }
+    ],
+    "names": false,
+    "altId": "fig_adjacent_angles"
+   },
+   "display": {
+    "a": "{a}"
+   },
+   "answer": "{180-a}",
+   "wrong": [
+    {
+     "expr": "{a}",
+     "tag": "supplement_vs_vertical"
+    },
+    {
+     "expr": "{90-a}",
+     "tag": "complement_mixup"
+    }
+   ],
+   "explanationId": "exp_m1_geo_angle_003"
+  },
+  {
+   "id": "m1_geo_angle_004",
+   "templateVersion": 1,
+   "unitId": "m1_geo_basic",
+   "type": "expr",
+   "difficulty": 0.65,
+   "params": {
+    "h": {
+     "int": [
+      10,
+      55
+     ]
+    }
+   },
+   "derived": {
+    "a": "2*h"
+   },
+   "constraints": [
+    "h != 45"
+   ],
+   "figure": {
+    "viewBox": [
+     0,
+     0,
+     100,
+     80
+    ],
+    "points": {
+     "A": [
+      50,
+      12
+     ],
+     "B": {
+      "polar": [
+       "A",
+       62,
+       "270-a/2"
+      ]
+     },
+     "C": {
+      "polar": [
+       "A",
+       62,
+       "270+a/2"
+      ]
+     }
+    },
+    "draw": [
+     {
+      "poly": [
+       "A",
+       "B",
+       "C"
+      ]
+     }
+    ],
+    "marks": [
+     {
+      "tick": [
+       "A",
+       "B"
+      ]
+     },
+     {
+      "tick": [
+       "A",
+       "C"
+      ]
+     },
+     {
+      "angle": [
+       "B",
+       "A",
+       "C"
+      ],
+      "label": "{a}°"
+     },
+     {
+      "angle": [
+       "A",
+       "B",
+       "C"
+      ],
+      "label": "x°"
+     }
+    ],
+    "names": true,
+    "altId": "fig_isosceles"
+   },
+   "display": {
+    "a": "{a}"
+   },
+   "answer": "{90-h}",
+   "wrong": [
+    {
+     "expr": "{180-a}",
+     "tag": "forgot_to_halve"
+    },
+    {
+     "expr": "{90-a}",
+     "tag": "base_angle_formula_confusion"
+    },
+    {
+     "expr": "{a}",
+     "tag": "apex_as_base"
+    }
+   ],
+   "explanationId": "exp_m1_geo_angle_004"
+  },
+  {
+   "id": "m1_geo_sector_003",
+   "templateVersion": 1,
+   "unitId": "m1_geo_sector",
+   "type": "expr",
+   "difficulty": 0.55,
+   "params": {
+    "r": {
+     "int": [
+      2,
+      20
+     ]
+    },
+    "t": {
+     "oneOf": [
+      30,
+      45,
+      60,
+      90,
+      120,
+      135,
+      150
+     ]
+    }
+   },
+   "figure": {
+    "viewBox": [
+     0,
+     0,
+     100,
+     80
+    ],
+    "points": {
+     "O": [
+      30,
+      60
+     ],
+     "A": {
+      "polar": [
+       "O",
+       50,
+       0
+      ]
+     },
+     "B": {
+      "polar": [
+       "O",
+       50,
+       "t"
+      ]
+     }
+    },
+    "draw": [
+     {
+      "seg": [
+       "O",
+       "A"
+      ]
+     },
+     {
+      "seg": [
+       "O",
+       "B"
+      ]
+     },
+     {
+      "arc": [
+       "O",
+       50,
+       0,
+       "t"
+      ]
+     }
+    ],
+    "marks": [
+     {
+      "angle": [
+       "A",
+       "O",
+       "B"
+      ],
+      "label": "{t}°"
+     },
+     {
+      "length": [
+       "O",
+       "A"
+      ],
+      "label": "{r}cm"
+     }
+    ],
+    "names": false,
+    "altId": "fig_sector"
+   },
+   "display": {
+    "r": "{r}",
+    "t": "{t}"
+   },
+   "answer": "{$2*r*t/360}",
+   "wrong": [
+    {
+     "expr": "{$2*r}",
+     "tag": "ignores_central_angle"
+    },
+    {
+     "expr": "{$r*r*t/360}",
+     "tag": "arc_area_mixup"
+    }
+   ],
+   "explanationId": "exp_m1_geo_sector_003",
+   "form": "in_terms_of_pi"
   }
  ]
 }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import '../bank/question_bank.dart';
 import '../models/models.dart';
 import '../scope/unit_tree.dart';
+import 'figure.dart';
 import 'math_expr.dart';
 import 'seeded_random.dart';
 import 'template_text.dart';
@@ -134,11 +135,15 @@ class Variant {
     required this.params,
     required this.display,
     this.lists = const {},
+    this.figure,
   });
 
   /// 出題・判定に使う問題（ID は `{templateId}~{seed}`）。
   final Question question;
   final int seed;
+
+  /// 図（型に `figure` があるとき）。画面が描くか、`figure.toSvg()` で SVG にする。
+  final Figure? figure;
 
   /// 引いた数列（データの活用の型。画面が表・ヒストグラムを描くのに使う）。
   final Map<String, List<double>> lists;
@@ -171,6 +176,7 @@ class MathTemplate {
     required this.lists,
     required this.stats,
     required this.derived,
+    required this.figure,
     required this.constraints,
     required this.display,
     required this.answer,
@@ -191,6 +197,9 @@ class MathTemplate {
   /// 数列から求める値（名前は英小文字 1 字 → `mean(L)` など）。
   final Map<String, String> stats;
   final Map<String, String> derived;
+
+  /// 図の仕様（平面図形）。無ければ null。
+  final FigureTemplate? figure;
   final List<String> constraints;
   final Map<String, String> display;
   final String answer;
@@ -201,7 +210,17 @@ class MathTemplate {
   static const maxAttempts = 50;
   static final _tag = RegExp(r'^[a-z0-9_]+$');
   static const _keys = {
-    'id', 'templateVersion', 'unitId', 'type', 'form', 'difficulty', 'params', 'stats', 'derived', 'constraints', //
+    'id',
+    'templateVersion',
+    'unitId',
+    'type',
+    'form',
+    'difficulty',
+    'params',
+    'stats',
+    'derived',
+    'figure',
+    'constraints', //
     'display', 'answer', 'choices', 'wrong', 'explanationId',
   };
 
@@ -264,6 +283,8 @@ class MathTemplate {
         throw FormatException('$id: derived の名前が不正: $n');
       }
     }
+    final rawFigure = j['figure'];
+    if (rawFigure != null && rawFigure is! Map) throw FormatException('$id: figure はオブジェクト');
     final constraints = [for (final c in (j['constraints'] as List? ?? const [])) c as String];
     final choices = [for (final c in (j['choices'] as List? ?? const [])) c as String];
     if (type == 'choice' && choices.length < 2) throw FormatException('$id: choice の型は choices が 2 つ以上');
@@ -287,6 +308,13 @@ class MathTemplate {
       lists: lists,
       stats: stats,
       derived: derived,
+      figure: rawFigure == null
+          ? null
+          : FigureTemplate.fromJson(Map<String, dynamic>.from(rawFigure as Map), {
+              ...params.keys,
+              ...stats.keys,
+              ...derived.keys,
+            }),
       constraints: constraints,
       display: strMap('display', required: true),
       answer: str('answer'),
@@ -400,7 +428,13 @@ class MathTemplate {
         shown[j] = t;
       }
     }
+    Figure? fig;
+    if (figure != null) {
+      fig = figure!.resolve(values, r);
+      if (fig == null) return null; // 図が枠の外・点が重なる・角が作れない
+    }
     return Variant(
+      figure: fig,
       question: Question(
         id: '$id~$seed',
         unitId: unitId,
