@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "constructions": [
+    {
+      "id": "ct_perp_bisector", "version": 1, "unitId": "m1_geo_basic",
+      "promptId": "ct_perp_bisector_prompt", "explanationId": "exp_ct_perp_bisector", "altId": "fig_ct_perp_bisector",
+      "viewBox": [0, 0, 100, 100],
+      "givens": {"A": [25, 65], "B": [75, 40]},
+      "show": [{"seg": ["A", "B"]}],
+      "goal": {"kind": "perpendicularBisector", "of": ["A", "B"]},
+      "solution": [
+        {"circle": ["A", "B"]}, {"circle": ["B", "A"]}, {"intersect": ["c1", "c2"]}, {"line": ["X1", "X2"]}
+      ],
+      "maxSteps": 6
+    },
+    {
+      "id": "ct_angle_bisector", "version": 1, "unitId": "m1_geo_basic",
+      "promptId": "ct_angle_bisector_prompt", "explanationId": "exp_ct_angle_bisector", "altId": "fig_ct_angle_bisector",
+      "viewBox": [0, 0, 100, 100],
+      "givens": {"O": [15, 75], "A": [90, 80], "B": [70, 15]},
+      "show": [{"ray": ["O", "A"]}, {"ray": ["O", "B"]}],
+      "goal": {"kind": "angleBisector", "of": ["A", "O", "B"]},
+      "solution": [
+        {"line": ["O", "B"]}, {"circle": ["O", "A"]}, {"intersect": ["c1", "l1"]},
+        {"circle": ["A", "A", "X1"]}, {"circle": ["X1", "A", "X1"]}, {"intersect": ["c2", "c3"]}, {"line": ["O", "X3"]}
+      ],
+      "maxSteps": 8
+    },
+    {
+      "id": "ct_perp_from_point", "version": 1, "unitId": "m1_geo_basic",
+      "promptId": "ct_perp_from_point_prompt", "explanationId": "exp_ct_perp_from_point", "altId": "fig_ct_perp_from_point",
+      "viewBox": [0, 0, 100, 100],
+      "givens": {"A": [15, 75], "B": [90, 80], "P": [60, 25]},
+      "show": [{"line": ["A", "B"]}],
+      "goal": {"kind": "perpendicular", "through": "P", "to": ["A", "B"]},
+      "solution": [
+        {"line": ["A", "B"]}, {"circle": ["P", "A"]}, {"intersect": ["c1", "l1"]},
+        {"circle": ["A", "A", "X1"]}, {"circle": ["X1", "A", "X1"]}, {"intersect": ["c2", "c3"]}, {"line": ["X2", "X3"]}
+      ],
+      "maxSteps": 8
+    },
+    {
+      "id": "ct_perp_at_point", "version": 1, "unitId": "m1_geo_basic",
+      "promptId": "ct_perp_at_point_prompt", "explanationId": "exp_ct_perp_at_point", "altId": "fig_ct_perp_at_point",
+      "viewBox": [0, 0, 100, 100],
+      "givens": {"A": [10, 70], "B": [90, 50], "P": [40, 62.5]},
+      "show": [{"line": ["A", "B"]}],
+      "goal": {"kind": "perpendicular", "through": "P", "to": ["A", "B"]},
+      "solution": [
+        {"line": ["A", "B"]}, {"circle": ["P", "A"]}, {"intersect": ["c1", "l1"]},
+        {"circle": ["A", "A", "X1"]}, {"circle": ["X1", "A", "X1"]}, {"intersect": ["c2", "c3"]}, {"line": ["X2", "X3"]}
+      ],
+      "maxSteps": 8
+    }
+  ]
+}

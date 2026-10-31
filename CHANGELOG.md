@@ -4,6 +4,8 @@
 
 ## [未リリース]
 
+- 作図の体験型 `Construction`・`ConstructionSet`・`ConstructionState`・`ConstructionGoal`・`validateConstructions`（定規とコンパスの手順を 1 つずつ実行し、目標の直線が引けたかで判定。点は最初の点と交点だけ。垂直二等分線・角の二等分線・垂線）。`Figure.fromShapes`。見本 `docs/samples/constructions.sample.json`
+
 - 空間図形の図 `SolidSpec`（型の `figure.solid`: 直方体・円柱・円錐・球の斜投影、立方体・円柱・円錐の展開図。見えない辺は破線、寸法の比を保って枠に収める）と、図形に楕円・半楕円を追加。数学（中1）の型に空間図形 7 型を追加（計 52 型）
 
 - 平面図形の図 `FigureTemplate`・`Figure`・`FigureShape`・`FigureLabel`（型の `figure`: 点・線分・円・弧・多角形・角印・直角印・等しい辺の印・長さ・ラベル。`Variant.figure`、`Figure.toSvg`）。描けない引き方は引き直す。数学（中1）の型に図つき 5 型を追加（三角形の内角・対頂角・隣り合う角・二等辺三角形・おうぎ形。計 45 型）

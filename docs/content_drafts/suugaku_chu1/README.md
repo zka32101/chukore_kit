@@ -28,7 +28,7 @@
 | | `volume_missing_third` | 錐体の体積の 1/3 を忘れる |
 
 ## 次にやること
-1. 型を増やす。`templates.json` に 52 型（正負の数・文字式の計算・式の値・数量の関係・等式の性質・一次方程式・座標・比例・反比例・データの活用・円とおうぎ形・円柱と球・角と二等辺三角形、図つき・立体と展開図）を書いた（各 40 変種）。次は作図（体験型）と、図が選択肢の問題（`docs/math_figures_design.md` §7）。
+1. 型を増やす。`templates.json` に 52 型（正負の数・文字式の計算・式の値・数量の関係・等式の性質・一次方程式・座標・比例・反比例・データの活用・円とおうぎ形・円柱と球・角と二等辺三角形、図つき・立体と展開図）を書いた（各 40 変種）。次は図が選択肢の問題（`docs/math_figures_design.md` §7）。作図の見本は `docs/samples/constructions.sample.json`。
    展開: `dart run tool/expand_templates.dart units.json templates.json questions.json`
 2. 選択式・記述式の見本問題（図が要る単元は図の方針を決めてから）。
 3. 体験型（`Exploration`）の見本: 一次関数の傾きと切片、方程式の天秤。

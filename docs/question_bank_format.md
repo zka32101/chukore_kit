@@ -151,3 +151,6 @@ dart run tool/expand_templates.dart units.json templates.json [questions.json] [
 
 ## 体験型の教材（`explorations.json`）
 スライダーで式のパラメータを動かして確かめる教材。形式と判定は [`math_foundation.md`](math_foundation.md) §4、見本は `docs/samples/explorations.sample.json`。問題集とは別のファイルで、回答履歴には残さない。
+
+## 作図の教材（`constructions.json`）
+定規とコンパスの作図を手順で判定する教材。形式・判定は [`math_foundation.md`](math_foundation.md) §9、見本は `docs/samples/constructions.sample.json`。問題集とは別のファイルで、回答履歴には残さない。
