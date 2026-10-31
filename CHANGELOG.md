@@ -4,6 +4,7 @@
 
 ## [未リリース]
 
+- 式に `floor(…)`・`ceil(…)`・`mod(a, b)` を追加（世紀・時差・周期の計算。整数に近い値は誤差で外れない）。時代区分 `EraTable`・`EraSpan`・`centuryOf`（年 → 時代、時代の前後、表にない年の出来事、世紀）。社会の基盤の第 2 段
 - 教科共通の体験 `Experience`（`sort` 仕分け・`link` つなぎ・`dial` ダイヤル・`balance` 天秤）・`ExperienceSet`・`validateExperiences`（仕様の読み取り・判定・検証。数学に依存しない `lib/src/experience`）。学びの設計の第 6 段
 - 学びの分析 `buildLearningFunnel`・`summarizeFunnel`・`summarizeBlockReads`・`skippedBlocks`・`lessonCheckMistakes`・`ineffectiveLessons`（学ぶ→体験→練習→テストの到達と止まっている段階、飛ばされるブロック、確認クイズの誤解の型、効かないレッスン。端末内の記録だけで計算）。学びの設計の第 5 段
 - 遊びのラウンド `buildPlayRound`・`PlayRound`・`PlayProgress`・`finishPlayRound`・`PlayRoundSummary`・`PlayReward`・`PlayClosing`（練習を 5〜10 問のラウンドにし、つながり・ごほうび・ひとこと・解き直し 1 問の提案。残機・順位・速さの点なし）。学びの設計の第 4 段

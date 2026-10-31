@@ -58,7 +58,7 @@
 
 ## 6. 実装の順（案）
 1. `match` 問題タイプ（§3.1）。**実装済み**。
-2. `MathExpr` に `floor`・`ceil`・`mod`（§3.4）と、時代区分 `EraTable`。
+2. `MathExpr` に `floor`・`ceil`・`mod`（§3.4）と、時代区分 `EraTable`。**実装済み**（`mod` は余りが 0 以上 b 未満、`centuryOf` は紀元前を負の世紀）。
 3. グラフ `figure.chart`（§3.2）。
 4. 地図データの形式・検証・簡略化・SVG（§3.3）。
 5. 中 1 社会の単元・前提・型の草案（§5）。
