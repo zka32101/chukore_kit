@@ -1,5 +1,6 @@
 import '../math/math_expr.dart';
 import '../models/models.dart';
+import '../question/match_pairs.dart';
 import '../question/text_match.dart';
 import '../scope/unit_tree.dart';
 import '../teacher/teacher_mode.dart';
@@ -24,7 +25,7 @@ class ValidationIssue {
 bool hasErrors(Iterable<ValidationIssue> issues) => issues.any((i) => i.isError);
 
 /// `checkAnswer` が扱う問題タイプ。
-const knownQuestionTypes = {'choice', 'map', 'numeric', 'expr', 'order', 'timeline', 'text', 'multi', 'card'};
+const knownQuestionTypes = {'choice', 'map', 'numeric', 'expr', 'order', 'timeline', 'text', 'multi', 'match', 'card'};
 
 final _thousands = RegExp(r'^-?\d{1,3}(,\d{3})+(\.\d+)?$');
 final _tagPattern = RegExp(r'^[a-z][a-z0-9_]*$');
@@ -229,6 +230,22 @@ List<ValidationIssue> validateQuestionBank({
           }
         }
         if (q.choices.isNotEmpty) warn('choices_ignored', q.id, 'multi では選択肢は使われません');
+      case 'match':
+        final pairs = parseMatchAnswer(q.answer);
+        if (pairs == null) {
+          err('match_answer_invalid', q.id, 'match の正解は 左:右 を ; で区切ります（空の ID・コロンが 1 つでない書き方は不可）: "${q.answer}"');
+          break;
+        }
+        if (pairs.length < 2) err('match_too_few', q.id, 'match は 2 組以上');
+        final lefts = pairs.map((p) => p.left).toList(), rights = pairs.map((p) => p.right).toList();
+        if (lefts.toSet().length != lefts.length) err('match_left_duplicate', q.id, '左の項目に同じ ID が複数の組にあります（1 対 1 の対応）');
+        if (rights.toSet().length != rights.length) err('match_right_duplicate', q.id, '右の項目に同じ ID が複数の組にあります（1 対 1 の対応）');
+        if (lefts.toSet().intersection(rights.toSet()).isNotEmpty) {
+          err('match_side_overlap', q.id, '左と右に同じ ID があります: ${lefts.toSet().intersection(rights.toSet()).join('・')}');
+        }
+        if (!(uniqueChoices.length == lefts.length + rights.length && uniqueChoices.containsAll([...lefts, ...rights]))) {
+          err('match_choices_mismatch', q.id, 'choices は左右の項目の ID すべて（過不足なし）にしてください');
+        }
       case 'order' || 'timeline':
         final ids = q.answer.split(',').map((e) => e.trim()).toList();
         if (ids.length < 2) err('order_too_few', q.id, '並べ替えは2つ以上');
@@ -238,7 +255,25 @@ List<ValidationIssue> validateQuestionBank({
         }
     }
 
-    if (q.misconceptionTags.isNotEmpty && q.type == 'expr') {
+    if (q.misconceptionTags.isNotEmpty && q.type == 'match') {
+      // 対応づけ: キーは取り違えやすい誤りの組 `左:右`
+      final pairs = parseMatchAnswer(q.answer);
+      final wantSet = pairs?.toSet() ?? const <MatchPair>{};
+      for (final e in q.misconceptionTags.entries) {
+        final k = parseMatchAnswer(e.key);
+        if (k == null || k.length != 1) {
+          err('match_tag_pair_invalid', q.id, '誤解の型の付いた組は 左:右 の 1 組です: ${e.key}');
+        } else if (wantSet.contains(k.single)) {
+          err('tag_on_answer', q.id, '正解の組に誤解の型 ${e.value} が付いています: ${e.key}');
+        } else if (pairs != null &&
+            (!pairs.any((p) => p.left == k.single.left) || !pairs.any((p) => p.right == k.single.right))) {
+          err('match_tag_pair_invalid', q.id, '組 ${e.key} の左右のどちらかが、この問題の項目にありません');
+        }
+        if (!_tagPattern.hasMatch(e.value)) {
+          err('tag_format', q.id, '誤解の型は小文字・数字・アンダースコア: ${e.value}');
+        }
+      }
+    } else if (q.misconceptionTags.isNotEmpty && q.type == 'expr') {
       // 数式: キーは誤答の式。正解と同じ値・キーどうしが同じ値は誤り
       final ans = MathExpr.tryParse(q.answer);
       final seen = <MathExpr>[];

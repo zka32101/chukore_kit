@@ -4,6 +4,8 @@
 
 ## [未リリース]
 
+- 対応づけ問題 `match`（`左ID:右ID` を `;` で区切る。順不同・部分点・誤りの組への誤解の型）、`MatchPair`・`parseMatchAnswer`・`parseMatchInput`。検証 `match_*`。社会の基盤の第 1 段（`docs/shakai_foundation.md`）
+
 - docs: 社会（中学）の基盤設計（`docs/shakai_foundation.md`。今ある部品と足りないもの: 対応づけ問題・グラフ・地図データ・年代と時差の計算・体験型・誤解の型。未実装）
 
 - 選択肢が図の問題: 型の `figures`（選択肢の ID → 図、式で図を選ぶ `pick`）、`Variant.choiceFigures`、立方体の展開図の候補 `net/cells`、`isCubeNet`（立方体を転がして展開図か判定）、検証 `template_net_mismatch`。数学（中1）の型に展開図選び・円柱と円錐の見取り図選び・比例のグラフ選びの 4 型を追加（計 56 型）

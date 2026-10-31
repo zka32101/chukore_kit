@@ -1,6 +1,7 @@
 import '../l10n/digits.dart';
 import '../math/math_expr.dart';
 import '../models/models.dart';
+import 'match_pairs.dart';
 import 'text_match.dart';
 
 /// 判定結果。誤答のとき選択肢に型があれば [misconceptionTag] に入る。
@@ -73,6 +74,8 @@ AnswerResult checkAnswer(
       return AnswerResult(ok);
     case 'multi':
       return _checkMulti(q.answer, input, foldKana);
+    case 'match':
+      return _checkMatch(q, input);
     case 'card': // 暗記カード: 入力は自己採点の名前（again・hard・good）。わかった=1、あやしい=0.5、わからない=0
       return switch (input) {
         'good' => const AnswerResult(true, score: 1.0),
@@ -116,4 +119,30 @@ String? _exprMisconception(Question q, String input) {
     if (k != null && MathExpr.equivalent(got, k)) return e.value;
   }
   return null;
+}
+
+/// `match` の判定。入力の組（重ねて書いた同じ組は 1 つ）のうち、正解の組に当たる数を `合い`、当たらない（読めない項目を含む）数を `誤り` として、
+/// 得点は max(0, 合い − 誤り) ÷ 全組。全組が合い、誤りが 0 のときだけ正解。誤りの組が `misconceptionTags`（キーは `左:右`）にあれば、
+/// 入力の並びで最初のタグを返す。
+AnswerResult _checkMatch(Question q, String input) {
+  final want = parseMatchAnswer(q.answer);
+  if (want == null || want.isEmpty) return const AnswerResult(false);
+  final wantSet = want.toSet();
+  final got = parseMatchInput(input);
+  final seen = <Object>{};
+  var good = 0, bad = 0;
+  String? tag;
+  for (final p in got) {
+    final key = p ?? '__unreadable__${seen.length}';
+    if (!seen.add(key)) continue; // 同じ組の重ね書きは加点も減点もしない
+    if (p != null && wantSet.contains(p)) {
+      good++;
+    } else {
+      bad++;
+      if (p != null) tag ??= q.misconceptionTags['$p'];
+    }
+  }
+  final score = ((good - bad).clamp(0, want.length)) / want.length;
+  final ok = good == want.length && bad == 0;
+  return AnswerResult(ok, score: score, misconceptionTag: tag); // 誤りの組が無ければ tag は null
 }
