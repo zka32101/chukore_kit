@@ -68,6 +68,7 @@ export 'src/growth/kit_tuning.dart';
 export 'src/growth/score_entry.dart';
 export 'src/postmortem/post_test_review.dart';
 export 'src/question/answer.dart';
+export 'src/question/match_pairs.dart';
 export 'src/math/exploration.dart';
 export 'src/math/construction.dart';
 export 'src/math/figure.dart';

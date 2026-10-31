@@ -67,7 +67,7 @@ dart run tool/validate_bank.dart units.json questions.json
 
 | 項目 | 内容 |
 |---|---|
-| `type` | `choice`（選択）／`map`（地図タップ。選択肢は領域ID）／`numeric`（数値。`choices` は空でよい）／`expr`（数式。`answer` は式で、入力と同じ値なら正解。`2x+6` と `2(x+3)`、`1/2` と `0.5` は同じ。`choices` は空。答えの形は `form` で指定できる。下の「数式の形の指定」）／`order`・`timeline`（並べ替え・年表。`answer` は正解順のIDをカンマ区切り、`choices` は同じID集合）／`card`（暗記カード。`answer` は裏面の内容の ID か文。自己採点なので照合には使わない。`choices` は空）／`text`（短い記述。`answer` は別解を `\|` で区切る。例 `東京\|とうきょう\|Tokyo`。`choices` は空）／`multi`（複数の語を答える。`answer` は項目を `;`、各項目の別解を `\|` で区切る。例 `織田信長\|のぶなが;豊臣秀吉\|ひでよし;徳川家康`。順不同・部分点あり。`choices` は空） |
+| `type` | `choice`（選択）／`map`（地図タップ。選択肢は領域ID）／`numeric`（数値。`choices` は空でよい）／`expr`（数式。`answer` は式で、入力と同じ値なら正解。`2x+6` と `2(x+3)`、`1/2` と `0.5` は同じ。`choices` は空。答えの形は `form` で指定できる。下の「数式の形の指定」）／`order`・`timeline`（並べ替え・年表。`answer` は正解順のIDをカンマ区切り、`choices` は同じID集合）／`card`（暗記カード。`answer` は裏面の内容の ID か文。自己採点なので照合には使わない。`choices` は空）／`text`（短い記述。`answer` は別解を `\|` で区切る。例 `東京\|とうきょう\|Tokyo`。`choices` は空）／`match`（対応づけ。`answer` は `左ID:右ID` を `;` で区切る。例 `a1:b2;a2:b1;a3:b3`。`choices` は左右の ID すべて。順不同・部分点あり。1 対 1 の対応）／`multi`（複数の語を答える。`answer` は項目を `;`、各項目の別解を `\|` で区切る。例 `織田信長\|のぶなが;豊臣秀吉\|ひでよし;徳川家康`。順不同・部分点あり。`choices` は空） |
 | `difficulty` | 基準正答率 0〜1（アプリ内偏差値の換算に使う）。0 と 1 は警告 |
 | `misconceptionTags` | 誤答の選択肢ID → 誤解の型（小文字・数字・`_`）。**正解の選択肢には付けない** |
 | `explanationId` | 解説の ID（解説の本文は別データ） |
@@ -154,3 +154,11 @@ dart run tool/expand_templates.dart units.json templates.json [questions.json] [
 
 ## 作図の教材（`constructions.json`）
 定規とコンパスの作図を手順で判定する教材。形式・判定は [`math_foundation.md`](math_foundation.md) §9、見本は `docs/samples/constructions.sample.json`。問題集とは別のファイルで、回答履歴には残さない。
+
+## 対応づけ問題（`type: match`）
+人物と出来事、国と首都、時代と文化など、左の項目と右の項目を 1 対 1 で結ぶ。
+- `answer` は `左ID:右ID` を `;` で区切る（例 `I:am;you:are;he:is`）。`choices` は左右の ID すべて（過不足なし）。ID に `:` `;` は使えない。左と右に同じ ID は置けない。2 組以上。
+- 例: `{"id": "en1_be_002", "unitId": "en1_be", "type": "match", "difficulty": 0.7, "choices": ["I", "you", "he", "am", "are", "is"], "answer": "I:am;you:are;he:is", "explanationId": "exp_en1_be_002", "misconceptionTags": {"I:is": "be_agreement"}}`
+- 入力も同じ形（区切りは `;`・`；`・改行、左右は `:`・`：`。順不同）。得点は max(0, 合った組 − 誤った組) ÷ 全組（`AnswerResult.score`）。全部合い、誤りの組が無いときだけ `correct`。同じ組の重ね書きは加点も減点もしない。読めない項目は誤りの組として数える。
+- `misconceptionTags` のキーは、取り違えやすい誤りの組 `左ID:右ID`（例 `I:is`）。入力の誤りの組のうち、入力の並びで最初にタグのある組のタグが返る（`AnswerResult.misconceptionTag`）。正解の組には付けない。
+- 検証コード（エラー）: `match_answer_invalid`・`match_too_few`・`match_left_duplicate`・`match_right_duplicate`・`match_side_overlap`・`match_choices_mismatch`・`match_tag_pair_invalid`（タグの組が 1 組の `左:右` でない・左右がこの問題にない）、正解の組へのタグは `tag_on_answer`。
