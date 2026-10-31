@@ -1,0 +1,476 @@
+{
+ "version": 1,
+ "templates": [
+  {
+   "id": "m1_expand_001",
+   "templateVersion": 1,
+   "unitId": "m1_expr",
+   "type": "expr",
+   "form": "expanded",
+   "difficulty": 0.7,
+   "params": {
+    "a": {
+     "int": [
+      2,
+      9
+     ]
+    },
+    "b": {
+     "int": [
+      -9,
+      9
+     ]
+    }
+   },
+   "constraints": [
+    "b != 0"
+   ],
+   "display": {
+    "expr": "{a}(x{+b})"
+   },
+   "answer": "{a}x{+a*b}",
+   "wrong": [
+    {
+     "expr": "{a}x{+b}",
+     "tag": "distribute_first_only"
+    },
+    {
+     "expr": "{a}x{+a+b}",
+     "tag": "add_instead_of_multiply"
+    }
+   ],
+   "explanationId": "exp_m1_expand_001"
+  },
+  {
+   "id": "m1_linear_001",
+   "templateVersion": 1,
+   "unitId": "m1_linear",
+   "type": "choice",
+   "difficulty": 0.55,
+   "params": {
+    "a": {
+     "int": [
+      2,
+      9
+     ]
+    },
+    "k": {
+     "int": [
+      -20,
+      20
+     ]
+    },
+    "b": {
+     "int": [
+      -9,
+      9
+     ]
+    }
+   },
+   "derived": {
+    "c": "a*k+b"
+   },
+   "constraints": [
+    "k != 0",
+    "b != 0"
+   ],
+   "display": {
+    "eq": "{a}x{+b}={c}"
+   },
+   "answer": "{k}",
+   "choices": [
+    "{k}",
+    "{c-b}",
+    "{(c+b)/a}",
+    "{-k}"
+   ],
+   "wrong": [
+    {
+     "expr": "{c-b}",
+     "tag": "forgot_to_divide"
+    },
+    {
+     "expr": "{(c+b)/a}",
+     "tag": "move_term_sign"
+    },
+    {
+     "expr": "{-k}",
+     "tag": "sign_flip"
+    }
+   ],
+   "explanationId": "exp_m1_linear_001"
+  },
+  {
+   "id": "m1_expr_combine_001",
+   "templateVersion": 1,
+   "unitId": "m1_expr",
+   "type": "expr",
+   "difficulty": 0.65,
+   "params": {
+    "a": {
+     "int": [
+      -9,
+      9
+     ]
+    },
+    "b": {
+     "int": [
+      -9,
+      9
+     ]
+    },
+    "c": {
+     "int": [
+      -9,
+      9
+     ]
+    },
+    "d": {
+     "int": [
+      -9,
+      9
+     ]
+    }
+   },
+   "form": "expanded",
+   "constraints": [
+    "a != 0",
+    "b != 0",
+    "c != 0",
+    "d != 0",
+    "a+c != 0",
+    "a+c != 1",
+    "a+c != -1",
+    "b+d != 0"
+   ],
+   "display": {
+    "expr": "{a}x{+b}{+c}x{+d}"
+   },
+   "answer": "{a+c}x{+b+d}",
+   "wrong": [
+    {
+     "expr": "{a+b+c+d}x",
+     "tag": "like_terms_mixup"
+    },
+    {
+     "expr": "{a*c}x{+b+d}",
+     "tag": "multiply_instead_of_add"
+    },
+    {
+     "expr": "{a+c}x{+b}",
+     "tag": "dropped_term"
+    }
+   ],
+   "explanationId": "exp_m1_expr_combine_001"
+  },
+  {
+   "id": "m1_expr_paren_001",
+   "templateVersion": 1,
+   "unitId": "m1_expr",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "a": {
+     "int": [
+      -9,
+      9
+     ]
+    },
+    "b": {
+     "int": [
+      -9,
+      9
+     ]
+    },
+    "c": {
+     "int": [
+      -9,
+      9
+     ]
+    }
+   },
+   "form": "expanded",
+   "constraints": [
+    "a != 0",
+    "b != 0",
+    "c != 0",
+    "a-b != 0",
+    "a-b != 1",
+    "a-b != -1"
+   ],
+   "display": {
+    "expr": "{a}x-({b}x{+c})"
+   },
+   "answer": "{a-b}x{+-c}",
+   "wrong": [
+    {
+     "expr": "{a-b}x{+c}",
+     "tag": "minus_paren_first_only"
+    },
+    {
+     "expr": "{a+b}x{+c}",
+     "tag": "minus_ignored"
+    }
+   ],
+   "explanationId": "exp_m1_expr_paren_001"
+  },
+  {
+   "id": "m1_alg_value_001",
+   "templateVersion": 1,
+   "unitId": "m1_alg_repr",
+   "type": "expr",
+   "difficulty": 0.75,
+   "params": {
+    "a": {
+     "int": [
+      2,
+      9
+     ]
+    },
+    "k": {
+     "int": [
+      -9,
+      9
+     ]
+    },
+    "b": {
+     "int": [
+      -9,
+      9
+     ]
+    }
+   },
+   "constraints": [
+    "k != 0",
+    "b != 0"
+   ],
+   "display": {
+    "expr": "{a}x{+b}",
+    "x": "{k}"
+   },
+   "answer": "{a*k+b}",
+   "wrong": [
+    {
+     "expr": "{a+k+b}",
+     "tag": "add_instead_of_multiply"
+    },
+    {
+     "expr": "{a*k-b}",
+     "tag": "sign_flip"
+    }
+   ],
+   "explanationId": "exp_m1_alg_value_001"
+  },
+  {
+   "id": "m1_linear_002",
+   "templateVersion": 1,
+   "unitId": "m1_linear",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "a": {
+     "int": [
+      2,
+      9
+     ]
+    },
+    "k": {
+     "int": [
+      -20,
+      20
+     ]
+    },
+    "b": {
+     "int": [
+      -9,
+      9
+     ]
+    }
+   },
+   "derived": {
+    "c": "a*k+b"
+   },
+   "constraints": [
+    "k != 0",
+    "b != 0"
+   ],
+   "display": {
+    "eq": "{a}x{+b}={c}"
+   },
+   "answer": "{k}",
+   "wrong": [
+    {
+     "expr": "{c-b}",
+     "tag": "forgot_to_divide"
+    },
+    {
+     "expr": "{(c+b)/a}",
+     "tag": "move_term_sign"
+    },
+    {
+     "expr": "{-k}",
+     "tag": "sign_flip"
+    }
+   ],
+   "explanationId": "exp_m1_linear_002"
+  },
+  {
+   "id": "m1_linear_003",
+   "templateVersion": 1,
+   "unitId": "m1_linear",
+   "type": "expr",
+   "difficulty": 0.45,
+   "params": {
+    "a": {
+     "int": [
+      2,
+      9
+     ]
+    },
+    "c": {
+     "int": [
+      1,
+      8
+     ]
+    },
+    "k": {
+     "int": [
+      -25,
+      25
+     ]
+    },
+    "b": {
+     "int": [
+      -9,
+      9
+     ]
+    }
+   },
+   "derived": {
+    "d": "(a-c)*k+b"
+   },
+   "constraints": [
+    "k != 0",
+    "b != 0",
+    "a != c"
+   ],
+   "display": {
+    "eq": "{a}x{+b}={c}x{+d}"
+   },
+   "answer": "{k}",
+   "wrong": [
+    {
+     "expr": "{(d-b)/(a+c)}",
+     "tag": "move_term_sign"
+    },
+    {
+     "expr": "{-k}",
+     "tag": "sign_flip"
+    },
+    {
+     "expr": "{d-b}",
+     "tag": "forgot_to_divide"
+    }
+   ],
+   "explanationId": "exp_m1_linear_003"
+  },
+  {
+   "id": "m1_eq_prop_001",
+   "templateVersion": 1,
+   "unitId": "m1_eq_prop",
+   "type": "choice",
+   "difficulty": 0.8,
+   "params": {
+    "b": {
+     "int": [
+      1,
+      30
+     ]
+    },
+    "k": {
+     "int": [
+      1,
+      30
+     ]
+    }
+   },
+   "derived": {
+    "c": "b+k"
+   },
+   "display": {
+    "eq": "x+{b}={c}"
+   },
+   "answer": "両辺から{b}をひく",
+   "choices": [
+    "両辺から{b}をひく",
+    "両辺に{b}をたす",
+    "両辺に{b}をかける",
+    "両辺を{b}でわる"
+   ],
+   "wrong": [
+    {
+     "expr": "両辺に{b}をたす",
+     "tag": "move_term_sign"
+    },
+    {
+     "expr": "両辺に{b}をかける",
+     "tag": "wrong_inverse_operation"
+    },
+    {
+     "expr": "両辺を{b}でわる",
+     "tag": "wrong_inverse_operation"
+    }
+   ],
+   "explanationId": "exp_m1_eq_prop_001"
+  },
+  {
+   "id": "m1_alg_rel_001",
+   "templateVersion": 1,
+   "unitId": "m1_alg_rel",
+   "type": "choice",
+   "difficulty": 0.6,
+   "params": {
+    "a": {
+     "int": [
+      2,
+      9
+     ]
+    },
+    "b": {
+     "int": [
+      2,
+      9
+     ]
+    }
+   },
+   "constraints": [
+    "a != b"
+   ],
+   "display": {
+    "situation": "1個{a}円の品物をx個買い、{b}円の箱に入れる"
+   },
+   "answer": "{a}x{+b}円",
+   "choices": [
+    "{a}x{+b}円",
+    "{b}x{+a}円",
+    "{a+b}x円",
+    "{a}x{+-b}円"
+   ],
+   "wrong": [
+    {
+     "expr": "{b}x{+a}円",
+     "tag": "coefficient_swap"
+    },
+    {
+     "expr": "{a+b}x円",
+     "tag": "like_terms_mixup"
+    },
+    {
+     "expr": "{a}x{+-b}円",
+     "tag": "sign_flip"
+    }
+   ],
+   "explanationId": "exp_m1_alg_rel_001"
+  }
+ ]
+}

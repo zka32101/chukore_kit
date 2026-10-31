@@ -20,4 +20,21 @@ void main() {
       expect(ids, contains(t.unitId));
     }
   });
+
+  test('数学（中1）の型の草案: エラー・警告なし（問題のない単元を除く）。全変種の正解と誤答が期待どおりに判定される', () {
+    const dir = 'docs/content_drafts/suugaku_chu1';
+    final tree = UnitTree.fromJson(jsonDecode(File('$dir/units.json').readAsStringSync()) as Map<String, dynamic>);
+    final set = TemplateSet.parse(File('$dir/templates.json').readAsStringSync());
+    final issues = validateTemplates(set, tree: tree).where((i) => i.code != 'unit_empty');
+    expect(issues, isEmpty, reason: issues.join('\n'));
+    for (final v in set.expand()) {
+      final q = v.question;
+      expect(checkAnswer(q, q.answer).correct, isTrue, reason: q.id);
+      for (final e in q.misconceptionTags.entries) {
+        final r = checkAnswer(q, e.key);
+        expect(r.correct, isFalse, reason: '${q.id} ${e.key}');
+        expect(r.misconceptionTag, e.value, reason: '${q.id} ${e.key}');
+      }
+    }
+  });
 }
