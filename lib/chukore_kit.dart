@@ -39,6 +39,7 @@ export 'src/review/spaced_review.dart';
 export 'src/time/study_time.dart';
 export 'src/goal/goal_plan.dart';
 export 'src/mock/mock_exam.dart';
+export 'src/mock/unit_test.dart';
 export 'src/mock/mock_timing.dart';
 export 'src/mock/mock_history.dart';
 export 'src/teacher/teacher_mode.dart';

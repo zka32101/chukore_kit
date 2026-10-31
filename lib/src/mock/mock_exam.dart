@@ -191,6 +191,9 @@ MockExamResult scoreMockExam(
   /// 問題ID → 自信（true = 自信あり）。任意。履歴の confident になる。
   Map<String, bool> confident = const {},
   String decimalSeparator = '.',
+
+  /// 回答履歴の mode。模試は `mock`（単元テストは `unit_test`）。
+  String mode = 'mock',
 }) {
   var correct = 0, unanswered = 0;
   final totals = <String, int>{}, rights = <String, int>{};
@@ -214,7 +217,7 @@ MockExamResult scoreMockExam(
       chosenId: input,
       answeredAt: answeredAt,
       elapsedMs: perQuestionMs[q.id] ?? 0,
-      mode: 'mock',
+      mode: mode,
       confident: confident[q.id],
     ));
   }

@@ -4,6 +4,7 @@
 
 ## [未リリース]
 
+- 単元テスト `buildUnitTest`・`scoreUnitTest`・`UnitTest`・`UnitTestResult`・`UnitTestLevel`（5〜15 問、やさしい:ふつう:難しい＝3:5:2、誤解の型を満遍なく、結果は 3 段階、履歴の mode は `unit_test`）。`scoreMockExam` に `mode` 引数。学びの設計の第 3 段
 - 今日の次の 1 手 `nextLearningStep`・`LearningStep`・`LearningStepKind`・`LearningStepReason`・`LearningContext`・`LearningStepConfig`（レッスン・体験・練習・復習・テストを、テスト日・前提・誤解の型の繰り返し・習熟度から決める）。`buildDailyHome(learning:)` で `DailyHome.learningStep`。学びの設計の第 2 段
 
 - レッスン（学ぶ）: `Lesson`・`LessonBlock`・`LessonSet`・`validateLessons`・`LessonRefs`・`LessonChecker`・`MathLessonChecker`（例題の途中式を 1 行ずつ検査）、`LessonProgress`・`summarizeLessonEffects`・`lessonCheckAttempt`（`mode: lesson_check`）。数学（中1）のレッスン 4 本の見本。全教科共通の学びの設計（`docs/learning_model.md`）の第 1 段
