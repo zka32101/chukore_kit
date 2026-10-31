@@ -1,0 +1,243 @@
+{
+ "version": 1,
+ "units": [
+  {
+   "id": "m1_num",
+   "subject": "math",
+   "grade": 1,
+   "title": "正の数・負の数",
+   "order": 1
+  },
+  {
+   "id": "m1_num_sign",
+   "subject": "math",
+   "grade": 1,
+   "title": "正負の数と数直線・大小・絶対値",
+   "order": 1,
+   "parentId": "m1_num",
+   "estimatedQuestions": 12
+  },
+  {
+   "id": "m1_num_add",
+   "subject": "math",
+   "grade": 1,
+   "title": "加法・減法",
+   "order": 2,
+   "parentId": "m1_num",
+   "estimatedQuestions": 25
+  },
+  {
+   "id": "m1_num_mul",
+   "subject": "math",
+   "grade": 1,
+   "title": "乗法・除法",
+   "order": 3,
+   "parentId": "m1_num",
+   "estimatedQuestions": 25
+  },
+  {
+   "id": "m1_num_mix",
+   "subject": "math",
+   "grade": 1,
+   "title": "累乗と四則の混じった計算",
+   "order": 4,
+   "parentId": "m1_num",
+   "estimatedQuestions": 20
+  },
+  {
+   "id": "m1_alg",
+   "subject": "math",
+   "grade": 1,
+   "title": "文字の式",
+   "order": 2
+  },
+  {
+   "id": "m1_alg_repr",
+   "subject": "math",
+   "grade": 1,
+   "title": "文字式の表し方と式の値",
+   "order": 1,
+   "parentId": "m1_alg",
+   "estimatedQuestions": 20
+  },
+  {
+   "id": "m1_expr",
+   "subject": "math",
+   "grade": 1,
+   "title": "文字式の計算（同類項・かっこ）",
+   "order": 2,
+   "parentId": "m1_alg",
+   "estimatedQuestions": 30
+  },
+  {
+   "id": "m1_alg_rel",
+   "subject": "math",
+   "grade": 1,
+   "title": "数量の関係を式に表す",
+   "order": 3,
+   "parentId": "m1_alg",
+   "estimatedQuestions": 15
+  },
+  {
+   "id": "m1_eq",
+   "subject": "math",
+   "grade": 1,
+   "title": "一次方程式",
+   "order": 3
+  },
+  {
+   "id": "m1_eq_prop",
+   "subject": "math",
+   "grade": 1,
+   "title": "等式の性質",
+   "order": 1,
+   "parentId": "m1_eq",
+   "estimatedQuestions": 10
+  },
+  {
+   "id": "m1_linear",
+   "subject": "math",
+   "grade": 1,
+   "title": "一次方程式の解き方",
+   "order": 2,
+   "parentId": "m1_eq",
+   "estimatedQuestions": 30
+  },
+  {
+   "id": "m1_eq_word",
+   "subject": "math",
+   "grade": 1,
+   "title": "方程式の文章題",
+   "order": 3,
+   "parentId": "m1_eq",
+   "estimatedQuestions": 20
+  },
+  {
+   "id": "m1_func",
+   "subject": "math",
+   "grade": 1,
+   "title": "比例と反比例",
+   "order": 4
+  },
+  {
+   "id": "m1_func_var",
+   "subject": "math",
+   "grade": 1,
+   "title": "変数と関数・座標",
+   "order": 1,
+   "parentId": "m1_func",
+   "estimatedQuestions": 12
+  },
+  {
+   "id": "m1_func_prop",
+   "subject": "math",
+   "grade": 1,
+   "title": "比例",
+   "order": 2,
+   "parentId": "m1_func",
+   "estimatedQuestions": 20
+  },
+  {
+   "id": "m1_func_inv",
+   "subject": "math",
+   "grade": 1,
+   "title": "反比例",
+   "order": 3,
+   "parentId": "m1_func",
+   "estimatedQuestions": 15
+  },
+  {
+   "id": "m1_func_graph",
+   "subject": "math",
+   "grade": 1,
+   "title": "比例・反比例のグラフと利用",
+   "order": 4,
+   "parentId": "m1_func",
+   "estimatedQuestions": 20
+  },
+  {
+   "id": "m1_geo",
+   "subject": "math",
+   "grade": 1,
+   "title": "平面図形",
+   "order": 5
+  },
+  {
+   "id": "m1_geo_basic",
+   "subject": "math",
+   "grade": 1,
+   "title": "直線・角・円と作図",
+   "order": 1,
+   "parentId": "m1_geo",
+   "estimatedQuestions": 20
+  },
+  {
+   "id": "m1_geo_move",
+   "subject": "math",
+   "grade": 1,
+   "title": "図形の移動（平行・回転・対称）",
+   "order": 2,
+   "parentId": "m1_geo",
+   "estimatedQuestions": 12
+  },
+  {
+   "id": "m1_geo_sector",
+   "subject": "math",
+   "grade": 1,
+   "title": "おうぎ形の弧と面積",
+   "order": 3,
+   "parentId": "m1_geo",
+   "estimatedQuestions": 12
+  },
+  {
+   "id": "m1_space",
+   "subject": "math",
+   "grade": 1,
+   "title": "空間図形",
+   "order": 6
+  },
+  {
+   "id": "m1_space_solid",
+   "subject": "math",
+   "grade": 1,
+   "title": "立体と直線・平面の位置関係",
+   "order": 1,
+   "parentId": "m1_space",
+   "estimatedQuestions": 12
+  },
+  {
+   "id": "m1_space_vol",
+   "subject": "math",
+   "grade": 1,
+   "title": "表面積と体積",
+   "order": 2,
+   "parentId": "m1_space",
+   "estimatedQuestions": 20
+  },
+  {
+   "id": "m1_data",
+   "subject": "math",
+   "grade": 1,
+   "title": "データの活用",
+   "order": 7
+  },
+  {
+   "id": "m1_data_hist",
+   "subject": "math",
+   "grade": 1,
+   "title": "度数分布・ヒストグラム・相対度数",
+   "order": 1,
+   "parentId": "m1_data",
+   "estimatedQuestions": 15
+  },
+  {
+   "id": "m1_data_rep",
+   "subject": "math",
+   "grade": 1,
+   "title": "代表値と確率的な見方",
+   "order": 2,
+   "parentId": "m1_data",
+   "estimatedQuestions": 12
+  }
+ ]
+}

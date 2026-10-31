@@ -1,0 +1,162 @@
+{
+ "version": 1,
+ "prerequisites": [
+  {
+   "unitId": "m1_num_sign",
+   "external": [
+    {
+     "id": "shogaku_math_decimal_fraction",
+     "title": "小学算数: 小数・分数の大小",
+     "link": "https://example.com/shogaku-kore"
+    }
+   ]
+  },
+  {
+   "unitId": "m1_num_add",
+   "requires": [
+    "m1_num_sign"
+   ]
+  },
+  {
+   "unitId": "m1_num_mul",
+   "requires": [
+    "m1_num_add"
+   ]
+  },
+  {
+   "unitId": "m1_num_mix",
+   "requires": [
+    "m1_num_mul"
+   ]
+  },
+  {
+   "unitId": "m1_alg_repr",
+   "requires": [
+    "m1_num_mix"
+   ],
+   "external": [
+    {
+     "id": "shogaku_math_formula",
+     "title": "小学算数: 文字を使った式（□・x）",
+     "link": "https://example.com/shogaku-kore"
+    }
+   ]
+  },
+  {
+   "unitId": "m1_expr",
+   "requires": [
+    "m1_alg_repr"
+   ]
+  },
+  {
+   "unitId": "m1_alg_rel",
+   "requires": [
+    "m1_alg_repr"
+   ]
+  },
+  {
+   "unitId": "m1_eq_prop",
+   "requires": [
+    "m1_alg_repr"
+   ]
+  },
+  {
+   "unitId": "m1_linear",
+   "requires": [
+    "m1_expr",
+    "m1_eq_prop"
+   ]
+  },
+  {
+   "unitId": "m1_eq_word",
+   "requires": [
+    "m1_linear",
+    "m1_alg_rel"
+   ]
+  },
+  {
+   "unitId": "m1_func_var",
+   "requires": [
+    "m1_alg_repr"
+   ],
+   "external": [
+    {
+     "id": "shogaku_math_proportion",
+     "title": "小学算数: 比例・反比例",
+     "link": "https://example.com/shogaku-kore"
+    }
+   ]
+  },
+  {
+   "unitId": "m1_func_prop",
+   "requires": [
+    "m1_func_var"
+   ]
+  },
+  {
+   "unitId": "m1_func_inv",
+   "requires": [
+    "m1_func_var"
+   ]
+  },
+  {
+   "unitId": "m1_func_graph",
+   "requires": [
+    "m1_func_prop",
+    "m1_func_inv"
+   ]
+  },
+  {
+   "unitId": "m1_geo_basic",
+   "external": [
+    {
+     "id": "shogaku_math_figures",
+     "title": "小学算数: 角・円・作図",
+     "link": "https://example.com/shogaku-kore"
+    }
+   ]
+  },
+  {
+   "unitId": "m1_geo_move",
+   "requires": [
+    "m1_geo_basic"
+   ]
+  },
+  {
+   "unitId": "m1_geo_sector",
+   "requires": [
+    "m1_geo_basic",
+    "m1_num_mul"
+   ]
+  },
+  {
+   "unitId": "m1_space_solid",
+   "requires": [
+    "m1_geo_basic"
+   ]
+  },
+  {
+   "unitId": "m1_space_vol",
+   "requires": [
+    "m1_space_solid",
+    "m1_geo_sector"
+   ]
+  },
+  {
+   "unitId": "m1_data_hist",
+   "external": [
+    {
+     "id": "shogaku_math_data",
+     "title": "小学算数: 表とグラフ・平均",
+     "link": "https://example.com/shogaku-kore"
+    }
+   ]
+  },
+  {
+   "unitId": "m1_data_rep",
+   "requires": [
+    "m1_data_hist"
+   ]
+  }
+ ]
+}
