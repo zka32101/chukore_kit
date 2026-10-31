@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "templates": [
+    {
+      "id": "m1_expand_001", "templateVersion": 1, "unitId": "m1_expr",
+      "type": "expr", "form": "expanded", "difficulty": 0.7,
+      "params": {"a": {"int": [2, 9]}, "b": {"int": [-9, 9]}},
+      "constraints": ["b != 0"],
+      "display": {"expr": "{a}(x{+b})"},
+      "answer": "{a}x{+a*b}",
+      "wrong": [
+        {"expr": "{a}x{+b}", "tag": "distribute_first_only"},
+        {"expr": "{a}x{+a+b}", "tag": "add_instead_of_multiply"}
+      ],
+      "explanationId": "exp_m1_expand_001"
+    },
+    {
+      "id": "m1_linear_001", "templateVersion": 1, "unitId": "m1_linear",
+      "type": "choice", "difficulty": 0.55,
+      "params": {"a": {"int": [2, 9]}, "k": {"int": [-20, 20]}, "b": {"int": [-9, 9]}},
+      "derived": {"c": "a*k+b"},
+      "constraints": ["k != 0", "b != 0"],
+      "display": {"eq": "{a}x{+b}={c}"},
+      "answer": "{k}",
+      "choices": ["{k}", "{c-b}", "{(c+b)/a}", "{-k}"],
+      "wrong": [
+        {"expr": "{c-b}", "tag": "forgot_to_divide"},
+        {"expr": "{(c+b)/a}", "tag": "move_term_sign"},
+        {"expr": "{-k}", "tag": "sign_flip"}
+      ],
+      "explanationId": "exp_m1_linear_001"
+    }
+  ]
+}

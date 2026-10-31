@@ -13,7 +13,7 @@
 |---|---|---|
 | 1 | 数式の判定 `type: expr`（`MathExpr`）: 展開・因数分解・約分・分数と小数を同じ値として判定。全角・×÷−・² も読む | **実装済み** |
 | 2 | 形の指定（`form`: 展開済み／因数分解済み／既約分数／最簡の根号）。`2(x+3)` を「展開しなさい」で通さない。`judgeExpr` が値は合うが形が違う（`wrongForm`）を区別 | **実装済み** |
-| 3 | 問題の変種生成 `MathTemplate`（係数を種で変える。同じ種なら同じ問題。答えは式から機械計算）。暗記でなく型を解く。設計は [`math_variants_design.md`](math_variants_design.md) | 設計済み（未実装） |
+| 3 | 問題の変種生成 `MathTemplate`（係数を種で変える。同じ種なら同じ問題。答えは式から機械計算）。暗記でなく型を解く。設計は [`math_variants_design.md`](math_variants_design.md) | **実装済み**（`MathTemplate`・`TemplateSet`・`validateTemplates`・`tool/expand_templates.dart`。見本は `docs/samples/templates.sample.json`） |
 | 4 | 検算ツール（別ツールで SymPy 等。`tool/` ではなくコンテンツ側のテスト） | 未 |
 | 5 | 体験の仕様 `Exploration`（下記 §4） | 未 |
 | 6 | 途中式の1行ずつ判定（直前の行と同値か。最初に崩れた行を示す＝「どこで間違えたか」） | 未 |

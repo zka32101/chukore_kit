@@ -4,6 +4,8 @@
 
 ## [未リリース]
 
+- 数学の問題の型 `MathTemplate`・`TemplateSet`・`Variant`・`parseVariantId`・`validateTemplates` と `tool/expand_templates.dart`。係数を種で変えた変種を作り、答えと誤答（誤解の型つき）を式から計算する。検証 `template_unsatisfiable`・`template_expression_invalid`・`template_answer_dup`。見本 `docs/samples/templates.sample.json`
+
 - 変種生成の部品: `SeededRandom`（xorshift32。端末・Web で同じ列）、`renderTemplateString`（`{e}`・`{+e}`・`{&e}` の差し込み）・`evalConstraint`・`formatExact`（整数・既約分数）。`expr` の誤答の誤解の型（`misconceptionTags` のキーに誤答の式を書く。検証 `tag_expr_invalid`・`tag_expr_duplicate`）
 
 - docs: 数学の問題の変種生成 `MathTemplate` の設計（`docs/math_variants_design.md`。未実装）

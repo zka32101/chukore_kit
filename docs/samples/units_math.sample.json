@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "units": [
+    {"id": "m1_algebra", "subject": "math", "grade": 1, "title": "文字式と方程式", "order": 1},
+    {"id": "m1_expr", "subject": "math", "grade": 1, "parentId": "m1_algebra", "title": "文字式の計算", "order": 1, "estimatedQuestions": 30},
+    {"id": "m1_linear", "subject": "math", "grade": 1, "parentId": "m1_algebra", "title": "一次方程式", "order": 2, "estimatedQuestions": 30}
+  ]
+}

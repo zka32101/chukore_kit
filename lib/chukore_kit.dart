@@ -69,6 +69,7 @@ export 'src/growth/score_entry.dart';
 export 'src/postmortem/post_test_review.dart';
 export 'src/question/answer.dart';
 export 'src/math/math_expr.dart';
+export 'src/math/math_template.dart';
 export 'src/math/seeded_random.dart';
 export 'src/math/template_text.dart';
 export 'src/question/card.dart';
