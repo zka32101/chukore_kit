@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 /// 数式（`2x+6`・`(x+3)^2`・`1/2`・`√2`）の読み取りと、同じ値かどうかの判定。
 /// 純粋な Dart で、式の文字列を木にして、決まった点で値を比べる（記号計算はしない）。
-/// 使える記号: 数・英小文字 1 字の変数・`+ - * / ^`・かっこ・`sqrt(…)`・`√`。
+/// 使える記号: 数・英小文字 1 字の変数・`+ - * / ^`・かっこ・`sqrt(…)`・`√`・円周率 `π`（`pi` とも書ける）。
 /// `2x`・`2(x+1)`・`(x+1)(x-1)` のような省略した掛け算も読む。`x2` や `2 3` は誤り。
 class MathExpr {
   MathExpr._(this._root, this.variables);
@@ -73,6 +73,8 @@ class MathExpr {
         return _isReducedFraction(_root);
       case 'simplest_radical':
         return _isSimplestRadical(_root);
+      case 'in_terms_of_pi':
+        return _isInTermsOfPi(_root);
       default:
         throw ArgumentError('未対応の形: $form');
     }
@@ -83,7 +85,7 @@ class MathExpr {
 }
 
 /// `Question.form` に書ける形の指定。
-const knownExprForms = {'expanded', 'factored', 'reduced_fraction', 'simplest_radical'};
+const knownExprForms = {'expanded', 'factored', 'reduced_fraction', 'simplest_radical', 'in_terms_of_pi'};
 
 bool _hasVar(_Node n) {
   final v = <String>{};
@@ -105,7 +107,7 @@ int _terms(_Node n) {
 }
 
 bool _isExpanded(_Node n) {
-  if (n is _Num || n is _Var) return true;
+  if (n is _Num || n is _Var || n is _Pi) return true;
   if (n is _Neg) return !(_isSum(n.a) && _hasVar(n.a)) && _isExpanded(n.a); // -(x+3)
   if (n is _Sqrt) return !_hasVar(n);
   if (n is! _Bin) return false;
@@ -167,6 +169,25 @@ bool _isReducedFraction(_Node n) {
   return a != null && b != null && b > 1 && a != 0 && _gcd(a, b) == 1;
 }
 
+/// 円周率 π を 1 つ含む、整数どうしの積・商の形（`12π`・`3/2π`・`3π/2`・`-π`）。小数の近似（`37.68`）や、π を含まない答えは不可。
+/// 約分されているかは見ない。
+bool _isInTermsOfPi(_Node n) {
+  var pis = 0;
+  bool ok(_Node x, {required bool denominator}) {
+    if (x is _Pi) {
+      pis++;
+      return !denominator;
+    }
+    if (x is _Num) return _asInt(x) != null;
+    if (x is _Neg) return ok(x.a, denominator: denominator);
+    if (x is _Bin && x.op == '*') return ok(x.a, denominator: denominator) && ok(x.b, denominator: denominator);
+    if (x is _Bin && x.op == '/') return ok(x.a, denominator: denominator) && ok(x.b, denominator: true);
+    return false;
+  }
+
+  return ok(n, denominator: false) && pis == 1;
+}
+
 bool _squareFree(int n) {
   for (var d = 2; d * d <= n; d++) {
     if (n % (d * d) == 0) return false;
@@ -203,6 +224,13 @@ class _Num extends _Node {
   final double v;
   @override
   double eval(Map<String, double> _) => v;
+  @override
+  _Node bind(Map<String, double> _) => this;
+}
+
+class _Pi extends _Node {
+  @override
+  double eval(Map<String, double> _) => math.pi;
   @override
   _Node bind(Map<String, double> _) => this;
 }
@@ -316,6 +344,9 @@ List<String> _tokenize(String source) {
     } else if (t.startsWith('sqrt', i)) {
       out.add('sqrt');
       i += 4;
+    } else if (c == 'π' || t.startsWith('pi', i)) {
+      out.add('π'); // 円周率（`pi` とも書ける。変数 p と i の積は p*i と書く）
+      i += c == 'π' ? 1 : 2;
     } else if (RegExp(r'[a-z]').hasMatch(c)) {
       out.add(c);
       i++;
@@ -352,7 +383,7 @@ class _Parser {
     return n;
   }
 
-  bool _startsAtom(String? s) => s != null && (s == '(' || s == 'sqrt' || RegExp(r'^[a-z]$').hasMatch(s));
+  bool _startsAtom(String? s) => s != null && (s == '(' || s == 'sqrt' || s == 'π' || RegExp(r'^[a-z]$').hasMatch(s));
 
   _Node _term() {
     var n = _unary();
@@ -410,6 +441,7 @@ class _Parser {
       i++;
       return _Sqrt(n);
     }
+    if (s == 'π') return _Pi();
     final d = double.tryParse(s);
     if (d != null) return _Num(d);
     if (RegExp(r'^[a-z]$').hasMatch(s)) return _Var(s);

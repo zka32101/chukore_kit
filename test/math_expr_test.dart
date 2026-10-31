@@ -17,6 +17,7 @@ void main() {
   formTests();
   exprTagTests();
   bindTests();
+  piTests();
   group('読み取り', () {
     test('優先順位・右結合・単項マイナス', () {
       double v(String s, [Map<String, double> m = const {}]) => MathExpr.parse(s).eval(m);
@@ -279,5 +280,79 @@ void bindTests() {
     expect(e.variables, ['a', 'b', 'x']); // 元の式は変わらない
     expect(MathExpr.parse('-sqrt(a)/x^2').bind({'a': 16}).eval({'x': 2}), -1);
     expect(MathExpr.equivalent(MathExpr.parse('a*x+b').bind({'a': 2, 'b': 2}), MathExpr.parse('2(x+1)')), isTrue);
+  });
+}
+
+void piTests() {
+  group('円周率 π', () {
+    test('π と pi は円周率。省略した掛け算にも使える', () {
+      expect(MathExpr.parse('π').eval({}), closeTo(3.141592653589793, 1e-12));
+      expect(MathExpr.parse('12π').eval({}), closeTo(12 * 3.141592653589793, 1e-9));
+      expect(MathExpr.parse('12pi').eval({}), closeTo(12 * 3.141592653589793, 1e-9));
+      expect(MathExpr.parse('ｐｉ').eval({}), closeTo(3.141592653589793, 1e-12)); // 全角
+      expect(MathExpr.parse('r^2π').eval({'r': 3}), closeTo(9 * 3.141592653589793, 1e-9));
+      expect(MathExpr.parse('3/2π').eval({}), closeTo(1.5 * 3.141592653589793, 1e-9));
+      expect(MathExpr.parse('3π/2').eval({}), closeTo(1.5 * 3.141592653589793, 1e-9));
+      expect(MathExpr.parse('2(π+1)').eval({}), closeTo(2 * (3.141592653589793 + 1), 1e-9));
+      expect(MathExpr.parse('π').variables, isEmpty);
+      expect(MathExpr.parse('p*i').variables, ['i', 'p']); // 変数の積は * で書く
+    });
+    test('同値判定: 書き方によらない。3.14 の近似は別の答え', () {
+      expect(eq('12π', '12*π'), isTrue);
+      expect(eq('12π', '6π+6π'), isTrue);
+      expect(eq('3π/2', '3/2π'), isTrue);
+      expect(eq('12π', '37.699111843077517'), isTrue); // 十分に長い小数は同じ値
+      expect(eq('12π', '37.68'), isFalse); // 3.14 を使った近似は別の答え
+      expect(eq('12π', '12'), isFalse);
+    });
+    test('in_terms_of_pi: π を 1 つ含む、整数どうしの積・商', () {
+      bool f(String s) => MathExpr.parse(s).hasForm('in_terms_of_pi', MathExpr.parse(s));
+      for (final ok in ['12π', 'π', '-π', '-12π', '3/2π', '3π/2', '2*3π', 'π*12', '12pi']) {
+        expect(f(ok), isTrue, reason: ok);
+      }
+      for (final ng in [
+        '37.68',
+        '12',
+        'π+1',
+        'π*π',
+        '2π+3π',
+        'πr',
+        'r',
+        '12/π',
+        '1.5π',
+        'π/0.5',
+        'sqrt(2)π',
+        '12π^2',
+      ]) {
+        expect(f(ng), isFalse, reason: ng);
+      }
+    });
+    test('検証: in_terms_of_pi は既知の形。正解自体が満たさないとエラー', () {
+      final tree = UnitTree(1, [Unit(id: 'u', subject: 'math', grade: 1, title: 'u', estimatedQuestions: 5)]);
+      List<String> codes(String answer) => validateQuestionBank(
+        questions: [
+          Question.fromJson({
+            'id': 'q',
+            'unitId': 'u',
+            'type': 'expr',
+            'difficulty': 0.5,
+            'answer': answer,
+            'explanationId': 'e',
+            'form': 'in_terms_of_pi',
+          }),
+        ],
+        tree: tree,
+      ).map((i) => i.code).toList();
+      expect(codes('12π'), isEmpty);
+      expect(codes('37.68'), contains('answer_form_mismatch'));
+      expect(codes('37.68'), isNot(contains('unknown_form')));
+    });
+    test('judgeExpr: 値は合っても π を使わない答えは wrongForm', () {
+      expect(judgeExpr('12π', '12π', form: 'in_terms_of_pi'), ExprVerdict.correct);
+      expect(judgeExpr('12π', '6π+6π', form: 'in_terms_of_pi'), ExprVerdict.wrongForm);
+      expect(judgeExpr('12π', '37.699111843077517', form: 'in_terms_of_pi'), ExprVerdict.wrongForm);
+      expect(judgeExpr('12π', '37.68', form: 'in_terms_of_pi'), ExprVerdict.wrongValue);
+      expect(judgeExpr('12π', '12π', form: 'expanded'), ExprVerdict.correct); // π は展開済みの項として扱う
+    });
   });
 }

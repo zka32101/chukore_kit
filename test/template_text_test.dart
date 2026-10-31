@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   listRenderTests();
+  piRenderTests();
   group('formatExact', () {
     test('整数・既約分数・書けない値', () {
       expect(formatExact(12), '12');
@@ -110,6 +111,30 @@ void listRenderTests() {
       expect(() => renderTemplateString('{L}', {}), throwsFormatException);
       expect(() => renderTemplateString('{+L}', {}, lists: lists), throwsFormatException);
       expect(() => renderTemplateString('{&L}', {}, lists: lists), throwsFormatException);
+    });
+  });
+}
+
+void piRenderTests() {
+  group('π の係数 {\$e}', () {
+    const p = {'r': 6.0, 'n': -3.0};
+    test('整数・分数・1・-1・0 の係数', () {
+      expect(renderTemplateString('{\$2*r}', p), '12π');
+      expect(renderTemplateString('{\$r/4}', p), '3/2π');
+      expect(renderTemplateString('{\$r/6}', p), 'π');
+      expect(renderTemplateString('{\$-r/6}', p), '-π');
+      expect(renderTemplateString('{\$r-6}', p), '0');
+      expect(renderTemplateString('{\$n}', p), '-3π');
+    });
+    test('符号つき・かっこつきと組み合わせられる。書き出した式は読める', () {
+      expect(renderTemplateString('x{+\$n}', p), 'x-3π');
+      expect(renderTemplateString('x{+\$r}', p), 'x+6π');
+      expect(renderTemplateString('x{&\$n}', p), 'x(-3π)');
+      expect(renderTemplateString('{\$r/4}', p), '3/2π');
+      expect(MathExpr.parse(renderTemplateString('{\$r/4}', p)).eval({}), closeTo(1.5 * 3.141592653589793, 1e-9));
+    });
+    test('書けない係数は InexactValueException', () {
+      expect(() => renderTemplateString('{\$r/1001}', p), throwsA(isA<InexactValueException>()));
     });
   });
 }

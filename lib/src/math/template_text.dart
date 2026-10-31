@@ -24,7 +24,8 @@ String? formatExact(double v) {
 
 /// 文字列中の `{…}` を、パラメータで計算した値に置き換える。数列（英大文字 1 字）は `{L}`（そのままの順）・`{~L}`（小さい順）で
 /// `3, 8, 5` のように差し込む。
-/// `{e}` 値、`{+e}` 符号つき（`+12`・`-12`・`+0`）、`{&e}` 負なら `(-3)` のようにかっこで囲む。
+/// `{e}` 値、`{+e}` 符号つき（`+12`・`-12`・`+0`）、`{&e}` 負なら `(-3)` のようにかっこで囲む、`{$e}` 係数として π を付ける
+/// （`12π`・`3/2π`・`π`・`-π`。`{+$e}` で符号つき）。
 /// `e` はパラメータ（英小文字 1 字）の四則・`^`・かっこ・`sqrt`。パラメータに無い文字は [FormatException]、
 /// 整数にも分数にも書けない値は [InexactValueException]。`{` と `}` 以外の文字はそのまま。
 String renderTemplateString(String template, Map<String, double> params, {Map<String, List<double>> lists = const {}}) {
@@ -42,8 +43,8 @@ String renderTemplateString(String template, Map<String, double> params, {Map<St
     if (end < 0) throw FormatException('} で閉じていません: $template');
     var body = template.substring(i + 1, end);
     var mode = '';
-    if (body.startsWith('+') || body.startsWith('&')) {
-      mode = body[0];
+    while (body.isNotEmpty && '+&\$'.contains(body[0])) {
+      mode += body[0];
       body = body.substring(1);
     }
     if (body.contains('{')) throw FormatException('{ が入れ子です: $template');
@@ -66,17 +67,20 @@ String _render(String body, String mode, Map<String, double> params, Map<String,
   final e = MathExpr.parse(body);
   final unknown = e.variables.where((v) => !params.containsKey(v));
   if (unknown.isNotEmpty) throw FormatException('パラメータにない文字です: ${unknown.join()}（$body）');
-  final s = formatExact(e.eval(params));
+  var s = formatExact(e.eval(params));
   if (s == null) throw InexactValueException(body);
-  final neg = s.startsWith('-');
-  switch (mode) {
-    case '+':
-      return neg ? s : '+$s';
-    case '&':
-      return neg ? '($s)' : s;
-    default:
-      return s;
+  if (mode.contains('\$')) {
+    s = switch (s) {
+      '0' => '0',
+      '1' => 'π',
+      '-1' => '-π',
+      _ => '$sπ',
+    }; // 係数に π を付ける（3/2 → 3/2π）
   }
+  final neg = s.startsWith('-');
+  if (mode.contains('+')) return neg ? s : '+$s';
+  if (mode.contains('&')) return neg ? '($s)' : s;
+  return s;
 }
 
 /// 制約 `左 比較 右`（比較は `== != <= >= < >`）をパラメータで評価する。計算できない（NaN）ときは偽。

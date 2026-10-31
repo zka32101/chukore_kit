@@ -1418,6 +1418,340 @@
     }
    ],
    "explanationId": "exp_m1_data_relfreq_001"
+  },
+  {
+   "id": "m1_geo_circle_001",
+   "templateVersion": 1,
+   "unitId": "m1_geo_sector",
+   "type": "expr",
+   "form": "in_terms_of_pi",
+   "difficulty": 0.8,
+   "params": {
+    "r": {
+     "int": [
+      2,
+      40
+     ]
+    }
+   },
+   "display": {
+    "r": "{r}"
+   },
+   "answer": "{$2*r}",
+   "wrong": [
+    {
+     "expr": "{$r}",
+     "tag": "radius_for_circumference"
+    },
+    {
+     "expr": "{$r*r}",
+     "tag": "circumference_area_mixup"
+    }
+   ],
+   "explanationId": "exp_m1_geo_circle_001"
+  },
+  {
+   "id": "m1_geo_circle_002",
+   "templateVersion": 1,
+   "unitId": "m1_geo_sector",
+   "type": "expr",
+   "form": "in_terms_of_pi",
+   "difficulty": 0.75,
+   "params": {
+    "r": {
+     "int": [
+      2,
+      40
+     ]
+    }
+   },
+   "constraints": [
+    "r != 2"
+   ],
+   "display": {
+    "r": "{r}"
+   },
+   "answer": "{$r*r}",
+   "wrong": [
+    {
+     "expr": "{$2*r}",
+     "tag": "circumference_area_mixup"
+    },
+    {
+     "expr": "{$(2*r)^2}",
+     "tag": "diameter_squared"
+    }
+   ],
+   "explanationId": "exp_m1_geo_circle_002"
+  },
+  {
+   "id": "m1_geo_sector_001",
+   "templateVersion": 1,
+   "unitId": "m1_geo_sector",
+   "type": "expr",
+   "form": "in_terms_of_pi",
+   "difficulty": 0.55,
+   "params": {
+    "r": {
+     "int": [
+      2,
+      20
+     ]
+    },
+    "t": {
+     "oneOf": [
+      30,
+      45,
+      60,
+      90,
+      120,
+      135,
+      150,
+      180,
+      270
+     ]
+    }
+   },
+   "display": {
+    "r": "{r}",
+    "t": "{t}"
+   },
+   "answer": "{$2*r*t/360}",
+   "wrong": [
+    {
+     "expr": "{$2*r}",
+     "tag": "ignores_central_angle"
+    },
+    {
+     "expr": "{$r*r*t/360}",
+     "tag": "arc_area_mixup"
+    }
+   ],
+   "explanationId": "exp_m1_geo_sector_001"
+  },
+  {
+   "id": "m1_geo_sector_002",
+   "templateVersion": 1,
+   "unitId": "m1_geo_sector",
+   "type": "expr",
+   "form": "in_terms_of_pi",
+   "difficulty": 0.5,
+   "params": {
+    "r": {
+     "int": [
+      2,
+      20
+     ]
+    },
+    "t": {
+     "oneOf": [
+      30,
+      45,
+      60,
+      90,
+      120,
+      135,
+      150,
+      180,
+      270
+     ]
+    }
+   },
+   "display": {
+    "r": "{r}",
+    "t": "{t}"
+   },
+   "answer": "{$r*r*t/360}",
+   "wrong": [
+    {
+     "expr": "{$r*r}",
+     "tag": "ignores_central_angle"
+    },
+    {
+     "expr": "{$2*r*t/360}",
+     "tag": "arc_area_mixup"
+    }
+   ],
+   "explanationId": "exp_m1_geo_sector_002"
+  },
+  {
+   "id": "m1_space_vol_001",
+   "templateVersion": 1,
+   "unitId": "m1_space_vol",
+   "type": "expr",
+   "form": "in_terms_of_pi",
+   "difficulty": 0.7,
+   "params": {
+    "r": {
+     "int": [
+      2,
+      12
+     ]
+    },
+    "h": {
+     "int": [
+      2,
+      15
+     ]
+    }
+   },
+   "constraints": [
+    "r != 2"
+   ],
+   "display": {
+    "r": "{r}",
+    "h": "{h}"
+   },
+   "answer": "{$r*r*h}",
+   "wrong": [
+    {
+     "expr": "{$r*r*h/3}",
+     "tag": "volume_extra_third"
+    },
+    {
+     "expr": "{$2*r*h}",
+     "tag": "circumference_instead_of_area"
+    }
+   ],
+   "explanationId": "exp_m1_space_vol_001"
+  },
+  {
+   "id": "m1_space_vol_002",
+   "templateVersion": 1,
+   "unitId": "m1_space_vol",
+   "type": "expr",
+   "form": "in_terms_of_pi",
+   "difficulty": 0.6,
+   "params": {
+    "r": {
+     "int": [
+      2,
+      12
+     ]
+    },
+    "h": {
+     "int": [
+      2,
+      15
+     ]
+    }
+   },
+   "display": {
+    "r": "{r}",
+    "h": "{h}"
+   },
+   "answer": "{$r*r*h/3}",
+   "wrong": [
+    {
+     "expr": "{$r*r*h}",
+     "tag": "volume_missing_third"
+    },
+    {
+     "expr": "{$r*h/3}",
+     "tag": "radius_not_squared"
+    }
+   ],
+   "explanationId": "exp_m1_space_vol_002"
+  },
+  {
+   "id": "m1_space_vol_003",
+   "templateVersion": 1,
+   "unitId": "m1_space_vol",
+   "type": "expr",
+   "form": "in_terms_of_pi",
+   "difficulty": 0.5,
+   "params": {
+    "r": {
+     "int": [
+      2,
+      30
+     ]
+    }
+   },
+   "display": {
+    "r": "{r}"
+   },
+   "answer": "{$4*r^3/3}",
+   "wrong": [
+    {
+     "expr": "{$4*r*r}",
+     "tag": "sphere_volume_surface_mixup"
+    },
+    {
+     "expr": "{$r^3/3}",
+     "tag": "sphere_coefficient_missing"
+    }
+   ],
+   "explanationId": "exp_m1_space_vol_003"
+  },
+  {
+   "id": "m1_space_vol_004",
+   "templateVersion": 1,
+   "unitId": "m1_space_vol",
+   "type": "expr",
+   "form": "in_terms_of_pi",
+   "difficulty": 0.55,
+   "params": {
+    "r": {
+     "int": [
+      2,
+      30
+     ]
+    }
+   },
+   "display": {
+    "r": "{r}"
+   },
+   "answer": "{$4*r*r}",
+   "wrong": [
+    {
+     "expr": "{$4*r^3/3}",
+     "tag": "sphere_volume_surface_mixup"
+    },
+    {
+     "expr": "{$2*r*r}",
+     "tag": "sphere_surface_coefficient"
+    }
+   ],
+   "explanationId": "exp_m1_space_vol_004"
+  },
+  {
+   "id": "m1_space_vol_005",
+   "templateVersion": 1,
+   "unitId": "m1_space_vol",
+   "type": "expr",
+   "form": "in_terms_of_pi",
+   "difficulty": 0.5,
+   "params": {
+    "r": {
+     "int": [
+      2,
+      12
+     ]
+    },
+    "h": {
+     "int": [
+      2,
+      15
+     ]
+    }
+   },
+   "display": {
+    "r": "{r}",
+    "h": "{h}"
+   },
+   "answer": "{$2*r*r+2*r*h}",
+   "wrong": [
+    {
+     "expr": "{$2*r*h}",
+     "tag": "base_area_missing"
+    },
+    {
+     "expr": "{$r*r+2*r*h}",
+     "tag": "one_base_only"
+    }
+   ],
+   "explanationId": "exp_m1_space_vol_005"
   }
  ]
 }

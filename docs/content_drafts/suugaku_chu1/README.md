@@ -5,7 +5,7 @@
 
 - `units.json`: 7 分野・21 単元（葉）。`estimatedQuestions` は目安（計 約 380 問）。
 - `prerequisites.json`: 前提関係。小学の前提は誘導リンクだけ（コードは共有しない）。
-- `templates.json`: 問題の型 31 個（`docs/math_variants_design.md`）。問題文の文章はコンテンツ側で持つ（`display` の数式を差し込む）。選択肢の日本語は型に直接書いてある（国別コンテンツのため）。
+- `templates.json`: 問題の型 40 個（`docs/math_variants_design.md`）。問題文の文章はコンテンツ側で持つ（`display` の数式を差し込む）。選択肢の日本語は型に直接書いてある（国別コンテンツのため）。
 
 ## 前提の流れ
 正負の数（大小 → 加減 → 乗除 → 混合）→ 文字式（表し方 → 計算・数量の関係）→ 方程式（等式の性質 + 計算 → 解き方 → 文章題）。比例・反比例は文字式の表し方 → 変数 → 比例／反比例 → グラフ。図形は作図 → 移動／おうぎ形 → 空間図形・体積。
@@ -28,7 +28,7 @@
 | | `volume_missing_third` | 錐体の体積の 1/3 を忘れる |
 
 ## 次にやること
-1. 型を増やす。`templates.json` に 31 型（正負の数・文字式の計算・式の値・数量の関係・等式の性質・一次方程式・座標・比例・反比例・データの活用）を書いた（各 40 変種）。次は図形・空間図形（図の方針は `docs/math_figures_design.md`）。
+1. 型を増やす。`templates.json` に 40 型（正負の数・文字式の計算・式の値・数量の関係・等式の性質・一次方程式・座標・比例・反比例・データの活用・円とおうぎ形・円柱と球）を書いた（各 40 変種）。次は図形・空間図形（図の方針は `docs/math_figures_design.md`）。
    展開: `dart run tool/expand_templates.dart units.json templates.json questions.json`
 2. 選択式・記述式の見本問題（図が要る単元は図の方針を決めてから）。
 3. 体験型（`Exploration`）の見本: 一次関数の傾きと切片、方程式の天秤。

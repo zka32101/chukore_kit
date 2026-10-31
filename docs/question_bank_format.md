@@ -136,6 +136,7 @@ dart run tool/validate_bank.dart units.json questions.json
 | `factored`（積の形） | `2(x+3)`・`(x+1)(x-1)`・`(x+3)^2` | `2x+6`・`2x`・`x^2` |
 | `reduced_fraction`（既約分数。整数もよい） | `1/2`・`-3/4`・`3` | `2/4`・`3/1`・`0.5` |
 | `simplest_radical`（最簡の根号） | `√2`・`3√2`・`5` | `√8`・`2√12`・`1√2` |
+| `in_terms_of_pi`（π で答える） | `12π`・`3/2π`・`3π/2`・`-π` | `37.68`・`π+1`・`2π+3π`・`12/π` |
 - `factored` は「積の形か」だけを見る（これ以上因数分解できないかは見ない）。`simplest_radical` は分母の有理化の形（`√2/2` など）を扱わない。
 - 判定は `judgeExpr(answer, input, form:)`: `correct`／`wrongForm`（値は合っている。画面では「値は合っています。形を整えよう」のように責めずに伝える）／`wrongValue`／`unreadable`。`checkAnswer` は `correct` のときだけ正解。
 - 検証コード: `unknown_form`・`answer_form_mismatch`（正解自体が形を満たさない）はエラー、`form_ignored`（expr 以外で指定）は警告。
