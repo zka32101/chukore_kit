@@ -305,7 +305,7 @@ class MathTemplate {
       for (final k in lists.keys) k: <double>[1, 2, 3],
     };
     void check(String text) {
-      final re = RegExp(r'\{[+&]?([^{}]*)\}');
+      final re = RegExp(r'\{[+&$]*([^{}]*)\}');
       for (final m in re.allMatches(text)) {
         if (RegExp(r'^~?[A-Z]$').hasMatch(m.group(1)!)) continue; // 数列（renderTemplateString の確認で名前を見る）
         final e = MathExpr.tryParse(m.group(1)!);
