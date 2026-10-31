@@ -55,7 +55,9 @@ AnswerResult checkAnswer(
       final ok = got != null && want != null && (got - want).abs() <= tolerance;
       return AnswerResult(ok);
     case 'expr': // 数式: 式として同じ値になれば正解（2x+6 と 2(x+3) は同じ）
-      return AnswerResult(judgeExpr(q.answer, input, form: q.form) == ExprVerdict.correct);
+      final verdict = judgeExpr(q.answer, input, form: q.form);
+      if (verdict == ExprVerdict.correct) return const AnswerResult(true);
+      return AnswerResult(false, misconceptionTag: _exprMisconception(q, input));
     case 'order':
     case 'timeline': // 年表: 古い順に並べたID列
       final got = input.split(',').map((e) => e.trim()).toList();
@@ -103,4 +105,15 @@ AnswerResult _checkMulti(String answer, String input, bool foldKana) {
   }
   final score = want.isEmpty ? 0.0 : ((matched - extra).clamp(0, want.length) / want.length);
   return AnswerResult(matched == want.length && extra == 0, score: score);
+}
+
+/// `expr` の誤答の誤解の型。`misconceptionTags` のキー（式）のうち、入力と同じ値になる最初のもののタグ。
+String? _exprMisconception(Question q, String input) {
+  final got = MathExpr.tryParse(input);
+  if (got == null) return null;
+  for (final e in q.misconceptionTags.entries) {
+    final k = MathExpr.tryParse(e.key);
+    if (k != null && MathExpr.equivalent(got, k)) return e.value;
+  }
+  return null;
 }

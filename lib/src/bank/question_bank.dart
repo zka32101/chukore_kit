@@ -238,7 +238,28 @@ List<ValidationIssue> validateQuestionBank({
         }
     }
 
-    if (q.misconceptionTags.isNotEmpty) {
+    if (q.misconceptionTags.isNotEmpty && q.type == 'expr') {
+      // 数式: キーは誤答の式。正解と同じ値・キーどうしが同じ値は誤り
+      final ans = MathExpr.tryParse(q.answer);
+      final seen = <MathExpr>[];
+      for (final e in q.misconceptionTags.entries) {
+        final k = MathExpr.tryParse(e.key);
+        if (k == null) {
+          err('tag_expr_invalid', q.id, '誤解の型の付いた式が読めません: ${e.key}');
+        } else {
+          if (ans != null && MathExpr.equivalent(k, ans)) {
+            err('tag_on_answer', q.id, '正解と同じ値の式に誤解の型 ${e.value} が付いています: ${e.key}');
+          }
+          if (seen.any((o) => MathExpr.equivalent(o, k))) {
+            err('tag_expr_duplicate', q.id, '同じ値の式に誤解の型が重ねて付いています: ${e.key}');
+          }
+          seen.add(k);
+        }
+        if (!_tagPattern.hasMatch(e.value)) {
+          err('tag_format', q.id, '誤解の型は小文字・数字・アンダースコア: ${e.value}');
+        }
+      }
+    } else if (q.misconceptionTags.isNotEmpty) {
       if (q.type != 'choice' && q.type != 'map') {
         warn('tags_ignored', q.id, '${q.type} では誤解の型は使われません');
       }
