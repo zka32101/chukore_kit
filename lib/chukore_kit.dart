@@ -48,6 +48,7 @@ export 'src/nudge/nudge.dart';
 export 'src/session/break_suggestion.dart';
 export 'src/session/today_card.dart';
 export 'src/session/daily_home.dart';
+export 'src/session/learning_step.dart';
 export 'src/nudge/nudge_hour.dart';
 export 'src/practice/question_picker.dart';
 export 'src/practice/timed_practice.dart';
