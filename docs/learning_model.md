@@ -125,7 +125,7 @@
 6. **途中式の判定（数学の段 6）を先に実装する**（案）。レッスンの例題の途中式の検証に使うので、順序は ⑥ → レッスン。
 
 ## 9. 実装の順（案）
-1. 途中式の判定（数学の段 6。例題の検証に使う）。
+1. 途中式の判定（数学の段 6。例題の検証に使う）。**実装済み**（`checkSolutionSteps`。`docs/math_foundation.md` §10）。
 2. `Lesson`・`LessonSet`・`validateLessons`（形式と参照・例題の検証）。数学の一次方程式のレッスンの見本。
 3. `LessonProgress`・事前／事後の確認・`Attempt` の `lesson_check`。
 4. `nextLearningStep`（`buildDailyHome` に組み込む）。
