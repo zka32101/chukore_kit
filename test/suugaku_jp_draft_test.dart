@@ -25,7 +25,12 @@ void main() {
     const dir = 'docs/content_drafts/suugaku_chu1';
     final tree = UnitTree.fromJson(jsonDecode(File('$dir/units.json').readAsStringSync()) as Map<String, dynamic>);
     final set = TemplateSet.parse(File('$dir/templates.json').readAsStringSync());
-    final issues = validateTemplates(set, tree: tree).where((i) => i.code != 'unit_empty');
+    // 答えの取りうる値が少ない型（最頻値は 1〜6、階級の度数は 0〜数個）は、答えの種類が少ないのが性質
+    const fewAnswers = {'m1_data_mode_001', 'm1_data_class_001'};
+    final issues = validateTemplates(
+      set,
+      tree: tree,
+    ).where((i) => i.code != 'unit_empty' && !(i.code == 'template_answer_dup' && fewAnswers.contains(i.subjectId)));
     expect(issues, isEmpty, reason: issues.join('\n'));
     for (final v in set.expand()) {
       final q = v.question;

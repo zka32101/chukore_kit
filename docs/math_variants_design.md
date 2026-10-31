@@ -92,3 +92,6 @@
 3. `MathTemplate` の読み込みと `generate`
 4. `expandTemplates` と検証、`tool/expand_templates.dart`
 5. 出題器との結線の例（`example/`）、ドキュメント
+
+## 11. 数列とデータの集計（追加）
+`params` に英大文字 1 字の数列、`stats` に集計を書ける。詳細は [`math_figures_design.md`](math_figures_design.md) §5C。引き直しの条件に「最頻値が複数」も入る。

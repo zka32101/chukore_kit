@@ -30,6 +30,7 @@ Map<String, dynamic> base([Map<String, dynamic> over = const {}]) => {
 MathTemplate tpl([Map<String, dynamic> over = const {}]) => MathTemplate.fromJson(base(over));
 
 void main() {
+  dataTests();
   group('サンプル（docs/samples）', () {
     test('検証エラー・警告なし。展開した問題集も通常の検証を通る', () {
       final issues = validateTemplates(sample, tree: tree);
@@ -390,6 +391,273 @@ void main() {
           }),
         ),
         contains('answer_form_mismatch'),
+      );
+    });
+  });
+}
+
+void dataTests() {
+  Map<String, dynamic> dbase([Map<String, dynamic> over = const {}]) => {
+    'id': 'd1',
+    'templateVersion': 1,
+    'unitId': 'm1_data_rep',
+    'type': 'expr',
+    'difficulty': 0.5,
+    'params': {
+      'L': {
+        'list': {
+          'n': [5, 9],
+          'int': [1, 20],
+        },
+      },
+    },
+    'stats': {'m': 'mean(L)'},
+    'display': {'data': '{L}'},
+    'answer': '{m}',
+    'explanationId': 'e',
+    ...over,
+  };
+  MathTemplate dt([Map<String, dynamic> over = const {}]) => MathTemplate.fromJson(dbase(over));
+
+  group('データ（数列と集計）', () {
+    test('数列は種で決まり、個数・値の範囲に収まる。表示は {L}', () {
+      final t = dt();
+      for (var s = 1; s <= 40; s++) {
+        final v = t.generate(s);
+        final l = v.lists['L']!;
+        expect(l.length, inInclusiveRange(5, 9));
+        expect(l.every((x) => x >= 1 && x <= 20 && x == x.roundToDouble()), isTrue);
+        expect(v.display['data'], l.map((x) => x.toInt()).join(', '));
+        expect(v.params['m'], closeTo(l.reduce((a, b) => a + b) / l.length, 1e-9));
+        expect(checkAnswer(v.question, v.question.answer).correct, isTrue);
+      }
+      expect(t.generate(3).lists, t.generate(3).lists);
+      expect({for (var s = 1; s <= 20; s++) t.generate(s).display['data']}.length, greaterThan(15));
+    });
+
+    test('集計関数の値（偶数個の中央値は中央 2 つの平均、count は lo 以上 hi 未満）', () {
+      // 数列を固定するため、個数 1 つ・値 1 つの範囲で作る
+      MathTemplate fixed(String stat, {List<int> vals = const [3, 8, 5, 8, 1]}) => dt({
+        'params': {
+          'L': {
+            'list': {
+              'n': [vals.length, vals.length],
+              'int': [1, 1],
+            },
+          },
+        },
+        'stats': {'m': stat},
+      });
+      // 乱数で決まるので、関数の値は _evalStat と同じ定義を使う別の経路（Variant の lists）から検算する
+      for (var s = 1; s <= 30; s++) {
+        final t = dt({
+          'stats': {
+            'a': 'sum(L)',
+            'b': 'median(L)',
+            'c': 'range(L)',
+            'd': 'min(L)',
+            'e': 'max(L)',
+            'f': 'count(L)',
+            'g': 'count(L, 5, 12)',
+          },
+          'derived': {'m': 'a'},
+        });
+        final v = t.generate(s);
+        final l = [...v.lists['L']!]..sort();
+        final n = l.length;
+        expect(v.params['a'], l.reduce((a, b) => a + b));
+        expect(v.params['b'], n.isOdd ? l[n ~/ 2] : (l[n ~/ 2 - 1] + l[n ~/ 2]) / 2);
+        expect(v.params['c'], l.last - l.first);
+        expect(v.params['d'], l.first);
+        expect(v.params['e'], l.last);
+        expect(v.params['f'], n);
+        expect(v.params['g'], l.where((x) => x >= 5 && x < 12).length);
+      }
+      expect(fixed('mean(L)').generate(1).params['m'], 1.0);
+    });
+
+    test('mode は最頻値が 1 つのときだけ（同数が複数なら引き直す）。count の引数はパラメータ名も使える', () {
+      final t = dt({
+        'params': {
+          'L': {
+            'list': {
+              'n': [9, 14],
+              'int': [1, 6],
+            },
+          },
+          'p': {
+            'int': [2, 4],
+          },
+        },
+        'stats': {'m': 'mode(L)', 'k': 'count(L, p, 7)'},
+      });
+      for (var s = 1; s <= 40; s++) {
+        final v = t.generate(s);
+        final counts = <double, int>{};
+        for (final x in v.lists['L']!) {
+          counts[x] = (counts[x] ?? 0) + 1;
+        }
+        final top = counts.values.reduce((a, b) => a > b ? a : b);
+        final modes = counts.entries.where((e) => e.value == top).map((e) => e.key).toList();
+        expect(modes, [v.params['m']]);
+        expect(v.params['k'], v.lists['L']!.where((x) => x >= v.params['p']!).length);
+      }
+    });
+
+    test('最頻値が決まらない型（毎回同数）は StateError', () {
+      // 値が 1 か 2 で個数 2 → 同数のことが多いが、必ずではない。値の範囲 1..1000 で個数 2 なら毎回同数
+      final t = dt({
+        'params': {
+          'L': {
+            'list': {
+              'n': [2, 2],
+              'int': [1, 1000],
+            },
+          },
+        },
+        'stats': {'m': 'mode(L)'},
+      });
+      var failed = 0;
+      for (var s = 1; s <= 10; s++) {
+        try {
+          t.generate(s);
+        } on StateError {
+          failed++;
+        }
+      }
+      expect(failed, greaterThan(5));
+    });
+
+    test('式の中で stats の値を使える。制約で絞れる', () {
+      final t = dt({
+        'stats': {'m': 'mean(L)', 'n': 'count(L)'},
+        'constraints': ['n >= 8'],
+        'answer': '{m*n}',
+      });
+      for (var s = 1; s <= 30; s++) {
+        final v = t.generate(s);
+        expect(v.lists['L']!.length, greaterThanOrEqualTo(8));
+        expect(v.question.answer, formatExact(v.lists['L']!.reduce((a, b) => a + b)));
+      }
+    });
+
+    test('書き間違いは FormatException', () {
+      final bad = <Map<String, dynamic>>[
+        {
+          'params': {
+            'l': {
+              'list': {
+                'n': [5, 9],
+                'int': [1, 20],
+              },
+            },
+          },
+        }, // 小文字は数列にならない（スカラー）
+        {
+          'params': {
+            'L': {
+              'list': {
+                'n': [0, 9],
+                'int': [1, 20],
+              },
+            },
+          },
+        },
+        {
+          'params': {
+            'L': {
+              'list': {
+                'n': [5, 999],
+                'int': [1, 20],
+              },
+            },
+          },
+        },
+        {
+          'params': {
+            'L': {
+              'list': {
+                'n': [9, 5],
+                'int': [1, 20],
+              },
+            },
+          },
+        },
+        {
+          'params': {
+            'L': {
+              'list': {
+                'n': [5, 9],
+                'int': [20, 1],
+              },
+            },
+          },
+        },
+        {
+          'params': {
+            'L': {
+              'list': {
+                'n': [5, 9],
+              },
+            },
+          },
+        },
+        {
+          'params': {
+            'L': {
+              'int': [1, 20],
+            },
+          },
+        },
+        {
+          'stats': {'m': 'average(L)'},
+        },
+        {
+          'stats': {'m': 'mean(M)'},
+        },
+        {
+          'stats': {'m': 'mean(L, 1)'},
+        },
+        {
+          'stats': {'m': 'count(L, 1)'},
+        },
+        {
+          'stats': {'m': 'count(L, 1, z)'},
+        },
+        {
+          'stats': {'m': 'mean L'},
+        },
+        {
+          'stats': {'mm': 'mean(L)'},
+        },
+        {
+          'stats': {'x': 'mean(L)'},
+        },
+        {
+          'display': {'data': '{M}'},
+        },
+        {
+          'derived': {'m': '1'},
+        }, // stats と名前が重なる
+        {'answer': '{z}'},
+      ];
+      for (final o in bad) {
+        expect(() => dt(o), throwsFormatException, reason: o.toString());
+      }
+      // stats があるのに数列がない
+      expect(
+        () => MathTemplate.fromJson({
+          ...dbase(),
+          'params': {
+            'a': {
+              'int': [1, 2],
+            },
+          },
+          'stats': {'m': 'mean(L)'},
+          'display': {'x': '{a}'},
+          'answer': '{a}',
+        }),
+        throwsFormatException,
       );
     });
   });

@@ -36,15 +36,114 @@ class ParamSpec {
   double draw(SeededRandom r) => options != null ? r.pick(options!) : r.nextInt(lo, hi).toDouble();
 }
 
+/// 数列のパラメータ（データの活用）。個数 `n` と各値の範囲を種から決める。名前は英大文字 1 字。
+class ListSpec {
+  const ListSpec._(this.nLo, this.nHi, this.lo, this.hi);
+
+  final int nLo, nHi, lo, hi;
+
+  factory ListSpec.fromJson(String name, Object? j) {
+    if (!RegExp(r'^[A-Z]$').hasMatch(name)) throw FormatException('数列の名前は英大文字 1 字: $name');
+    final spec = j is Map && j.length == 1 ? j['list'] : null;
+    if (spec is! Map || spec.length != 2) {
+      throw FormatException('数列 $name は {"list": {"n": [下限, 上限], "int": [下限, 上限]}}');
+    }
+    List<int> range(String k) {
+      final r = spec[k];
+      if (r is! List || r.length != 2 || r.any((e) => e is! int) || (r[0] as int) > (r[1] as int)) {
+        throw FormatException('$name の $k は [下限, 上限]（整数）');
+      }
+      return [r[0] as int, r[1] as int];
+    }
+
+    final n = range('n'), v = range('int');
+    if (n[0] < 1 || n[1] > 200) throw FormatException('$name の個数は 1〜200');
+    return ListSpec._(n[0], n[1], v[0], v[1]);
+  }
+
+  List<double> draw(SeededRandom r) {
+    final n = r.nextInt(nLo, nHi);
+    return [for (var i = 0; i < n; i++) r.nextInt(lo, hi).toDouble()];
+  }
+}
+
+const _statFunctions = {'sum', 'mean', 'median', 'mode', 'range', 'min', 'max', 'count'};
+
+/// `stats` の式（`mean(L)`・`count(L)`・`count(L, 10, 20)` など）。数列の名前と、引数の数・パラメータ名を調べる。
+({String fn, String list, List<String> args}) _parseStat(String spec, Set<String> lists, Set<String> scalars) {
+  final m = RegExp(r'^\s*([a-z]+)\(\s*([A-Z])\s*((?:,[^,()]*)*)\)\s*$').firstMatch(spec);
+  if (m == null) throw FormatException('stats の式は 関数名(数列, …): $spec');
+  final fn = m.group(1)!, list = m.group(2)!;
+  if (!_statFunctions.contains(fn)) throw FormatException('未対応の関数 $fn（${_statFunctions.join('・')}）: $spec');
+  if (!lists.contains(list)) throw FormatException('数列にない名前です: $list（$spec）');
+  final args = [for (final a in m.group(3)!.split(',').skip(1)) a.trim()];
+  final want = fn == 'count' ? const [0, 2] : const [0];
+  if (!want.contains(args.length)) throw FormatException('$fn の引数の数が違います: $spec');
+  for (final a in args) {
+    if (double.tryParse(a) == null && !scalars.contains(a)) throw FormatException('引数は数かパラメータ名: $a（$spec）');
+  }
+  return (fn: fn, list: list, args: args);
+}
+
+/// 集計。最頻値が複数のときは NaN（数列は 1 個以上なので空にはならない）。`count(L, lo, hi)` は lo 以上 hi 未満の個数。
+double _evalStat(
+  ({String fn, String list, List<String> args}) s,
+  Map<String, List<double>> lists,
+  Map<String, double> v,
+) {
+  final d = lists[s.list]!;
+  double arg(String a) => double.tryParse(a) ?? v[a]!;
+  final sorted = [...d]..sort();
+  switch (s.fn) {
+    case 'sum':
+      return d.reduce((a, b) => a + b);
+    case 'mean':
+      return d.reduce((a, b) => a + b) / d.length;
+    case 'median':
+      final n = sorted.length;
+      return n.isOdd ? sorted[n ~/ 2] : (sorted[n ~/ 2 - 1] + sorted[n ~/ 2]) / 2;
+    case 'mode':
+      final counts = <double, int>{};
+      for (final x in d) {
+        counts[x] = (counts[x] ?? 0) + 1;
+      }
+      final top = counts.values.reduce((a, b) => a > b ? a : b);
+      final modes = [
+        for (final e in counts.entries)
+          if (e.value == top) e.key,
+      ];
+      return modes.length == 1 ? modes.first : double.nan;
+    case 'range':
+      return sorted.last - sorted.first;
+    case 'min':
+      return sorted.first;
+    case 'max':
+      return sorted.last;
+    default: // count
+      if (s.args.isEmpty) return d.length.toDouble();
+      final lo = arg(s.args[0]), hi = arg(s.args[1]);
+      return d.where((x) => x >= lo && x < hi).length.toDouble();
+  }
+}
+
 /// 型から作った 1 つの変種。
 class Variant {
-  const Variant({required this.question, required this.seed, required this.params, required this.display});
+  const Variant({
+    required this.question,
+    required this.seed,
+    required this.params,
+    required this.display,
+    this.lists = const {},
+  });
 
   /// 出題・判定に使う問題（ID は `{templateId}~{seed}`）。
   final Question question;
   final int seed;
 
-  /// 引いたパラメータと、`derived` で計算した値。
+  /// 引いた数列（データの活用の型。画面が表・ヒストグラムを描くのに使う）。
+  final Map<String, List<double>> lists;
+
+  /// 引いたパラメータと、`stats`・`derived` で計算した値。
   final Map<String, double> params;
 
   /// 画面に出す数式の文字列（型の `display` を差し込んだもの）。問題文の文章はコンテンツ側が持つ。
@@ -69,6 +168,8 @@ class MathTemplate {
     required this.form,
     required this.difficulty,
     required this.params,
+    required this.lists,
+    required this.stats,
     required this.derived,
     required this.constraints,
     required this.display,
@@ -85,6 +186,10 @@ class MathTemplate {
   final String? form;
   final double difficulty;
   final Map<String, ParamSpec> params;
+  final Map<String, ListSpec> lists;
+
+  /// 数列から求める値（名前は英小文字 1 字 → `mean(L)` など）。
+  final Map<String, String> stats;
   final Map<String, String> derived;
   final List<String> constraints;
   final Map<String, String> display;
@@ -96,7 +201,7 @@ class MathTemplate {
   static const maxAttempts = 50;
   static final _tag = RegExp(r'^[a-z0-9_]+$');
   static const _keys = {
-    'id', 'templateVersion', 'unitId', 'type', 'form', 'difficulty', 'params', 'derived', 'constraints', //
+    'id', 'templateVersion', 'unitId', 'type', 'form', 'difficulty', 'params', 'stats', 'derived', 'constraints', //
     'display', 'answer', 'choices', 'wrong', 'explanationId',
   };
 
@@ -124,7 +229,15 @@ class MathTemplate {
     if (diff is! num || diff < 0 || diff > 1) throw FormatException('$id: difficulty は 0〜1');
     final rawParams = j['params'];
     if (rawParams is! Map || rawParams.isEmpty) throw FormatException('$id: params が必要です');
-    final params = {for (final e in rawParams.entries) e.key as String: ParamSpec.fromJson(e.key as String, e.value)};
+    final params = {
+      for (final e in rawParams.entries)
+        if (!RegExp(r'^[A-Z]$').hasMatch(e.key as String))
+          e.key as String: ParamSpec.fromJson(e.key as String, e.value),
+    };
+    final lists = {
+      for (final e in rawParams.entries)
+        if (RegExp(r'^[A-Z]$').hasMatch(e.key as String)) e.key as String: ListSpec.fromJson(e.key as String, e.value),
+    };
 
     Map<String, String> strMap(String k, {bool required = false}) {
       final v = j[k];
@@ -138,9 +251,18 @@ class MathTemplate {
       return {for (final e in v.entries) e.key as String: e.value as String};
     }
 
+    final stats = strMap('stats');
+    for (final e in stats.entries) {
+      if (params.containsKey(e.key) || !RegExp(r'^[a-wyz]$').hasMatch(e.key)) {
+        throw FormatException('$id: stats の名前が不正: ${e.key}');
+      }
+      _parseStat(e.value, lists.keys.toSet(), params.keys.toSet());
+    }
     final derived = strMap('derived');
     for (final n in derived.keys) {
-      if (params.containsKey(n) || !RegExp(r'^[a-wyz]$').hasMatch(n)) throw FormatException('$id: derived の名前が不正: $n');
+      if (params.containsKey(n) || stats.containsKey(n) || !RegExp(r'^[a-wyz]$').hasMatch(n)) {
+        throw FormatException('$id: derived の名前が不正: $n');
+      }
     }
     final constraints = [for (final c in (j['constraints'] as List? ?? const [])) c as String];
     final choices = [for (final c in (j['choices'] as List? ?? const [])) c as String];
@@ -162,6 +284,8 @@ class MathTemplate {
       form: form as String?,
       difficulty: diff.toDouble(),
       params: params,
+      lists: lists,
+      stats: stats,
       derived: derived,
       constraints: constraints,
       display: strMap('display', required: true),
@@ -176,17 +300,21 @@ class MathTemplate {
 
   /// 型の書き間違いを、乱数を使わずに見つける（式の文字、比較の有無）。
   void _precheck() {
-    final known = {...params.keys, ...derived.keys};
+    final known = {...params.keys, ...stats.keys, ...derived.keys};
+    final fakeLists = {
+      for (final k in lists.keys) k: <double>[1, 2, 3],
+    };
     void check(String text) {
       final re = RegExp(r'\{[+&]?([^{}]*)\}');
       for (final m in re.allMatches(text)) {
+        if (RegExp(r'^~?[A-Z]$').hasMatch(m.group(1)!)) continue; // 数列（renderTemplateString の確認で名前を見る）
         final e = MathExpr.tryParse(m.group(1)!);
         if (e == null) throw FormatException('$id: {…} の式が読めません: ${m.group(0)}');
         final bad = e.variables.where((v) => !known.contains(v));
         if (bad.isNotEmpty) throw FormatException('$id: パラメータにない文字 ${bad.join()}: ${m.group(0)}');
       }
       try {
-        renderTemplateString(text, {for (final k in known) k: 1.0}); // { と } の対応
+        renderTemplateString(text, {for (final k in known) k: 1.0}, lists: fakeLists); // { と } の対応
       } on InexactValueException {
         // 値は実際のパラメータで決まるので、ここでは書式だけ見る
       }
@@ -211,13 +339,17 @@ class MathTemplate {
     final rng = SeededRandom(seed);
     for (var attempt = 0; attempt < maxAttempts; attempt++) {
       final values = <String, double>{for (final e in params.entries) e.key: e.value.draw(rng)};
+      final drawn = <String, List<double>>{for (final e in lists.entries) e.key: e.value.draw(rng)};
+      for (final e in stats.entries) {
+        values[e.key] = _evalStat(_parseStat(e.value, lists.keys.toSet(), params.keys.toSet()), drawn, values);
+      }
       for (final e in derived.entries) {
         values[e.key] = MathExpr.parse(e.value).eval(values);
       }
       if (values.values.any((v) => v.isNaN || v.isInfinite)) continue;
       if (!constraints.every((c) => evalConstraint(c, values))) continue;
       try {
-        final v = _build(seed, values, rng);
+        final v = _build(seed, values, drawn, rng);
         if (v != null) return v;
       } on InexactValueException {
         continue;
@@ -226,8 +358,8 @@ class MathTemplate {
     throw StateError('template_unsatisfiable: $id（$maxAttempts 回引き直しても条件に合いません）');
   }
 
-  Variant? _build(int seed, Map<String, double> values, SeededRandom rng) {
-    String r(String t) => renderTemplateString(t, values);
+  Variant? _build(int seed, Map<String, double> values, Map<String, List<double>> drawn, SeededRandom rng) {
+    String r(String t) => renderTemplateString(t, values, lists: drawn);
     final disp = {for (final e in display.entries) e.key: r(e.value)};
     final ans = r(answer);
     final tags = <String, String>{};
@@ -283,6 +415,7 @@ class MathTemplate {
       ),
       seed: seed,
       params: Map.unmodifiable(values),
+      lists: {for (final e in drawn.entries) e.key: List.unmodifiable(e.value)},
       display: Map.unmodifiable(disp),
     );
   }
