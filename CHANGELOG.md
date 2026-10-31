@@ -4,6 +4,8 @@
 
 ## [未リリース]
 
+- 変種生成の部品: `SeededRandom`（xorshift32。端末・Web で同じ列）、`renderTemplateString`（`{e}`・`{+e}`・`{&e}` の差し込み）・`evalConstraint`・`formatExact`（整数・既約分数）。`expr` の誤答の誤解の型（`misconceptionTags` のキーに誤答の式を書く。検証 `tag_expr_invalid`・`tag_expr_duplicate`）
+
 - docs: 数学の問題の変種生成 `MathTemplate` の設計（`docs/math_variants_design.md`。未実装）
 
 - 数式の答えの形の指定 `Question.form`（`expanded`・`factored`・`reduced_fraction`・`simplest_radical`）と `judgeExpr`・`ExprVerdict`・`MathExpr.hasForm`。値は合うが形が違う答えを区別。検証 `unknown_form`・`answer_form_mismatch`・`form_ignored`

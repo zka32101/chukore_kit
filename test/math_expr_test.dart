@@ -15,6 +15,7 @@ Question q(String answer) => Question(
 
 void main() {
   formTests();
+  exprTagTests();
   group('読み取り', () {
     test('優先順位・右結合・単項マイナス', () {
       double v(String s, [Map<String, double> m = const {}]) => MathExpr.parse(s).eval(m);
@@ -209,6 +210,59 @@ void formTests() {
       expect(codes(mk('expr', '2(x+3)', 'expanded')), contains('answer_form_mismatch'));
       expect(codes(mk('expr', '2/4', 'reduced_fraction')), contains('answer_form_mismatch'));
       expect(codes(mk('choice', 'a', 'expanded')), contains('form_ignored'));
+    });
+  });
+}
+
+void exprTagTests() {
+  Question qt(Map<String, String> tags, {String answer = '2x+6', String? form}) => Question(
+    id: 'q',
+    unitId: 'u',
+    type: 'expr',
+    difficulty: 0.5,
+    choices: const [],
+    answer: answer,
+    explanationId: 'e',
+    misconceptionTags: tags,
+    form: form,
+  );
+
+  group('expr の誤答の誤解の型', () {
+    final tags = {'2x+3': 'distribute_first_only', 'x+9': 'add_instead_of_multiply'};
+    test('入力と同じ値の式のタグを返す（書き方が違っても）', () {
+      expect(checkAnswer(qt(tags), '2x+3').misconceptionTag, 'distribute_first_only');
+      expect(checkAnswer(qt(tags), '3+2*x').misconceptionTag, 'distribute_first_only');
+      expect(checkAnswer(qt(tags), 'x + 9').misconceptionTag, 'add_instead_of_multiply');
+    });
+    test('どれにも当たらない・読めない・正解のときはタグなし', () {
+      expect(checkAnswer(qt(tags), 'x').misconceptionTag, isNull);
+      expect(checkAnswer(qt(tags), '2x+').misconceptionTag, isNull);
+      final ok = checkAnswer(qt(tags), '2(x+3)');
+      expect(ok.correct, isTrue);
+      expect(ok.misconceptionTag, isNull);
+    });
+    test('形の指定に外れた答えは、タグではなく不正解のみ', () {
+      final r = checkAnswer(qt(tags, form: 'expanded'), '2(x+3)');
+      expect(r.correct, isFalse);
+      expect(r.misconceptionTag, isNull);
+    });
+    test('検証: 読めない式・正解と同じ値・同じ値の重複・タグの書式', () {
+      final tree = UnitTree(1, [Unit(id: 'u', subject: 'math', grade: 1, title: 'u', estimatedQuestions: 5)]);
+      List<String> codes(Question x) => validateQuestionBank(questions: [x], tree: tree).map((i) => i.code).toList();
+      expect(codes(qt(tags)), isEmpty);
+      expect(codes(qt({'2x+': 'a_b'})), contains('tag_expr_invalid'));
+      expect(codes(qt({'2(x+3)': 'a_b'})), contains('tag_on_answer'));
+      expect(codes(qt({'2x+3': 'a_b', '3+2x': 'c_d'})), contains('tag_expr_duplicate'));
+      final dup = validateQuestionBank(
+        questions: [
+          qt({'2x+3': 'a_b', '3+2x': 'c_d'}),
+        ],
+        tree: tree,
+      );
+      expect(dup.every((i) => i.isError), isTrue);
+      expect(codes(qt({'2x+3': 'Bad Tag'})), contains('tag_format'));
+      expect(codes(qt(tags)), isNot(contains('tag_choice_missing')));
+      expect(codes(qt(tags)), isNot(contains('tags_ignored')));
     });
   });
 }
