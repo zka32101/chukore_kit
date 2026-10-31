@@ -147,3 +147,6 @@ dart run tool/validate_bank.dart units.json questions.json
 dart run tool/expand_templates.dart units.json templates.json [questions.json] [変種の数]
 ```
 変種の問題 ID は `{型のid}~{種}`（`parseVariantId` で分ける）。型の内容を変えたら `templateVersion` を上げる。
+
+## 体験型の教材（`explorations.json`）
+スライダーで式のパラメータを動かして確かめる教材。形式と判定は [`math_foundation.md`](math_foundation.md) §4、見本は `docs/samples/explorations.sample.json`。問題集とは別のファイルで、回答履歴には残さない。

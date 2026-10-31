@@ -15,7 +15,7 @@
 | 2 | 形の指定（`form`: 展開済み／因数分解済み／既約分数／最簡の根号）。`2(x+3)` を「展開しなさい」で通さない。`judgeExpr` が値は合うが形が違う（`wrongForm`）を区別 | **実装済み** |
 | 3 | 問題の変種生成 `MathTemplate`（係数を種で変える。同じ種なら同じ問題。答えは式から機械計算）。暗記でなく型を解く。設計は [`math_variants_design.md`](math_variants_design.md) | **実装済み**（`MathTemplate`・`TemplateSet`・`validateTemplates`・`tool/expand_templates.dart`。見本は `docs/samples/templates.sample.json`） |
 | 4 | 検算ツール（別ツールで SymPy 等。`tool/` ではなくコンテンツ側のテスト） | 未 |
-| 5 | 体験の仕様 `Exploration`（下記 §4） | 未 |
+| 5 | 体験の仕様 `Exploration`（下記 §4）。スライダーで式のパラメータを動かすグラフ教材（`slider_graph`）。グラフの点の計算・予想の答え合わせ・目標の達成判定・目標に届くかの検証。見本は `docs/samples/explorations.sample.json` | **実装済み**（画面はアプリ側） |
 | 6 | 途中式の1行ずつ判定（直前の行と同値か。最初に崩れた行を示す＝「どこで間違えたか」） | 未 |
 
 ## 3. 暗記にしない工夫（問題の設計）
@@ -28,18 +28,21 @@
 7. **間隔反復**: 既存の復習（型ごとに復習の期限）。
 
 ## 4. 体験型（Exploration）
-基盤は**仕様（データ）と判定**だけ持ち、操作は画面側が実装する。
+基盤は**仕様（データ）と判定**だけ持ち、操作（スライダー・グラフの描画）は画面側が実装する。実装済みの種類は `slider_graph`（式のパラメータを動かして、グラフの変化を確かめる）。天秤などは種類を足して対応する。
 
 ```json
-{"id": "ex_linear_slope", "unitId": "m1_linear", "kind": "slider_graph",
- "expr": "a*x+b", "params": [{"name": "a", "min": -3, "max": 3, "step": 0.5}, {"name": "b", "min": -5, "max": 5, "step": 1}],
- "predict": {"prompt": "a を大きくすると？", "choices": ["傾きが急になる", "上に平行移動する", "変わらない"], "answer": "傾きが急になる"},
- "goal": {"expr": "2*x+1"}}
+{"id": "ex_linear_ab", "version": 1, "unitId": "m1_func_graph", "kind": "slider_graph", "promptId": "ex_linear_ab_prompt",
+ "expr": "a*x+b",
+ "params": [{"name": "a", "min": -3, "max": 3, "step": 0.5, "initial": 0}, {"name": "b", "min": -5, "max": 5, "step": 1, "initial": 0}],
+ "predict": {"promptId": "…", "choices": ["steeper", "shift_up", "same"], "answer": "steeper"},
+ "goal": {"expr": "2*x+1"}, "explanationId": "exp_ex_linear_ab"}
 ```
-- **予想 → 動かして確かめる → 言葉にする**の順（予想が外れた時こそ学ぶ。責めない）。
-- ゴール型: 「このグラフに合わせよう」（目標の式と同値なら達成。`MathExpr.equivalent` を使う）。
-- 例: 比例・一次関数（傾きと切片）、正負の数（数直線で動かす）、方程式（天秤）、図形（角度・面積のスライダー）、確率（コインを何回も振る）。
-- 体験は**習熟度に直接加点しない**（遊びで水増ししない）。体験後の確認問題（`expr`／選択）で測る。
+- **予想 → 動かして確かめる → 言葉にする**の順（予想が外れた時こそ学ぶ。責めない）。`predict` の選択肢は ID で、文言はコンテンツ側。`checkPrediction(id)`。
+- **ゴール型**: 「このグラフに合わせよう」。`goalReached(values)` は、パラメータを格子に合わせた式が目標と同じ関数かを `MathExpr.equivalent` で判定する（書き方によらない）。
+- 画面向け: `initialValues`、`normalize`（スライダーの値を格子に合わせる）、`sample`（グラフの点。定義できない点・桁あふれは y が NaN で、描かない点として扱う）。
+- 検証 `validateExplorations`: `exploration_unit_missing`・`exploration_goal_unreachable`（格子のどの組でも目標にならない）・`exploration_initial_is_goal`（最初から達成）。`goalSolutions` は目標を満たす組を返し、ヒントにも使える。
+- 例: 比例・一次関数（傾きと切片）、反比例。今後: 正負の数（数直線）、方程式（天秤）、図形（角度・面積）、確率（コインを何回も振る）。
+- 体験は**習熟度に直接加点しない**（遊びで水増ししない。回答履歴 `Attempt` にも残さない）。体験後の確認問題（`expr`／選択）で測る。
 
 ## 5. 海外展開での違い
 - 数式の記号と式の判定はそのまま（`expr`）。小数点がカンマの国は `decimalSeparator`（数値入力）に対応済み。
