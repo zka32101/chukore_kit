@@ -7,6 +7,7 @@ import '../practice/eve_guard.dart';
 import '../practice/question_picker.dart';
 import '../practice/timed_practice.dart';
 import '../time/study_time.dart';
+import 'learning_step.dart';
 import 'today_card.dart';
 
 /// 「今日」の入口。画面に出す内容を 1 回で求めた結果。
@@ -20,6 +21,7 @@ class DailyHome {
     required this.hasPlanToday,
     required this.guard,
     required this.scorePrompt,
+    this.learningStep,
   });
 
   /// 今日の見出しと一言（休憩・前日/当日・山場の予告・復習の期限・学習済みか）。
@@ -46,6 +48,9 @@ class DailyHome {
   /// 今日、点を聞くか（聞かないなら null）。聞いたら `ScorePromptState.markPrompted` で記録すること。
   final ScorePrompt? scorePrompt;
 
+  /// 今日の次の 1 手（レッスン・体験・練習・復習・テスト）。材料 `learning` を渡したときだけ（渡さなければ null）。
+  final LearningStep? learningStep;
+
   /// 予算に収まっているか（時間を指定しなければ常に真）。
   bool get fits => budgetSeconds == null || estimatedSeconds <= budgetSeconds!;
 }
@@ -58,6 +63,7 @@ class DailyHome {
 /// 3. `interleaveByUnit`: 同じ単元が続かないよう混ぜる
 /// 4. 前日・当日なら `guardLastDays`: 新しい問題を外し、上限を設ける
 /// 5. `KitTuning.scorePrompt`: 点を聞くか（テスト後に 1 回だけ。[testDates] を省くと [testDate] を使う）
+/// 6. [learning] を渡せば `nextLearningStep`: 今日の次の 1 手（レッスン・体験・練習・復習・テスト）
 ///
 /// 今日の分が計画（[plan]）に無ければ、出題は空（見出しと点の判定は返す）。
 /// [now] は端末のローカル時刻（深夜の学習を前日に数えるなら `StudyDay.shift` を通した値と回答を渡す）。
@@ -79,8 +85,21 @@ DailyHome buildDailyHome({
   DateTime? lastBreakSuggestedAt,
   int seed = 0,
   PickerConfig pickerConfig = const PickerConfig(),
+  LearningContext? learning,
 }) {
   final day = dateOnly(now);
+  // 今日の次の 1 手（材料があるときだけ）。範囲は scopeUnitIds、無ければ問題のある単元すべて
+  final step = learning == null
+      ? null
+      : nextLearningStep(
+          now: now,
+          unitIds: scopeUnitIds ?? {for (final q in questions) q.unitId},
+          mastery: mastery,
+          attempts: attempts,
+          questions: questions,
+          context: learning,
+          testDate: testDate,
+        );
   final paceModel = pace ?? buildPace(attempts);
   final card = buildTodayCard(
     now: now,
@@ -108,6 +127,7 @@ DailyHome buildDailyHome({
       hasPlanToday: false,
       guard: null,
       scorePrompt: prompt,
+      learningStep: step,
     );
   }
 
@@ -163,5 +183,6 @@ DailyHome buildDailyHome({
     hasPlanToday: true,
     guard: guard,
     scorePrompt: prompt,
+    learningStep: step,
   );
 }

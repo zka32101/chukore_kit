@@ -1,6 +1,6 @@
 # 全教科共通の学びの設計: 学ぶ・体験する・解く・評価する・分析する
 
-> ステータス: 設計。レッスンの形式・検証・進み具合（§3）は実装済み、遊び・`nextLearningStep`・単元テスト・分析（§4〜7）は未実装。決定済みの要望: **全教科で、①教科書のように学ぶ、②体験・遊びで学ぶ、③問題を解いて理解する、④テストで評価する、⑤データで分析する、を入れる**。今の基盤は ③④⑤が厚く、②は数学だけ、**①（学ぶ）がまだ無い**。この文書は、5 つを 1 本の「学びの流れ」にまとめ、足りない部品（特に①）と実装の順を決める。先に決めたいことは §8。
+> ステータス: 設計。レッスンの形式・検証・進み具合（§3）と `nextLearningStep`（§5）は実装済み、遊び・単元テスト・分析（§4・6・7）は未実装。決定済みの要望: **全教科で、①教科書のように学ぶ、②体験・遊びで学ぶ、③問題を解いて理解する、④テストで評価する、⑤データで分析する、を入れる**。今の基盤は ③④⑤が厚く、②は数学だけ、**①（学ぶ）がまだ無い**。この文書は、5 つを 1 本の「学びの流れ」にまとめ、足りない部品（特に①）と実装の順を決める。先に決めたいことは §8。
 
 ## 1. 1 つの単元の学びの流れ
 ```
@@ -110,6 +110,20 @@
 | 十分に固まった | 次の単元へ（`suggestNextUnits`） |
 出力は `LearningStep`（`kind: lesson|explore|practice|test|review`、`unitId`、理由）。画面は理由をそのまま短い文にできる（責めない言い方）。
 
+### 5.1 実装したもの（`lib/src/session/learning_step.dart`）
+`nextLearningStep(now:, unitIds:, mastery:, attempts:, questions:, context:, testDate:)` → `LearningStep?`（範囲が空なら null）。材料は `LearningContext`（前提 `graph`・`lessons`・`progress`・単元ごとの `explorations`・やった体験 `doneExplorations`・単元ごとの復習の期限 `reviewDue`・しきい値 `LearningStepConfig`）で、省いた材料の段階は勧めない。**同じ入力なら同じ結果**。
+優先順（上から）:
+1. **テストが近い**（7 日以内）: 直近 3 日以内に模試（`mock`）・単元テスト（`unit_test`）を受けていなければ `test`（最も弱い単元と日数）。受けていれば新しいレッスン・体験を足さず、弱い単元の練習へ。当日はテストを勧めない（前日・当日のガードがあるため）。
+2. **取り組む単元**: 仕上がっていない（習熟度 0.8 未満）単元のうち、記録のあるものの習熟度の低い順。記録が無ければ、前提が固まっていて取り組める新しい単元（`suggestNextUnits`）。全部仕上がっていれば `maintain`。
+3. **前提が弱ければ土台へ**: 前提（習熟度 0.6 未満か記録なし）をさかのぼって、土台の単元を対象にする（`prerequisiteWeak`。循環があっても止まる）。
+4. **同じ誤解の型の繰り返し**: 直近 30 日の誤答で同じ型が 3 回以上あり、その型の `pitfall` があるレッスンがあれば、**解説のブロックから**（`repeatedMistake`・`blockIndex`）。テストが近くても勧める。
+5. **レッスン**: レッスンがあり、読み終えていなければ（習熟度 0.7 未満）。記録がまったく無ければ `newUnit`、あれば `lessonNotFinished`。テストが近いときは勧めない。
+6. **体験**: レッスンのあとで（レッスンが無い・読み終えた）、習熟度 0.6 未満で、まだやっていない体験があれば（`afterLesson`）。
+7. **復習・練習**: 復習の期限が来た問題が 3 問以上なら `review`、そうでなければ `practice`。
+- `LearningStep` は `kind`（`lesson`・`explore`・`practice`・`review`・`test`・`maintain`）・`reason`・`unitId`・`lessonId`・`blockIndex`・`explorationId`・`tag`・`daysToTest`。**理由の文言は基盤に持たない**（教科アプリが責めない短い文にする）。
+- `buildDailyHome(..., learning: LearningContext)` を渡すと `DailyHome.learningStep` に入る（今日の分が計画に無くても返す。範囲は `scopeUnitIds`、無ければ問題のある単元すべて）。
+- しきい値は暫定（ソフトローンチで検証）。
+
 ## 6. ④テストで評価する
 - **単元テスト・章テスト**: 模試（`buildMockExam`）の小さい版。範囲＝単元／章、問題数 5〜15、**誤解の型を満遍なく**（型のカバー）・難しさの配分（やさしい 3 : ふつう 5 : 難しい 2）を指定できる `buildUnitTest`。結果は 3 段階（できた／もう少し／復習しよう。点数・偏差値は子どもには出さず保護者に出す）。
 - 模試（既存）: アプリ内偏差値（海外は点・成績）、時間配分、履歴比較、テスト後の振り返り。
@@ -136,7 +150,7 @@
 1. 途中式の判定（数学の段 6。例題の検証に使う）。**実装済み**（`checkSolutionSteps`。`docs/math_foundation.md` §10）。
 2. `Lesson`・`LessonSet`・`validateLessons`（形式と参照・例題の検証）。数学の一次方程式のレッスンの見本。**実装済み**（§3.6）。
 3. `LessonProgress`・事前／事後の確認・`Attempt` の `lesson_check`。**実装済み**（§3.6）。
-4. `nextLearningStep`（`buildDailyHome` に組み込む）。
+4. `nextLearningStep`（`buildDailyHome` に組み込む）。**実装済み**（§5.1）。
 5. `buildUnitTest`（誤解の型のカバー・難しさの配分・3 段階の結果）。
 6. `PlayRound`（ラウンド・つながり・ごほうびの条件）。
 7. 分析（`LearningFunnel`・`LessonEffect`・ブロックの読まれ方）。
