@@ -1,12 +1,15 @@
 import 'dart:math' as math;
 
 import 'math_expr.dart';
+import 'solid.dart';
 
 /// 図の仕様（平面図形）。点・線分・円・弧・多角形・角印・直角印・長さの印・ラベルを、座標で持つ。
 /// 型（`MathTemplate`）の `figure` に書き、数は式（`"10+a*2"`）と `{…}` で差し込む。描くのは画面側か [Figure.toSvg]。
 /// 設計は docs/math_figures_design.md §3。
 class FigureTemplate {
-  FigureTemplate._(this._points, this._draw, this._marks, this.viewBox, this.names, this.altId);
+  FigureTemplate._(this._points, this._draw, this._marks, this.viewBox, this.names, this.altId, [this._solid]);
+
+  final SolidSpec? _solid;
 
   final List<({String name, Object spec})> _points;
   final List<Map<String, dynamic>> _draw;
@@ -15,7 +18,7 @@ class FigureTemplate {
   final bool names;
   final String altId;
 
-  static const _keys = {'viewBox', 'points', 'draw', 'marks', 'names', 'altId'};
+  static const _keys = {'viewBox', 'points', 'draw', 'marks', 'names', 'altId', 'solid'};
   static const _drawKinds = {'seg', 'circle', 'arc', 'poly'};
   static const _markKinds = {'angle', 'right', 'tick', 'length', 'text'};
 
@@ -23,6 +26,32 @@ class FigureTemplate {
   factory FigureTemplate.fromJson(Map<String, dynamic> j, Set<String> known) {
     final unknown = j.keys.where((k) => !_keys.contains(k));
     if (unknown.isNotEmpty) throw FormatException('figure: 未知のキー: ${unknown.join(', ')}');
+    final altId0 = j['altId'];
+    if (j.containsKey('solid')) {
+      // 立体・展開図: 枠は 100 × 100 に決まっている。点・描画・印とは併用しない
+      final other = j.keys.where((k) => k != 'solid' && k != 'altId');
+      if (other.isNotEmpty) throw FormatException('figure: solid は altId 以外と併用できません: ${other.join(', ')}');
+      if (altId0 is! String || altId0.isEmpty) throw const FormatException('figure: altId（図の説明の ID）が必要です');
+      final s = j['solid'];
+      if (s is! Map) throw const FormatException('figure: solid はオブジェクト');
+      void check(Object? e, String where) {
+        if (e is num) return;
+        final x = e is String ? MathExpr.tryParse(e) : null;
+        if (x == null) throw FormatException('figure: $where は数か式: $e');
+        final bad = x.variables.where((v) => !known.contains(v));
+        if (bad.isNotEmpty) throw FormatException('figure: $where にパラメータにない文字 ${bad.join()}: $e');
+      }
+
+      return FigureTemplate._(
+        const [],
+        const [],
+        const [],
+        const [0, 0, 100, 100],
+        false,
+        altId0,
+        SolidSpec.fromJson(Map<String, dynamic>.from(s), check),
+      );
+    }
     final vb = j['viewBox'];
     if (vb is! List || vb.length != 4 || vb.any((e) => e is! num) || (vb[2] as num) <= 0 || (vb[3] as num) <= 0) {
       throw const FormatException('figure: viewBox は [x, y, 幅, 高さ]（幅・高さは正）');
@@ -151,6 +180,16 @@ class FigureTemplate {
       return MathExpr.parse(e as String).eval(values);
     }
 
+    final solid = _solid;
+    if (solid != null) {
+      final built = solid.build(
+        {for (final e in solid.dims.entries) e.key: ev(e.value)},
+        {for (final e in solid.labels.entries) e.key: render(e.value)},
+      );
+      if (built == null) return null;
+      return Figure._(viewBox, const {}, built.shapes, built.labels, altId);
+    }
+
     final pts = <String, ({double x, double y})>{};
     for (final p in _points) {
       final s = p.spec;
@@ -268,7 +307,7 @@ class FigureTemplate {
 }
 
 /// 図の要素の種類。
-enum FigureShapeKind { seg, poly, circle, arc, angle, rightAngle, tick }
+enum FigureShapeKind { seg, poly, circle, arc, angle, rightAngle, tick, ellipse, ellipseHalf }
 
 /// 描く図形 1 つ（座標は図の座標系。y は下向き）。
 class FigureShape {
@@ -276,6 +315,8 @@ class FigureShape {
     this.kind,
     this.points, {
     this.r = 0,
+    this.ry = 0,
+    this.upper = false,
     this.start = 0,
     this.end = 0,
     this.fill = false,
@@ -285,7 +326,10 @@ class FigureShape {
 
   final FigureShapeKind kind;
   final List<({double x, double y})> points;
-  final double r, start, end;
+  final double r, ry, start, end;
+
+  /// 楕円の半分（[FigureShapeKind.ellipseHalf]）で、上側（奥）か。偽なら下側（手前）。
+  final bool upper;
   final bool fill, dashed;
   final int n;
 
@@ -297,6 +341,15 @@ class FigureShape {
       FigureShape._(FigureShapeKind.circle, [c], r: r, dashed: dashed);
   factory FigureShape.arc(({double x, double y}) c, double r, double start, double end, {bool dashed = false}) =>
       FigureShape._(FigureShapeKind.arc, [c], r: r, start: start, end: end, dashed: dashed);
+  factory FigureShape.ellipse(({double x, double y}) c, double rx, double ry, {bool dashed = false}) =>
+      FigureShape._(FigureShapeKind.ellipse, [c], r: rx, ry: ry, dashed: dashed);
+  factory FigureShape.ellipseHalf(
+    ({double x, double y}) c,
+    double rx,
+    double ry, {
+    required bool upper,
+    bool dashed = false,
+  }) => FigureShape._(FigureShapeKind.ellipseHalf, [c], r: rx, ry: ry, upper: upper, dashed: dashed);
   factory FigureShape.angle(({double x, double y}) a, ({double x, double y}) o, ({double x, double y}) b) =>
       FigureShape._(FigureShapeKind.angle, [a, o, b]);
   factory FigureShape.rightAngle(({double x, double y}) a, ({double x, double y}) o, ({double x, double y}) b) =>
@@ -379,6 +432,13 @@ class Figure {
           final vx = (p[2].x - p[1].x) / len(p[2]) * 6, vy = (p[2].y - p[1].y) / len(p[2]) * 6;
           b.write(
             '<polyline points="${_n(p[1].x + ux)},${_n(p[1].y + uy)} ${_n(p[1].x + ux + vx)},${_n(p[1].y + uy + vy)} ${_n(p[1].x + vx)},${_n(p[1].y + vy)}"/>',
+          );
+        case FigureShapeKind.ellipse:
+          b.write('<ellipse cx="${_n(p[0].x)}" cy="${_n(p[0].y)}" rx="${_n(s.r)}" ry="${_n(s.ry)}"$dash/>');
+        case FigureShapeKind.ellipseHalf:
+          // 左端から右端へ。下側（手前）は反時計回り、上側（奥）は時計回りに回る
+          b.write(
+            '<path d="M${_n(p[0].x - s.r)} ${_n(p[0].y)}A${_n(s.r)} ${_n(s.ry)} 0 0 ${s.upper ? 1 : 0} ${_n(p[0].x + s.r)} ${_n(p[0].y)}"$dash/>',
           );
         case FigureShapeKind.tick:
           final mx = (p[0].x + p[1].x) / 2, my = (p[0].y + p[1].y) / 2;
