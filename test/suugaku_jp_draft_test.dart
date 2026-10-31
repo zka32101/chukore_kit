@@ -35,6 +35,13 @@ void main() {
     for (final v in set.expand()) {
       final q = v.question;
       expect(checkAnswer(q, q.answer).correct, isTrue, reason: q.id);
+      final fig = v.figure;
+      if (fig != null) {
+        final svg = fig.toSvg();
+        expect(svg, startsWith('<svg'), reason: q.id);
+        expect(svg.contains('NaN') || svg.contains('Infinity'), isFalse, reason: q.id);
+        expect(fig.altId, isNotEmpty);
+      }
       for (final e in q.misconceptionTags.entries) {
         final r = checkAnswer(q, e.key);
         expect(r.correct, isFalse, reason: '${q.id} ${e.key}');
