@@ -165,6 +165,8 @@ List<ValidationIssue> validateQuestionBank({
     final uniqueChoices = q.choices.toSet();
     if (uniqueChoices.length != q.choices.length) err('choices_duplicate', q.id, '選択肢が重複しています');
 
+    if (q.form != null && q.type != 'expr') warn('form_ignored', q.id, 'form は expr でだけ使われます');
+
     switch (q.type) {
       case 'choice' || 'map':
         if (q.choices.length < 2) err('choices_too_few', q.id, '選択肢は2つ以上');
@@ -182,6 +184,15 @@ List<ValidationIssue> validateQuestionBank({
         }
         if (q.choices.isNotEmpty) {
           warn('choices_ignored', q.id, 'expr では選択肢は使われません');
+        }
+        final f = q.form;
+        if (f != null) {
+          final ans = MathExpr.tryParse(q.answer);
+          if (!knownExprForms.contains(f)) {
+            err('unknown_form', q.id, '未対応の形の指定: $f');
+          } else if (ans != null && !ans.hasForm(f, ans)) {
+            err('answer_form_mismatch', q.id, '正解 ${q.answer} が形の指定 $f を満たしていません');
+          }
         }
       case 'text':
         final alts = textAlternatives(q.answer);

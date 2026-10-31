@@ -138,6 +138,7 @@ bool _sameContent(Question a, Question b) =>
     a.type == b.type &&
     a.difficulty == b.difficulty &&
     a.answer == b.answer &&
+    a.form == b.form &&
     a.explanationId == b.explanationId &&
     _listEq(a.choices, b.choices) &&
     _listEq(a.hintIds, b.hintIds) &&

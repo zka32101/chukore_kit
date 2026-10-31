@@ -52,8 +52,136 @@ class MathExpr {
     return valid >= minPoints;
   }
 
+  /// 答えの形の指定（[knownExprForms]）を満たすか。値が同じかどうかは見ない（[equivalent] と合わせて使う）。
+  /// [reference] は正解の式（`expanded` で、同類項をまとめ忘れた式を見分けるのに使う）。
+  /// `factored` は「積の形」かどうかだけを見る（これ以上因数分解できないかは見ない）。
+  bool hasForm(String form, MathExpr reference) {
+    switch (form) {
+      case 'expanded':
+        return _isExpanded(_root) && _terms(_root) <= _terms(reference._root);
+      case 'factored':
+        return _isFactored(_root);
+      case 'reduced_fraction':
+        return _isReducedFraction(_root);
+      case 'simplest_radical':
+        return _isSimplestRadical(_root);
+      default:
+        throw ArgumentError('未対応の形: $form');
+    }
+  }
+
   // 0・1・-1 は x と x^2 などが偶然一致するので避ける。
   static const _samples = <double>[2, 3, -2, 0.5, 5, -3, 1.5, 7, -0.7, 4, -1.3, 6, 2.5, -4, 8];
+}
+
+/// `Question.form` に書ける形の指定。
+const knownExprForms = {'expanded', 'factored', 'reduced_fraction', 'simplest_radical'};
+
+bool _hasVar(_Node n) {
+  final v = <String>{};
+  n.collect(v);
+  return v.isNotEmpty;
+}
+
+_Node _unNeg(_Node n) => n is _Neg ? _unNeg(n.a) : n;
+
+bool _isSum(_Node n) {
+  final u = _unNeg(n);
+  return u is _Bin && (u.op == '+' || u.op == '-');
+}
+
+int _terms(_Node n) {
+  if (n is _Neg) return _terms(n.a);
+  if (n is _Bin && (n.op == '+' || n.op == '-')) return _terms(n.a) + _terms(n.b);
+  return 1;
+}
+
+bool _isExpanded(_Node n) {
+  if (n is _Num || n is _Var) return true;
+  if (n is _Neg) return !(_isSum(n.a) && _hasVar(n.a)) && _isExpanded(n.a); // -(x+3)
+  if (n is _Sqrt) return !_hasVar(n);
+  if (n is! _Bin) return false;
+  final va = _hasVar(n.a), vb = _hasVar(n.b);
+  switch (n.op) {
+    case '+':
+    case '-':
+      if (n.op == '-' && vb && _isSum(n.b)) return false; // a-(b+c)
+      return _isExpanded(n.a) && _isExpanded(n.b);
+    case '*':
+      if (va && vb) return false; // 変数どうしの積は x^2 のように書く
+      if ((va && _isSum(n.a)) || (vb && _isSum(n.b))) return false; // 2(x+3)
+      return _isExpanded(n.a) && _isExpanded(n.b);
+    case '/':
+      if (vb) return false;
+      if (va && _isSum(n.a)) return false; // (x+2)/2
+      return _isExpanded(n.a) && _isExpanded(n.b);
+    default: // ^
+      if (vb) return false;
+      if (va && _unNeg(n.a) is! _Var) return false; // (x+3)^2
+      return _isExpanded(n.a) && _isExpanded(n.b);
+  }
+}
+
+void _factors(_Node n, List<_Node> out) {
+  final u = _unNeg(n);
+  if (u is _Bin && u.op == '*') {
+    _factors(u.a, out);
+    _factors(u.b, out);
+  } else {
+    out.add(u);
+  }
+}
+
+bool _isFactored(_Node n) {
+  final u = _unNeg(n);
+  if (u is _Bin && u.op == '^') {
+    final e = u.b.eval(const {});
+    return _isSum(u.a) && _hasVar(u.a) && !e.isNaN && e >= 2; // (x+3)^2
+  }
+  final f = <_Node>[];
+  _factors(u, f);
+  if (f.length < 2) return false;
+  return f.any((x) => _isSum(x) && _hasVar(x)); // 2(x+3)・(x+1)(x-1)
+}
+
+int? _asInt(_Node n) {
+  if (n is! _Num || n.v != n.v.truncateToDouble() || n.v.abs() > 1e12) return null;
+  return n.v.toInt();
+}
+
+int _gcd(int a, int b) => b == 0 ? a.abs() : _gcd(b, a % b);
+
+bool _isReducedFraction(_Node n) {
+  final u = _unNeg(n);
+  if (_asInt(u) != null) return true; // 整数
+  if (u is! _Bin || u.op != '/') return false;
+  final a = _asInt(_unNeg(u.a)), b = _asInt(u.b); // -3/4 は (-3)/4 と読まれる
+  return a != null && b != null && b > 1 && a != 0 && _gcd(a, b) == 1;
+}
+
+bool _squareFree(int n) {
+  for (var d = 2; d * d <= n; d++) {
+    if (n % (d * d) == 0) return false;
+  }
+  return true;
+}
+
+bool _isSimplestRadical(_Node n) {
+  final u = _unNeg(n);
+  if (_asInt(u) != null) return true;
+  bool radical(_Node x) {
+    if (x is! _Sqrt) return false;
+    final k = _asInt(x.a);
+    return k != null && k > 1 && _squareFree(k);
+  }
+
+  if (radical(u)) return true;
+  // k√n（k は 2 以上の整数。1√2 や 0√2 は不可）
+  if (u is _Bin && u.op == '*') {
+    final k = _asInt(_unNeg(u.a)); // -2√3 は (-2)*√3 と読まれる
+    return k != null && k.abs() >= 2 && radical(u.b);
+  }
+  return false;
 }
 
 abstract class _Node {
@@ -268,4 +396,16 @@ class _Parser {
     if (RegExp(r'^[a-z]$').hasMatch(s)) return _Var(s);
     throw FormatException('ここには置けません: $s');
   }
+}
+
+/// 数式の答えの判定結果。形の指定を外したときは [wrongForm]（値は合っている）。
+enum ExprVerdict { correct, wrongForm, wrongValue, unreadable }
+
+/// 数式の問題 [answer]（正解の式）と [form]（形の指定。無ければ値だけ）に対する入力 [input] の判定。
+ExprVerdict judgeExpr(String answer, String input, {String? form}) {
+  final got = MathExpr.tryParse(input), want = MathExpr.tryParse(answer);
+  if (got == null || want == null) return ExprVerdict.unreadable;
+  if (!MathExpr.equivalent(got, want)) return ExprVerdict.wrongValue;
+  if (form != null && !got.hasForm(form, want)) return ExprVerdict.wrongForm;
+  return ExprVerdict.correct;
 }
