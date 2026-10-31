@@ -4,6 +4,8 @@
 
 ## [未リリース]
 
+- 途中式の判定 `checkSolutionSteps`・`SolutionCheck`・`LineVerdict`・`LineStatus`・`LineKind`・`MathEquation`（方程式の同じ解の判定）、`MathExpr.commonMistakes`（よくある誤りで書き換えた式。誤解の型つき）・`MathExpr.linearIn`。前の行から壊れた最初の行と、移項の符号・割り忘れ・分配・かっこの符号などの誤解の型を返す。数学の基盤の段 6
+
 - docs: 全教科共通の学びの設計（`docs/learning_model.md`。学ぶ（レッスン）・体験・遊び・解く・テスト・分析を 1 本の流れに。レッスン `Lesson` の形式・`nextLearningStep`・単元テスト・遊び `PlayRound`・分析。未実装）
 
 - 対応づけ問題 `match`（`左ID:右ID` を `;` で区切る。順不同・部分点・誤りの組への誤解の型）、`MatchPair`・`parseMatchAnswer`・`parseMatchInput`。検証 `match_*`。社会の基盤の第 1 段（`docs/shakai_foundation.md`）

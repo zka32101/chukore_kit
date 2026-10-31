@@ -39,6 +39,39 @@ class MathExpr {
     return MathExpr._(node, vars.toList()..sort());
   }
 
+  /// 変数 [v] だけの一次式 `a v + b` なら (a, b)、違えば（他の変数がある・一次でない）null。
+  ({double a, double b})? linearIn(String v) {
+    if (variables.any((x) => x != v)) return null;
+    final f0 = eval({v: 0}), f1 = eval({v: 1}), f2 = eval({v: 2}), f3 = eval({v: -3});
+    if ([f0, f1, f2, f3].any((e) => e.isNaN || e.isInfinite)) return null;
+    final a = f1 - f0;
+    if ((f2 - (a * 2 + f0)).abs() > 1e-7 || (f3 - (a * -3 + f0)).abs() > 1e-7) return null;
+    return (a: a, b: f0);
+  }
+
+  /// この式を計算するときに**よくある誤り**で書き換えた式の一覧（誤解の型つき）。式のどの部分（1 か所）に誤りがあるかを変えて作る。
+  /// 途中式の判定（[docs/math_foundation.md] §10）で、「前の行から次の行で何を間違えたか」を当てるのに使う。
+  /// 型: `distribute_first_only`（`2(x+3)` → `2x+3`）・`minus_paren_first_only`（`5-(x+3)` → `5-x+3`）・`square_of_sum`（`(x+3)^2` → `x^2+9`）・
+  /// `fraction_add_denominator`（`1/2+1/3` → `2/5`）・`like_terms_mixup`（`2x+3` → `5x`）・`order_of_operations`（`3+4*2` → `(3+4)*2`）・
+  /// `fraction_numerator_partial`（`(a+b)/c` → `a+b/c`）・`sub_negative_sign`（`a-(-b)` → `a-b`）・`sign_rule_product`（積・商の符号を逆にする）・
+  /// `neg_square_sign`（`(-a)^2` と `-a^2` の取り違え）。
+  List<({String tag, MathExpr expr})> commonMistakes() {
+    return [
+      for (final m in _mistakes(_root))
+        (
+          tag: m.tag,
+          expr: MathExpr._(
+            m.node,
+            (() {
+              final v = <String>{};
+              m.node.collect(v);
+              return v.toList()..sort();
+            })(),
+          ),
+        ),
+    ];
+  }
+
   /// 変数に値を入れて計算する。0 での割り算・負の数の平方根などは NaN。
   double eval(Map<String, double> values) => _root.eval(values);
 
@@ -459,4 +492,108 @@ ExprVerdict judgeExpr(String answer, String input, {String? form}) {
   if (!MathExpr.equivalent(got, want)) return ExprVerdict.wrongValue;
   if (form != null && !got.hasForm(form, want)) return ExprVerdict.wrongForm;
   return ExprVerdict.correct;
+}
+
+bool _isSumNode(_Node n) => n is _Bin && (n.op == '+' || n.op == '-');
+
+bool _isNegativeNumber(_Node n) => n is _Neg || (n is _Num && n.v < 0);
+
+/// [n] の根の部分の誤り（1 か所）。子の中の誤りは [_mistakes] が組み合わせる。
+List<({String tag, _Node node})> _mistakesHere(_Node n) {
+  final out = <({String tag, _Node node})>[];
+  void add(String tag, _Node node) => out.add((tag: tag, node: node));
+  if (n is _Bin) {
+    final a = n.a, b = n.b;
+    switch (n.op) {
+      case '*':
+        // k(a±b) → ka±b、(a+b)(c+d) → ac+bd
+        if (_isSumNode(b) && !_isSumNode(a)) {
+          final s = b as _Bin;
+          add('distribute_first_only', _Bin(s.op, _Bin('*', a, s.a), s.b));
+        }
+        if (_isSumNode(a) && !_isSumNode(b)) {
+          final s = a as _Bin;
+          add('distribute_first_only', _Bin(s.op, _Bin('*', s.a, b), s.b));
+        }
+        if (_isSumNode(a) && _isSumNode(b)) {
+          final s = a as _Bin, t = b as _Bin;
+          add('distribute_first_only', _Bin(t.op, _Bin('*', s.a, t.a), _Bin('*', s.b, t.b)));
+        }
+        add('sign_rule_product', _Neg(n));
+      case '/':
+        // (a+b)/c → a+b/c
+        if (_isSumNode(a)) {
+          final s = a as _Bin;
+          add('fraction_numerator_partial', _Bin(s.op, s.a, _Bin('/', s.b, b)));
+        }
+        add('sign_rule_product', _Neg(n));
+      case '-':
+        // a-(b+c) → a-b+c、a-(b-c) → a-b-c、a-(-b) → a-b
+        if (_isSumNode(b)) {
+          final s = b as _Bin;
+          add('minus_paren_first_only', _Bin(s.op, _Bin('-', a, s.a), s.b));
+        }
+        if (_isNegativeNumber(b)) {
+          add('sub_negative_sign', _Bin('-', a, b is _Neg ? b.a : _Num(-(b as _Num).v)));
+        }
+      case '^':
+        // (a+b)^2 → a^2+b^2、(-a)^2 → -a^2
+        if (_isSumNode(a) && b is _Num && b.v == 2) {
+          final s = a as _Bin;
+          add('square_of_sum', _Bin(s.op, _Bin('^', s.a, b), _Bin('^', s.b, b)));
+        }
+        if (a is _Neg) add('neg_square_sign', _Neg(_Bin('^', a.a, b)));
+    }
+    if (n.op == '+' || n.op == '-') {
+      // a/b ± c/d → (a±c)/(b±d)
+      if (a is _Bin && a.op == '/' && b is _Bin && b.op == '/') {
+        add('fraction_add_denominator', _Bin('/', _Bin(n.op, a.a, b.a), _Bin(n.op, a.b, b.b)));
+      }
+      // kx ± c → (k±c)x（係数と定数をまとめる）
+      _Node? coef(_Node t) =>
+          t is _Var ? _Num(1) : (t is _Bin && t.op == '*' && t.a is _Num && t.b is _Var ? t.a : null);
+      final ca = coef(a), cb = coef(b);
+      if (ca != null && b is _Num) {
+        add('like_terms_mixup', _Bin('*', _Bin(n.op, ca, b), a is _Var ? a : (a as _Bin).b));
+      }
+      if (cb != null && a is _Num && n.op == '+') {
+        add('like_terms_mixup', _Bin('*', _Bin('+', a, cb), b is _Var ? b : (b as _Bin).b));
+      }
+      // a ± b*c → (a±b)*c
+      if (b is _Bin && b.op == '*') add('order_of_operations', _Bin('*', _Bin(n.op, a, b.a), b.b));
+    }
+  }
+  if (n is _Neg) {
+    final a = n.a;
+    // -(a+b) → -a+b
+    if (_isSumNode(a)) {
+      final s = a as _Bin;
+      add('minus_paren_first_only', _Bin(s.op, _Neg(s.a), s.b));
+    }
+    // -a^2 → (-a)^2
+    if (a is _Bin && a.op == '^') add('neg_square_sign', _Bin('^', _Neg(a.a), a.b));
+  }
+  return out;
+}
+
+/// [n] の木のどこか 1 か所に誤りを入れた書き換え。
+List<({String tag, _Node node})> _mistakes(_Node n) {
+  final out = [..._mistakesHere(n)];
+  if (n is _Bin) {
+    for (final m in _mistakes(n.a)) {
+      out.add((tag: m.tag, node: _Bin(n.op, m.node, n.b)));
+    }
+    for (final m in _mistakes(n.b)) {
+      out.add((tag: m.tag, node: _Bin(n.op, n.a, m.node)));
+    }
+  } else if (n is _Neg) {
+    for (final m in _mistakes(n.a)) {
+      out.add((tag: m.tag, node: _Neg(m.node)));
+    }
+  } else if (n is _Sqrt) {
+    for (final m in _mistakes(n.a)) {
+      out.add((tag: m.tag, node: _Sqrt(m.node)));
+    }
+  }
+  return out;
 }
