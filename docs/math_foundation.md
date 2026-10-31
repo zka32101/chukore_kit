@@ -60,3 +60,12 @@
 
 ## 8. 図・グラフ・データ（平面図形／空間図形／データの活用）
 未着手の3分野の方針は [`math_figures_design.md`](math_figures_design.md)（設計のみ。着手順の案: データ → π → 平面図形 → 空間図形）。
+
+## 9. 作図（体験型 `construction`、実装済み）
+定規とコンパスの作図を、**手順を 1 つずつ実行して、最後に目標の直線が引けたか**で判定する（描いた絵を採点しない）。見本は `docs/samples/constructions.sample.json`。
+- 教材 `Construction`: 最初の点（`givens`）、見せる図形（`show`: 線分 `seg`・直線 `line`・半直線 `ray`）、目標 `goal`、模範の手順 `solution`、手順の上限 `maxSteps`、`promptId`・`explanationId`・`altId`（文言はコンテンツ側）。目標は `perpendicularBisector`（線分の垂直二等分線）・`angleBisector`（角の二等分線）・`perpendicular`（点を通る垂線。点は直線の上でも外でもよい）。
+- 状態 `ConstructionState`: **点は最初の点と交点だけ**を選べる（自由な位置に点は打てない）ので、手順そのものが作図として正しい。操作は `addCircle(中心, 点)`（その点を通る円）・`addCircle(中心, 点a, 点b)`（半径は線分 ab の長さ＝コンパスを移す）・`addLine(点, 点)`（定規）・`intersect(図形, 図形)`（円と円・直線と円・直線と直線。すでにある点と同じ位置なら使い回す）。ID は円 `c1…`・直線 `l1…`・交点 `X1…`（新しい点だけ順に）。成り立たない操作は `ArgumentError`。
+- 判定 `isSolved`: 引いた直線のどれかが目標の直線と**同じ直線**（向きは問わない）か。通る点が合っていても向きが違えば不可、平行でも重ならなければ不可。
+- 表示 `figure(state)`: 見せる図形・作った直線（枠で切る）・円・点と名前を `Figure`（`toSvg` で SVG）にする。体験は習熟度に加点せず、回答履歴にも残さない（確認問題で測る）。
+- 検証 `validateConstructions`: `construction_unit_missing`・`construction_solution_missing`・`construction_solution_fails`（模範の手順が成り立たない・目標に届かない）・`construction_solution_too_long`。**模範の手順を実際に実行して確かめる**ので、教材を書き間違えても、解けない作図は出ない。
+- 見本 4 つ: 垂直二等分線、角の二等分線、点から直線への垂線（外の点）、直線上の点での垂線。

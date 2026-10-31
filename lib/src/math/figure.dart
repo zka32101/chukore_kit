@@ -370,6 +370,15 @@ class FigureLabel {
 class Figure {
   const Figure._(this.viewBox, this.points, this.shapes, this.labels, this.altId);
 
+  /// 図形とラベルから図を作る（作図の途中経過など、型を通さない図）。
+  const Figure.fromShapes({
+    required this.viewBox,
+    required this.shapes,
+    required this.labels,
+    required this.altId,
+    this.points = const {},
+  });
+
   final List<double> viewBox;
   final Map<String, ({double x, double y})> points;
   final List<FigureShape> shapes;
