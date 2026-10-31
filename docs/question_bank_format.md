@@ -67,7 +67,7 @@ dart run tool/validate_bank.dart units.json questions.json
 
 | 項目 | 内容 |
 |---|---|
-| `type` | `choice`（選択）／`map`（地図タップ。選択肢は領域ID）／`numeric`（数値。`choices` は空でよい）／`expr`（数式。`answer` は式で、入力と同じ値なら正解。`2x+6` と `2(x+3)`、`1/2` と `0.5` は同じ。`choices` は空。形の指定は未対応）／`order`・`timeline`（並べ替え・年表。`answer` は正解順のIDをカンマ区切り、`choices` は同じID集合）／`card`（暗記カード。`answer` は裏面の内容の ID か文。自己採点なので照合には使わない。`choices` は空）／`text`（短い記述。`answer` は別解を `\|` で区切る。例 `東京\|とうきょう\|Tokyo`。`choices` は空）／`multi`（複数の語を答える。`answer` は項目を `;`、各項目の別解を `\|` で区切る。例 `織田信長\|のぶなが;豊臣秀吉\|ひでよし;徳川家康`。順不同・部分点あり。`choices` は空） |
+| `type` | `choice`（選択）／`map`（地図タップ。選択肢は領域ID）／`numeric`（数値。`choices` は空でよい）／`expr`（数式。`answer` は式で、入力と同じ値なら正解。`2x+6` と `2(x+3)`、`1/2` と `0.5` は同じ。`choices` は空。答えの形は `form` で指定できる。下の「数式の形の指定」）／`order`・`timeline`（並べ替え・年表。`answer` は正解順のIDをカンマ区切り、`choices` は同じID集合）／`card`（暗記カード。`answer` は裏面の内容の ID か文。自己採点なので照合には使わない。`choices` は空）／`text`（短い記述。`answer` は別解を `\|` で区切る。例 `東京\|とうきょう\|Tokyo`。`choices` は空）／`multi`（複数の語を答える。`answer` は項目を `;`、各項目の別解を `\|` で区切る。例 `織田信長\|のぶなが;豊臣秀吉\|ひでよし;徳川家康`。順不同・部分点あり。`choices` は空） |
 | `difficulty` | 基準正答率 0〜1（アプリ内偏差値の換算に使う）。0 と 1 は警告 |
 | `misconceptionTags` | 誤答の選択肢ID → 誤解の型（小文字・数字・`_`）。**正解の選択肢には付けない** |
 | `explanationId` | 解説の ID（解説の本文は別データ） |
@@ -127,3 +127,16 @@ dart run tool/validate_bank.dart units.json questions.json
 - 検証コード: `card_answer_empty`（エラー）、`choices_ignored`・`hints_ignored`（警告）。
 - 模試には出さない。今日のカードは `buildCardDeck`、学習の進み方は `CardSession`。
 
+
+## 数式の形の指定（`form`、`expr` のみ・省略可）
+値が同じでも「展開しなさい」に `2(x+3)` と答えて通らないように、答えの**形**を指定できる。`form` が無ければ値だけで判定する。
+| form | 通る例 | 通らない例 |
+|---|---|---|
+| `expanded`（展開済み） | `x^2+6x+9`・`6+2x` | `(x+3)^2`・`2(x+3)`・`x*x`・`x+x+3`（同類項のまとめ忘れ。項の数が正解より多い） |
+| `factored`（積の形） | `2(x+3)`・`(x+1)(x-1)`・`(x+3)^2` | `2x+6`・`2x`・`x^2` |
+| `reduced_fraction`（既約分数。整数もよい） | `1/2`・`-3/4`・`3` | `2/4`・`3/1`・`0.5` |
+| `simplest_radical`（最簡の根号） | `√2`・`3√2`・`5` | `√8`・`2√12`・`1√2` |
+- `factored` は「積の形か」だけを見る（これ以上因数分解できないかは見ない）。`simplest_radical` は分母の有理化の形（`√2/2` など）を扱わない。
+- 判定は `judgeExpr(answer, input, form:)`: `correct`／`wrongForm`（値は合っている。画面では「値は合っています。形を整えよう」のように責めずに伝える）／`wrongValue`／`unreadable`。`checkAnswer` は `correct` のときだけ正解。
+- 検証コード: `unknown_form`・`answer_form_mismatch`（正解自体が形を満たさない）はエラー、`form_ignored`（expr 以外で指定）は警告。
+- `form` を足す・変えるのは問題の内容の変更なので、差分更新では `version` を上げる。

@@ -46,6 +46,7 @@ class Question {
     this.misconceptionTags = const {},
     this.version = 1,
     this.hintIds = const [],
+    this.form,
   }) : assert(difficulty >= 0 && difficulty <= 1);
 
   /// 基準正答率の範囲外（assert はリリースビルドで無効なので、読み込み時にも明示的に確かめる）。
@@ -71,6 +72,7 @@ class Question {
         },
         version: (j['version'] as int?) ?? 1,
         hintIds: [for (final h in (j['hintIds'] as List? ?? const [])) h as String],
+        form: j['form'] as String?,
       );
 
   Map<String, dynamic> toJson() => {
@@ -84,6 +86,7 @@ class Question {
         if (misconceptionTags.isNotEmpty) 'misconceptionTags': misconceptionTags,
         'version': version,
         if (hintIds.isNotEmpty) 'hintIds': hintIds,
+        if (form != null) 'form': form,
       };
 
   /// 内容の一部を変えた写しを作る（基準正答率の見直しなど）。内容を変えたら [version] を上げること。
@@ -98,6 +101,7 @@ class Question {
         misconceptionTags: misconceptionTags ?? this.misconceptionTags,
         version: version ?? this.version,
         hintIds: hintIds ?? this.hintIds,
+        form: form,
       );
 
   final String id;
@@ -117,6 +121,9 @@ class Question {
   /// 段階ヒントの ID（浅いものから順に。本文は問題データ側。`explanationId` と同じ扱い）。無ければ空。
   /// 1 つ目は考え方、2 つ目は途中の式、のように少しずつ答えに近づける。
   final List<String> hintIds;
+
+  /// 数式（`expr`）の答えの形の指定（`expanded`・`factored`・`reduced_fraction`・`simplest_radical`）。無ければ値が同じなら正解。
+  final String? form;
 }
 
 /// 誤答・失点の理由（本人が選ぶ）。回答（[Attempt.reason]）にも、テスト後の振り返りにも使う。

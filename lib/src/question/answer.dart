@@ -55,8 +55,7 @@ AnswerResult checkAnswer(
       final ok = got != null && want != null && (got - want).abs() <= tolerance;
       return AnswerResult(ok);
     case 'expr': // 数式: 式として同じ値になれば正解（2x+6 と 2(x+3) は同じ）
-      final a = MathExpr.tryParse(input), b = MathExpr.tryParse(q.answer);
-      return AnswerResult(a != null && b != null && MathExpr.equivalent(a, b));
+      return AnswerResult(judgeExpr(q.answer, input, form: q.form) == ExprVerdict.correct);
     case 'order':
     case 'timeline': // 年表: 古い順に並べたID列
       final got = input.split(',').map((e) => e.trim()).toList();
