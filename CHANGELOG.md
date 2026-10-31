@@ -4,6 +4,8 @@
 
 ## [未リリース]
 
+- レッスン（学ぶ）: `Lesson`・`LessonBlock`・`LessonSet`・`validateLessons`・`LessonRefs`・`LessonChecker`・`MathLessonChecker`（例題の途中式を 1 行ずつ検査）、`LessonProgress`・`summarizeLessonEffects`・`lessonCheckAttempt`（`mode: lesson_check`）。数学（中1）のレッスン 4 本の見本。全教科共通の学びの設計（`docs/learning_model.md`）の第 1 段
+
 - 途中式の判定 `checkSolutionSteps`・`SolutionCheck`・`LineVerdict`・`LineStatus`・`LineKind`・`MathEquation`（方程式の同じ解の判定）、`MathExpr.commonMistakes`（よくある誤りで書き換えた式。誤解の型つき）・`MathExpr.linearIn`。前の行から壊れた最初の行と、移項の符号・割り忘れ・分配・かっこの符号などの誤解の型を返す。数学の基盤の段 6
 
 - docs: 全教科共通の学びの設計（`docs/learning_model.md`。学ぶ（レッスン）・体験・遊び・解く・テスト・分析を 1 本の流れに。レッスン `Lesson` の形式・`nextLearningStep`・単元テスト・遊び `PlayRound`・分析。未実装）

@@ -1,0 +1,247 @@
+{
+ "version": 1,
+ "lessons": [
+  {
+   "id": "les_m1_eq_prop_01",
+   "version": 1,
+   "unitId": "m1_eq_prop",
+   "minutes": 4,
+   "titleId": "les_m1_eq_prop_01_title",
+   "pre": [
+    "m1_eq_prop_001~3"
+   ],
+   "blocks": [
+    {
+     "type": "hook",
+     "textId": "les_m1_eq_prop_01_hook"
+    },
+    {
+     "type": "text",
+     "textId": "les_m1_eq_prop_01_t1"
+    },
+    {
+     "type": "formula",
+     "expr": "x+3=7",
+     "textId": "les_m1_eq_prop_01_f1"
+    },
+    {
+     "type": "example",
+     "template": "m1_linear_002",
+     "seed": 7,
+     "lines": [
+      "{a}x{+b}={c}",
+      "{a}x{+b}{+-b}={c}{+-b}",
+      "{a}x={c-b}"
+     ],
+     "textIds": [
+      "les_m1_eq_prop_01_e1",
+      "les_m1_eq_prop_01_e2",
+      "les_m1_eq_prop_01_e3"
+     ]
+    },
+    {
+     "type": "check",
+     "questions": [
+      "m1_eq_prop_001~11",
+      "m1_eq_prop_001~12"
+     ]
+    },
+    {
+     "type": "pitfall",
+     "tag": "move_term_sign",
+     "textId": "les_m1_eq_prop_01_p1"
+    },
+    {
+     "type": "summary",
+     "textIds": [
+      "les_m1_eq_prop_01_s1",
+      "les_m1_eq_prop_01_s2"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "les_m1_linear_01",
+   "version": 1,
+   "unitId": "m1_linear",
+   "minutes": 5,
+   "titleId": "les_m1_linear_01_title",
+   "pre": [
+    "m1_linear_002~21"
+   ],
+   "blocks": [
+    {
+     "type": "hook",
+     "textId": "les_m1_linear_01_hook"
+    },
+    {
+     "type": "text",
+     "textId": "les_m1_linear_01_t1"
+    },
+    {
+     "type": "example",
+     "template": "m1_linear_002",
+     "seed": 7,
+     "lines": [
+      "{a}x{+b}={c}",
+      "{a}x={c}{+-b}",
+      "{a}x={c-b}",
+      "x={k}"
+     ],
+     "target": "x={k}",
+     "textIds": [
+      "les_m1_linear_01_e1",
+      "les_m1_linear_01_e2",
+      "les_m1_linear_01_e3",
+      "les_m1_linear_01_e4"
+     ]
+    },
+    {
+     "type": "explore",
+     "exploration": "ex_linear_ab"
+    },
+    {
+     "type": "check",
+     "questions": [
+      "m1_linear_002~22",
+      "m1_linear_002~23"
+     ]
+    },
+    {
+     "type": "pitfall",
+     "tag": "move_term_sign",
+     "textId": "les_m1_linear_01_p1"
+    },
+    {
+     "type": "pitfall",
+     "tag": "forgot_to_divide",
+     "textId": "les_m1_linear_01_p2"
+    },
+    {
+     "type": "summary",
+     "textIds": [
+      "les_m1_linear_01_s1",
+      "les_m1_linear_01_s2",
+      "les_m1_linear_01_s3"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "les_m1_expr_01",
+   "version": 1,
+   "unitId": "m1_expr",
+   "minutes": 4,
+   "titleId": "les_m1_expr_01_title",
+   "pre": [
+    "m1_expr_combine_001~5"
+   ],
+   "blocks": [
+    {
+     "type": "hook",
+     "textId": "les_m1_expr_01_hook"
+    },
+    {
+     "type": "text",
+     "textId": "les_m1_expr_01_t1"
+    },
+    {
+     "type": "example",
+     "template": "m1_expr_combine_001",
+     "seed": 3,
+     "lines": [
+      "{a}x{+b}{+c}x{+d}",
+      "{a}x{+c}x{+b}{+d}",
+      "{a+c}x{+b+d}"
+     ],
+     "target": "{a+c}x{+b+d}",
+     "form": "expanded",
+     "textIds": [
+      "les_m1_expr_01_e1",
+      "les_m1_expr_01_e2",
+      "les_m1_expr_01_e3"
+     ]
+    },
+    {
+     "type": "check",
+     "questions": [
+      "m1_expr_combine_001~6",
+      "m1_expr_combine_001~7"
+     ]
+    },
+    {
+     "type": "pitfall",
+     "tag": "like_terms_mixup",
+     "textId": "les_m1_expr_01_p1"
+    },
+    {
+     "type": "summary",
+     "textIds": [
+      "les_m1_expr_01_s1",
+      "les_m1_expr_01_s2"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "les_m1_geo_angle_01",
+   "version": 1,
+   "unitId": "m1_geo_basic",
+   "minutes": 4,
+   "titleId": "les_m1_geo_angle_01_title",
+   "pre": [
+    "m1_geo_angle_002~4"
+   ],
+   "blocks": [
+    {
+     "type": "hook",
+     "textId": "les_m1_geo_angle_01_hook"
+    },
+    {
+     "type": "figure",
+     "template": "m1_geo_angle_001",
+     "seed": 3,
+     "altId": "fig_triangle_two_angles"
+    },
+    {
+     "type": "text",
+     "textId": "les_m1_geo_angle_01_t1"
+    },
+    {
+     "type": "example",
+     "template": "m1_geo_angle_001",
+     "seed": 3,
+     "lines": [
+      "x+{a}+{b}=180",
+      "x=180-{a}-{b}",
+      "x={180-a-b}"
+     ],
+     "target": "x={180-a-b}",
+     "textIds": [
+      "les_m1_geo_angle_01_e1",
+      "les_m1_geo_angle_01_e2",
+      "les_m1_geo_angle_01_e3"
+     ]
+    },
+    {
+     "type": "check",
+     "questions": [
+      "m1_geo_angle_001~8",
+      "m1_geo_angle_001~9"
+     ]
+    },
+    {
+     "type": "pitfall",
+     "tag": "sum_instead_of_remainder",
+     "textId": "les_m1_geo_angle_01_p1"
+    },
+    {
+     "type": "summary",
+     "textIds": [
+      "les_m1_geo_angle_01_s1"
+     ]
+    }
+   ]
+  }
+ ]
+}
