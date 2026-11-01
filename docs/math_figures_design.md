@@ -44,6 +44,19 @@
 - 描けない図（範囲が 0 を含まない・点が範囲の外ほか）は引き直す。形は `FigureShapeKind.polyline`（開いた折れ線）で、SVG は `<polyline>`。
 - 見本: `docs/content_drafts/suugaku_chu3/templates.json`（`m3_fn_graph_001`）。
 
+### 動く図 `figure.animation`（実装済み）
+時間 `t` で変わる図（ボールの落下、点が曲線の上を動く、図形が広がる）。どの図（点・線・`plot`・`solid`）にも付けられる。
+```json
+"figure": {"plot": {"x": [0, 6], "y": [0, 200], "curves": [{"expr": "5*x^2"}], "points": [{"at": ["t", "5*t*t"]}]},
+           "altId": "fig_free_fall_motion",
+           "animation": {"from": 0, "to": "p", "frames": 13, "durationMs": 2600, "loop": false}}
+```
+- `from`・`to`: 時間の範囲（数かパラメータの式。`to` が `from` より小さくてもよい=逆再生）。`frames` は 2〜120（既定 24）、`durationMs` は 200〜20000（既定 3000）、`loop`（既定 偽）。図の式では `t` が使える（パラメータ名に `t` は使えない）。
+- 変種の `Variant.animation`（`FigureAnimation`）に全コマの図 `frames`・時刻 `times`・`durationMs`・`loop`。`Variant.figure`（静止画）は最後のコマ。`indexAt(進み具合 0〜1)`・`figureAt`・`toSvgFrames()`。**再生は画面側**（タイマーでコマを切り替える。基盤はコマの作り方と検証だけ）。
+- どれかのコマが描けなければ（枠の外・点の重なりほか）、その変種は引き直す（毎回なら `template_unsatisfiable`）。`from == to` は動かないので描けない。
+- 容量はほぼ増えない（コマは式から作る。ファイルに持たない）。
+- 見本: `docs/content_drafts/suugaku_chu3/templates.json` の `m3_fn_use_002`（落下距離 y=5t²。点が p 秒まで動く）。
+
 ## 4. 描画（実装済み）
 - **core が SVG 文字列を作る**: `Figure.toSvg({fontSize, padding})`（純粋な Dart）。画面（Flutter）は SVG を描画する部品で表示するか、`Figure.shapes`・`labels` から自前で描く。検証ツールが全変種を SVG に落として目視・差分確認でき、成長カードなどの共有にも使え、Web でもそのまま使える。
 - 色は `currentColor` だけ（画面の文字色・ダークモードに合わせる）。ラベルは XML エスケープ。枠の外側に余白をとり、端の点の名前が切れない。

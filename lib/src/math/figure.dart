@@ -13,6 +13,9 @@ class FigureTemplate {
   final SolidSpec? _solid;
   final PlotSpec? _plot;
 
+  /// 時間で変わる図の仕様（無ければ null）。
+  FigureAnimationSpec? animation;
+
   final List<({String name, Object spec})> _points;
   final List<Map<String, dynamic>> _draw;
   final List<Map<String, dynamic>> _marks;
@@ -20,12 +23,23 @@ class FigureTemplate {
   final bool names;
   final String altId;
 
-  static const _keys = {'viewBox', 'points', 'draw', 'marks', 'names', 'altId', 'solid', 'plot'};
+  static const _keys = {'viewBox', 'points', 'draw', 'marks', 'names', 'altId', 'solid', 'plot'};  // animation は fromJson で取り出す
   static const _drawKinds = {'seg', 'circle', 'arc', 'poly'};
   static const _markKinds = {'angle', 'right', 'tick', 'length', 'text'};
 
   /// 読めなければ [FormatException]。[known] は式で使える名前（パラメータ・stats・derived）。
+  /// `animation`（時間で変わる図。[FigureAnimationSpec]）があれば、式で `t`（時間）も使える（パラメータ名に `t` は使えない）。
   factory FigureTemplate.fromJson(Map<String, dynamic> j, Set<String> known) {
+    final raw = j['animation'];
+    if (raw == null) return FigureTemplate._parse(j, known);
+    if (known.contains('t')) throw const FormatException('figure: animation を使う型ではパラメータ名 t は使えません（時間の名前）');
+    final spec = FigureAnimationSpec.fromJson(raw, known);
+    final t = FigureTemplate._parse({...j}..remove('animation'), {...known, 't'});
+    t.animation = spec;
+    return t;
+  }
+
+  factory FigureTemplate._parse(Map<String, dynamic> j, Set<String> known) {
     final unknown = j.keys.where((k) => !_keys.contains(k));
     if (unknown.isNotEmpty) throw FormatException('figure: 未知のキー: ${unknown.join(', ')}');
     final altId0 = j['altId'];
@@ -194,9 +208,31 @@ class FigureTemplate {
     );
   }
 
+  /// 時間で変わる図の全コマ（`animation` があるとき）。どれか 1 コマでも描けなければ null（変種生成が引き直す）。
+  FigureAnimation? animate(Map<String, double> values, String Function(String) render) {
+    final a = animation;
+    if (a == null) return null;
+    final from = a.from(values), to = a.to(values);
+    if (from == to) return null; // 動かない。計算できない値は、各コマが NaN になって描けない（null）
+    final frames = <Figure>[], times = <double>[];
+    for (var i = 0; i < a.frames; i++) {
+      final t = from + (to - from) * i / (a.frames - 1);
+      final f = resolve({...values, 't': t}, render);
+      if (f == null) return null;
+      frames.add(f);
+      times.add(t);
+    }
+    return FigureAnimation(frames: frames, times: times, durationMs: a.durationMs, loop: a.loop);
+  }
+
   /// 値を入れて座標にする。図が枠の外にはみ出す・点が重なる・角が作れないなど、描けないときは null
   /// （変種生成が引き直す）。
   Figure? resolve(Map<String, double> values, String Function(String) render) {
+    final anim = animation;
+    if (anim != null && !values.containsKey('t')) {
+      // 時間で変わる図の静止画は、最後の時刻の図
+      values = {...values, 't': anim.to(values)}; // 計算できない値は、図の式が NaN になって描けない（null）
+    }
     double ev(Object? e) {
       if (e is num) return e.toDouble();
       return MathExpr.parse(e as String).eval(values);
@@ -333,6 +369,78 @@ class FigureTemplate {
     final nx = -dy / d, ny = dx / d; // 線分に垂直な向き
     return FigureLabel(mx + nx * 5, my + ny * 5 + 2, label);
   }
+}
+
+/// 時間で変わる図の仕様（`figure.animation`）。時間 `t` が `from` から `to` まで動く間の [frames] コマ。
+/// `{"animation": {"from": 0, "to": "p", "frames": 24, "durationMs": 3000, "loop": false}}`。
+/// `from`・`to` は数かパラメータの式。図の式で `t` を使って位置などを決める（例: 点 `["t", "5*t*t"]`）。
+class FigureAnimationSpec {
+  const FigureAnimationSpec._(this._from, this._to, this.frames, this.durationMs, this.loop);
+
+  final Object _from, _to;
+
+  /// コマ数（2〜120）。
+  final int frames;
+
+  /// 全コマを再生する時間（ミリ秒。200〜20000）。
+  final int durationMs;
+
+  /// くり返し再生か。
+  final bool loop;
+
+  static const maxFrames = 120;
+
+  factory FigureAnimationSpec.fromJson(Object? raw, Set<String> known) {
+    if (raw is! Map || raw.keys.any((k) => !const {'from', 'to', 'frames', 'durationMs', 'loop'}.contains(k))) {
+      throw const FormatException('figure.animation は from・to・frames・durationMs・loop だけ');
+    }
+    Object bound(String k) {
+      final v = raw[k];
+      if (v is num) return v;
+      final x = v is String ? MathExpr.tryParse(v) : null;
+      if (x == null) throw FormatException('figure.animation: $k は数か式: $v');
+      final bad = x.variables.where((e) => !known.contains(e));
+      if (bad.isNotEmpty) throw FormatException('figure.animation: $k にパラメータにない文字 ${bad.join()}: $v');
+      return v as Object;
+    }
+
+    final frames = raw['frames'] ?? 24, ms = raw['durationMs'] ?? 3000, loop = raw['loop'] ?? false;
+    if (frames is! int || frames < 2 || frames > maxFrames) throw FormatException('figure.animation: frames は 2〜$maxFrames の整数');
+    if (ms is! int || ms < 200 || ms > 20000) throw const FormatException('figure.animation: durationMs は 200〜20000 の整数');
+    if (loop is! bool) throw const FormatException('figure.animation: loop は真偽');
+    return FigureAnimationSpec._(bound('from'), bound('to'), frames, ms, loop);
+  }
+
+  double from(Map<String, double> values) => _eval(_from, values);
+  double to(Map<String, double> values) => _eval(_to, values);
+
+  static double _eval(Object e, Map<String, double> v) => e is num ? e.toDouble() : MathExpr.parse(e as String).eval(v);
+}
+
+/// 値を入れた、時間で変わる図。画面は [durationMs] をかけて [frames] を順に見せる（[loop] ならくり返す）。
+class FigureAnimation {
+  const FigureAnimation({required this.frames, required this.times, required this.durationMs, required this.loop});
+
+  /// 各コマの図（時刻の順）。
+  final List<Figure> frames;
+
+  /// 各コマの時刻 `t`。
+  final List<double> times;
+  final int durationMs;
+  final bool loop;
+
+  /// 再生の進み具合 [progress]（0〜1。範囲外は端）に最も近いコマの位置。
+  int indexAt(double progress) {
+    final p = progress.isNaN ? 0.0 : progress.clamp(0.0, 1.0);
+    return (p * (frames.length - 1)).round();
+  }
+
+  Figure figureAt(double progress) => frames[indexAt(progress)];
+
+  /// 全コマの SVG。
+  List<String> toSvgFrames({double fontSize = 6, double padding = 8}) => [
+    for (final f in frames) f.toSvg(fontSize: fontSize, padding: padding),
+  ];
 }
 
 /// 図の要素の種類。
