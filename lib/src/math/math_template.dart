@@ -3,6 +3,7 @@ import 'dart:convert';
 import '../bank/question_bank.dart';
 import '../models/models.dart';
 import '../scope/unit_tree.dart';
+import '../util/five_number.dart';
 import 'figure.dart';
 import 'math_expr.dart';
 import 'seeded_random.dart';
@@ -69,11 +70,11 @@ class ListSpec {
   }
 }
 
-const _statFunctions = {'sum', 'mean', 'median', 'mode', 'range', 'min', 'max', 'count'};
+const _statFunctions = {'sum', 'mean', 'median', 'mode', 'range', 'min', 'max', 'count', 'q1', 'q3', 'iqr'};
 
 /// `stats` の式（`mean(L)`・`count(L)`・`count(L, 10, 20)` など）。数列の名前と、引数の数・パラメータ名を調べる。
 ({String fn, String list, List<String> args}) _parseStat(String spec, Set<String> lists, Set<String> scalars) {
-  final m = RegExp(r'^\s*([a-z]+)\(\s*([A-Z])\s*((?:,[^,()]*)*)\)\s*$').firstMatch(spec);
+  final m = RegExp(r'^\s*([a-z][a-z0-9]*)\(\s*([A-Z])\s*((?:,[^,()]*)*)\)\s*$').firstMatch(spec);
   if (m == null) throw FormatException('stats の式は 関数名(数列, …): $spec');
   final fn = m.group(1)!, list = m.group(2)!;
   if (!_statFunctions.contains(fn)) throw FormatException('未対応の関数 $fn（${_statFunctions.join('・')}）: $spec');
@@ -117,6 +118,10 @@ double _evalStat(
       return modes.length == 1 ? modes.first : double.nan;
     case 'range':
       return sorted.last - sorted.first;
+    case 'q1' || 'q3' || 'iqr': // 四分位数（中学校の定義）。データが 1 個のときは求められないので NaN
+      if (d.length < 2) return double.nan;
+      final f = fiveNumberSummary(d);
+      return switch (s.fn) { 'q1' => f.q1, 'q3' => f.q3, _ => f.iqr };
     case 'min':
       return sorted.first;
     case 'max':

@@ -155,6 +155,113 @@ void main() {
     });
   });
 
+  group('箱ひげ図 box', () {
+    List<List<num>> five5(List<num> mn, List<num> q1, List<num> md, List<num> q3, List<num> mx) => [mn, q1, md, q3, mx];
+    Map<String, dynamic> boxJson({List<String>? ids, List<List<num>>? v, List<String>? cats}) => {
+          'kind': 'box',
+          'altId': 'a',
+          'categories': cats ?? ['A', 'B'],
+          'series': [
+            for (var i = 0; i < 5; i++)
+              {'id': (ids ?? ['min', 'q1', 'median', 'q3', 'max'])[i], 'values': (v ?? five5([1, 2], [3, 4], [5, 6], [7, 8], [9, 10]))[i]},
+          ],
+        };
+
+    test('読み取りと補助（四分位範囲・範囲）', () {
+      final c = ChartSpec.fromJson(boxJson());
+      expect(c.kind, ChartKind.box);
+      expect([c.iqrOf(0), c.iqrOf(1), c.rangeOf(0), c.rangeOf(1)], [4, 4, 8, 8]);
+      expect(() => c.iqrOf(2), throwsRangeError);
+      expect(() => c.iqrOf(-1), throwsRangeError);
+      expect(() => c.rangeOf(2), throwsRangeError);
+      expect(() => _climate().iqrOf(0), throwsStateError);
+      expect(() => _climate().rangeOf(0), throwsStateError);
+      expect(c.argMax('median'), 1);
+    });
+
+    test('形の誤り: 系列の数・ID の順・各項目で小さい順', () {
+      expect(() => _p('box', ['a'], [[1], [2], [3], [4]]), _bad('5 個'));
+      expect(() => ChartSpec.fromJson(boxJson(ids: ['q1', 'min', 'median', 'q3', 'max'])), _bad('順'));
+      for (var k = 0; k < 4; k++) {
+        final v = five5([1, 2], [3, 4], [5, 6], [7, 8], [9, 10]);
+        v[k] = [v[k + 1][0] + 1, v[k][1]]; // 項目 A の k 番目を次より大きくする
+        expect(() => ChartSpec.fromJson(boxJson(v: v)), _bad('A'), reason: 'k=$k');
+      }
+      // 等しいのはよい（箱が線になる）
+      ChartSpec.fromJson(boxJson(v: five5([1, 1], [1, 1], [1, 1], [1, 1], [1, 1])));
+      // 負の値もよい
+      ChartSpec.fromJson(boxJson(v: five5([-9, -8], [-7, -6], [-5, -4], [-3, -2], [-1, 0])));
+    });
+
+    test('生のデータから: 五数要約は中学校の定義', () {
+      final c = ChartSpec.boxFromData(altId: 'a', categories: ['A組', 'B組'], data: [
+        [1, 2, 3, 4, 5, 6, 7, 8],
+        [2, 4, 6, 8, 10, 12, 14],
+      ]);
+      expect(c.series.map((s) => s.id), ['min', 'q1', 'median', 'q3', 'max']);
+      expect(c.series[0].values, [1, 2]);
+      expect(c.series[1].values, [2.5, 4]);
+      expect(c.series[2].values, [4.5, 8]);
+      expect(c.series[3].values, [6.5, 12]);
+      expect(c.series[4].values, [8, 14]);
+      expect([c.iqrOf(0), c.iqrOf(1)], [4, 8]);
+      expect(() => ChartSpec.boxFromData(altId: 'a', categories: ['A'], data: [[1, 2], [3, 4]]), throwsArgumentError);
+      expect(() => ChartSpec.boxFromData(altId: 'a', categories: ['A'], data: [[1]]), throwsArgumentError);
+    });
+
+    test('SVG: 項目ごとに箱 1 つ・目盛り・項目の名前。色は currentColor だけ', () {
+      final c = ChartSpec.boxFromData(altId: 'a', categories: ['A組', 'B組', 'C組'], data: [
+        [10, 20, 30, 40, 50, 60],
+        [25, 30, 35, 40, 45],
+        [5, 50, 55, 60, 95, 100],
+      ]);
+      final svg = c.toSvg();
+      expect(svg.startsWith('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 80"'), isTrue);
+      expect(_count(svg, '<rect'), 3);
+      for (final n in ['A組', 'B組', 'C組']) {
+        expect(svg.contains('>$n</text>'), isTrue, reason: n);
+      }
+      expect(RegExp(r'#[0-9a-fA-F]{3,6}').hasMatch(svg), isFalse);
+      expect(svg.contains('NaN') || svg.contains('Infinity'), isFalse);
+      // 目盛り: 最小 5〜最大 100 → 0〜100（20 刻み）の 6 本
+      for (final t in ['0', '20', '40', '60', '80', '100']) {
+        expect(svg.contains('>$t</text>'), isTrue, reason: t);
+      }
+      expect(c.toSvg(), svg);
+    });
+
+    test('SVG: 箱の位置は値に比例する（中央値の縦線は箱の中）', () {
+      final c = ChartSpec.fromJson(boxJson(cats: ['A'], v: five5([0], [20], [50], [60], [100])));
+      final svg = c.toSvg();
+      final rect = RegExp(r'<rect x="([\d.]+)" y="[\d.]+" width="([\d.]+)"').firstMatch(svg)!;
+      final x = double.parse(rect.group(1)!), w = double.parse(rect.group(2)!);
+      // 軸 0〜100 が 24〜108 → 20 は 40.8、60 は 74.4（幅 33.6）
+      expect(x, closeTo(24 + 0.2 * 84, 0.01));
+      expect(w, closeTo(0.4 * 84, 0.01));
+    });
+
+    test('SVG: ひげ（最小〜q1、q3〜最大）・端の短い縦線・中央値の縦線・箱の高さと濃さ', () {
+      final c = ChartSpec.fromJson(boxJson(cats: ['A'], v: five5([0], [20], [50], [60], [100])));
+      final svg = c.toSvg();
+      // 軸 0〜100 → x = 24 + 0.84·v。1 項目なので行の高さ 54、中心 y = 35、箱の高さ 27
+      expect(svg.contains('<line x1="24" y1="35" x2="40.8" y2="35"/>'), isTrue, reason: '最小〜q1 のひげ');
+      expect(svg.contains('<line x1="74.4" y1="35" x2="108" y2="35"/>'), isTrue, reason: 'q3〜最大 のひげ');
+      expect(svg.contains('<line x1="24" y1="26" x2="24" y2="44"/>'), isTrue, reason: '最小の端');
+      expect(svg.contains('<line x1="108" y1="26" x2="108" y2="44"/>'), isTrue, reason: '最大の端');
+      expect(svg.contains('<line x1="66" y1="21.5" x2="66" y2="48.5"/>'), isTrue, reason: '中央値');
+      expect(svg.contains('height="27" fill="currentColor" fill-opacity="0.2"/>'), isTrue, reason: '箱');
+    });
+
+    test('SVG: 値がすべて同じでも描ける。項目が 8 を超えると文字を小さくする', () {
+      final same = ChartSpec.fromJson(boxJson(cats: ['A'], v: five5([5], [5], [5], [5], [5])));
+      expect(same.toSvg().contains('NaN'), isFalse);
+      List<String> cats(int n) => [for (var i = 0; i < n; i++) 'c$i'];
+      List<List<num>> flat(int n) => five5(List.filled(n, 1), List.filled(n, 2), List.filled(n, 3), List.filled(n, 4), List.filled(n, 5));
+      expect(ChartSpec.fromJson(boxJson(cats: cats(8), v: flat(8))).toSvg().contains('font-size="4" text-anchor="end"'), isTrue);
+      expect(ChartSpec.fromJson(boxJson(cats: cats(9), v: flat(9))).toSvg().contains('font-size="3" text-anchor="end"'), isTrue);
+    });
+  });
+
   group('SVG', () {
     void common(String svg) {
       expect(svg.startsWith('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 80"'), isTrue);

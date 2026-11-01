@@ -19,4 +19,4 @@
 | 一次関数 | 座標・図（線分・点）、スライダーの体験（`ex_linear_ab`） | 直線のグラフを式から描く図（`Figure` は点と線分で書ける）、2 直線の交点 |
 | 平行と合同・三角形と四角形 | 角の図（`figure`）、`order`・`choice` | **証明**の問題（根拠の穴埋め・手順の並べ替え。当面は `order`・`choice`）、合同条件の図 |
 | 確率 | `form: reduced_fraction`、場合の数は数値 | 樹形図の図 |
-| データの比較 | 代表値（`stats`）、`ChartSpec` | **箱ひげ図**（`ChartKind` に追加が要る）、四分位数の計算（`stats` に追加） |
+| データの比較 | 代表値（`stats`）、`ChartSpec`（**箱ひげ図 `box`**。`ChartSpec.boxFromData`・`iqrOf`・`rangeOf`）、四分位数 `q1`・`q3`・`iqr`（中学校の定義） | 箱ひげ図の問題の型（箱ひげ図から読み取る・データから描く） |

@@ -11,7 +11,7 @@ List<String> _imports(File f) => [
 
 void main() {
   test('lib/src/math は Flutter に依存せず、models・bank・scope/unit_tree 以外の core に依存しない', () {
-    const allowed = {'../models/models.dart', '../bank/question_bank.dart', '../scope/unit_tree.dart'};
+    const allowed = {'../models/models.dart', '../bank/question_bank.dart', '../scope/unit_tree.dart', '../util/five_number.dart'};
     final files = Directory(
       'lib/src/math',
     ).listSync().whereType<File>().where((f) => f.path.endsWith('.dart')).toList();
@@ -62,7 +62,7 @@ void main() {
     expect(files, isNotEmpty);
     for (final f in files) {
       for (final i in _imports(f)) {
-        expect(i == 'dart:convert' || i == 'dart:math', isTrue, reason: '${f.path}: $i');
+        expect(i == 'dart:convert' || i == 'dart:math' || i == '../util/five_number.dart', isTrue, reason: '${f.path}: $i');
       }
     }
   });

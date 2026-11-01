@@ -61,7 +61,7 @@
 ## 6. 実装の順（案）
 1. `match` 問題タイプ（§3.1）。**実装済み**。
 2. `MathExpr` に `floor`・`ceil`・`mod`（§3.4）と、時代区分 `EraTable`。**実装済み**（`mod` は余りが 0 以上 b 未満、`centuryOf` は紀元前を負の世紀）。
-3. グラフ `ChartSpec`（§3.2）。**実装済み**（`lib/src/chart/chart.dart`、教科共通・数学に依存しない）。`bars`・`line`・`climate`（雨温図: 1 系列目が気温の折れ線・2 系列目が降水量の棒、左右の目盛りは横線を共有）・`pyramid`・`pie`。仕様の読み取り（`ChartSpec.parse`）・SVG（`toSvg`）・読み取りの補助（`argMax`/`argMin`/`total`/`mean`/`shareOf`）・目盛り（`niceScale`）。型のパラメータから値を作る変種への接続は未（固定の値を書く資料から）。
+3. グラフ `ChartSpec`（§3.2）。**実装済み**（`lib/src/chart/chart.dart`、教科共通・数学に依存しない）。`bars`・`line`・`box`（箱ひげ図: 系列は `min`・`q1`・`median`・`q3`・`max`。`boxFromData` で生のデータから）・`climate`（雨温図: 1 系列目が気温の折れ線・2 系列目が降水量の棒、左右の目盛りは横線を共有）・`pyramid`・`pie`。仕様の読み取り（`ChartSpec.parse`）・SVG（`toSvg`）・読み取りの補助（`argMax`/`argMin`/`total`/`mean`/`shareOf`）・目盛り（`niceScale`）。型のパラメータから値を作る変種への接続は未（固定の値を書く資料から）。
 4. 地図データの形式・検証・簡略化・SVG（§3.3）。**実装済み**（GeoJSON からの変換 `mapPackFromGeoJson` を含む）。
 5. 中 1 社会の単元・前提・型の草案（§5）。**実装済み**（`docs/content_drafts/shakai_chu1/`: 19 単元・前提 12・見本の問題 18・雨温図の見本 4。`test/shakai_draft_test.dart` が検証）。
 6. 体験型（§3.5）。**一部実装済み**: 年表づくり `timeline`（置き方の誤りを「前後が逆の組」で返す）、因果の矢印 `link`（`LinkResult.reversed` = 向きだけ逆 → 誤解の型 `cause_effect_reversed`）、時差ダイヤル `dial` と時差の計算 `timeOffsetHours`・`localTimeAt`（日付のずれつき）。未: 雨温図を動かす（`Exploration` に `chart` を結ぶ）。
