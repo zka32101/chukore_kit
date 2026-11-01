@@ -24,7 +24,7 @@ sealed class Experience {
   /// JSON の `kind`。
   String get kind;
 
-  static const knownKinds = {'sort', 'link', 'dial', 'balance'};
+  static const knownKinds = {'sort', 'link', 'dial', 'balance', 'timeline'};
   static const _common = {'id', 'version', 'unitId', 'kind', 'promptId', 'explanationId'};
 
   /// 読めなければ [FormatException]。
@@ -37,6 +37,7 @@ sealed class Experience {
       'sort' => const {'bins', 'items'},
       'link' => const {'nodes', 'edges', 'directed'},
       'dial' => const {'min', 'max', 'step', 'initial', 'target', 'tolerance'},
+      'timeline' => const {'events'},
       _ => const {'items', 'leftFixed', 'rightFixed'},
     };
     final unknown = j.keys.where((k) => !_common.contains(k) && !extra.contains(k));
@@ -54,6 +55,7 @@ sealed class Experience {
       'sort' => SortExperience._parse(j, c),
       'link' => LinkExperience._parse(j, c),
       'dial' => DialExperience._parse(j, c),
+      'timeline' => TimelineExperience._parse(j, c),
       _ => BalanceExperience._parse(j, c),
     };
   }
@@ -169,9 +171,13 @@ class SortExperience extends Experience {
 
 /// つなぎの結果。辺は `from>to`（向きなしのときは ID の小さい方を先にそろえる）。
 class LinkResult {
-  const LinkResult({required this.correct, required this.missing, required this.extra});
+  const LinkResult({required this.correct, required this.missing, required this.extra, this.reversed = const []});
 
   final List<String> correct, missing, extra;
+
+  /// 余分な辺のうち、向きだけが逆のもの（原因と結果の取り違え。向きありのときだけ。誤解の型 `cause_effect_reversed`）。
+  /// `extra` にも含まれる。
+  final List<String> reversed;
 
   /// 過不足なくつながっている。
   bool get complete => missing.isEmpty && extra.isEmpty;
@@ -230,6 +236,11 @@ class LinkExperience extends Experience {
   static String edgeKey(String from, String to, {bool directed = true}) =>
       directed || from.compareTo(to) <= 0 ? '$from>$to' : '$to>$from';
 
+  static String _flip(String key) {
+    final i = key.indexOf('>');
+    return '${key.substring(i + 1)}>${key.substring(0, i)}';
+  }
+
   /// つないだ辺 [made]（`(from, to)`）の判定。点にない辺や自分への辺は余分として数える。重複は 1 本。
   LinkResult check(Iterable<(String, String)> made) {
     final keys = <String>{for (final (f, t) in made) edgeKey(f, t, directed: directed)};
@@ -237,6 +248,8 @@ class LinkExperience extends Experience {
       correct: [for (final e in edges) if (keys.contains(e)) e],
       missing: [for (final e in edges) if (!keys.contains(e)) e],
       extra: [for (final k in keys.toList()..sort()) if (!edges.contains(k)) k],
+      // 向きなしの辺は ID の小さい方を先にそろえてあるので、逆向きの辺は正解の中に現れない（向きありのときだけ出る）
+      reversed: [for (final k in keys.toList()..sort()) if (!edges.contains(k) && edges.contains(_flip(k))) k],
     );
   }
 }
@@ -434,6 +447,101 @@ class BalanceExperience extends Experience {
   }
 }
 
+// ───────────────────────── timeline（年表づくり）─────────────────────────
+
+/// 年表づくりの結果。
+class TimelineResult {
+  const TimelineResult({required this.reversedPairs, required this.unplaced});
+
+  /// 置いた順が逆になっている組（`(先のはずの出来事, 後のはずの出来事)`。置いた順で、組の並びは (先に置いた方, 後に置いた方) の順）。
+  /// 「A は B より前」のような前後の言葉でフィードバックする。
+  final List<(String, String)> reversedPairs;
+
+  /// まだ置いていない出来事。
+  final List<String> unplaced;
+
+  /// 全部置いて、前後がすべて正しい。
+  bool get complete => reversedPairs.isEmpty && unplaced.isEmpty;
+
+  /// 前後が逆になっている出来事の ID（置いた順・重複なし）。
+  List<String> get misplaced {
+    final seen = <String>{};
+    return [
+      for (final (a, b) in reversedPairs) ...[
+        if (seen.add(a)) a,
+        if (seen.add(b)) b,
+      ],
+    ];
+  }
+}
+
+/// 出来事のカードを年表に並べる（年表づくり）。置き方の誤りを「前後」で返す。
+class TimelineExperience extends Experience {
+  const TimelineExperience._({
+    required super.id,
+    required super.version,
+    required super.unitId,
+    required super.promptId,
+    required super.explanationId,
+    required this.events,
+  });
+
+  /// 出来事（古い順。同じ年は `order` の小さい方が先）。ID → 西暦（紀元前は負）。
+  final List<({String id, int year, int order})> events;
+
+  @override
+  String get kind => 'timeline';
+
+  /// 出来事の最大数。
+  static const maxEvents = 30;
+
+  factory TimelineExperience._parse(Map<String, dynamic> j, _Common c) {
+    final list = <({String id, int year, int order})>[];
+    for (final m in _maps(j['events'], c.id, 'events', min: 2, max: maxEvents)) {
+      _onlyKeys(m, const {'id', 'year', 'order'}, c.id, 'events');
+      final id = _str(m, 'id', '${c.id}.events');
+      final y = m['year'], o = m['order'] ?? 0;
+      if (y is! int || y == 0) throw FormatException('${c.id}: $id の year は 0 でない整数の年（紀元前は負）');
+      if (o is! int) throw FormatException('${c.id}: $id の order は整数');
+      if (list.any((e) => e.id == id)) throw FormatException('${c.id}: events の id が重複: $id');
+      if (list.any((e) => e.year == y && e.order == o)) {
+        throw FormatException('${c.id}: $id は同じ年・同じ order の出来事があり、前後が決まりません');
+      }
+      list.add((id: id, year: y, order: o));
+    }
+    list.sort((a, b) {
+      final d = a.year.compareTo(b.year);
+      return d != 0 ? d : a.order.compareTo(b.order);
+    });
+    return TimelineExperience._(
+      id: c.id, version: c.version, unitId: c.unitId, promptId: c.promptId, explanationId: c.explanationId,
+      events: list,
+    );
+  }
+
+  /// 正しい順（古い順）の出来事 ID。
+  List<String> get order => [for (final e in events) e.id];
+
+  /// 置いた順 [placed]（出来事 ID。知らない ID と重複は無視）の判定。
+  TimelineResult check(List<String> placed) {
+    final rank = {for (var i = 0; i < events.length; i++) events[i].id: i};
+    final seq = <String>[];
+    for (final p in placed) {
+      if (rank.containsKey(p) && !seq.contains(p)) seq.add(p);
+    }
+    final pairs = <(String, String)>[];
+    for (var i = 0; i < seq.length; i++) {
+      for (var k = i + 1; k < seq.length; k++) {
+        if (rank[seq[i]]! > rank[seq[k]]!) pairs.add((seq[i], seq[k]));
+      }
+    }
+    return TimelineResult(
+      reversedPairs: pairs,
+      unplaced: [for (final e in events) if (!seq.contains(e.id)) e.id],
+    );
+  }
+}
+
 // ───────────────────────── 集まりと検証 ─────────────────────────
 
 /// 体験の集まり（`experiences.json`）。
@@ -482,6 +590,8 @@ List<ValidationIssue> validateExperiences(ExperienceSet set, {required UnitTree 
         if (e.check(e.initial).reached) {
           add(IssueSeverity.error, 'experience_initial_is_goal', e.id, '最初の値がすでに目標に合っています');
         }
+      case TimelineExperience():
+        break;
       case BalanceExperience():
         if ((e.leftFixed.fold<double>(0, (s, w) => s + w) - e.rightFixed.fold<double>(0, (s, w) => s + w)).abs() < 1e-9) {
           add(IssueSeverity.error, 'experience_initial_is_goal', e.id, '最初からつりあっています');

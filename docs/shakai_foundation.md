@@ -64,7 +64,7 @@
 3. グラフ `ChartSpec`（§3.2）。**実装済み**（`lib/src/chart/chart.dart`、教科共通・数学に依存しない）。`bars`・`line`・`climate`（雨温図: 1 系列目が気温の折れ線・2 系列目が降水量の棒、左右の目盛りは横線を共有）・`pyramid`・`pie`。仕様の読み取り（`ChartSpec.parse`）・SVG（`toSvg`）・読み取りの補助（`argMax`/`argMin`/`total`/`mean`/`shareOf`）・目盛り（`niceScale`）。型のパラメータから値を作る変種への接続は未（固定の値を書く資料から）。
 4. 地図データの形式・検証・簡略化・SVG（§3.3）。**実装済み**（GeoJSON からの変換 `mapPackFromGeoJson` を含む）。
 5. 中 1 社会の単元・前提・型の草案（§5）。**実装済み**（`docs/content_drafts/shakai_chu1/`: 19 単元・前提 12・見本の問題 18・雨温図の見本 4。`test/shakai_draft_test.dart` が検証）。
-6. 体験型（§3.5）。
+6. 体験型（§3.5）。**一部実装済み**: 年表づくり `timeline`（置き方の誤りを「前後が逆の組」で返す）、因果の矢印 `link`（`LinkResult.reversed` = 向きだけ逆 → 誤解の型 `cause_effect_reversed`）、時差ダイヤル `dial` と時差の計算 `timeOffsetHours`・`localTimeAt`（日付のずれつき）。未: 雨温図を動かす（`Exploration` に `chart` を結ぶ）。
 
 ## 7. 先に決めたいこと
 1. **最初の範囲**: 中 1 の地理（世界・日本の姿、気候）から（案）。歴史は次。
