@@ -1,0 +1,140 @@
+{
+ "version": 1,
+ "proofs": [
+  {
+   "id": "pf_m3_sim_ade",
+   "unitId": "m3_sim_def",
+   "titleId": "pf_m3_sim_ade_title",
+   "givenId": "pf_m3_sim_ade_given",
+   "goalId": "pf_m3_sim_ade_goal",
+   "reasons": [
+    {
+     "id": "r_given",
+     "textId": "pfr3_given"
+    },
+    {
+     "id": "r_corresponding",
+     "textId": "pfr3_corresponding"
+    },
+    {
+     "id": "r_common",
+     "textId": "pfr3_common"
+    },
+    {
+     "id": "r_aa",
+     "textId": "pfr3_aa"
+    },
+    {
+     "id": "r_sas",
+     "textId": "pfr3_sas"
+    },
+    {
+     "id": "r_ratio",
+     "textId": "pfr3_ratio"
+    }
+   ],
+   "steps": [
+    {
+     "id": "s1",
+     "claimId": "pf_m3_sim_ade_s1",
+     "reasonId": "r_corresponding"
+    },
+    {
+     "id": "s2",
+     "claimId": "pf_m3_sim_ade_s2",
+     "reasonId": "r_common"
+    },
+    {
+     "id": "s3",
+     "claimId": "pf_m3_sim_ade_s3",
+     "reasonId": "r_aa",
+     "after": [
+      "s1",
+      "s2"
+     ]
+    }
+   ],
+   "decoys": [
+    {
+     "id": "d1",
+     "claimId": "pf_m3_sim_ade_d1",
+     "tag": "assumed_conclusion"
+    },
+    {
+     "id": "d2",
+     "claimId": "pf_m3_sim_ade_d2",
+     "tag": "assumed_not_given"
+    }
+   ]
+  },
+  {
+   "id": "pf_m3_sim_oac",
+   "unitId": "m3_sim_def",
+   "titleId": "pf_m3_sim_oac_title",
+   "givenId": "pf_m3_sim_oac_given",
+   "goalId": "pf_m3_sim_oac_goal",
+   "reasons": [
+    {
+     "id": "r_alt",
+     "textId": "pfr3_alt"
+    },
+    {
+     "id": "r_vertical",
+     "textId": "pfr3_vertical"
+    },
+    {
+     "id": "r_aa",
+     "textId": "pfr3_aa"
+    },
+    {
+     "id": "r_ratio",
+     "textId": "pfr3_ratio"
+    },
+    {
+     "id": "r_sas",
+     "textId": "pfr3_sas"
+    },
+    {
+     "id": "r_corresponding",
+     "textId": "pfr3_corresponding"
+    }
+   ],
+   "steps": [
+    {
+     "id": "s1",
+     "claimId": "pf_m3_sim_oac_s1",
+     "reasonId": "r_alt"
+    },
+    {
+     "id": "s2",
+     "claimId": "pf_m3_sim_oac_s2",
+     "reasonId": "r_vertical"
+    },
+    {
+     "id": "s3",
+     "claimId": "pf_m3_sim_oac_s3",
+     "reasonId": "r_aa",
+     "after": [
+      "s1",
+      "s2"
+     ]
+    },
+    {
+     "id": "s4",
+     "claimId": "pf_m3_sim_oac_s4",
+     "reasonId": "r_ratio",
+     "after": [
+      "s3"
+     ]
+    }
+   ],
+   "decoys": [
+    {
+     "id": "d1",
+     "claimId": "pf_m3_sim_oac_d1",
+     "tag": "used_congruence"
+    }
+   ]
+  }
+ ]
+}

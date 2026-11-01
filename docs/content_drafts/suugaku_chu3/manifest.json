@@ -16,6 +16,7 @@
   "templates": "templates.json",
   "scenes": "scenes.json",
   "lessons": "lessons.json",
-  "texts": "texts.json"
+  "texts": "texts.json",
+  "proofs": "proofs.json"
  }
 }

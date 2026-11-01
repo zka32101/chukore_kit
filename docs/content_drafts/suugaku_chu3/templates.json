@@ -323,6 +323,788 @@
      "durationMs": 2600
     }
    }
+  },
+  {
+   "id": "m3_poly_expand_001",
+   "templateVersion": 1,
+   "unitId": "m3_poly_expand",
+   "type": "expr",
+   "form": "expanded",
+   "difficulty": 0.6,
+   "params": {
+    "a": {
+     "int": [
+      -9,
+      9
+     ]
+    },
+    "b": {
+     "int": [
+      -9,
+      9
+     ]
+    }
+   },
+   "constraints": [
+    "a != 0",
+    "b != 0",
+    "(a+b)*(a+b) > 1"
+   ],
+   "display": {
+    "expr": "(x{+a})(x{+b})"
+   },
+   "answer": "x^2{+a+b}x{+a*b}",
+   "wrong": [
+    {
+     "expr": "x^2{+a+b}x{+a+b}",
+     "tag": "multiply_forgotten"
+    },
+    {
+     "expr": "x^2{+a*b}",
+     "tag": "middle_term_dropped"
+    }
+   ],
+   "explanationId": "exp_m3_poly_expand_001"
+  },
+  {
+   "id": "m3_poly_expand_002",
+   "templateVersion": 1,
+   "unitId": "m3_poly_expand",
+   "type": "expr",
+   "form": "expanded",
+   "difficulty": 0.65,
+   "params": {
+    "a": {
+     "int": [
+      -9,
+      9
+     ]
+    }
+   },
+   "constraints": [
+    "a != 0"
+   ],
+   "display": {
+    "expr": "(x{+a})^2"
+   },
+   "answer": "x^2{+2*a}x{+a*a}",
+   "wrong": [
+    {
+     "expr": "x^2{+a*a}",
+     "tag": "forgot_middle_term"
+    },
+    {
+     "expr": "x^2{+a}x{+a*a}",
+     "tag": "middle_term_not_doubled"
+    }
+   ],
+   "explanationId": "exp_m3_poly_expand_002"
+  },
+  {
+   "id": "m3_poly_expand_003",
+   "templateVersion": 1,
+   "unitId": "m3_poly_expand",
+   "type": "expr",
+   "form": "expanded",
+   "difficulty": 0.6,
+   "params": {
+    "a": {
+     "int": [
+      2,
+      12
+     ]
+    }
+   },
+   "display": {
+    "expr": "(x+{a})(x-{a})"
+   },
+   "answer": "x^2-{a*a}",
+   "wrong": [
+    {
+     "expr": "x^2+{a*a}",
+     "tag": "sign_error"
+    },
+    {
+     "expr": "x^2-{a}",
+     "tag": "forgot_square"
+    }
+   ],
+   "explanationId": "exp_m3_poly_expand_003"
+  },
+  {
+   "id": "m3_poly_factor_001",
+   "templateVersion": 1,
+   "unitId": "m3_poly_factor",
+   "type": "expr",
+   "form": "factored",
+   "difficulty": 0.7,
+   "params": {
+    "a": {
+     "int": [
+      -9,
+      9
+     ]
+    },
+    "b": {
+     "int": [
+      -9,
+      9
+     ]
+    }
+   },
+   "constraints": [
+    "a != 0",
+    "b != 0",
+    "a != b",
+    "(a+b)*(a+b) > 1"
+   ],
+   "display": {
+    "expr": "x^2{+a+b}x{+a*b}"
+   },
+   "answer": "(x{+a})(x{+b})",
+   "wrong": [
+    {
+     "expr": "(x{-a})(x{-b})",
+     "tag": "sign_flip"
+    },
+    {
+     "expr": "(x{+a})(x{-b})",
+     "tag": "sign_flip"
+    }
+   ],
+   "explanationId": "exp_m3_poly_factor_001"
+  },
+  {
+   "id": "m3_poly_factor_002",
+   "templateVersion": 1,
+   "unitId": "m3_poly_factor",
+   "type": "expr",
+   "form": "factored",
+   "difficulty": 0.65,
+   "params": {
+    "a": {
+     "int": [
+      2,
+      12
+     ]
+    }
+   },
+   "display": {
+    "expr": "x^2-{a*a}"
+   },
+   "answer": "(x+{a})(x-{a})",
+   "wrong": [
+    {
+     "expr": "(x-{a})^2",
+     "tag": "square_mixup"
+    },
+    {
+     "expr": "(x+{a})^2",
+     "tag": "square_mixup"
+    }
+   ],
+   "explanationId": "exp_m3_poly_factor_002"
+  },
+  {
+   "id": "m3_sqrt_def_001",
+   "templateVersion": 1,
+   "unitId": "m3_sqrt_def",
+   "type": "expr",
+   "difficulty": 0.45,
+   "params": {
+    "a": {
+     "int": [
+      2,
+      15
+     ]
+    }
+   },
+   "display": {
+    "area": "{a*a}"
+   },
+   "answer": "{a}",
+   "wrong": [
+    {
+     "expr": "{a*a}",
+     "tag": "area_not_side"
+    },
+    {
+     "expr": "{a*a/2}",
+     "tag": "half_of_area"
+    }
+   ],
+   "explanationId": "exp_m3_sqrt_def_001"
+  },
+  {
+   "id": "m3_sqrt_calc_001",
+   "templateVersion": 1,
+   "unitId": "m3_sqrt_calc",
+   "type": "expr",
+   "difficulty": 0.7,
+   "params": {
+    "a": {
+     "int": [
+      2,
+      5
+     ]
+    },
+    "b": {
+     "int": [
+      2,
+      7
+     ]
+    }
+   },
+   "constraints": [
+    "b != 4",
+    "b != 9"
+   ],
+   "display": {
+    "x": "√{b} × √{a*a*b}"
+   },
+   "answer": "{a*b}",
+   "wrong": [
+    {
+     "expr": "{a*b*b}",
+     "tag": "wrong_root"
+    },
+    {
+     "expr": "{a+b}",
+     "tag": "add_instead"
+    }
+   ],
+   "explanationId": "exp_m3_sqrt_calc_001"
+  },
+  {
+   "id": "m3_quad_solve_001",
+   "templateVersion": 1,
+   "unitId": "m3_quad_solve",
+   "type": "expr",
+   "difficulty": 0.65,
+   "params": {
+    "p": {
+     "int": [
+      -9,
+      9
+     ]
+    },
+    "q": {
+     "int": [
+      -9,
+      9
+     ]
+    }
+   },
+   "derived": {
+    "s": "-(p+q)"
+   },
+   "constraints": [
+    "p != 0",
+    "q != 0",
+    "p > q",
+    "s*s > 1"
+   ],
+   "display": {
+    "eq": "x^2{+s}x{+p*q}=0"
+   },
+   "answer": "{p}",
+   "wrong": [
+    {
+     "expr": "{q}",
+     "tag": "smaller_solution"
+    },
+    {
+     "expr": "{-p}",
+     "tag": "sign_error"
+    },
+    {
+     "expr": "{p+q}",
+     "tag": "sum_not_solution"
+    }
+   ],
+   "explanationId": "exp_m3_quad_solve_001"
+  },
+  {
+   "id": "m3_quad_solve_002",
+   "templateVersion": 1,
+   "unitId": "m3_quad_solve",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "a": {
+     "int": [
+      -6,
+      6
+     ]
+    },
+    "c": {
+     "int": [
+      1,
+      7
+     ]
+    }
+   },
+   "constraints": [
+    "a != 0"
+   ],
+   "display": {
+    "eq": "(x{+a})^2={c*c}"
+   },
+   "answer": "{c-a}",
+   "wrong": [
+    {
+     "expr": "{-c-a}",
+     "tag": "smaller_solution"
+    },
+    {
+     "expr": "{c+a}",
+     "tag": "sign_error"
+    },
+    {
+     "expr": "{c}",
+     "tag": "forgot_shift"
+    }
+   ],
+   "explanationId": "exp_m3_quad_solve_002"
+  },
+  {
+   "id": "m3_quad_word_001",
+   "templateVersion": 1,
+   "unitId": "m3_quad_word",
+   "type": "expr",
+   "difficulty": 0.7,
+   "params": {
+    "n": {
+     "int": [
+      2,
+      12
+     ]
+    }
+   },
+   "display": {
+    "prod": "{n*(n+1)}"
+   },
+   "answer": "{n}",
+   "wrong": [
+    {
+     "expr": "{n+1}",
+     "tag": "larger_number"
+    },
+    {
+     "expr": "{n*n}",
+     "tag": "square_instead"
+    }
+   ],
+   "explanationId": "exp_m3_quad_word_001"
+  },
+  {
+   "id": "m3_sim_def_001",
+   "templateVersion": 1,
+   "unitId": "m3_sim_def",
+   "type": "expr",
+   "difficulty": 0.55,
+   "params": {
+    "a": {
+     "int": [
+      2,
+      6
+     ]
+    },
+    "b": {
+     "int": [
+      2,
+      6
+     ]
+    },
+    "k": {
+     "int": [
+      2,
+      5
+     ]
+    }
+   },
+   "constraints": [
+    "a != b"
+   ],
+   "display": {
+    "ratio": "{a}:{b}"
+   },
+   "answer": "{b*k}",
+   "wrong": [
+    {
+     "expr": "{a*k*b}",
+     "tag": "multiplied"
+    },
+    {
+     "expr": "{b}",
+     "tag": "ratio_value_only"
+    }
+   ],
+   "explanationId": "exp_m3_sim_def_001"
+  },
+  {
+   "id": "m3_sim_ratio_001",
+   "templateVersion": 1,
+   "unitId": "m3_sim_ratio",
+   "type": "expr",
+   "difficulty": 0.65,
+   "params": {
+    "a": {
+     "int": [
+      1,
+      5
+     ]
+    },
+    "b": {
+     "int": [
+      1,
+      5
+     ]
+    },
+    "m": {
+     "int": [
+      2,
+      6
+     ]
+    }
+   },
+   "display": {
+    "ad": "{a}",
+    "db": "{b}"
+   },
+   "answer": "{a*m}",
+   "wrong": [
+    {
+     "expr": "{b*m}",
+     "tag": "swapped_ratio"
+    },
+    {
+     "expr": "{m*(a+b)}",
+     "tag": "used_whole"
+    }
+   ],
+   "explanationId": "exp_m3_sim_ratio_001"
+  },
+  {
+   "id": "m3_sim_area_001",
+   "templateVersion": 1,
+   "unitId": "m3_sim_area",
+   "type": "expr",
+   "difficulty": 0.7,
+   "params": {
+    "a": {
+     "int": [
+      2,
+      4
+     ]
+    },
+    "b": {
+     "int": [
+      2,
+      6
+     ]
+    },
+    "k": {
+     "int": [
+      1,
+      3
+     ]
+    }
+   },
+   "constraints": [
+    "a < b"
+   ],
+   "display": {
+    "ratio": "{a}:{b}"
+   },
+   "answer": "{b*b*k}",
+   "wrong": [
+    {
+     "expr": "{a*b*k}",
+     "tag": "ratio_not_squared"
+    },
+    {
+     "expr": "{b*k}",
+     "tag": "ratio_only"
+    }
+   ],
+   "explanationId": "exp_m3_sim_area_001"
+  },
+  {
+   "id": "m3_sim_area_002",
+   "templateVersion": 1,
+   "unitId": "m3_sim_area",
+   "type": "expr",
+   "difficulty": 0.75,
+   "params": {
+    "a": {
+     "int": [
+      2,
+      4
+     ]
+    },
+    "b": {
+     "int": [
+      2,
+      6
+     ]
+    },
+    "k": {
+     "int": [
+      1,
+      3
+     ]
+    }
+   },
+   "constraints": [
+    "a < b"
+   ],
+   "display": {
+    "ratio": "{a}:{b}"
+   },
+   "answer": "{b*b*b*k}",
+   "wrong": [
+    {
+     "expr": "{b*b*k}",
+     "tag": "used_square"
+    },
+    {
+     "expr": "{a*b*b*k}",
+     "tag": "mixed"
+    }
+   ],
+   "explanationId": "exp_m3_sim_area_002"
+  },
+  {
+   "id": "m3_circ_angle_001",
+   "templateVersion": 1,
+   "unitId": "m3_circ_angle",
+   "type": "expr",
+   "difficulty": 0.55,
+   "params": {
+    "a": {
+     "int": [
+      15,
+      80
+     ]
+    }
+   },
+   "display": {
+    "c": "{2*a}"
+   },
+   "answer": "{a}",
+   "wrong": [
+    {
+     "expr": "{2*a}",
+     "tag": "central_equals_inscribed"
+    },
+    {
+     "expr": "{90-a}",
+     "tag": "complement"
+    }
+   ],
+   "explanationId": "exp_m3_circ_angle_001"
+  },
+  {
+   "id": "m3_circ_angle_002",
+   "templateVersion": 1,
+   "unitId": "m3_circ_angle",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "a": {
+     "int": [
+      15,
+      75
+     ]
+    }
+   },
+   "display": {
+    "c": "{a}"
+   },
+   "answer": "{90-a}",
+   "wrong": [
+    {
+     "expr": "{a}",
+     "tag": "same_angle"
+    },
+    {
+     "expr": "{180-a}",
+     "tag": "supplement"
+    }
+   ],
+   "explanationId": "exp_m3_circ_angle_002"
+  },
+  {
+   "id": "m3_pyth_thm_001",
+   "templateVersion": 1,
+   "unitId": "m3_pyth_thm",
+   "type": "expr",
+   "difficulty": 0.55,
+   "params": {
+    "k": {
+     "int": [
+      1,
+      9
+     ]
+    }
+   },
+   "display": {
+    "a": "{3*k}",
+    "b": "{4*k}"
+   },
+   "answer": "{5*k}",
+   "wrong": [
+    {
+     "expr": "{7*k}",
+     "tag": "added_legs"
+    },
+    {
+     "expr": "{k}",
+     "tag": "wrong_root"
+    }
+   ],
+   "explanationId": "exp_m3_pyth_thm_001"
+  },
+  {
+   "id": "m3_pyth_thm_002",
+   "templateVersion": 1,
+   "unitId": "m3_pyth_thm",
+   "type": "expr",
+   "difficulty": 0.65,
+   "params": {
+    "k": {
+     "int": [
+      1,
+      6
+     ]
+    }
+   },
+   "display": {
+    "c": "{13*k}",
+    "a": "{5*k}"
+   },
+   "answer": "{12*k}",
+   "wrong": [
+    {
+     "expr": "{8*k}",
+     "tag": "subtracted_sides"
+    },
+    {
+     "expr": "{k}",
+     "tag": "wrong_root"
+    }
+   ],
+   "explanationId": "exp_m3_pyth_thm_002"
+  },
+  {
+   "id": "m3_pyth_use_001",
+   "templateVersion": 1,
+   "unitId": "m3_pyth_use",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "k": {
+     "int": [
+      1,
+      9
+     ]
+    }
+   },
+   "display": {
+    "a": "{3*k}",
+    "b": "{4*k}"
+   },
+   "answer": "{5*k}",
+   "wrong": [
+    {
+     "expr": "{7*k}",
+     "tag": "perimeter_half"
+    },
+    {
+     "expr": "{k}",
+     "tag": "wrong_root"
+    }
+   ],
+   "explanationId": "exp_m3_pyth_use_001"
+  },
+  {
+   "id": "m3_pyth_use_002",
+   "templateVersion": 1,
+   "unitId": "m3_pyth_use",
+   "type": "expr",
+   "difficulty": 0.7,
+   "params": {
+    "k": {
+     "int": [
+      1,
+      5
+     ]
+    }
+   },
+   "display": {
+    "l": "{13*k}",
+    "d": "{5*k}"
+   },
+   "answer": "{12*k}",
+   "wrong": [
+    {
+     "expr": "{8*k}",
+     "tag": "subtracted_sides"
+    },
+    {
+     "expr": "{18*k}",
+     "tag": "added"
+    }
+   ],
+   "explanationId": "exp_m3_pyth_use_002"
+  },
+  {
+   "id": "m3_samp_sample_001",
+   "templateVersion": 1,
+   "unitId": "m3_samp_sample",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "n": {
+     "int": [
+      20,
+      50
+     ]
+    },
+    "m": {
+     "int": [
+      5,
+      20
+     ]
+    },
+    "r": {
+     "int": [
+      2,
+      15
+     ]
+    }
+   },
+   "constraints": [
+    "r < n"
+   ],
+   "display": {
+    "nn": "{n*m}",
+    "n": "{n}",
+    "r": "{r}"
+   },
+   "answer": "{m*r}",
+   "wrong": [
+    {
+     "expr": "{r*n}",
+     "tag": "wrong_scale"
+    },
+    {
+     "expr": "{n*m}",
+     "tag": "used_total"
+    }
+   ],
+   "explanationId": "exp_m3_samp_sample_001"
   }
  ]
 }

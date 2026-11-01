@@ -12,6 +12,7 @@ import '../math/math_expr.dart';
 import '../math/math_template.dart';
 import '../models/models.dart';
 import '../prereq/prerequisites.dart';
+import '../proof/proof.dart';
 import '../scene/scene.dart';
 import '../scope/unit_tree.dart';
 import '../text/content_texts.dart';
@@ -61,12 +62,12 @@ class ContentPackManifest {
   final Set<String> textsCover;
 
   /// `textsCover` に書ける種類: `scenes`（場面の名前と説明）・`lessons`（レッスン）・`templates`（型の問題文と解説）・
-  /// `figures`（型の図の説明）・`questions`（問題集の解説）。
-  static const textKinds = {'scenes', 'lessons', 'templates', 'figures', 'questions'};
+  /// `figures`（型の図の説明）・`questions`（問題集の解説）・`proofs`（証明の題・仮定・結論・各行・根拠）。
+  static const textKinds = {'scenes', 'lessons', 'templates', 'figures', 'questions', 'proofs'};
 
   static const fileKeys = {
     'units', 'prerequisites', 'questions', 'templates', 'lessons',
-    'explorations', 'constructions', 'experiences', 'charts', 'scenes', 'texts', 'maps',
+    'explorations', 'constructions', 'experiences', 'charts', 'scenes', 'proofs', 'texts', 'maps',
   };
   static const _keys = {
     'version', 'id', 'country', 'locale', 'subject', 'grades', 'curriculum', 'contentVersion', 'attribution', 'files', 'textsCover',
@@ -310,6 +311,17 @@ ContentPackReport validateContentPack(String manifestSource, String? Function(St
     }
   }
   final usedScenes = <String>{};
+  // 証明（合同・相似など）
+  final proofsFile = m.files['proofs'] as String?;
+  ProofSet? proofSet;
+  if (proofsFile != null) {
+    final set = tryParse(proofsFile, ProofSet.parse);
+    if (set != null) {
+      proofSet = set;
+      if (tree != null) addAll(proofsFile, validateProofs(set, tree: tree));
+      counts['proofs'] = set.proofs.length;
+    }
+  }
 
   // 型（変種）
   final templatesFile = m.files['templates'] as String?;
@@ -418,6 +430,7 @@ ContentPackReport validateContentPack(String manifestSource, String? Function(St
         templates: templates?.templates ?? const <MathTemplate>[],
         lessons: lessonSet?.lessons ?? const <Lesson>[],
         sceneSet: sceneSet,
+        proofs: proofSet?.proofs ?? const <ProofSpec>[],
         questionExplanations: questionExplanations,
         cover: m.textsCover,
         add: add,
@@ -483,6 +496,7 @@ void _checkTexts({
   required List<MathTemplate> templates,
   required List<Lesson> lessons,
   required SceneSet? sceneSet,
+  required List<ProofSpec> proofs,
   required Set<String> questionExplanations,
   required Set<String> cover,
   required void Function(IssueSeverity, String, String, String) add,
@@ -504,6 +518,11 @@ void _checkTexts({
   for (final s in sceneSet?.scenes ?? const <Scene>[]) {
     need(s.titleId, 'scenes');
     need(s.textId, 'scenes');
+  }
+  for (final p in proofs) {
+    for (final id in p.textIds) {
+      need(id, 'proofs');
+    }
   }
   final all = namesOf(templates);
   for (final l in lessons) {

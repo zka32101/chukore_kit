@@ -57,6 +57,17 @@ void main() {
     }
   });
 
+  test('lib/src/proof（証明の問題）は数学にも Flutter にも依存しない', () {
+    const allowed = {'../bank/question_bank.dart', '../scope/unit_tree.dart'};
+    final files = Directory('lib/src/proof').listSync().whereType<File>().where((f) => f.path.endsWith('.dart'));
+    expect(files, isNotEmpty);
+    for (final f in files) {
+      for (final i in _imports(f)) {
+        expect(i.startsWith('../') ? allowed.contains(i) : (i == 'dart:convert' || i == 'dart:math'), isTrue, reason: '${f.path}: $i');
+      }
+    }
+  });
+
   test('lib/src/chart（資料のグラフ）は数学にも Flutter にも core にも依存しない', () {
     final files = Directory('lib/src/chart').listSync().whereType<File>().where((f) => f.path.endsWith('.dart'));
     expect(files, isNotEmpty);
