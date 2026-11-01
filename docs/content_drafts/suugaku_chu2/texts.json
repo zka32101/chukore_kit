@@ -65,6 +65,8 @@
   "pf_m2_cong_isosceles_s3": "AD = AD",
   "pf_m2_cong_isosceles_s4": "△ABD ≡ △ACD",
   "pf_m2_cong_isosceles_s5": "∠B = ∠C",
-  "pf_m2_cong_isosceles_d1": "BD = CD"
+  "pf_m2_cong_isosceles_d1": "BD = CD",
+  "pffig_m2_cong_vertical": "線分 AB と CD が点 O で交わっている図。OA と OB、OC と OD の長さが等しい。",
+  "pffig_m2_cong_isosceles": "AB = AC の二等辺三角形 ABC。頂点 A から底辺 BC に引いた線 AD が、角 A を 2 等分している。"
  }
 }

@@ -119,3 +119,5 @@ dart run tool/validate_pack.dart <パックのディレクトリ>
 ## 証明の問題（`proofs.json`）
 証明を「主張（だから…）と根拠（なぜなら…）」の行の並びで持つ。遊び方は 2 つ: ①手順を並べる（`gradeProofOrder`。同じ前提から出る行の入れ替えは正解、まぎらわしい行は入れると指摘）②各行の根拠を語群から選ぶ（`gradeProofReasons`。語群のうち使われない根拠がまぎらわしい選択肢）。点や順位は付けず、「どの行がちがうか」だけを返す。
 `validateProofs`: `proof_unit_missing`・`proof_too_short`（3 行未満）・`proof_id_duplicate`・`proof_reason_missing`・`proof_after_invalid`（after は前の行だけ）・`proof_not_connected`（最後の行＝結論に結びつかない行）。警告 `proof_no_decoy_reason`・`proof_no_decoy_step`。文言（題・仮定・結論・各行・根拠）は texts.json に書く。
+
+証明には図（`figure`。`FigureTemplate` の JSON で値は固定）を付けられる。描けない図は `pack_proof_figure_invalid`（エラー）、図の説明文（`altId`）は texts.json の `figures` の範囲に入る。

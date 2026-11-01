@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:chukore_kit/chukore_kit.dart';
@@ -254,6 +255,44 @@ void main() {
     }
   });
   }
+  test('証明の図: 描ける図は通り、壊れた図・説明文のない図はエラー。草案の図は SVG にできる', () {
+    const dir = 'docs/content_drafts/suugaku_chu2';
+    String read(String f) => File('$dir/$f').readAsStringSync();
+    Map<String, dynamic> manifest() => {
+          ...jsonDecode(read('manifest.json')) as Map<String, dynamic>,
+        };
+    Set<String> codes(String proofs, [String? texts]) {
+      final r = validateContentPack(
+        jsonEncode(manifest()),
+        (p) => p == 'proofs.json' ? proofs : (p == 'texts.json' && texts != null ? texts : read(p)),
+      );
+      return r.issues.where((i) => i.isError).map((i) => i.code).toSet();
+    }
+
+    final good = jsonDecode(read('proofs.json')) as Map<String, dynamic>;
+    expect(codes(jsonEncode(good)), isEmpty);
+    // 壊れた図（未知の点を使う線）
+    final bad = jsonDecode(read('proofs.json')) as Map<String, dynamic>;
+    ((bad['proofs'] as List).first as Map)['figure'] = {
+      'viewBox': [0, 0, 100, 80],
+      'points': {'A': [1, 1]},
+      'draw': [
+        {'seg': ['A', 'Z']},
+      ],
+      'altId': 'pffig_m2_cong_vertical',
+    };
+    expect(codes(jsonEncode(bad)), contains('pack_proof_figure_invalid'));
+    // 図の説明文がない
+    final texts = jsonDecode(read('texts.json')) as Map<String, dynamic>;
+    (texts['texts'] as Map).remove('pffig_m2_cong_vertical');
+    expect(codes(jsonEncode(good), jsonEncode(texts)), contains('pack_text_missing'));
+    // 草案の図は SVG になる
+    for (final p in ProofSet.parse(read('proofs.json')).proofs) {
+      final svg = FigureTemplate.fromJson(p.figure!, const {}).resolve(const {}, (t) => t)!.toSvg();
+      expect(svg, contains('<svg'), reason: p.id);
+    }
+  });
+
 }
 
 Map<String, dynamic> _json() => {
