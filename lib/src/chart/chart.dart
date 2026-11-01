@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:math' as math;
 
-/// 資料のグラフ（棒・折れ線・雨温図・人口ピラミッド・円）の仕様と SVG。教科によらない（社会の資料・理科のデータ）。
+import '../util/five_number.dart';
+
+/// 資料のグラフ（棒・折れ線・雨温図・人口ピラミッド・円・箱ひげ図）の仕様と SVG。教科によらない（社会の資料・理科のデータ）。
 /// 値はそのまま持つ。文言（題・説明）は ID だけ（`altId`）、目盛りの数値と軸は値から作る。
 /// 色は `currentColor` だけ（系列は濃さと線の種類で分ける）。画面は SVG を表示するか、系列の値から自分で描く。
-enum ChartKind { bars, line, climate, pyramid, pie }
+enum ChartKind { bars, line, climate, pyramid, pie, box }
 
 /// 系列 1 つ。[values] は [ChartSpec.categories] と同じ長さ。
 class ChartSeries {
@@ -106,6 +108,7 @@ class ChartSpec {
     final need = switch (kind) {
       ChartKind.climate || ChartKind.pyramid => 2,
       ChartKind.pie => 1,
+      ChartKind.box => 5,
       _ => 0,
     };
     if (need > 0 && series.length != need) throw FormatException('${kind.name} は系列が $need 個');
@@ -113,15 +116,48 @@ class ChartSpec {
     final nonNegative = switch (kind) {
       ChartKind.bars || ChartKind.pyramid || ChartKind.pie => series,
       ChartKind.climate => [series[1]],
-      ChartKind.line => const <ChartSeries>[],
+      ChartKind.line || ChartKind.box => const <ChartSeries>[],
     };
     for (final s in nonNegative) {
       if (s.values.any((x) => x < 0)) throw FormatException('${s.id}: 値は 0 以上');
+    }
+    if (kind == ChartKind.box) {
+      // 箱ひげ図: 系列は 最小値・第 1 四分位数・中央値・第 3 四分位数・最大値（この順・この ID）。各項目で小さい順
+      const ids = ['min', 'q1', 'median', 'q3', 'max'];
+      for (var k = 0; k < 5; k++) {
+        if (series[k].id != ids[k]) throw FormatException('box の系列は ${ids.join('・')} の順: ${series.map((e) => e.id).join('・')}');
+      }
+      for (var i = 0; i < categories.length; i++) {
+        for (var k = 0; k < 4; k++) {
+          if (series[k].values[i] > series[k + 1].values[i]) {
+            throw FormatException('box: ${categories[i]} の ${ids[k]} が ${ids[k + 1]} より大きい');
+          }
+        }
+      }
     }
     if (kind == ChartKind.pie && series[0].values.fold<double>(0, (a, b) => a + b) <= 0) {
       throw const FormatException('円グラフは合計が 0 より大きい');
     }
     return ChartSpec._(kind: kind, altId: altId, categories: categories, series: series);
+  }
+
+  /// 生のデータの組（項目ごと）から箱ひげ図を作る。五数要約は中学校の定義（`fiveNumberSummary`）。
+  /// 各組は 2 個以上。[categories] と同じ数の組が要る。
+  factory ChartSpec.boxFromData({required String altId, required List<String> categories, required List<List<num>> data}) {
+    if (data.length != categories.length) throw ArgumentError('categories とデータの組の数が違います');
+    final f = [for (final d in data) fiveNumberSummary(d)];
+    return ChartSpec.fromJson({
+      'kind': 'box',
+      'altId': altId,
+      'categories': categories,
+      'series': [
+        {'id': 'min', 'values': [for (final x in f) x.min]},
+        {'id': 'q1', 'values': [for (final x in f) x.q1]},
+        {'id': 'median', 'values': [for (final x in f) x.median]},
+        {'id': 'q3', 'values': [for (final x in f) x.q3]},
+        {'id': 'max', 'values': [for (final x in f) x.max]},
+      ],
+    });
   }
 
   factory ChartSpec.parse(String source) {
@@ -169,6 +205,20 @@ class ChartSpec {
   /// 系列 [seriesId] の平均。年平均気温など。
   double mean(String seriesId) => total(seriesId) / categories.length;
 
+  /// 箱ひげ図の項目 [index] の四分位範囲（q3 − q1）。箱ひげ図以外は [StateError]。
+  double iqrOf(int index) {
+    if (kind != ChartKind.box) throw StateError('箱ひげ図ではありません');
+    if (index < 0 || index >= categories.length) throw RangeError.index(index, categories);
+    return series[3].values[index] - series[1].values[index];
+  }
+
+  /// 箱ひげ図の項目 [index] の範囲（max − min）。箱ひげ図以外は [StateError]。
+  double rangeOf(int index) {
+    if (kind != ChartKind.box) throw StateError('箱ひげ図ではありません');
+    if (index < 0 || index >= categories.length) throw RangeError.index(index, categories);
+    return series[4].values[index] - series[0].values[index];
+  }
+
   /// 円グラフの項目 [index] の割合（0〜1）。円グラフ以外は [StateError]。
   double shareOf(int index) {
     if (kind != ChartKind.pie) throw StateError('円グラフではありません');
@@ -202,6 +252,8 @@ class ChartSpec {
         _pie(b);
       case ChartKind.pyramid:
         _pyramid(b);
+      case ChartKind.box:
+        _box(b);
       default:
         _xy(b);
     }
@@ -325,6 +377,35 @@ class ChartSpec {
         '<rect x="${_n(cx)}" y="${_n(y + rowH * 0.1)}" width="${_n(wr)}" height="${_n(bh)}" fill="currentColor" fill-opacity="0.2"/>',
       );
       b.write(_text(_l - 2, y + rowH / 2 + 1.2, categories[i], anchor: 'end', size: n > 12 ? 3 : 3.5));
+    }
+  }
+
+  /// 箱ひげ図（横向き）。項目は上から下へ。箱は q1〜q3、中央値は縦線、ひげは最小値・最大値まで（端に短い縦線）。
+  void _box(StringBuffer b) {
+    final n = categories.length;
+    final lo = series[0].values.reduce(math.min), hi = series[4].values.reduce(math.max);
+    final sc = niceScale(lo, hi);
+    const left = 24.0, right = 108.0;
+    double xOf(double v) => left + (v - sc.min) / (sc.max - sc.min) * (right - left);
+    final rowH = (_b - _t) / n;
+    b.write(_line(left, _b, right, _b));
+    for (final t in sc.ticks) {
+      final x = xOf(t);
+      b.write(_line(x, _b, x, _b + 1.2));
+      b.write(_line(x, _t, x, _b, light: true));
+      b.write(_text(x, _b + 5, _n(t), size: 3.5));
+    }
+    for (var i = 0; i < n; i++) {
+      final cy = _t + rowH * (i + 0.5), bh = rowH * 0.5;
+      final mn = xOf(series[0].values[i]), q1 = xOf(series[1].values[i]), md = xOf(series[2].values[i]);
+      final q3 = xOf(series[3].values[i]), mx = xOf(series[4].values[i]);
+      b.write(_line(mn, cy, q1, cy));
+      b.write(_line(q3, cy, mx, cy));
+      b.write(_line(mn, cy - bh / 3, mn, cy + bh / 3));
+      b.write(_line(mx, cy - bh / 3, mx, cy + bh / 3));
+      b.write('<rect x="${_n(q1)}" y="${_n(cy - bh / 2)}" width="${_n(q3 - q1)}" height="${_n(bh)}" fill="currentColor" fill-opacity="0.2"/>');
+      b.write(_line(md, cy - bh / 2, md, cy + bh / 2));
+      b.write(_text(left - 2, cy + 1.2, categories[i], anchor: 'end', size: n > 8 ? 3 : 4));
     }
   }
 

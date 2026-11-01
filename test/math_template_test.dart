@@ -477,6 +477,42 @@ void dataTests() {
       expect(fixed('mean(L)').generate(1).params['m'], 1.0);
     });
 
+    test('四分位数 q1・q3・iqr（中学校の定義: 中央値で半分に分け、奇数個なら中央値は除く）', () {
+      for (var s = 1; s <= 40; s++) {
+        final t = dt({
+          'stats': {'a': 'q1(L)', 'b': 'q3(L)', 'c': 'iqr(L)', 'd': 'median(L)'},
+          'derived': {'m': 'a'},
+        });
+        final v = t.generate(s);
+        final l = [...v.lists['L']!]..sort();
+        final n = l.length, h = n ~/ 2;
+        double med(List<double> x) => x.length.isOdd ? x[x.length ~/ 2] : (x[x.length ~/ 2 - 1] + x[x.length ~/ 2]) / 2;
+        final q1 = med(l.sublist(0, h)), q3 = med(l.sublist(n - h));
+        expect(v.params['a'], q1, reason: '$l');
+        expect(v.params['b'], q3, reason: '$l');
+        expect(v.params['c'], q3 - q1, reason: '$l');
+        expect(v.params['d'], med(l));
+      }
+      // 奇数個と偶数個の両方が出ている
+      final sizes = {for (var s = 1; s <= 40; s++) dt().generate(s).lists['L']!.length.isOdd};
+      expect(sizes, {true, false});
+    });
+
+    test('四分位数はデータが 1 個だと求められない（毎回なら StateError）', () {
+      final t = dt({
+        'params': {
+          'L': {
+            'list': {
+              'n': [1, 1],
+              'int': [1, 9],
+            },
+          },
+        },
+        'stats': {'m': 'q1(L)'},
+      });
+      expect(() => t.generate(1), throwsStateError);
+    });
+
     test('mode は最頻値が 1 つのときだけ（同数が複数なら引き直す）。count の引数はパラメータ名も使える', () {
       final t = dt({
         'params': {
@@ -618,6 +654,12 @@ void dataTests() {
         },
         {
           'stats': {'m': 'mean(L, 1)'},
+        },
+        {
+          'stats': {'m': 'q1(L, 1)'},
+        },
+        {
+          'stats': {'m': 'iqr(M)'},
         },
         {
           'stats': {'m': 'count(L, 1)'},
