@@ -28,6 +28,8 @@ class SolidSpec {
     'solid/cylinder': ['r', 'h'],
     'solid/cone': ['r', 'h'],
     'solid/sphere': ['r'],
+    'solid/prism': ['n', 'r', 'h'],
+    'solid/pyramid': ['n', 'r', 'h'],
     'net/cube': ['a'],
     'net/cylinder': ['r', 'h'],
     'net/cone': ['r', 'h'],
@@ -40,6 +42,8 @@ class SolidSpec {
     'solid/cylinder': {'r', 'h'},
     'solid/cone': {'r', 'h'},
     'solid/sphere': {'r'},
+    'solid/prism': {'h'},
+    'solid/pyramid': {'h'},
     'net/cube': {'a'},
     'net/cylinder': {'r', 'h', 'w'},
     'net/cone': {'r', 'l'},
@@ -92,9 +96,17 @@ class SolidSpec {
     return SolidSpec._(kind, view, dims, {for (final e in rawLabels.entries) e.key as String: e.value as String});
   }
 
+  /// 角柱・角錐の底面の辺の数（`n`）の範囲。
+  static const minSides = 3, maxSides = 8;
+
   /// 寸法 [d]（すべて正の数）と、文字列にしたラベル [labels] から図形を作る。寸法が正でなければ null。
+  /// 角柱・角錐は、`n`（底面の辺の数）が 3〜8 の整数でなければ null。
   ({List<FigureShape> shapes, List<FigureLabel> labels})? build(Map<String, double> d, Map<String, String> labels) {
     if (d.values.any((v) => !(v > 0) || v.isInfinite)) return null;
+    if (kind == 'prism' || kind == 'pyramid') {
+      final n = d['n']!;
+      if ((n - n.roundToDouble()).abs() > 1e-9 || n.round() < minSides || n.round() > maxSides) return null;
+    }
     final s = <FigureShape>[];
     final l = <FigureLabel>[];
     void label(String name, double x, double y) {
@@ -157,6 +169,39 @@ class SolidSpec {
           ..add(FigureShape.ellipseHalf(p(50, 50), r, 0.3 * r, upper: true, dashed: true))
           ..add(FigureShape.seg(p(50, 50), p(50 + r, 50), dashed: true));
         label('r', 50 + r / 2, 50 - 2);
+      case 'solid/prism' || 'solid/pyramid':
+        final n = d['n']!.round(), r = d['r']!, h = d['h']!;
+        final isPrism = kind == 'prism';
+        final k = isPrism ? math.min(72 / (2 * r), 72 / (h + 0.6 * r)) : math.min(72 / (2 * r), 72 / (h + 0.3 * r));
+        final rx = k * r, ry = 0.3 * rx;
+        final top = isPrism ? 50 - k * h / 2 : 50 - (k * h + ry) / 2;
+        final bot = top + k * h; // 角柱: 上の面の中心 → 下の面の中心。角錐: 頂点 → 底面の中心
+        // 底面の頂点（正 n 角形を、縦に 0.3 に縮めた楕円に内接させる）。最も手前の面が正面の中央にくる向き
+        // n が 4 の倍数だと、真横を向く面ができて図が潰れるので、半周期だけ回して角を手前にする
+        final turn = n % 4 == 0 ? 180 / n : 0.0;
+        double ang(int i) => (90 + 180 / n + 360 * i / n + turn) * math.pi / 180;
+        _P at(int i, double cy) => p(50 + rx * math.cos(ang(i)), cy + ry * math.sin(ang(i)));
+        bool front(int i) => math.sin((ang(i) + ang(i + 1)) / 2) > 1e-9; // i と i+1 の間の側面が見えるか
+        final base = [for (var i = 0; i < n; i++) at(i, bot)];
+        if (isPrism) {
+          final upper = [for (var i = 0; i < n; i++) at(i, top)];
+          s.add(FigureShape.poly(upper));
+          for (var i = 0; i < n; i++) {
+            final j = (i + 1) % n;
+            s.add(FigureShape.seg(base[i], base[j], dashed: !front(i)));
+            s.add(FigureShape.seg(upper[i], base[i], dashed: !(front(i) || front((i - 1 + n) % n))));
+          }
+          label('h', 50 + rx + 9, (top + bot) / 2 + 2);
+        } else {
+          final apex = p(50, top);
+          for (var i = 0; i < n; i++) {
+            final j = (i + 1) % n;
+            s.add(FigureShape.seg(base[i], base[j], dashed: !front(i)));
+            s.add(FigureShape.seg(apex, base[i], dashed: !(front(i) || front((i - 1 + n) % n))));
+          }
+          s.add(FigureShape.seg(apex, p(50, bot), dashed: true));
+          label('h', 50 + 8, top + 0.62 * (bot - top));
+        }
       case 'net/cells':
         final cs = cells!;
         final cols = cs.map((c) => c.col).reduce(math.max) + 1, rows = cs.map((c) => c.row).reduce(math.max) + 1;

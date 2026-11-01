@@ -32,6 +32,8 @@ void main() {
       'm1_eq_word_001', 'm1_eq_word_002', 'm1_eq_word_003',
       'm1_geo_move_001', 'm1_geo_move_002', 'm1_geo_move_003', 'm1_geo_move_004', 'm1_geo_move_005',
       'm1_space_solid_face_001', 'm1_space_solid_edge_001', 'm1_space_solid_vertex_001', 'm1_space_solid_edge_002',
+      'm1_space_solid_face_002', 'm1_space_solid_edge_003', 'm1_space_solid_vertex_002',
+      'm1_space_solid_face_003', 'm1_space_solid_edge_004', 'm1_space_solid_vertex_003',
     };
     final issues = validateTemplates(
       set,

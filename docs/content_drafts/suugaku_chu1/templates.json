@@ -5449,6 +5449,474 @@
     }
    ],
    "explanationId": "exp_m1_space_solid_edge_002"
+  },
+  {
+   "id": "m1_space_solid_face_002",
+   "templateVersion": 1,
+   "unitId": "m1_space_solid",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "n": {
+     "int": [
+      3,
+      8
+     ]
+    },
+    "r": {
+     "int": [
+      2,
+      6
+     ]
+    },
+    "h": {
+     "int": [
+      3,
+      9
+     ]
+    }
+   },
+   "figure": {
+    "solid": {
+     "kind": "prism",
+     "dims": {
+      "n": "n",
+      "r": "r",
+      "h": "h"
+     }
+    },
+    "altId": "fig_prism"
+   },
+   "display": {
+    "kind": "角柱"
+   },
+   "answer": "{n+2}",
+   "wrong": [
+    {
+     "expr": "{n}",
+     "tag": "base_faces_forgotten"
+    },
+    {
+     "expr": "{n+1}",
+     "tag": "pyramid_prism_mixup"
+    },
+    {
+     "expr": "{2*n}",
+     "tag": "vertex_count_mixup"
+    }
+   ],
+   "explanationId": "exp_m1_space_solid_face_002"
+  },
+  {
+   "id": "m1_space_solid_edge_003",
+   "templateVersion": 1,
+   "unitId": "m1_space_solid",
+   "type": "expr",
+   "difficulty": 0.65,
+   "params": {
+    "n": {
+     "int": [
+      3,
+      8
+     ]
+    },
+    "r": {
+     "int": [
+      2,
+      6
+     ]
+    },
+    "h": {
+     "int": [
+      3,
+      9
+     ]
+    }
+   },
+   "figure": {
+    "solid": {
+     "kind": "prism",
+     "dims": {
+      "n": "n",
+      "r": "r",
+      "h": "h"
+     }
+    },
+    "altId": "fig_prism"
+   },
+   "display": {
+    "kind": "角柱"
+   },
+   "answer": "{3*n}",
+   "wrong": [
+    {
+     "expr": "{2*n}",
+     "tag": "edge_vertex_mixup"
+    },
+    {
+     "expr": "{n+2}",
+     "tag": "face_edge_mixup"
+    },
+    {
+     "expr": "{n}",
+     "tag": "base_edges_only"
+    }
+   ],
+   "explanationId": "exp_m1_space_solid_edge_003"
+  },
+  {
+   "id": "m1_space_solid_vertex_002",
+   "templateVersion": 1,
+   "unitId": "m1_space_solid",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "n": {
+     "int": [
+      3,
+      8
+     ]
+    },
+    "r": {
+     "int": [
+      2,
+      6
+     ]
+    },
+    "h": {
+     "int": [
+      3,
+      9
+     ]
+    }
+   },
+   "figure": {
+    "solid": {
+     "kind": "prism",
+     "dims": {
+      "n": "n",
+      "r": "r",
+      "h": "h"
+     }
+    },
+    "altId": "fig_prism"
+   },
+   "display": {
+    "kind": "角柱"
+   },
+   "answer": "{2*n}",
+   "wrong": [
+    {
+     "expr": "{n}",
+     "tag": "base_vertices_only"
+    },
+    {
+     "expr": "{n+2}",
+     "tag": "face_vertex_mixup"
+    },
+    {
+     "expr": "{3*n}",
+     "tag": "vertex_edge_mixup"
+    }
+   ],
+   "explanationId": "exp_m1_space_solid_vertex_002"
+  },
+  {
+   "id": "m1_space_solid_face_003",
+   "templateVersion": 1,
+   "unitId": "m1_space_solid",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "n": {
+     "int": [
+      3,
+      8
+     ]
+    },
+    "r": {
+     "int": [
+      2,
+      6
+     ]
+    },
+    "h": {
+     "int": [
+      3,
+      9
+     ]
+    }
+   },
+   "figure": {
+    "solid": {
+     "kind": "pyramid",
+     "dims": {
+      "n": "n",
+      "r": "r",
+      "h": "h"
+     }
+    },
+    "altId": "fig_pyramid"
+   },
+   "display": {
+    "kind": "角錐"
+   },
+   "answer": "{n+1}",
+   "wrong": [
+    {
+     "expr": "{n}",
+     "tag": "base_faces_forgotten"
+    },
+    {
+     "expr": "{n+2}",
+     "tag": "pyramid_prism_mixup"
+    },
+    {
+     "expr": "{2*n}",
+     "tag": "edge_count_mixup"
+    }
+   ],
+   "explanationId": "exp_m1_space_solid_face_003"
+  },
+  {
+   "id": "m1_space_solid_edge_004",
+   "templateVersion": 1,
+   "unitId": "m1_space_solid",
+   "type": "expr",
+   "difficulty": 0.65,
+   "params": {
+    "n": {
+     "int": [
+      3,
+      8
+     ]
+    },
+    "r": {
+     "int": [
+      2,
+      6
+     ]
+    },
+    "h": {
+     "int": [
+      3,
+      9
+     ]
+    }
+   },
+   "figure": {
+    "solid": {
+     "kind": "pyramid",
+     "dims": {
+      "n": "n",
+      "r": "r",
+      "h": "h"
+     }
+    },
+    "altId": "fig_pyramid"
+   },
+   "display": {
+    "kind": "角錐"
+   },
+   "answer": "{2*n}",
+   "wrong": [
+    {
+     "expr": "{n+1}",
+     "tag": "edge_vertex_mixup"
+    },
+    {
+     "expr": "{3*n}",
+     "tag": "prism_pyramid_mixup"
+    },
+    {
+     "expr": "{n}",
+     "tag": "base_edges_only"
+    }
+   ],
+   "explanationId": "exp_m1_space_solid_edge_004"
+  },
+  {
+   "id": "m1_space_solid_vertex_003",
+   "templateVersion": 1,
+   "unitId": "m1_space_solid",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "n": {
+     "int": [
+      3,
+      8
+     ]
+    },
+    "r": {
+     "int": [
+      2,
+      6
+     ]
+    },
+    "h": {
+     "int": [
+      3,
+      9
+     ]
+    }
+   },
+   "figure": {
+    "solid": {
+     "kind": "pyramid",
+     "dims": {
+      "n": "n",
+      "r": "r",
+      "h": "h"
+     }
+    },
+    "altId": "fig_pyramid"
+   },
+   "display": {
+    "kind": "角錐"
+   },
+   "answer": "{n+1}",
+   "wrong": [
+    {
+     "expr": "{n}",
+     "tag": "apex_forgotten"
+    },
+    {
+     "expr": "{2*n}",
+     "tag": "prism_pyramid_mixup"
+    },
+    {
+     "expr": "{n+2}",
+     "tag": "face_vertex_mixup"
+    }
+   ],
+   "explanationId": "exp_m1_space_solid_vertex_003"
+  },
+  {
+   "id": "m1_space_prism_002",
+   "templateVersion": 1,
+   "unitId": "m1_space_vol",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "n": {
+     "int": [
+      3,
+      6
+     ]
+    },
+    "r": {
+     "int": [
+      2,
+      6
+     ]
+    },
+    "h": {
+     "int": [
+      3,
+      9
+     ]
+    },
+    "u": {
+     "int": [
+      12,
+      60
+     ]
+    }
+   },
+   "figure": {
+    "solid": {
+     "kind": "prism",
+     "dims": {
+      "n": "n",
+      "r": "r",
+      "h": "h"
+     },
+     "labels": {
+      "h": "{h}cm"
+     }
+    },
+    "altId": "fig_prism"
+   },
+   "display": {
+    "S": "{u}",
+    "h": "{h}"
+   },
+   "answer": "{u*h}",
+   "wrong": [
+    {
+     "expr": "{u*h/3}",
+     "tag": "volume_extra_third"
+    },
+    {
+     "expr": "{u+h}",
+     "tag": "add_instead_of_multiply"
+    }
+   ],
+   "explanationId": "exp_m1_space_prism_002"
+  },
+  {
+   "id": "m1_space_pyramid_002",
+   "templateVersion": 1,
+   "unitId": "m1_space_vol",
+   "type": "expr",
+   "difficulty": 0.75,
+   "params": {
+    "n": {
+     "int": [
+      3,
+      6
+     ]
+    },
+    "r": {
+     "int": [
+      2,
+      6
+     ]
+    },
+    "h": {
+     "int": [
+      3,
+      9
+     ]
+    },
+    "u": {
+     "int": [
+      4,
+      20
+     ]
+    }
+   },
+   "figure": {
+    "solid": {
+     "kind": "pyramid",
+     "dims": {
+      "n": "n",
+      "r": "r",
+      "h": "h"
+     },
+     "labels": {
+      "h": "{h}cm"
+     }
+    },
+    "altId": "fig_pyramid"
+   },
+   "display": {
+    "S": "{3*u}",
+    "h": "{h}"
+   },
+   "answer": "{u*h}",
+   "wrong": [
+    {
+     "expr": "{3*u*h}",
+     "tag": "volume_forgot_third"
+    },
+    {
+     "expr": "{3*u+h}",
+     "tag": "add_instead_of_multiply"
+    }
+   ],
+   "explanationId": "exp_m1_space_pyramid_002"
   }
  ]
 }
