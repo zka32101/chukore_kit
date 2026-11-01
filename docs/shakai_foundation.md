@@ -59,7 +59,7 @@
 ## 6. 実装の順（案）
 1. `match` 問題タイプ（§3.1）。**実装済み**。
 2. `MathExpr` に `floor`・`ceil`・`mod`（§3.4）と、時代区分 `EraTable`。**実装済み**（`mod` は余りが 0 以上 b 未満、`centuryOf` は紀元前を負の世紀）。
-3. グラフ `figure.chart`（§3.2）。
+3. グラフ `ChartSpec`（§3.2）。**実装済み**（`lib/src/chart/chart.dart`、教科共通・数学に依存しない）。`bars`・`line`・`climate`（雨温図: 1 系列目が気温の折れ線・2 系列目が降水量の棒、左右の目盛りは横線を共有）・`pyramid`・`pie`。仕様の読み取り（`ChartSpec.parse`）・SVG（`toSvg`）・読み取りの補助（`argMax`/`argMin`/`total`/`mean`/`shareOf`）・目盛り（`niceScale`）。型のパラメータから値を作る変種への接続は未（固定の値を書く資料から）。
 4. 地図データの形式・検証・簡略化・SVG（§3.3）。
 5. 中 1 社会の単元・前提・型の草案（§5）。
 6. 体験型（§3.5）。
