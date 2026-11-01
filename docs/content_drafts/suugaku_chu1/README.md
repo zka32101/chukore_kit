@@ -5,7 +5,7 @@
 
 - `units.json`: 7 分野・21 単元（葉）。`estimatedQuestions` は目安（計 約 380 問）。
 - `prerequisites.json`: 前提関係。小学の前提は誘導リンクだけ（コードは共有しない）。
-- `templates.json`: 問題の型 73 個（`docs/math_variants_design.md`）。問題文の文章はコンテンツ側で持つ（`display` の数式を差し込む）。選択肢の日本語は型に直接書いてある（国別コンテンツのため）。
+- `templates.json`: 問題の型 81 個（`docs/math_variants_design.md`）。問題文の文章はコンテンツ側で持つ（`display` の数式を差し込む）。選択肢の日本語は型に直接書いてある（国別コンテンツのため）。
 
 ## 前提の流れ
 正負の数（大小 → 加減 → 乗除 → 混合）→ 文字式（表し方 → 計算・数量の関係）→ 方程式（等式の性質 + 計算 → 解き方 → 文章題）。比例・反比例は文字式の表し方 → 変数 → 比例／反比例 → グラフ。図形は作図 → 移動／おうぎ形 → 空間図形・体積。
@@ -37,10 +37,12 @@
 | m1_geo_move_003〜005 | 「点 ({p}, {q}) を x 軸について対称移動した点の y 座標」／「原点について対称移動した点の x 座標」／「原点を中心に反時計回りに 90° 回転した点の x 座標」 |
 | m1_geo_parallel_001〜003 | 「l // m のとき、x は」（図: 平行な 2 直線と交わる直線。001 錯角・002 同位角・003 同側内角） |
 | m1_space_prism_001〜pyramid_001 | 「底面積 {S} cm²、高さ {h} cm の角柱（角錐）の体積」 |
+| m1_space_solid_face_002〜vertex_003（図つき） | 「図の{kind}（角柱・角錐）の面の数／辺の数／頂点の数」（n は図から読み取る。角柱・角錐の図は `solid` の `prism`・`pyramid`） |
+| m1_space_prism_002・pyramid_002（図つき） | 「底面積 {S} cm²、高さ {h} cm の{kind}の体積」（図の n は何角形でもよい） |
 | m1_space_solid_face_001〜edge_002 | 「{n} 角柱の面の数／辺の数」「{n} 角錐の頂点の数／辺の数」 |
 
 ## 次にやること
-1. 型を増やす。`templates.json` に 73 型（正負の数・文字式の計算・式の値・数量の関係・等式の性質・一次方程式・座標・比例・反比例・データの活用・円とおうぎ形・円柱と球・角と二等辺三角形、図つき・立体と展開図・図が選択肢）を書いた（各 40 変種）。次は平行線と角、角柱・角錐（`docs/math_figures_design.md`）。作図の見本は `docs/samples/constructions.sample.json`。
+1. 型を増やす。`templates.json` に 81 型（正負の数・文字式の計算・式の値・数量の関係・等式の性質・一次方程式・座標・比例・反比例・データの活用・円とおうぎ形・円柱と球・角と二等辺三角形、図つき・立体と展開図・図が選択肢）を書いた（各 40 変種）。次は平行線と角、角柱・角錐（`docs/math_figures_design.md`）。作図の見本は `docs/samples/constructions.sample.json`。
    展開: `dart run tool/expand_templates.dart units.json templates.json questions.json`
 2. 選択式・記述式の見本問題（図が要る単元は図の方針を決めてから）。
 3. 体験型（`Exploration`）の見本: 一次関数の傾きと切片、方程式の天秤。

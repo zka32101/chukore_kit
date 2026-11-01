@@ -324,7 +324,7 @@ void main() {
       expect(count('shakai_chu1', 'questions'), 18);
       expect(count('shakai_chu1', 'charts'), 4);
       expect(count('eigo_jp_chu1', 'questions'), 16);
-      expect(count('suugaku_chu1', 'templates'), 73);
+      expect(count('suugaku_chu1', 'templates'), 81);
       expect(count('suugaku_chu1', 'lessons'), 4);
     });
   });

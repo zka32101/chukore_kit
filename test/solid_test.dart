@@ -8,7 +8,7 @@ Map<String, dynamic> sol(String kind, Map<String, Object> dims, {String? view, M
   'altId': 'fig_x',
 };
 
-FigureTemplate ft(Map<String, dynamic> j) => FigureTemplate.fromJson(j, {'r', 'h', 'a', 'b', 'c', 'l'});
+FigureTemplate ft(Map<String, dynamic> j) => FigureTemplate.fromJson(j, {'r', 'h', 'a', 'b', 'c', 'l', 'n'});
 
 Figure? make(String kind, Map<String, double> v, {String? view, Map<String, String>? labels}) {
   final dims = {for (final e in v.entries) e.key: e.key as Object};
@@ -244,6 +244,133 @@ void main() {
             expectInside(make('cuboid', {'a': a, 'b': b, 'c': c})!, reason: 'cuboid $a $b $c');
           }
         }
+      }
+    });
+  });
+
+  group('角柱・角錐', () {
+    Figure? pr(String kind, int n, {double r = 3, double h = 5}) =>
+        make(kind, {'n': n.toDouble(), 'r': r, 'h': h}, labels: {'h': '{h}cm'});
+    int segs(Figure f, {required bool dashed}) =>
+        f.shapes.where((s) => s.kind == FigureShapeKind.seg && s.dashed == dashed).length;
+
+    test('底面の辺の数 n は 3〜8 の整数だけ（それ以外は描けない）', () {
+      for (final n in [3.0, 4.0, 8.0]) {
+        expect(make('prism', {'n': n, 'r': 3, 'h': 5}), isNotNull, reason: 'prism $n');
+        expect(make('pyramid', {'n': n, 'r': 3, 'h': 5}), isNotNull, reason: 'pyramid $n');
+      }
+      for (final n in [2.0, 9.0, 3.5, 0.0, -4.0, double.nan]) {
+        expect(make('prism', {'n': n, 'r': 3, 'h': 5}), isNull, reason: 'prism $n');
+        expect(make('pyramid', {'n': n, 'r': 3, 'h': 5}), isNull, reason: 'pyramid $n');
+      }
+      expect(make('prism', {'n': 4, 'r': 0, 'h': 5}), isNull);
+      expect(make('pyramid', {'n': 4, 'r': 3, 'h': -1}), isNull);
+      expect(make('prism', {'n': 3.0000000001, 'r': 3, 'h': 5}), isNotNull); // 誤差は整数とみなす
+    });
+
+    test('三角柱: 上の面、下の辺 3 本と縦の辺 3 本（見える辺は実線、見えない辺は破線）', () {
+      final f = pr('prism', 3)!;
+      expect(f.shapes.first.kind, FigureShapeKind.poly);
+      expect(f.shapes.first.points.length, 3);
+      expect(f.shapes.where((s) => s.kind == FigureShapeKind.seg).length, 6);
+      expect(segs(f, dashed: false), 3); // 手前の底辺 1 + 見える縦の辺 2
+      expect(segs(f, dashed: true), 3); // 奥の底辺 2 + 奥の縦の辺 1
+      expect(f.labels.map((l) => l.text), ['5cm']);
+      expectInside(f);
+    });
+
+    test('n ごとの見える辺の数（見える側面の数と、それに接する縦の辺）', () {
+      // n: (実線の辺, 破線の辺)
+      const expected = {3: (3, 3), 4: (5, 3), 5: (7, 3), 6: (7, 5)};
+      for (final e in expected.entries) {
+        final f = pr('prism', e.key)!;
+        expect((segs(f, dashed: false), segs(f, dashed: true)), e.value, reason: 'prism n=${e.key}');
+        expect(f.shapes.first.points.length, e.key);
+        expect(f.shapes.where((s) => s.kind == FigureShapeKind.seg).length, 2 * e.key);
+      }
+    });
+
+    test('三角錐: 頂点から 3 本、底辺 3 本、高さの破線（頂点から底面の中心）', () {
+      final f = pr('pyramid', 3)!;
+      expect(f.shapes.every((s) => s.kind == FigureShapeKind.seg), isTrue);
+      expect(f.shapes.length, 3 + 3 + 1);
+      expect(segs(f, dashed: false), 3); // 手前の底辺 1 + 見える側面の辺 2
+      expect(segs(f, dashed: true), 4); // 奥の底辺 2 + 奥の辺 1 + 高さ
+      final axis = f.shapes.last;
+      expect(axis.dashed, isTrue);
+      expect(axis.points[0].x, 50);
+      expect(axis.points[1].x, 50);
+      expect(axis.points[1].y > axis.points[0].y, isTrue); // 頂点が上
+      expect(f.labels.map((l) => l.text), ['5cm']);
+      expectInside(f);
+    });
+
+    test('角錐: n 本の側面の辺は、すべて頂点（50, 上）から出る', () {
+      for (final n in [3, 4, 5, 6, 7, 8]) {
+        final f = pr('pyramid', n)!;
+        final segsAll = f.shapes.where((s) => s.kind == FigureShapeKind.seg).toList();
+        expect(segsAll.length, 2 * n + 1, reason: 'n=$n');
+        final apex = segsAll.last.points[0];
+        expect(segsAll.where((s) => s.points[0].x == apex.x && s.points[0].y == apex.y).length, n + 1, reason: 'n=$n');
+      }
+    });
+
+    test('寸法の比が保たれる: 角柱の縦の辺の長さ ÷ 底面の外接円の半径 = h ÷ r', () {
+      final f = pr('prism', 6, r: 2, h: 6)!;
+      final upper = f.shapes.first.points;
+      // 上の面の横幅（n=6 は左右の頂点が x = 50 ± rx）が 2rx
+      final w = upper.map((q) => q.x).reduce(math.max) - upper.map((q) => q.x).reduce(math.min);
+      final vertical = f.shapes.where((s) => s.kind == FigureShapeKind.seg && s.points[0].x == s.points[1].x).first;
+      final len = (vertical.points[1].y - vertical.points[0].y).abs();
+      expect(len / (w / 2), closeTo(3, 1e-9));
+    });
+
+    test('底面は縦を 0.3 に縮めた楕円に内接する（n=4 の対角の比）', () {
+      final f = pr('prism', 4)!;
+      final xs = f.shapes.first.points.map((q) => q.x), ys = f.shapes.first.points.map((q) => q.y);
+      final w = xs.reduce(math.max) - xs.reduce(math.min), hh = ys.reduce(math.max) - ys.reduce(math.min);
+      expect(hh / w, closeTo(0.3, 1e-9)); // 正方形を 45° 回した頂点: 横 2·rx·cos45, 縦 2·ry·sin45 → 比は ry / rx
+    });
+
+    test('縦長なら高さで枠いっぱい（72）に収める: 角柱は 72·h/(h+0.6r)、角錐は 72·h/(h+0.3r)', () {
+      final prism = pr('prism', 6, r: 1, h: 40)!;
+      final v = prism.shapes.where((s) => s.kind == FigureShapeKind.seg && s.points[0].x == s.points[1].x).first;
+      expect((v.points[1].y - v.points[0].y).abs(), closeTo(72 * 40 / 40.6, 1e-9));
+      final pyr = pr('pyramid', 6, r: 1, h: 40)!;
+      final axis = pyr.shapes.last;
+      expect(axis.points[1].y - axis.points[0].y, closeTo(72 * 40 / 40.3, 1e-9));
+    });
+
+    test('角錐は枠の中央に置く: 頂点から底面の楕円の下端までの中央が 50', () {
+      final f = pr('pyramid', 6, r: 3, h: 5)!;
+      final axis = f.shapes.last;
+      final xs = [for (final s in f.shapes) for (final q in s.points) q.x];
+      final rx = (xs.reduce(math.max) - xs.reduce(math.min)) / 2;
+      final apexY = axis.points[0].y, botY = axis.points[1].y;
+      expect((apexY + botY + 0.3 * rx) / 2, closeTo(50, 1e-9));
+    });
+
+    test('どの n・寸法の比でも枠（0〜100）に収まる', () {
+      for (final n in [3, 4, 5, 6, 7, 8]) {
+        for (final r in [0.5, 3.0, 40.0]) {
+          for (final h in [0.5, 3.0, 40.0]) {
+            expectInside(pr('prism', n, r: r, h: h)!, reason: 'prism $n $r $h');
+            expectInside(pr('pyramid', n, r: r, h: h)!, reason: 'pyramid $n $r $h');
+          }
+        }
+      }
+    });
+
+    test('読み込み: 寸法 n・r・h が必要。ラベルは h だけ', () {
+      expect(ft(sol('prism', {'n': 'n', 'r': 'r', 'h': 'h'}, labels: {'h': '{h}'})).altId, 'fig_x');
+      expect(ft(sol('pyramid', {'n': 'n', 'r': 'r', 'h': 'h'})).altId, 'fig_x');
+      for (final bad in [
+        sol('prism', {'r': 'r', 'h': 'h'}),
+        sol('pyramid', {'n': 'n', 'r': 'r'}),
+        sol('prism', {'n': 'n', 'r': 'r', 'h': 'h'}, labels: {'r': '{r}'}),
+        sol('prism', {'n': 'n', 'r': 'r', 'h': 'h'}, view: 'net'),
+      ]) {
+        expect(() => ft(bad), throwsFormatException);
       }
     });
   });
