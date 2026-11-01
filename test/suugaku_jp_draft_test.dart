@@ -26,7 +26,13 @@ void main() {
     final tree = UnitTree.fromJson(jsonDecode(File('$dir/units.json').readAsStringSync()) as Map<String, dynamic>);
     final set = TemplateSet.parse(File('$dir/templates.json').readAsStringSync());
     // 答えの取りうる値が少ない型（最頻値は 1〜6、階級の度数は 0〜数個、比例のグラフは 4 通りの傾き）は、見かけの種類が少ないのが性質
-    const fewAnswers = {'m1_data_mode_001', 'm1_data_class_001', 'm1_func_graphchoice_001'};
+    const fewAnswers = {
+      'm1_data_mode_001', 'm1_data_class_001', 'm1_func_graphchoice_001',
+      // 答えが整数の小さな範囲に収まる（文章題の解は 2〜20 ほど、座標は -9〜9、n角柱・n角錐は n=3〜9）
+      'm1_eq_word_001', 'm1_eq_word_002', 'm1_eq_word_003',
+      'm1_geo_move_001', 'm1_geo_move_002', 'm1_geo_move_003', 'm1_geo_move_004', 'm1_geo_move_005',
+      'm1_space_solid_face_001', 'm1_space_solid_edge_001', 'm1_space_solid_vertex_001', 'm1_space_solid_edge_002',
+    };
     final issues = validateTemplates(
       set,
       tree: tree,

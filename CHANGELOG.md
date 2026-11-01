@@ -4,6 +4,7 @@
 
 ## [未リリース]
 
+- 数学（中1）の型を 56 → 73 に: 方程式の文章題 3・図形の移動 5・平行線と角（図つき）3・角柱と角錐 6。移動と文章題の単元にも問題ができた
 - コンテンツパック（国 × 教科 × 学年の中身 1 式）の仕様 `docs/content_pack_spec.md`・目録 `ContentPackManifest`・一括検証 `validateContentPack`（ファイルをまたぐ検査: 教科・学年の一致、レッスンの参照、体験の ID の重複ほか）・`tool/validate_pack.dart`。同梱の草案 3 つ（社会・英語・数学）に `manifest.json` を追加（数学には体験型・作図を同梱）。国別展開の第 1 段
 - 社会の体験型: 年表づくり `TimelineExperience`・`TimelineResult`（体験の 5 種目 `timeline`）、`LinkResult.reversed`（向きだけ逆の辺 = 原因と結果の取り違え）、時差の計算 `timeOffsetHours`・`localTimeAt`・`LocalTime`。社会の基盤の第 7 段
 - 中 1 社会（日本）の内容の草案 `docs/content_drafts/shakai_chu1/`（単元 19・前提 12・見本の問題 18・雨温図の見本 4・誤解の型）と検証テスト。社会の基盤の第 6 段

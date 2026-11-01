@@ -4428,6 +4428,1027 @@
     }
    ],
    "explanationId": "exp_m1_func_graphchoice_001"
+  },
+  {
+   "id": "m1_eq_word_001",
+   "templateVersion": 1,
+   "unitId": "m1_eq_word",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "a": {
+     "int": [
+      2,
+      9
+     ]
+    },
+    "k": {
+     "int": [
+      2,
+      15
+     ]
+    },
+    "b": {
+     "int": [
+      1,
+      9
+     ]
+    }
+   },
+   "derived": {
+    "c": "a*k+b"
+   },
+   "display": {
+    "a": "{a}",
+    "b": "{b}",
+    "c": "{c}"
+   },
+   "answer": "{k}",
+   "wrong": [
+    {
+     "expr": "{c-b}",
+     "tag": "forgot_to_divide"
+    },
+    {
+     "expr": "{(c+b)/a}",
+     "tag": "move_term_sign"
+    },
+    {
+     "expr": "{c/a}",
+     "tag": "forgot_subtract_constant"
+    }
+   ],
+   "explanationId": "exp_m1_eq_word_001"
+  },
+  {
+   "id": "m1_eq_word_002",
+   "templateVersion": 1,
+   "unitId": "m1_eq_word",
+   "type": "expr",
+   "difficulty": 0.8,
+   "params": {
+    "a": {
+     "int": [
+      2,
+      6
+     ]
+    },
+    "e": {
+     "int": [
+      1,
+      3
+     ]
+    },
+    "k": {
+     "int": [
+      5,
+      20
+     ]
+    },
+    "b": {
+     "int": [
+      1,
+      4
+     ]
+    }
+   },
+   "derived": {
+    "c": "a+e",
+    "d": "e*k-b"
+   },
+   "constraints": [
+    "d > 0"
+   ],
+   "display": {
+    "a": "{a}",
+    "b": "{b}",
+    "c": "{c}",
+    "d": "{d}"
+   },
+   "answer": "{k}",
+   "wrong": [
+    {
+     "expr": "{(d-b)/(c-a)}",
+     "tag": "excess_shortage_sign"
+    },
+    {
+     "expr": "{a*k+b}",
+     "tag": "answer_total_not_unknown"
+    },
+    {
+     "expr": "{(b+d)/(c+a)}",
+     "tag": "diff_vs_sum"
+    }
+   ],
+   "explanationId": "exp_m1_eq_word_002"
+  },
+  {
+   "id": "m1_eq_word_003",
+   "templateVersion": 1,
+   "unitId": "m1_eq_word",
+   "type": "expr",
+   "difficulty": 0.85,
+   "params": {
+    "n": {
+     "int": [
+      3,
+      4
+     ]
+    },
+    "b": {
+     "int": [
+      5,
+      12
+     ]
+    },
+    "y": {
+     "int": [
+      1,
+      15
+     ]
+    }
+   },
+   "derived": {
+    "a": "n*(b+y)-y"
+   },
+   "constraints": [
+    "a <= 60"
+   ],
+   "display": {
+    "a": "{a}",
+    "b": "{b}",
+    "n": "{n}"
+   },
+   "answer": "{y}",
+   "wrong": [
+    {
+     "expr": "{a-n*b}",
+     "tag": "forgot_to_divide"
+    },
+    {
+     "expr": "{(a+n*b)/(n+1)}",
+     "tag": "sum_instead_of_difference"
+    },
+    {
+     "expr": "{n*(b+y)}",
+     "tag": "answer_age_not_years"
+    }
+   ],
+   "explanationId": "exp_m1_eq_word_003"
+  },
+  {
+   "id": "m1_geo_move_001",
+   "templateVersion": 1,
+   "unitId": "m1_geo_move",
+   "type": "expr",
+   "difficulty": 0.55,
+   "params": {
+    "p": {
+     "int": [
+      -9,
+      9
+     ]
+    },
+    "q": {
+     "int": [
+      -9,
+      9
+     ]
+    },
+    "s": {
+     "int": [
+      1,
+      8
+     ]
+    },
+    "t": {
+     "int": [
+      1,
+      8
+     ]
+    }
+   },
+   "constraints": [
+    "q+t != p+s",
+    "q+t != p-s"
+   ],
+   "display": {
+    "p": "{p}",
+    "q": "{q}",
+    "s": "{s}",
+    "t": "{t}"
+   },
+   "answer": "{p+s}",
+   "wrong": [
+    {
+     "expr": "{p-s}",
+     "tag": "translate_direction_reversed"
+    },
+    {
+     "expr": "{q+t}",
+     "tag": "x_y_swapped"
+    }
+   ],
+   "explanationId": "exp_m1_geo_move_001"
+  },
+  {
+   "id": "m1_geo_move_002",
+   "templateVersion": 1,
+   "unitId": "m1_geo_move",
+   "type": "expr",
+   "difficulty": 0.55,
+   "params": {
+    "p": {
+     "int": [
+      -9,
+      9
+     ]
+    },
+    "q": {
+     "int": [
+      -9,
+      9
+     ]
+    },
+    "s": {
+     "int": [
+      1,
+      8
+     ]
+    },
+    "t": {
+     "int": [
+      1,
+      8
+     ]
+    }
+   },
+   "constraints": [
+    "p+s != q+t",
+    "p+s != q-t"
+   ],
+   "display": {
+    "p": "{p}",
+    "q": "{q}",
+    "s": "{s}",
+    "t": "{t}"
+   },
+   "answer": "{q+t}",
+   "wrong": [
+    {
+     "expr": "{q-t}",
+     "tag": "translate_direction_reversed"
+    },
+    {
+     "expr": "{p+s}",
+     "tag": "x_y_swapped"
+    }
+   ],
+   "explanationId": "exp_m1_geo_move_002"
+  },
+  {
+   "id": "m1_geo_move_003",
+   "templateVersion": 1,
+   "unitId": "m1_geo_move",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "p": {
+     "int": [
+      -9,
+      9
+     ]
+    },
+    "q": {
+     "int": [
+      -9,
+      9
+     ]
+    }
+   },
+   "constraints": [
+    "q != 0",
+    "p != q",
+    "p != -q"
+   ],
+   "display": {
+    "p": "{p}",
+    "q": "{q}"
+   },
+   "answer": "{-q}",
+   "wrong": [
+    {
+     "expr": "{q}",
+     "tag": "symmetry_axis_mixup"
+    },
+    {
+     "expr": "{-p}",
+     "tag": "reflect_wrong_coordinate"
+    }
+   ],
+   "explanationId": "exp_m1_geo_move_003"
+  },
+  {
+   "id": "m1_geo_move_004",
+   "templateVersion": 1,
+   "unitId": "m1_geo_move",
+   "type": "expr",
+   "difficulty": 0.65,
+   "params": {
+    "p": {
+     "int": [
+      -9,
+      9
+     ]
+    },
+    "q": {
+     "int": [
+      -9,
+      9
+     ]
+    }
+   },
+   "constraints": [
+    "p != 0",
+    "p != q",
+    "p != -q"
+   ],
+   "display": {
+    "p": "{p}",
+    "q": "{q}"
+   },
+   "answer": "{-p}",
+   "wrong": [
+    {
+     "expr": "{p}",
+     "tag": "symmetry_origin_mixup"
+    },
+    {
+     "expr": "{-q}",
+     "tag": "x_y_swapped"
+    }
+   ],
+   "explanationId": "exp_m1_geo_move_004"
+  },
+  {
+   "id": "m1_geo_move_005",
+   "templateVersion": 1,
+   "unitId": "m1_geo_move",
+   "type": "expr",
+   "difficulty": 0.8,
+   "params": {
+    "p": {
+     "int": [
+      -9,
+      9
+     ]
+    },
+    "q": {
+     "int": [
+      -9,
+      9
+     ]
+    }
+   },
+   "constraints": [
+    "q != 0",
+    "p != q",
+    "p != -q"
+   ],
+   "display": {
+    "p": "{p}",
+    "q": "{q}"
+   },
+   "answer": "{-q}",
+   "wrong": [
+    {
+     "expr": "{q}",
+     "tag": "rotation_direction_reversed"
+    },
+    {
+     "expr": "{-p}",
+     "tag": "rotation_no_swap"
+    }
+   ],
+   "explanationId": "exp_m1_geo_move_005"
+  },
+  {
+   "id": "m1_geo_parallel_001",
+   "templateVersion": 1,
+   "unitId": "m1_geo_basic",
+   "type": "expr",
+   "difficulty": 0.7,
+   "params": {
+    "a": {
+     "int": [
+      30,
+      80
+     ]
+    }
+   },
+   "constraints": [
+    "a != 45"
+   ],
+   "figure": {
+    "viewBox": [
+     0,
+     0,
+     100,
+     80
+    ],
+    "points": {
+     "P": [
+      40,
+      22
+     ],
+     "L1": {
+      "polar": [
+       "P",
+       25,
+       180
+      ]
+     },
+     "R1": {
+      "polar": [
+       "P",
+       25,
+       0
+      ]
+     },
+     "Q": {
+      "polar": [
+       "P",
+       40,
+       "-a"
+      ]
+     },
+     "L2": {
+      "polar": [
+       "Q",
+       25,
+       180
+      ]
+     },
+     "R2": {
+      "polar": [
+       "Q",
+       25,
+       0
+      ]
+     },
+     "T": {
+      "polar": [
+       "P",
+       16,
+       "180-a"
+      ]
+     },
+     "B": {
+      "polar": [
+       "Q",
+       16,
+       "-a"
+      ]
+     }
+    },
+    "draw": [
+     {
+      "seg": [
+       "L1",
+       "R1"
+      ]
+     },
+     {
+      "seg": [
+       "L2",
+       "R2"
+      ]
+     },
+     {
+      "seg": [
+       "T",
+       "B"
+      ]
+     }
+    ],
+    "marks": [
+     {
+      "angle": [
+       "R1",
+       "P",
+       "Q"
+      ],
+      "label": "{a}°"
+     },
+     {
+      "angle": [
+       "L2",
+       "Q",
+       "P"
+      ],
+      "label": "x°"
+     }
+    ],
+    "names": false,
+    "altId": "fig_parallel_transversal"
+   },
+   "display": {
+    "a": "{a}"
+   },
+   "answer": "{a}",
+   "wrong": [
+    {
+     "expr": "{180-a}",
+     "tag": "supplement_vs_equal_angles"
+    },
+    {
+     "expr": "{90-a}",
+     "tag": "complement_mixup"
+    }
+   ],
+   "explanationId": "exp_m1_geo_parallel_001"
+  },
+  {
+   "id": "m1_geo_parallel_002",
+   "templateVersion": 1,
+   "unitId": "m1_geo_basic",
+   "type": "expr",
+   "difficulty": 0.7,
+   "params": {
+    "a": {
+     "int": [
+      30,
+      80
+     ]
+    }
+   },
+   "constraints": [
+    "a != 45"
+   ],
+   "figure": {
+    "viewBox": [
+     0,
+     0,
+     100,
+     80
+    ],
+    "points": {
+     "P": [
+      40,
+      22
+     ],
+     "L1": {
+      "polar": [
+       "P",
+       25,
+       180
+      ]
+     },
+     "R1": {
+      "polar": [
+       "P",
+       25,
+       0
+      ]
+     },
+     "Q": {
+      "polar": [
+       "P",
+       40,
+       "-a"
+      ]
+     },
+     "L2": {
+      "polar": [
+       "Q",
+       25,
+       180
+      ]
+     },
+     "R2": {
+      "polar": [
+       "Q",
+       25,
+       0
+      ]
+     },
+     "T": {
+      "polar": [
+       "P",
+       16,
+       "180-a"
+      ]
+     },
+     "B": {
+      "polar": [
+       "Q",
+       16,
+       "-a"
+      ]
+     }
+    },
+    "draw": [
+     {
+      "seg": [
+       "L1",
+       "R1"
+      ]
+     },
+     {
+      "seg": [
+       "L2",
+       "R2"
+      ]
+     },
+     {
+      "seg": [
+       "T",
+       "B"
+      ]
+     }
+    ],
+    "marks": [
+     {
+      "angle": [
+       "R1",
+       "P",
+       "Q"
+      ],
+      "label": "{a}°"
+     },
+     {
+      "angle": [
+       "R2",
+       "Q",
+       "B"
+      ],
+      "label": "x°"
+     }
+    ],
+    "names": false,
+    "altId": "fig_parallel_transversal"
+   },
+   "display": {
+    "a": "{a}"
+   },
+   "answer": "{a}",
+   "wrong": [
+    {
+     "expr": "{180-a}",
+     "tag": "supplement_vs_equal_angles"
+    },
+    {
+     "expr": "{90-a}",
+     "tag": "complement_mixup"
+    }
+   ],
+   "explanationId": "exp_m1_geo_parallel_002"
+  },
+  {
+   "id": "m1_geo_parallel_003",
+   "templateVersion": 1,
+   "unitId": "m1_geo_basic",
+   "type": "expr",
+   "difficulty": 0.8,
+   "params": {
+    "a": {
+     "int": [
+      30,
+      80
+     ]
+    }
+   },
+   "constraints": [
+    "a != 45"
+   ],
+   "figure": {
+    "viewBox": [
+     0,
+     0,
+     100,
+     80
+    ],
+    "points": {
+     "P": [
+      40,
+      22
+     ],
+     "L1": {
+      "polar": [
+       "P",
+       25,
+       180
+      ]
+     },
+     "R1": {
+      "polar": [
+       "P",
+       25,
+       0
+      ]
+     },
+     "Q": {
+      "polar": [
+       "P",
+       40,
+       "-a"
+      ]
+     },
+     "L2": {
+      "polar": [
+       "Q",
+       25,
+       180
+      ]
+     },
+     "R2": {
+      "polar": [
+       "Q",
+       25,
+       0
+      ]
+     },
+     "T": {
+      "polar": [
+       "P",
+       16,
+       "180-a"
+      ]
+     },
+     "B": {
+      "polar": [
+       "Q",
+       16,
+       "-a"
+      ]
+     }
+    },
+    "draw": [
+     {
+      "seg": [
+       "L1",
+       "R1"
+      ]
+     },
+     {
+      "seg": [
+       "L2",
+       "R2"
+      ]
+     },
+     {
+      "seg": [
+       "T",
+       "B"
+      ]
+     }
+    ],
+    "marks": [
+     {
+      "angle": [
+       "R1",
+       "P",
+       "Q"
+      ],
+      "label": "{a}°"
+     },
+     {
+      "angle": [
+       "R2",
+       "Q",
+       "P"
+      ],
+      "label": "x°"
+     }
+    ],
+    "names": false,
+    "altId": "fig_parallel_transversal"
+   },
+   "display": {
+    "a": "{a}"
+   },
+   "answer": "{180-a}",
+   "wrong": [
+    {
+     "expr": "{a}",
+     "tag": "co_interior_equal_mixup"
+    },
+    {
+     "expr": "{90-a}",
+     "tag": "complement_mixup"
+    }
+   ],
+   "explanationId": "exp_m1_geo_parallel_003"
+  },
+  {
+   "id": "m1_space_prism_001",
+   "templateVersion": 1,
+   "unitId": "m1_space_vol",
+   "type": "expr",
+   "difficulty": 0.55,
+   "params": {
+    "u": {
+     "int": [
+      12,
+      60
+     ]
+    },
+    "h": {
+     "int": [
+      2,
+      12
+     ]
+    }
+   },
+   "display": {
+    "S": "{u}",
+    "h": "{h}"
+   },
+   "answer": "{u*h}",
+   "wrong": [
+    {
+     "expr": "{u*h/3}",
+     "tag": "volume_extra_third"
+    },
+    {
+     "expr": "{u+h}",
+     "tag": "add_instead_of_multiply"
+    }
+   ],
+   "explanationId": "exp_m1_space_prism_001"
+  },
+  {
+   "id": "m1_space_pyramid_001",
+   "templateVersion": 1,
+   "unitId": "m1_space_vol",
+   "type": "expr",
+   "difficulty": 0.7,
+   "params": {
+    "u": {
+     "int": [
+      4,
+      20
+     ]
+    },
+    "h": {
+     "int": [
+      2,
+      12
+     ]
+    }
+   },
+   "display": {
+    "S": "{3*u}",
+    "h": "{h}"
+   },
+   "answer": "{u*h}",
+   "wrong": [
+    {
+     "expr": "{3*u*h}",
+     "tag": "volume_forgot_third"
+    },
+    {
+     "expr": "{3*u+h}",
+     "tag": "add_instead_of_multiply"
+    }
+   ],
+   "explanationId": "exp_m1_space_pyramid_001"
+  },
+  {
+   "id": "m1_space_solid_face_001",
+   "templateVersion": 1,
+   "unitId": "m1_space_solid",
+   "type": "expr",
+   "difficulty": 0.5,
+   "params": {
+    "n": {
+     "int": [
+      3,
+      9
+     ]
+    }
+   },
+   "display": {
+    "n": "{n}"
+   },
+   "answer": "{n+2}",
+   "wrong": [
+    {
+     "expr": "{n}",
+     "tag": "base_faces_forgotten"
+    },
+    {
+     "expr": "{n+1}",
+     "tag": "pyramid_prism_mixup"
+    },
+    {
+     "expr": "{2*n}",
+     "tag": "vertex_count_mixup"
+    }
+   ],
+   "explanationId": "exp_m1_space_solid_face_001"
+  },
+  {
+   "id": "m1_space_solid_edge_001",
+   "templateVersion": 1,
+   "unitId": "m1_space_solid",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "n": {
+     "int": [
+      3,
+      9
+     ]
+    }
+   },
+   "display": {
+    "n": "{n}"
+   },
+   "answer": "{3*n}",
+   "wrong": [
+    {
+     "expr": "{2*n}",
+     "tag": "edge_vertex_mixup"
+    },
+    {
+     "expr": "{n+2}",
+     "tag": "face_edge_mixup"
+    },
+    {
+     "expr": "{n}",
+     "tag": "base_edges_only"
+    }
+   ],
+   "explanationId": "exp_m1_space_solid_edge_001"
+  },
+  {
+   "id": "m1_space_solid_vertex_001",
+   "templateVersion": 1,
+   "unitId": "m1_space_solid",
+   "type": "expr",
+   "difficulty": 0.55,
+   "params": {
+    "n": {
+     "int": [
+      3,
+      9
+     ]
+    }
+   },
+   "display": {
+    "n": "{n}"
+   },
+   "answer": "{n+1}",
+   "wrong": [
+    {
+     "expr": "{n}",
+     "tag": "apex_forgotten"
+    },
+    {
+     "expr": "{2*n}",
+     "tag": "prism_pyramid_mixup"
+    },
+    {
+     "expr": "{n+2}",
+     "tag": "face_vertex_mixup"
+    }
+   ],
+   "explanationId": "exp_m1_space_solid_vertex_001"
+  },
+  {
+   "id": "m1_space_solid_edge_002",
+   "templateVersion": 1,
+   "unitId": "m1_space_solid",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "n": {
+     "int": [
+      3,
+      9
+     ]
+    }
+   },
+   "display": {
+    "n": "{n}"
+   },
+   "answer": "{2*n}",
+   "wrong": [
+    {
+     "expr": "{n+1}",
+     "tag": "edge_vertex_mixup"
+    },
+    {
+     "expr": "{3*n}",
+     "tag": "prism_pyramid_mixup"
+    },
+    {
+     "expr": "{n}",
+     "tag": "base_edges_only"
+    }
+   ],
+   "explanationId": "exp_m1_space_solid_edge_002"
   }
  ]
 }
