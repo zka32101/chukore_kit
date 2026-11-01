@@ -219,7 +219,7 @@ void main() {
   });
 
   for (final dir in ['docs/content_drafts/suugaku_chu2', 'docs/content_drafts/suugaku_chu3']) {
-  test('$dir の証明 2 つ: 文言がそろい、全部の遊び方で正解の並びが正解になる', () {
+  test('$dir の証明: 文言がそろい、全部の遊び方で正解の並びが正解になる', () {
     final r = validateContentPack(
       File('$dir/manifest.json').readAsStringSync(),
       (p) => File('$dir/$p').readAsStringSync(),
@@ -229,7 +229,7 @@ void main() {
       isEmpty,
       reason: r.issues.join('\n'),
     );
-    expect(r.counts['proofs'], 2);
+    expect(r.counts['proofs'], dir.endsWith('chu2') ? 4 : 2);
     final set = ProofSet.parse(File('$dir/proofs.json').readAsStringSync());
     for (final p in set.proofs) {
       expect(

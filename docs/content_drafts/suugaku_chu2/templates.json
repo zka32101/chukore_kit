@@ -809,6 +809,510 @@
     }
    ],
    "explanationId": "exp_m2_data_box_001"
+  },
+  {
+   "id": "m2_par_cong_001",
+   "templateVersion": 1,
+   "unitId": "m2_par_cong",
+   "type": "expr",
+   "difficulty": 0.55,
+   "params": {
+    "a": {
+     "int": [
+      30,
+      80
+     ]
+    },
+    "b": {
+     "int": [
+      30,
+      80
+     ]
+    }
+   },
+   "display": {
+    "v": "{a}"
+   },
+   "answer": "{180-a-b}",
+   "wrong": [
+    {
+     "expr": "{180-a}",
+     "tag": "only_one_angle"
+    },
+    {
+     "expr": "{a+b}",
+     "tag": "sum_not_remaining"
+    }
+   ],
+   "explanationId": "exp_m2_par_cong_001"
+  },
+  {
+   "id": "m2_par_cong_002",
+   "templateVersion": 1,
+   "unitId": "m2_par_cong",
+   "type": "expr",
+   "difficulty": 0.5,
+   "params": {
+    "a": {
+     "int": [
+      3,
+      12
+     ]
+    },
+    "b": {
+     "int": [
+      3,
+      12
+     ]
+    },
+    "c": {
+     "int": [
+      3,
+      12
+     ]
+    }
+   },
+   "display": {
+    "v": "{a}"
+   },
+   "answer": "{a+b+c}",
+   "wrong": [
+    {
+     "expr": "{a+b}",
+     "tag": "forgot_one_side"
+    },
+    {
+     "expr": "{a*b*c}",
+     "tag": "multiplied"
+    }
+   ],
+   "explanationId": "exp_m2_par_cong_002"
+  },
+  {
+   "id": "m2_tri_iso_001",
+   "templateVersion": 1,
+   "unitId": "m2_tri_iso",
+   "type": "expr",
+   "difficulty": 0.55,
+   "params": {
+    "k": {
+     "int": [
+      10,
+      80
+     ]
+    }
+   },
+   "display": {
+    "c": "{2*k}"
+   },
+   "answer": "{90-k}",
+   "wrong": [
+    {
+     "expr": "{180-2*k}",
+     "tag": "forgot_to_halve"
+    },
+    {
+     "expr": "{k}",
+     "tag": "apex_half"
+    }
+   ],
+   "explanationId": "exp_m2_tri_iso_001"
+  },
+  {
+   "id": "m2_tri_iso_002",
+   "templateVersion": 1,
+   "unitId": "m2_tri_iso",
+   "type": "expr",
+   "difficulty": 0.55,
+   "params": {
+    "b": {
+     "int": [
+      30,
+      80
+     ]
+    }
+   },
+   "display": {
+    "v": "{b}"
+   },
+   "answer": "{180-2*b}",
+   "wrong": [
+    {
+     "expr": "{180-b}",
+     "tag": "one_base_angle"
+    },
+    {
+     "expr": "{90-b}",
+     "tag": "halved"
+    }
+   ],
+   "explanationId": "exp_m2_tri_iso_002"
+  },
+  {
+   "id": "m2_tri_iso_003",
+   "templateVersion": 1,
+   "unitId": "m2_tri_iso",
+   "type": "expr",
+   "difficulty": 0.7,
+   "params": {
+    "b": {
+     "int": [
+      30,
+      80
+     ]
+    }
+   },
+   "display": {
+    "v": "{b}"
+   },
+   "answer": "{2*b}",
+   "wrong": [
+    {
+     "expr": "{180-2*b}",
+     "tag": "interior_not_exterior"
+    },
+    {
+     "expr": "{b}",
+     "tag": "base_angle"
+    }
+   ],
+   "explanationId": "exp_m2_tri_iso_003"
+  },
+  {
+   "id": "m2_tri_para_001",
+   "templateVersion": 1,
+   "unitId": "m2_tri_para",
+   "type": "expr",
+   "difficulty": 0.45,
+   "params": {
+    "a": {
+     "int": [
+      40,
+      140
+     ]
+    }
+   },
+   "constraints": [
+    "a != 90"
+   ],
+   "display": {
+    "v": "{a}"
+   },
+   "answer": "{a}",
+   "wrong": [
+    {
+     "expr": "{180-a}",
+     "tag": "adjacent_angle"
+    },
+    {
+     "expr": "{360-a}",
+     "tag": "wrong_total"
+    }
+   ],
+   "explanationId": "exp_m2_tri_para_001"
+  },
+  {
+   "id": "m2_tri_para_002",
+   "templateVersion": 1,
+   "unitId": "m2_tri_para",
+   "type": "expr",
+   "difficulty": 0.5,
+   "params": {
+    "a": {
+     "int": [
+      40,
+      140
+     ]
+    }
+   },
+   "constraints": [
+    "a != 90"
+   ],
+   "display": {
+    "v": "{a}"
+   },
+   "answer": "{180-a}",
+   "wrong": [
+    {
+     "expr": "{a}",
+     "tag": "opposite_angle"
+    },
+    {
+     "expr": "{360-2*a}",
+     "tag": "wrong_total"
+    }
+   ],
+   "explanationId": "exp_m2_tri_para_002"
+  },
+  {
+   "id": "m2_tri_para_003",
+   "templateVersion": 1,
+   "unitId": "m2_tri_para",
+   "type": "expr",
+   "difficulty": 0.5,
+   "params": {
+    "a": {
+     "int": [
+      3,
+      12
+     ]
+    },
+    "b": {
+     "int": [
+      3,
+      12
+     ]
+    }
+   },
+   "display": {
+    "v": "{a}"
+   },
+   "answer": "{2*(a+b)}",
+   "wrong": [
+    {
+     "expr": "{a+b}",
+     "tag": "half_perimeter"
+    },
+    {
+     "expr": "{2*a+b}",
+     "tag": "one_side_doubled"
+    }
+   ],
+   "explanationId": "exp_m2_tri_para_003"
+  },
+  {
+   "id": "m2_tri_para_004",
+   "templateVersion": 1,
+   "unitId": "m2_tri_para",
+   "type": "expr",
+   "difficulty": 0.55,
+   "params": {
+    "k": {
+     "int": [
+      2,
+      12
+     ]
+    }
+   },
+   "display": {
+    "d": "{2*k}"
+   },
+   "answer": "{k}",
+   "wrong": [
+    {
+     "expr": "{2*k}",
+     "tag": "whole_diagonal"
+    },
+    {
+     "expr": "{4*k}",
+     "tag": "doubled"
+    }
+   ],
+   "explanationId": "exp_m2_tri_para_004"
+  },
+  {
+   "id": "m2_lin_sim_001",
+   "templateVersion": 1,
+   "unitId": "m2_lin_sim",
+   "type": "expr",
+   "difficulty": 0.65,
+   "params": {
+    "a": {
+     "int": [
+      -4,
+      4
+     ]
+    },
+    "c": {
+     "int": [
+      -4,
+      4
+     ]
+    },
+    "b": {
+     "int": [
+      -6,
+      6
+     ]
+    },
+    "p": {
+     "int": [
+      -4,
+      4
+     ]
+    }
+   },
+   "derived": {
+    "d": "b+(a-c)*p"
+   },
+   "constraints": [
+    "a != c",
+    "a != 0",
+    "c != 0",
+    "b != 0",
+    "d != 0",
+    "p != 0"
+   ],
+   "display": {
+    "eq1": "y={a}x{+b}",
+    "eq2": "y={c}x{+d}"
+   },
+   "answer": "{p}",
+   "wrong": [
+    {
+     "expr": "{a*p+b}",
+     "tag": "y_not_x"
+    },
+    {
+     "expr": "{-p}",
+     "tag": "sign_error"
+    }
+   ],
+   "explanationId": "exp_m2_lin_sim_001"
+  },
+  {
+   "id": "m2_lin_sim_002",
+   "templateVersion": 1,
+   "unitId": "m2_lin_sim",
+   "type": "expr",
+   "difficulty": 0.7,
+   "params": {
+    "a": {
+     "int": [
+      -4,
+      4
+     ]
+    },
+    "c": {
+     "int": [
+      -4,
+      4
+     ]
+    },
+    "b": {
+     "int": [
+      -6,
+      6
+     ]
+    },
+    "p": {
+     "int": [
+      -4,
+      4
+     ]
+    }
+   },
+   "derived": {
+    "d": "b+(a-c)*p"
+   },
+   "constraints": [
+    "a != c",
+    "a != 0",
+    "c != 0",
+    "b != 0",
+    "d != 0",
+    "p != 0"
+   ],
+   "display": {
+    "eq1": "y={a}x{+b}",
+    "eq2": "y={c}x{+d}"
+   },
+   "answer": "{a*p+b}",
+   "wrong": [
+    {
+     "expr": "{p}",
+     "tag": "x_not_y"
+    },
+    {
+     "expr": "{c*p+b}",
+     "tag": "wrong_substitution"
+    }
+   ],
+   "explanationId": "exp_m2_lin_sim_002"
+  },
+  {
+   "id": "m2_lin_use_001",
+   "templateVersion": 1,
+   "unitId": "m2_lin_use",
+   "type": "expr",
+   "difficulty": 0.55,
+   "params": {
+    "a": {
+     "int": [
+      2,
+      9
+     ]
+    },
+    "b": {
+     "int": [
+      5,
+      40
+     ]
+    },
+    "p": {
+     "int": [
+      2,
+      15
+     ]
+    }
+   },
+   "display": {
+    "v": "{a}"
+   },
+   "answer": "{b+a*p}",
+   "wrong": [
+    {
+     "expr": "{a*p}",
+     "tag": "forgot_initial"
+    },
+    {
+     "expr": "{b+a+p}",
+     "tag": "added_not_multiplied"
+    }
+   ],
+   "explanationId": "exp_m2_lin_use_001"
+  },
+  {
+   "id": "m2_lin_use_002",
+   "templateVersion": 1,
+   "unitId": "m2_lin_use",
+   "type": "expr",
+   "difficulty": 0.7,
+   "params": {
+    "a": {
+     "int": [
+      2,
+      9
+     ]
+    },
+    "b": {
+     "int": [
+      5,
+      40
+     ]
+    },
+    "p": {
+     "int": [
+      2,
+      15
+     ]
+    }
+   },
+   "display": {
+    "n": "{b+a*p}"
+   },
+   "answer": "{p}",
+   "wrong": [
+    {
+     "expr": "{b+a*p}",
+     "tag": "answer_not_time"
+    },
+    {
+     "expr": "{(b+a*p)/a}",
+     "tag": "forgot_initial"
+    }
+   ],
+   "explanationId": "exp_m2_lin_use_002"
   }
  ]
 }

@@ -10,8 +10,8 @@ void main() {
   final texts = ContentTexts.parse(File('$dir/texts.json').readAsStringSync());
   final set = TemplateSet.parse(File('$dir/templates.json').readAsStringSync());
 
-  test('19 の型。一括検証にエラーなし', () {
-    expect(set.templates.length, 19);
+  test('32 の型。一括検証にエラーなし', () {
+    expect(set.templates.length, 32);
     final r = validateContentPack(
       File('$dir/manifest.json').readAsStringSync(),
       (p) => File('$dir/$p').readAsStringSync(),
