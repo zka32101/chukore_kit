@@ -29,6 +29,7 @@ class ContentPackManifest {
     required this.contentVersion,
     required this.attribution,
     required this.files,
+    this.textsCover = textKinds,
   });
 
   final String id;
@@ -55,12 +56,20 @@ class ContentPackManifest {
   /// ファイルの場所（目録からの相対パス）。`units` は必須。
   final Map<String, Object> files;
 
+  /// `texts` がそろっていなければならない範囲（既定はすべて）。書いた分だけ増やしていくパック（例: まずレッスンの説明だけ）は
+  /// `textsCover` で範囲を絞る。範囲の外の文言は、あってもなくてもよい（あれば差し込みの名前は確かめる）。
+  final Set<String> textsCover;
+
+  /// `textsCover` に書ける種類: `scenes`（場面の名前と説明）・`lessons`（レッスン）・`templates`（型の問題文と解説）・
+  /// `figures`（型の図の説明）・`questions`（問題集の解説）。
+  static const textKinds = {'scenes', 'lessons', 'templates', 'figures', 'questions'};
+
   static const fileKeys = {
     'units', 'prerequisites', 'questions', 'templates', 'lessons',
     'explorations', 'constructions', 'experiences', 'charts', 'scenes', 'texts', 'maps',
   };
   static const _keys = {
-    'version', 'id', 'country', 'locale', 'subject', 'grades', 'curriculum', 'contentVersion', 'attribution', 'files',
+    'version', 'id', 'country', 'locale', 'subject', 'grades', 'curriculum', 'contentVersion', 'attribution', 'files', 'textsCover',
   };
 
   /// 読めなければ [FormatException]。
@@ -97,6 +106,11 @@ class ContentPackManifest {
     if (ra is! List || ra.any((e) => e is! String || e.trim().isEmpty)) {
       throw const FormatException('manifest: attribution は空でない文字列の並び');
     }
+    final rc = j['textsCover'];
+    if (rc != null &&
+        (rc is! List || rc.isEmpty || rc.any((e) => e is! String || !textKinds.contains(e)) || rc.toSet().length != rc.length)) {
+      throw FormatException('manifest: textsCover は ${textKinds.join('・')} の重複しない 1 つ以上');
+    }
     final rf = j['files'];
     if (rf is! Map) throw const FormatException('manifest: files が必要です');
     final badKey = rf.keys.where((k) => !fileKeys.contains(k));
@@ -125,6 +139,7 @@ class ContentPackManifest {
       contentVersion: version,
       attribution: [for (final a in ra) a as String],
       files: files,
+      textsCover: rc == null ? textKinds : {for (final e in rc as List) e as String},
     );
   }
 
@@ -404,6 +419,7 @@ ContentPackReport validateContentPack(String manifestSource, String? Function(St
         lessons: lessonSet?.lessons ?? const <Lesson>[],
         sceneSet: sceneSet,
         questionExplanations: questionExplanations,
+        cover: m.textsCover,
         add: add,
       );
     }
@@ -468,12 +484,15 @@ void _checkTexts({
   required List<Lesson> lessons,
   required SceneSet? sceneSet,
   required Set<String> questionExplanations,
+  required Set<String> cover,
   required void Function(IssueSeverity, String, String, String) add,
 }) {
   // 文言 ID → 差し込める名前（null は差し込みなし）
   final required = <String, ({Set<String> keys, Set<String> vars, Set<String> lists})?>{};
-  void need(String id, [({Set<String> keys, Set<String> vars, Set<String> lists})? names]) {
+  final covered = <String>{}; // そろっていなければならない文言（textsCover の範囲）
+  void need(String id, String kind, [({Set<String> keys, Set<String> vars, Set<String> lists})? names]) {
     if (!required.containsKey(id)) required[id] = names;
+    if (cover.contains(kind)) covered.add(id);
   }
 
   ({Set<String> keys, Set<String> vars, Set<String> lists}) namesOf(Iterable<MathTemplate> ts) => (
@@ -483,37 +502,37 @@ void _checkTexts({
   );
 
   for (final s in sceneSet?.scenes ?? const <Scene>[]) {
-    need(s.titleId);
-    need(s.textId);
+    need(s.titleId, 'scenes');
+    need(s.textId, 'scenes');
   }
   final all = namesOf(templates);
   for (final l in lessons) {
     for (final id in l.textIds) {
-      need(id, all);
+      need(id, 'lessons', all);
     }
   }
   for (final t in templates) {
     final own = namesOf([t]);
-    need('prompt_${t.id}', own);
-    need(t.explanationId, own);
+    need('prompt_${t.id}', 'templates', own);
+    need(t.explanationId, 'templates', own);
     final f = t.figure;
-    if (f != null) need(f.altId);
+    if (f != null) need(f.altId, 'figures');
     for (final c in t.figures.values) {
       final one = c.one;
-      if (one != null) need(one.altId);
+      if (one != null) need(one.altId, 'figures');
       for (final o in c.of) {
-        need(o.altId);
+        need(o.altId, 'figures');
       }
     }
   }
   for (final id in questionExplanations) {
-    need(id);
+    need(id, 'questions');
   }
 
   for (final e in required.entries) {
     final body = texts.texts[e.key];
     if (body == null) {
-      add(IssueSeverity.error, 'pack_text_missing', e.key, '[$file] 文言 ${e.key} がありません');
+      if (covered.contains(e.key)) add(IssueSeverity.error, 'pack_text_missing', e.key, '[$file] 文言 ${e.key} がありません');
       continue;
     }
     if (!ContentTexts.balanced(body)) continue; // 別のエラー（text_unbalanced_braces）で報告済み

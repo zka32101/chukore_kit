@@ -6,6 +6,7 @@
 - `units.json`: 7 分野・21 単元（葉）。`estimatedQuestions` は目安（計 約 380 問）。
 - `prerequisites.json`: 前提関係。小学の前提は誘導リンクだけ（コードは共有しない）。
 - `experiences.json` / `explorations.json` / `constructions.json`: 体験（天秤・一次関数・作図の見本）。レッスンから参照する
+- `texts.json`: レッスンの説明文 40（等式の性質＝天秤、一次方程式＝みかんの代金、同類項＝えんぴつと消しゴム、三角形の内角の和＝切り取って並べる）。実例から入り、例題の行ごとの説明は例題の値を差し込んで読める。目録の `textsCover` は `["lessons"]`（型の問題文・解説はこれから）
 - `templates.json`: 問題の型 81 個（`docs/math_variants_design.md`）。問題文の文章はコンテンツ側で持つ（`display` の数式を差し込む）。選択肢の日本語は型に直接書いてある（国別コンテンツのため）。
 
 続き: 中2 `../suugaku_chu2/`、中3 `../suugaku_chu3/`（単元・前提の草案）。

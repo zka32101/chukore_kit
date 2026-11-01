@@ -53,6 +53,7 @@ pack/
 | `country` | 国コード（ISO 3166-1 の大文字 2 文字: `JP`・`BR`） |
 | `locale` | 言語（`ja`・`pt-BR`・`en` など） |
 | `subject` | 教科（`math`・`en`・`social`・`science`・…）。**すべての単元の `subject` と同じ** |
+| `textsCover` | 文言がそろっていなければならない範囲（省略は全部。§3.5） |
 | `grades` | 範囲の学年（1〜12）。単元の `grade` はこの中に入れる |
 | `curriculum` | 準拠する教育課程の名前 |
 | `contentVersion` | 中身の版（`1.2.3`）。問題の `version` とは別（パック全体の版） |
@@ -95,6 +96,7 @@ dart run tool/validate_pack.dart <パックのディレクトリ>
 - **必要な文言**（`texts` を持つパックだけ確かめる）: 場面の名前と説明、レッスンの題名と各ブロックの説明（導入・説明・式・例題の行・つまずき・要点・図の説明）、型の**問題文 `prompt_<型ID>`**・解説（`explanationId`）・図の説明（`altId`）、問題集の解説。
 - 1 つの本文は 300 文字までを目安にする（教科書の 1 段落ほどに区切る）。`{` `}` は対応させる（入れ子なし）。
 - 検証: `pack_text_missing`（足りない）・`pack_text_placeholder_unknown`（差し込めない名前。問題文・解説は**その型の値の名前**だけ、レッスンはパックの型の名前、場面は差し込みなし）・`pack_texts_locale_mismatch`・`text_unbalanced_braces`（エラー）、`pack_text_unused`・`text_too_long`（警告）。
+- **範囲 `textsCover`**（目録。省略すると全部）: 文言を書いた分だけ増やしていくパックは、そろっていなければならない範囲を絞れる。`scenes`（場面）・`lessons`（レッスン）・`templates`（型の問題文と解説）・`figures`（図の説明）・`questions`（問題集の解説）。範囲の外は、なくても未使用の警告にもならず（使われていれば）、あれば差し込みの名前は確かめる。例: 中1の数学は `["lessons"]`（まずレッスンの説明だけ）。
 - 見本: `docs/content_drafts/suugaku_chu3/texts.json`（場面 3・レッスン 1・型 5 の問題文と解説。落下・停止距離などの実例）。
 
 ## 4. 国ごとの違いはどこに置くか

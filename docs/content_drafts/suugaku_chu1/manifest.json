@@ -17,6 +17,10 @@
   "lessons": "lessons.json",
   "explorations": "explorations.json",
   "constructions": "constructions.json",
-  "experiences": "experiences.json"
- }
+  "experiences": "experiences.json",
+  "texts": "texts.json"
+ },
+ "textsCover": [
+  "lessons"
+ ]
 }
