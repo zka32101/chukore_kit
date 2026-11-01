@@ -60,6 +60,7 @@ class ProofSpec {
     required this.reasons,
     required this.steps,
     required this.decoys,
+    this.figure,
   });
 
   final String id;
@@ -75,6 +76,9 @@ class ProofSpec {
   /// 正しい証明（書く順）。
   final List<ProofStep> steps;
   final List<ProofDecoy> decoys;
+
+  /// 証明の図（`FigureTemplate` の JSON。値は固定）。中身の検査はパックの検証が行う（この層は数学を知らない）。
+  final Map<String, dynamic>? figure;
 
   ProofStep stepById(String id) => steps.firstWhere((s) => s.id == id);
 
@@ -134,6 +138,7 @@ class ProofSpec {
     'reasons',
     'steps',
     'decoys',
+    'figure',
   };
 
   /// 読めなければ [FormatException]。
@@ -202,6 +207,7 @@ class ProofSpec {
       reasons: reasons,
       steps: steps,
       decoys: decoys,
+      figure: j['figure'] == null ? null : Map<String, dynamic>.from(j['figure'] as Map),
     );
   }
 }

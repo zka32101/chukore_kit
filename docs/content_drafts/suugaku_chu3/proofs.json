@@ -65,7 +65,55 @@
      "claimId": "pf_m3_sim_ade_d2",
      "tag": "assumed_not_given"
     }
-   ]
+   ],
+   "figure": {
+    "viewBox": [
+     0,
+     0,
+     100,
+     80
+    ],
+    "points": {
+     "A": [
+      50,
+      8
+     ],
+     "B": [
+      12,
+      70
+     ],
+     "C": [
+      88,
+      70
+     ],
+     "D": [
+      31,
+      39
+     ],
+     "E": [
+      69,
+      39
+     ]
+    },
+    "draw": [
+     {
+      "poly": [
+       "A",
+       "B",
+       "C"
+      ]
+     },
+     {
+      "seg": [
+       "D",
+       "E"
+      ]
+     }
+    ],
+    "marks": [],
+    "names": true,
+    "altId": "pffig_m3_sim_ade"
+   }
   },
   {
    "id": "pf_m3_sim_oac",
@@ -134,7 +182,66 @@
      "claimId": "pf_m3_sim_oac_d1",
      "tag": "used_congruence"
     }
-   ]
+   ],
+   "figure": {
+    "viewBox": [
+     0,
+     0,
+     100,
+     80
+    ],
+    "points": {
+     "A": [
+      15,
+      12
+     ],
+     "B": [
+      85,
+      68
+     ],
+     "C": [
+      85,
+      12
+     ],
+     "D": [
+      15,
+      68
+     ],
+     "O": [
+      50,
+      40
+     ]
+    },
+    "draw": [
+     {
+      "seg": [
+       "A",
+       "B"
+      ]
+     },
+     {
+      "seg": [
+       "C",
+       "D"
+      ]
+     },
+     {
+      "seg": [
+       "A",
+       "C"
+      ]
+     },
+     {
+      "seg": [
+       "B",
+       "D"
+      ]
+     }
+    ],
+    "marks": [],
+    "names": true,
+    "altId": "pffig_m3_sim_oac"
+   }
   }
  ]
 }

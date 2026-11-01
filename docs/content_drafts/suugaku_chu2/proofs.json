@@ -67,7 +67,93 @@
      "claimId": "pf_m2_cong_vertical_d2",
      "tag": "assumed_not_given"
     }
-   ]
+   ],
+   "figure": {
+    "viewBox": [
+     0,
+     0,
+     100,
+     80
+    ],
+    "points": {
+     "A": [
+      15,
+      12
+     ],
+     "B": [
+      85,
+      68
+     ],
+     "C": [
+      15,
+      68
+     ],
+     "D": [
+      85,
+      12
+     ],
+     "O": [
+      50,
+      40
+     ]
+    },
+    "draw": [
+     {
+      "seg": [
+       "A",
+       "B"
+      ]
+     },
+     {
+      "seg": [
+       "C",
+       "D"
+      ]
+     },
+     {
+      "seg": [
+       "A",
+       "C"
+      ]
+     },
+     {
+      "seg": [
+       "B",
+       "D"
+      ]
+     }
+    ],
+    "marks": [
+     {
+      "tick": [
+       "O",
+       "A"
+      ]
+     },
+     {
+      "tick": [
+       "O",
+       "B"
+      ]
+     },
+     {
+      "tick": [
+       "O",
+       "C"
+      ],
+      "n": 2
+     },
+     {
+      "tick": [
+       "O",
+       "D"
+      ],
+      "n": 2
+     }
+    ],
+    "names": true,
+    "altId": "pffig_m2_cong_vertical"
+   }
   },
   {
    "id": "pf_m2_cong_isosceles",
@@ -138,7 +224,80 @@
      "claimId": "pf_m2_cong_isosceles_d1",
      "tag": "assumed_conclusion"
     }
-   ]
+   ],
+   "figure": {
+    "viewBox": [
+     0,
+     0,
+     100,
+     80
+    ],
+    "points": {
+     "A": [
+      50,
+      8
+     ],
+     "B": [
+      14,
+      70
+     ],
+     "C": [
+      86,
+      70
+     ],
+     "D": [
+      50,
+      70
+     ]
+    },
+    "draw": [
+     {
+      "poly": [
+       "A",
+       "B",
+       "C"
+      ]
+     },
+     {
+      "seg": [
+       "A",
+       "D"
+      ]
+     }
+    ],
+    "marks": [
+     {
+      "tick": [
+       "A",
+       "B"
+      ]
+     },
+     {
+      "tick": [
+       "A",
+       "C"
+      ]
+     },
+     {
+      "angle": [
+       "B",
+       "A",
+       "D"
+      ],
+      "label": "●"
+     },
+     {
+      "angle": [
+       "D",
+       "A",
+       "C"
+      ],
+      "label": "●"
+     }
+    ],
+    "names": true,
+    "altId": "pffig_m2_cong_isosceles"
+   }
   }
  ]
 }

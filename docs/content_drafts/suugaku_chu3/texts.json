@@ -92,6 +92,8 @@
   "pf_m3_sim_oac_s2": "∠AOC = ∠BOD",
   "pf_m3_sim_oac_s3": "△OAC ∽ △OBD",
   "pf_m3_sim_oac_s4": "OA : OB = OC : OD",
-  "pf_m3_sim_oac_d1": "△OAC ≡ △OBD"
+  "pf_m3_sim_oac_d1": "△OAC ≡ △OBD",
+  "pffig_m3_sim_ade": "△ABC の辺 AB、AC の途中に点 D、E があり、DE が底辺 BC と平行になっている図。",
+  "pffig_m3_sim_oac": "線分 AB と CD が点 O で交わり、AC と BD が平行になっている図。"
  }
 }

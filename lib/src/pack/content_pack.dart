@@ -8,6 +8,7 @@ import '../lesson/math_lesson_checker.dart';
 import '../map/map_pack.dart';
 import '../math/construction.dart';
 import '../math/exploration.dart';
+import '../math/figure.dart';
 import '../math/math_expr.dart';
 import '../math/math_template.dart';
 import '../models/models.dart';
@@ -320,6 +321,17 @@ ContentPackReport validateContentPack(String manifestSource, String? Function(St
       proofSet = set;
       if (tree != null) addAll(proofsFile, validateProofs(set, tree: tree));
       counts['proofs'] = set.proofs.length;
+      for (final pf in set.proofs) {
+        final fig = pf.figure;
+        if (fig == null) continue;
+        try {
+          if (FigureTemplate.fromJson(fig, const {}).resolve(const {}, (t) => t) == null) {
+            add(IssueSeverity.error, 'pack_proof_figure_invalid', pf.id, '[$proofsFile] 図を描けません');
+          }
+        } on FormatException catch (e) {
+          add(IssueSeverity.error, 'pack_proof_figure_invalid', pf.id, '[$proofsFile] ${e.message}');
+        }
+      }
     }
   }
 
@@ -523,6 +535,8 @@ void _checkTexts({
     for (final id in p.textIds) {
       need(id, 'proofs');
     }
+    final altId = p.figure?['altId'];
+    if (altId is String) need(altId, 'figures');
   }
   final all = namesOf(templates);
   for (final l in lessons) {
