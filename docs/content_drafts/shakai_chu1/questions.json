@@ -1,0 +1,311 @@
+{
+ "version": 1,
+ "questions": [
+  {
+   "id": "soc1_land_001",
+   "unitId": "soc1_geo_world_land",
+   "type": "choice",
+   "difficulty": 0.8,
+   "choices": [
+    "ユーラシア大陸",
+    "アフリカ大陸",
+    "北アメリカ大陸"
+   ],
+   "answer": "ユーラシア大陸",
+   "explanationId": "exp_soc1_land_001",
+   "version": 1,
+   "misconceptionTags": {
+    "アフリカ大陸": "continent_size_mixup",
+    "北アメリカ大陸": "continent_size_mixup"
+   }
+  },
+  {
+   "id": "soc1_land_002",
+   "unitId": "soc1_geo_world_land",
+   "type": "multi",
+   "difficulty": 0.6,
+   "choices": [],
+   "answer": "太平洋;大西洋;インド洋",
+   "explanationId": "exp_soc1_land_002",
+   "version": 1
+  },
+  {
+   "id": "soc1_coord_001",
+   "unitId": "soc1_geo_world_coord",
+   "type": "choice",
+   "difficulty": 0.75,
+   "choices": [
+    "0度",
+    "90度",
+    "180度"
+   ],
+   "answer": "0度",
+   "explanationId": "exp_soc1_coord_001",
+   "version": 1,
+   "misconceptionTags": {
+    "90度": "equator_pole_mixup",
+    "180度": "latitude_longitude_mixup"
+   }
+  },
+  {
+   "id": "soc1_time_001",
+   "unitId": "soc1_geo_world_time",
+   "type": "numeric",
+   "difficulty": 0.55,
+   "choices": [],
+   "answer": "9",
+   "explanationId": "exp_soc1_time_001",
+   "version": 1
+  },
+  {
+   "id": "soc1_time_002",
+   "unitId": "soc1_geo_world_time",
+   "type": "choice",
+   "difficulty": 0.45,
+   "choices": [
+    "午前3時",
+    "午後9時",
+    "午前9時"
+   ],
+   "answer": "午前3時",
+   "explanationId": "exp_soc1_time_002",
+   "version": 1,
+   "misconceptionTags": {
+    "午後9時": "time_diff_direction_reversed",
+    "午前9時": "time_diff_ignored"
+   }
+  },
+  {
+   "id": "soc1_area_001",
+   "unitId": "soc1_geo_japan_area",
+   "type": "choice",
+   "difficulty": 0.6,
+   "choices": [
+    "択捉島",
+    "沖ノ鳥島",
+    "南鳥島"
+   ],
+   "answer": "択捉島",
+   "explanationId": "exp_soc1_area_001",
+   "version": 1,
+   "misconceptionTags": {
+    "沖ノ鳥島": "extreme_point_mixup",
+    "南鳥島": "extreme_point_mixup"
+   }
+  },
+  {
+   "id": "soc1_area_002",
+   "unitId": "soc1_geo_japan_area",
+   "type": "match",
+   "difficulty": 0.5,
+   "choices": [
+    "etorofu",
+    "minamitori",
+    "yonaguni",
+    "okinotori",
+    "north",
+    "east",
+    "west",
+    "south"
+   ],
+   "answer": "etorofu:north;minamitori:east;yonaguni:west;okinotori:south",
+   "explanationId": "exp_soc1_area_002",
+   "version": 1,
+   "misconceptionTags": {
+    "minamitori:south": "name_direction_trap",
+    "okinotori:east": "extreme_point_mixup"
+   }
+  },
+  {
+   "id": "soc1_pref_001",
+   "unitId": "soc1_geo_japan_pref",
+   "type": "map",
+   "difficulty": 0.7,
+   "choices": [
+    "hokkaido",
+    "tohoku",
+    "kanto",
+    "chubu",
+    "kinki",
+    "chugoku_shikoku",
+    "kyushu"
+   ],
+   "answer": "tohoku",
+   "explanationId": "exp_soc1_pref_001",
+   "version": 1,
+   "misconceptionTags": {
+    "kanto": "neighbor_region",
+    "chubu": "neighbor_region"
+   }
+  },
+  {
+   "id": "soc1_pref_002",
+   "unitId": "soc1_geo_japan_pref",
+   "type": "choice",
+   "difficulty": 0.5,
+   "choices": [
+    "栃木県",
+    "長野県",
+    "滋賀県"
+   ],
+   "answer": "長野県",
+   "explanationId": "exp_soc1_pref_002",
+   "version": 1,
+   "misconceptionTags": {
+    "栃木県": "neighbor_region",
+    "滋賀県": "neighbor_region"
+   }
+  },
+  {
+   "id": "soc1_zone_001",
+   "unitId": "soc1_geo_climate_zone",
+   "type": "choice",
+   "difficulty": 0.7,
+   "choices": [
+    "熱帯",
+    "乾燥帯",
+    "寒帯"
+   ],
+   "answer": "熱帯",
+   "explanationId": "exp_soc1_zone_001",
+   "version": 1,
+   "misconceptionTags": {
+    "乾燥帯": "climate_zone_mixup",
+    "寒帯": "climate_zone_mixup"
+   }
+  },
+  {
+   "id": "soc1_chart_001",
+   "unitId": "soc1_geo_climate_chart",
+   "type": "choice",
+   "difficulty": 0.5,
+   "choices": [
+    "chart_rainforest",
+    "chart_desert",
+    "chart_mediterranean",
+    "chart_subarctic"
+   ],
+   "answer": "chart_desert",
+   "explanationId": "exp_soc1_chart_001",
+   "version": 1,
+   "misconceptionTags": {
+    "chart_rainforest": "climate_zone_mixup",
+    "chart_mediterranean": "climate_zone_mixup"
+   }
+  },
+  {
+   "id": "soc1_era_001",
+   "unitId": "soc1_his_how_era",
+   "type": "numeric",
+   "difficulty": 0.55,
+   "choices": [],
+   "answer": "19",
+   "explanationId": "exp_soc1_era_001",
+   "version": 1
+  },
+  {
+   "id": "soc1_era_002",
+   "unitId": "soc1_his_how_era",
+   "type": "timeline",
+   "difficulty": 0.5,
+   "choices": [
+    "jomon",
+    "yayoi",
+    "kofun",
+    "asuka",
+    "nara",
+    "heian"
+   ],
+   "answer": "jomon,yayoi,kofun,asuka,nara,heian",
+   "explanationId": "exp_soc1_era_002",
+   "version": 1
+  },
+  {
+   "id": "soc1_yayoi_001",
+   "unitId": "soc1_his_ancient_jomon_yayoi",
+   "type": "choice",
+   "difficulty": 0.7,
+   "choices": [
+    "縄文時代",
+    "弥生時代",
+    "古墳時代"
+   ],
+   "answer": "弥生時代",
+   "explanationId": "exp_soc1_yayoi_001",
+   "version": 1,
+   "misconceptionTags": {
+    "縄文時代": "era_mixup",
+    "古墳時代": "era_mixup"
+   }
+  },
+  {
+   "id": "soc1_kofun_001",
+   "unitId": "soc1_his_ancient_kofun",
+   "type": "choice",
+   "difficulty": 0.65,
+   "choices": [
+    "前方後円墳",
+    "竪穴住居",
+    "高床倉庫"
+   ],
+   "answer": "前方後円墳",
+   "explanationId": "exp_soc1_kofun_001",
+   "version": 1,
+   "misconceptionTags": {
+    "竪穴住居": "artifact_mixup",
+    "高床倉庫": "artifact_mixup"
+   }
+  },
+  {
+   "id": "soc1_asuka_001",
+   "unitId": "soc1_his_ancient_asuka",
+   "type": "match",
+   "difficulty": 0.5,
+   "choices": [
+    "shotoku",
+    "naka",
+    "shomu",
+    "kanmu",
+    "kani12",
+    "taika",
+    "daibutsu",
+    "heiankyo"
+   ],
+   "answer": "shotoku:kani12;naka:taika;shomu:daibutsu;kanmu:heiankyo",
+   "explanationId": "exp_soc1_asuka_001",
+   "version": 1,
+   "misconceptionTags": {
+    "naka:kani12": "name_mixup",
+    "shotoku:taika": "name_mixup"
+   }
+  },
+  {
+   "id": "soc1_asuka_002",
+   "unitId": "soc1_his_ancient_asuka",
+   "type": "text",
+   "difficulty": 0.55,
+   "choices": [],
+   "answer": "平城京|へいじょうきょう",
+   "explanationId": "exp_soc1_asuka_002",
+   "version": 1
+  },
+  {
+   "id": "soc1_heian_001",
+   "unitId": "soc1_his_ancient_heian",
+   "type": "choice",
+   "difficulty": 0.6,
+   "choices": [
+    "桓武天皇",
+    "聖武天皇",
+    "天智天皇"
+   ],
+   "answer": "桓武天皇",
+   "explanationId": "exp_soc1_heian_001",
+   "version": 1,
+   "misconceptionTags": {
+    "聖武天皇": "name_mixup",
+    "天智天皇": "name_mixup"
+   }
+  }
+ ]
+}

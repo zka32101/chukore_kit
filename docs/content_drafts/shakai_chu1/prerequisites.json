@@ -1,0 +1,89 @@
+{
+ "version": 1,
+ "prerequisites": [
+  {
+   "unitId": "soc1_geo_world_land",
+   "external": [
+    {
+     "id": "shogaku_shakai_chizu",
+     "title": "小学社会: 地図の見方・世界の大陸と海洋",
+     "link": "https://example.com/shogaku-kore"
+    }
+   ]
+  },
+  {
+   "unitId": "soc1_geo_world_coord",
+   "requires": [
+    "soc1_geo_world_land"
+   ]
+  },
+  {
+   "unitId": "soc1_geo_world_time",
+   "requires": [
+    "soc1_geo_world_coord"
+   ]
+  },
+  {
+   "unitId": "soc1_geo_japan_area",
+   "external": [
+    {
+     "id": "shogaku_shakai_nihon",
+     "title": "小学社会: 日本の国土のようす",
+     "link": "https://example.com/shogaku-kore"
+    }
+   ]
+  },
+  {
+   "unitId": "soc1_geo_japan_pref",
+   "requires": [
+    "soc1_geo_japan_area"
+   ]
+  },
+  {
+   "unitId": "soc1_geo_climate_zone",
+   "requires": [
+    "soc1_geo_world_land"
+   ]
+  },
+  {
+   "unitId": "soc1_geo_climate_chart",
+   "requires": [
+    "soc1_geo_climate_zone"
+   ]
+  },
+  {
+   "unitId": "soc1_his_how_era",
+   "external": [
+    {
+     "id": "shogaku_shakai_nenpyo",
+     "title": "小学社会: 年表の読み方・歴史のはじまり",
+     "link": "https://example.com/shogaku-kore"
+    }
+   ]
+  },
+  {
+   "unitId": "soc1_his_ancient_jomon_yayoi",
+   "requires": [
+    "soc1_his_how_era"
+   ]
+  },
+  {
+   "unitId": "soc1_his_ancient_kofun",
+   "requires": [
+    "soc1_his_ancient_jomon_yayoi"
+   ]
+  },
+  {
+   "unitId": "soc1_his_ancient_asuka",
+   "requires": [
+    "soc1_his_ancient_kofun"
+   ]
+  },
+  {
+   "unitId": "soc1_his_ancient_heian",
+   "requires": [
+    "soc1_his_ancient_asuka"
+   ]
+  }
+ ]
+}

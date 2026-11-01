@@ -1,0 +1,167 @@
+{
+ "version": 1,
+ "units": [
+  {
+   "id": "soc1_geo",
+   "subject": "social",
+   "grade": 1,
+   "title": "地理（中1）",
+   "order": 1
+  },
+  {
+   "id": "soc1_geo_world",
+   "subject": "social",
+   "grade": 1,
+   "title": "世界の姿",
+   "order": 1,
+   "parentId": "soc1_geo"
+  },
+  {
+   "id": "soc1_geo_world_land",
+   "subject": "social",
+   "grade": 1,
+   "title": "六大陸と三海洋",
+   "order": 1,
+   "parentId": "soc1_geo_world",
+   "estimatedQuestions": 10
+  },
+  {
+   "id": "soc1_geo_world_coord",
+   "subject": "social",
+   "grade": 1,
+   "title": "緯度と経度",
+   "order": 2,
+   "parentId": "soc1_geo_world",
+   "estimatedQuestions": 12
+  },
+  {
+   "id": "soc1_geo_world_time",
+   "subject": "social",
+   "grade": 1,
+   "title": "時差",
+   "order": 3,
+   "parentId": "soc1_geo_world",
+   "estimatedQuestions": 12
+  },
+  {
+   "id": "soc1_geo_japan",
+   "subject": "social",
+   "grade": 1,
+   "title": "日本の姿",
+   "order": 2,
+   "parentId": "soc1_geo"
+  },
+  {
+   "id": "soc1_geo_japan_area",
+   "subject": "social",
+   "grade": 1,
+   "title": "領域と国土の端",
+   "order": 1,
+   "parentId": "soc1_geo_japan",
+   "estimatedQuestions": 12
+  },
+  {
+   "id": "soc1_geo_japan_pref",
+   "subject": "social",
+   "grade": 1,
+   "title": "都道府県と地方区分",
+   "order": 2,
+   "parentId": "soc1_geo_japan",
+   "estimatedQuestions": 20
+  },
+  {
+   "id": "soc1_geo_climate",
+   "subject": "social",
+   "grade": 1,
+   "title": "世界各地の生活と環境",
+   "order": 3,
+   "parentId": "soc1_geo"
+  },
+  {
+   "id": "soc1_geo_climate_zone",
+   "subject": "social",
+   "grade": 1,
+   "title": "気候帯",
+   "order": 1,
+   "parentId": "soc1_geo_climate",
+   "estimatedQuestions": 12
+  },
+  {
+   "id": "soc1_geo_climate_chart",
+   "subject": "social",
+   "grade": 1,
+   "title": "雨温図の読み取り",
+   "order": 2,
+   "parentId": "soc1_geo_climate",
+   "estimatedQuestions": 12
+  },
+  {
+   "id": "soc1_his",
+   "subject": "social",
+   "grade": 1,
+   "title": "歴史（中1）",
+   "order": 2
+  },
+  {
+   "id": "soc1_his_how",
+   "subject": "social",
+   "grade": 1,
+   "title": "歴史の学び方",
+   "order": 1,
+   "parentId": "soc1_his"
+  },
+  {
+   "id": "soc1_his_how_era",
+   "subject": "social",
+   "grade": 1,
+   "title": "年代・世紀・時代区分",
+   "order": 1,
+   "parentId": "soc1_his_how",
+   "estimatedQuestions": 12
+  },
+  {
+   "id": "soc1_his_ancient",
+   "subject": "social",
+   "grade": 1,
+   "title": "古代",
+   "order": 2,
+   "parentId": "soc1_his"
+  },
+  {
+   "id": "soc1_his_ancient_jomon_yayoi",
+   "subject": "social",
+   "grade": 1,
+   "title": "縄文と弥生",
+   "order": 1,
+   "parentId": "soc1_his_ancient",
+   "estimatedQuestions": 12
+  },
+  {
+   "id": "soc1_his_ancient_kofun",
+   "subject": "social",
+   "grade": 1,
+   "title": "古墳と大和政権",
+   "order": 2,
+   "parentId": "soc1_his_ancient",
+   "estimatedQuestions": 10
+  },
+  {
+   "id": "soc1_his_ancient_asuka",
+   "subject": "social",
+   "grade": 1,
+   "title": "飛鳥と奈良（律令国家）",
+   "order": 3,
+   "parentId": "soc1_his_ancient",
+   "estimatedQuestions": 16
+  },
+  {
+   "id": "soc1_his_ancient_heian",
+   "subject": "social",
+   "grade": 1,
+   "title": "平安時代",
+   "order": 4,
+   "parentId": "soc1_his_ancient",
+   "estimatedQuestions": 12
+  }
+ ]
+}
