@@ -20,8 +20,47 @@ void main() {
       }
     }
     final r = validateContentPack(File('$dir/manifest.json').readAsStringSync(), (p) => File('$dir/$p').readAsStringSync());
-    expect(r.manifest!.textsCover, {'lessons'});
+    expect(r.manifest!.textsCover, ContentPackManifest.textKinds); // 範囲を絞らない（すべてそろっている）
     expect(r.issues.where((i) => i.code.startsWith('pack_text') || i.code.startsWith('text_')), isEmpty);
+  });
+
+  test('全 81 の型: 問題文と解説は、全変種で値が入って読める（波かっこが残らない）。式の問題は解説が答えを含む', () {
+    expect(set.templates.length, 81);
+    for (final t in set.templates) {
+      final prompt = text('prompt_${t.id}'), exp = text(t.explanationId);
+      expect(t.explanationId, 'exp_${t.id}');
+      for (var s = 1; s <= 30; s++) {
+        final v = t.generate(s);
+        final p = renderVariantText(prompt, v), e = renderVariantText(exp, v);
+        expect(p.contains('{') || p.contains('}'), isFalse, reason: '${t.id}~$s $p');
+        expect(e.contains('{') || e.contains('}'), isFalse, reason: '${t.id}~$s $e');
+        if (t.type == 'expr') {
+          expect(e, contains(v.question.answer), reason: '${t.id}~$s 解説が答えを含む: $e');
+        }
+      }
+    }
+  });
+
+  test('代表的な解説を実際の値で読む（符号つき・累乗・比・度）', () {
+    String ex(String id, int seed) => renderVariantText(text('exp_$id'), set.templates.firstWhere((t) => t.id == id).generate(seed));
+    String pr(String id, int seed) => renderVariantText(text('prompt_$id'), set.templates.firstWhere((t) => t.id == id).generate(seed));
+    // 式と文が、変種の値どおりに整合している
+    for (var s = 1; s <= 10; s++) {
+      final v = set.templates.firstWhere((t) => t.id == 'm1_geo_angle_001').generate(s);
+      final a = v.params['a']!.toInt(), b = v.params['b']!.toInt();
+      expect(ex('m1_geo_angle_001', s), '三角形の内角の和は 180° です。x = 180 - $a - $b = ${180 - a - b}（度）。');
+      expect(pr('m1_geo_angle_001', s), '図の三角形で、2 つの角が $a° と $b° のとき、x の大きさを求めなさい。');
+    }
+    final pow = set.templates.firstWhere((t) => t.id == 'm1_num_pow_001').generate(3);
+    final a = pow.params['a']!.toInt();
+    expect(renderVariantText(text('exp_m1_num_pow_001'), pow), 'かっこがないときは、$a だけを 2 乗します。-$a² は、$a² に - がついたものなので、-($a × $a) = ${-a * a}。');
+    final neg = set.templates.firstWhere((t) => t.id == 'm1_num_pow_002').generate(3);
+    final b = neg.params['a']!.toInt();
+    expect(renderVariantText(text('exp_m1_num_pow_002'), neg), 'かっこがあるときは、かっこの中全体を 2 乗します。(-$b) × (-$b) = ${b * b}。');
+    final cone = set.templates.firstWhere((t) => t.id == 'm1_space_net_002').generate(5);
+    final r = cone.params['r']!.toInt(), l = cone.params['l']!.toInt();
+    expect(renderVariantText(text('exp_m1_space_net_002'), cone), contains('360 × $r ÷ $l = '));
+    expect(renderVariantText(text('exp_m1_space_net_002'), cone), contains(cone.question.answer));
   });
 
   test('例題の行ごとの説明: 例題の値を差し込むと読めて、最後の行の説明は答えの値を含む', () {

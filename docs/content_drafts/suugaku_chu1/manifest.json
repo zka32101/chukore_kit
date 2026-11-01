@@ -19,8 +19,5 @@
   "constructions": "constructions.json",
   "experiences": "experiences.json",
   "texts": "texts.json"
- },
- "textsCover": [
-  "lessons"
- ]
+ }
 }
