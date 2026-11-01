@@ -315,6 +315,26 @@ void main() {
       });
     }
 
+    test('数学の天秤の体験: どれもつりあう載せ方があり、レッスンが参照している（体験を消すと参照エラー）', () {
+      const dir = 'docs/content_drafts/suugaku_chu1';
+      final set = ExperienceSet.parse(File('$dir/experiences.json').readAsStringSync());
+      expect(set.experiences.length, 3);
+      for (final e in set.experiences) {
+        e as BalanceExperience;
+        expect(e.solutions(limit: 1), isNotEmpty, reason: e.id);
+      }
+      List<String> run(String experiences) => [
+            for (final i in validateContentPack(File('$dir/manifest.json').readAsStringSync(), (p) {
+              if (p == 'experiences.json') return experiences;
+              final f = File('$dir/$p');
+              return f.existsSync() ? f.readAsStringSync() : null;
+            }).issues)
+              i.code,
+          ];
+      expect(run(File('$dir/experiences.json').readAsStringSync()), isNot(contains('lesson_ref_missing')));
+      expect(run('{"version":1,"experiences":[]}'), contains('lesson_ref_missing'));
+    });
+
     test('社会・英語・数学の目録: 件数', () {
       int count(String d, String key) {
         final dir = 'docs/content_drafts/$d';

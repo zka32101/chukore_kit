@@ -59,10 +59,14 @@ void main() {
   final tree = UnitTree.fromJson(jsonDecode(File('$dir/units.json').readAsStringSync()) as Map<String, dynamic>);
   final explorations = ExplorationSet.parse(File('docs/samples/explorations.sample.json').readAsStringSync());
   final constructions = ConstructionSet.parse(File('docs/samples/constructions.sample.json').readAsStringSync());
+  final experiences = ExperienceSet.parse(File('$dir/experiences.json').readAsStringSync());
   final refs = LessonRefs(
     questionIds: const {'q_plain'},
     templateIds: {for (final t in tpl.templates) t.id},
-    explorationIds: {for (final e in explorations.explorations) e.id},
+    explorationIds: {
+      for (final e in explorations.explorations) e.id,
+      ...experiences.experiences.map((e) => e.id),
+    },
     constructionIds: {for (final c in constructions.constructions) c.id},
     tags: {
       for (final t in tpl.templates)
