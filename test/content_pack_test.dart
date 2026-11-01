@@ -57,6 +57,13 @@ void main() {
       expect(ContentPackManifest.parse(jsonEncode(_manifest({'locale': 'pt-BR', 'country': 'BR'}))).locale, 'pt-BR');
     });
 
+    test('textsCover: 既定はすべて。指定すれば絞る', () {
+      expect(ContentPackManifest.parse(jsonEncode(_manifest())).textsCover, ContentPackManifest.textKinds);
+      expect(ContentPackManifest.textKinds, {'scenes', 'lessons', 'templates', 'figures', 'questions'});
+      final m = ContentPackManifest.parse(jsonEncode(_manifest({'textsCover': ['lessons', 'scenes']})));
+      expect(m.textsCover, {'lessons', 'scenes'});
+    });
+
     test('maps は並び。paths に 1 つずつ入る', () {
       final m = ContentPackManifest.parse(jsonEncode(_manifest({'files': {'units': 'u.json', 'maps': ['a.json', 'b.json']}})));
       expect(m.paths, ['u.json', 'a.json', 'b.json']);
@@ -84,6 +91,11 @@ void main() {
       expect(() => ContentPackManifest.parse(s({'grades': [1, 1]})), _bad('grades'));
       expect(() => ContentPackManifest.parse(s({'attribution': [1]})), _bad('attribution'));
       expect(() => ContentPackManifest.parse(s({'attribution': ['']})), _bad('attribution'));
+      expect(() => ContentPackManifest.parse(s({'textsCover': []})), _bad('textsCover'));
+      expect(() => ContentPackManifest.parse(s({'textsCover': ['zzz']})), _bad('textsCover'));
+      expect(() => ContentPackManifest.parse(s({'textsCover': ['lessons', 'lessons']})), _bad('textsCover'));
+      expect(() => ContentPackManifest.parse(s({'textsCover': 'lessons'})), _bad('textsCover'));
+      expect(() => ContentPackManifest.parse(s({'textsCover': [1]})), _bad('textsCover'));
       expect(() => ContentPackManifest.parse(s({'files': 1})), _bad('files'));
       expect(() => ContentPackManifest.parse(s({'files': {'questions': 'q.json'}})), _bad('files.units'));
       expect(() => ContentPackManifest.parse(s({'files': {'units': 'u.json', 'zzz': 'x'}})), _bad('未知のキー'));
@@ -356,6 +368,39 @@ void main() {
         expect(codes(run(good(), locale: 'en')), contains('pack_texts_locale_mismatch:x.json:error'));
       });
 
+      test('textsCover: 範囲を絞ると、範囲の外の文言はなくてもよい（あれば差し込みの名前は確かめる）', () {
+        // good() から、レッスン以外（場面・問題文・解説）を消す
+        final onlyLessons = {for (final e in good().entries) if (e.key.startsWith('l1_')) e.key: e.value};
+        ContentPackReport go(List<String>? cover, Map<String, String> texts) => _run(
+              _manifest({
+                'files': {'units': 'units.json', 'scenes': 's.json', 'templates': 't.json', 'lessons': 'l.json', 'texts': 'x.json'},
+                'textsCover': ?cover,
+              }),
+              {
+                'units.json': _units(),
+                's.json': scenes,
+                't.json': templates,
+                'l.json': lessons,
+                'x.json': jsonEncode({'version': 1, 'locale': 'ja', 'texts': texts}),
+              },
+            );
+        List<String> miss(ContentPackReport r) => [for (final i in r.issues) if (i.code == 'pack_text_missing') i.subjectId]..sort();
+        // 既定（すべて）: 場面・問題文・解説が足りない
+        expect(miss(go(null, onlyLessons)), ['exp_tp', 'prompt_tp', 'sc_text', 'sc_title']);
+        // レッスンだけ: 足りなくてよい。レッスンの文言が足りなければエラー
+        expect(miss(go(['lessons'], onlyLessons)), isEmpty);
+        expect(miss(go(['lessons'], {...onlyLessons}..remove('l1_t1'))), ['l1_t1']);
+        // 場面だけ・型だけ
+        expect(miss(go(['scenes'], onlyLessons)), ['sc_text', 'sc_title']);
+        expect(miss(go(['templates'], onlyLessons)), ['exp_tp', 'prompt_tp']);
+        // 範囲の外にある文言も、使われていれば未使用ではなく、差し込みの名前は確かめる
+        final r = go(['lessons'], {...onlyLessons, 'exp_tp': '答えは {zz}。'});
+        List<String> tx(ContentPackReport r) => [for (final i in r.issues) if (i.code.startsWith('pack_text')) i.code];
+        expect(tx(r), ['pack_text_placeholder_unknown']);
+        // 範囲の外で、どこにも使われない文言は未使用の警告
+        expect(tx(go(['lessons'], {...onlyLessons, 'zzz': '余り'})), ['pack_text_unused']);
+      });
+
       test('波かっこが合わない文言は、差し込みの検査をしない（別のエラーで報告済み）', () {
         final r = run({...good(), 'exp_tp': '{zz}}'});
         expect(r.issues.map((i) => i.code), contains('text_unbalanced_braces'));
@@ -368,6 +413,13 @@ void main() {
         final ok = _run(m, {..._files(), 'x.json': texts({'e': '解説'})});
         expect(ok.issues, isEmpty, reason: ok.issues.join('\n'));
         final missing = _run(m, {..._files(), 'x.json': texts({'other': '別'})});
+        // textsCover に questions がなければ、問題集の解説は要らない
+        final noQ = _run(_manifest({'files': {'units': 'units.json', 'questions': 'questions.json', 'texts': 'x.json'}, 'textsCover': ['lessons']}),
+            {..._files(), 'x.json': texts({'e': '解説'})});
+        expect(noQ.issues, isEmpty, reason: noQ.issues.join('\n'));
+        final onlyQ = _run(_manifest({'files': {'units': 'units.json', 'questions': 'questions.json', 'texts': 'x.json'}, 'textsCover': ['questions']}),
+            {..._files(), 'x.json': texts({'other': '別'})});
+        expect([for (final i in onlyQ.issues) i.code], contains('pack_text_missing'));
         expect(
           [for (final i in missing.issues) '${i.code}:${i.subjectId}:${i.severity.name}'],
           containsAll(['pack_text_missing:e:error', 'pack_text_unused:other:warning']),
@@ -402,8 +454,19 @@ void main() {
           'wrong': [{'expr': '{3-k}', 'tag': 't2'}],
           'explanationId': 'exp_ch',
         };
+        final plainFig = {
+          'id': 'fg', 'templateVersion': 1, 'unitId': 'leaf', 'type': 'expr', 'difficulty': 0.5,
+          'params': {'p': {'int': [1, 5]}},
+          'figure': fig('alt_main'),
+          'display': {'p': '{p}'}, 'answer': '{p}',
+          'wrong': [{'expr': '{p+1}', 'tag': 't3'}],
+          'explanationId': 'exp_fg',
+        };
         final m = _manifest({'files': {'units': 'units.json', 'templates': 't.json', 'texts': 'x.json'}});
         Map<String, String> texts() => {
+              'prompt_fg': '{p}',
+              'exp_fg': '{p}',
+              'alt_main': '図',
               'prompt_dt': '次のデータ {L}（小さい順 {~L}）の平均は。',
               'exp_dt': '平均は {m}。',
               'prompt_ch': '{k} 番を選ぶ。',
@@ -414,14 +477,27 @@ void main() {
             };
         ContentPackReport go(Map<String, String> t) => _run(m, {
               'units.json': _units(),
-              't.json': jsonEncode({'version': 1, 'templates': [data, choice]}),
+              't.json': jsonEncode({'version': 1, 'templates': [data, choice, plainFig]}),
               'x.json': jsonEncode({'version': 1, 'locale': 'ja', 'texts': t}),
             });
         List<String> only(ContentPackReport r) => [for (final i in r.issues) if (i.code.startsWith('pack_text')) '${i.code}:${i.subjectId}'];
         expect(only(go(texts())), isEmpty, reason: go(texts()).issues.join('\n'));
-        for (final id in ['alt_one', 'alt_pick_a', 'alt_pick_b']) {
+        for (final id in ['alt_one', 'alt_pick_a', 'alt_pick_b', 'alt_main']) {
           expect(only(go({...texts()}..remove(id))), ['pack_text_missing:$id'], reason: id);
         }
+        // 図の説明（altId）は textsCover の figures。templates だけでは要らず、figures だけなら図の説明だけが要る
+        ContentPackReport cover(List<String> k, Map<String, String> t) => _run(
+              _manifest({'files': {'units': 'units.json', 'templates': 't.json', 'texts': 'x.json'}, 'textsCover': k}),
+              {
+                'units.json': _units(),
+                't.json': jsonEncode({'version': 1, 'templates': [data, choice, plainFig]}),
+                'x.json': jsonEncode({'version': 1, 'locale': 'ja', 'texts': t}),
+              },
+            );
+        final noAlt = {...texts()}..removeWhere((k, _) => k.startsWith('alt_'));
+        expect(only(cover(['templates'], noAlt)).where((e) => e.startsWith('pack_text_missing')), isEmpty);
+        expect(only(cover(['figures'], noAlt)), ['pack_text_missing:alt_one', 'pack_text_missing:alt_pick_a', 'pack_text_missing:alt_pick_b', 'pack_text_missing:alt_main']);
+        expect(only(cover(['figures'], {for (final e in texts().entries) if (e.key.startsWith('alt_')) e.key: e.value})), isEmpty);
         // 数列の名前（{L}・{~L}）は数列のある型だけ
         expect(only(go({...texts(), 'prompt_ch': '{L}'})), ['pack_text_placeholder_unknown:prompt_ch']);
         expect(only(go({...texts(), 'prompt_ch': '{~L}'})), ['pack_text_placeholder_unknown:prompt_ch']);
