@@ -5,6 +5,7 @@
 
 - `units.json`: 7 分野・21 単元（葉）。`estimatedQuestions` は目安（計 約 380 問）。
 - `prerequisites.json`: 前提関係。小学の前提は誘導リンクだけ（コードは共有しない）。
+- `experiences.json` / `explorations.json` / `constructions.json`: 体験（天秤・一次関数・作図の見本）。レッスンから参照する
 - `templates.json`: 問題の型 81 個（`docs/math_variants_design.md`）。問題文の文章はコンテンツ側で持つ（`display` の数式を差し込む）。選択肢の日本語は型に直接書いてある（国別コンテンツのため）。
 
 ## 前提の流れ
@@ -45,4 +46,4 @@
 1. 型を増やす。`templates.json` に 81 型（正負の数・文字式の計算・式の値・数量の関係・等式の性質・一次方程式・座標・比例・反比例・データの活用・円とおうぎ形・円柱と球・角と二等辺三角形、図つき・立体と展開図・図が選択肢）を書いた（各 40 変種）。次は平行線と角、角柱・角錐（`docs/math_figures_design.md`）。作図の見本は `docs/samples/constructions.sample.json`。
    展開: `dart run tool/expand_templates.dart units.json templates.json questions.json`
 2. 選択式・記述式の見本問題（図が要る単元は図の方針を決めてから）。
-3. 体験型（`Exploration`）の見本: 一次関数の傾きと切片、方程式の天秤。
+3. 体験型（`Exploration`）の見本: 一次関数の傾きと切片（`explorations.json`）。方程式の天秤は `experiences.json`（`balance` の 3 つ。`les_m1_eq_prop_01` が参照）。

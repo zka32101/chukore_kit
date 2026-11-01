@@ -1,0 +1,107 @@
+{
+ "version": 1,
+ "experiences": [
+  {
+   "id": "ex_balance_add",
+   "version": 1,
+   "unitId": "m1_eq_prop",
+   "kind": "balance",
+   "promptId": "p_ex_balance_add",
+   "explanationId": "exp_ex_balance_add",
+   "items": [
+    {
+     "id": "w1",
+     "weight": 1
+    },
+    {
+     "id": "w2",
+     "weight": 1
+    },
+    {
+     "id": "w3",
+     "weight": 1
+    },
+    {
+     "id": "w4",
+     "weight": 1
+    },
+    {
+     "id": "w5",
+     "weight": 2
+    },
+    {
+     "id": "w6",
+     "weight": 5
+    }
+   ],
+   "leftFixed": [
+    7
+   ],
+   "rightFixed": [
+    3
+   ]
+  },
+  {
+   "id": "ex_balance_both",
+   "version": 1,
+   "unitId": "m1_eq_prop",
+   "kind": "balance",
+   "promptId": "p_ex_balance_both",
+   "explanationId": "exp_ex_balance_both",
+   "items": [
+    {
+     "id": "w1",
+     "weight": 1
+    },
+    {
+     "id": "w2",
+     "weight": 1
+    },
+    {
+     "id": "w3",
+     "weight": 2
+    },
+    {
+     "id": "w4",
+     "weight": 3
+    }
+   ],
+   "leftFixed": [
+    6
+   ],
+   "rightFixed": [
+    2,
+    1
+   ]
+  },
+  {
+   "id": "ex_balance_equal",
+   "version": 1,
+   "unitId": "m1_eq_prop",
+   "kind": "balance",
+   "promptId": "p_ex_balance_equal",
+   "explanationId": "exp_ex_balance_equal",
+   "items": [
+    {
+     "id": "w1",
+     "weight": 1
+    },
+    {
+     "id": "w2",
+     "weight": 2
+    },
+    {
+     "id": "w3",
+     "weight": 3
+    }
+   ],
+   "leftFixed": [
+    4,
+    3
+   ],
+   "rightFixed": [
+    5
+   ]
+  }
+ ]
+}

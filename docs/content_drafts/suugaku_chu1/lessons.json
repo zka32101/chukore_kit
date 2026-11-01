@@ -20,6 +20,10 @@
      "textId": "les_m1_eq_prop_01_t1"
     },
     {
+     "type": "explore",
+     "exploration": "ex_balance_add"
+    },
+    {
      "type": "formula",
      "expr": "x+3=7",
      "textId": "les_m1_eq_prop_01_f1"

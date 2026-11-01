@@ -16,6 +16,7 @@
   "templates": "templates.json",
   "lessons": "lessons.json",
   "explorations": "explorations.json",
-  "constructions": "constructions.json"
+  "constructions": "constructions.json",
+  "experiences": "experiences.json"
  }
 }
