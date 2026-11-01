@@ -1,0 +1,814 @@
+{
+ "version": 1,
+ "templates": [
+  {
+   "id": "m2_expr_poly_001",
+   "templateVersion": 1,
+   "unitId": "m2_expr_poly",
+   "type": "expr",
+   "difficulty": 0.55,
+   "params": {
+    "a": {
+     "int": [
+      2,
+      9
+     ]
+    },
+    "b": {
+     "int": [
+      -9,
+      9
+     ]
+    },
+    "c": {
+     "int": [
+      2,
+      9
+     ]
+    },
+    "d": {
+     "int": [
+      -9,
+      9
+     ]
+    }
+   },
+   "constraints": [
+    "b != 0",
+    "d != 0",
+    "b+d != 0",
+    "(a+c)*(a+c) > 1"
+   ],
+   "display": {
+    "expr": "({a}x{+b})+({c}x{+d})"
+   },
+   "answer": "{a+c}x{+b+d}",
+   "wrong": [
+    {
+     "expr": "{a-c}x{+b+d}",
+     "tag": "sign_error"
+    },
+    {
+     "expr": "{a+c}x{+b-d}",
+     "tag": "sign_error"
+    }
+   ],
+   "explanationId": "exp_m2_expr_poly_001"
+  },
+  {
+   "id": "m2_expr_poly_002",
+   "templateVersion": 1,
+   "unitId": "m2_expr_poly",
+   "type": "expr",
+   "difficulty": 0.7,
+   "params": {
+    "a": {
+     "int": [
+      2,
+      9
+     ]
+    },
+    "b": {
+     "int": [
+      -9,
+      9
+     ]
+    },
+    "c": {
+     "int": [
+      2,
+      9
+     ]
+    },
+    "d": {
+     "int": [
+      -9,
+      9
+     ]
+    }
+   },
+   "constraints": [
+    "b != 0",
+    "d != 0",
+    "b-d != 0",
+    "a != c",
+    "(a-c)*(a-c) > 1"
+   ],
+   "display": {
+    "expr": "({a}x{+b})-({c}x{+d})"
+   },
+   "answer": "{a-c}x{+b-d}",
+   "wrong": [
+    {
+     "expr": "{a-c}x{+b+d}",
+     "tag": "forgot_sign_change"
+    },
+    {
+     "expr": "{a+c}x{+b-d}",
+     "tag": "forgot_sign_change"
+    }
+   ],
+   "explanationId": "exp_m2_expr_poly_002"
+  },
+  {
+   "id": "m2_expr_mono_001",
+   "templateVersion": 1,
+   "unitId": "m2_expr_mono",
+   "type": "expr",
+   "form": "expanded",
+   "difficulty": 0.6,
+   "params": {
+    "a": {
+     "int": [
+      2,
+      9
+     ]
+    },
+    "b": {
+     "int": [
+      2,
+      9
+     ]
+    }
+   },
+   "display": {
+    "expr": "{a}x × {b}x"
+   },
+   "answer": "{a*b}x^2",
+   "wrong": [
+    {
+     "expr": "{a+b}x^2",
+     "tag": "add_coefficients"
+    },
+    {
+     "expr": "{a*b}x",
+     "tag": "forgot_exponent"
+    }
+   ],
+   "explanationId": "exp_m2_expr_mono_001"
+  },
+  {
+   "id": "m2_expr_mono_002",
+   "templateVersion": 1,
+   "unitId": "m2_expr_mono",
+   "type": "expr",
+   "form": "expanded",
+   "difficulty": 0.65,
+   "params": {
+    "a": {
+     "int": [
+      2,
+      6
+     ]
+    },
+    "b": {
+     "int": [
+      2,
+      9
+     ]
+    }
+   },
+   "display": {
+    "expr": "{a*b}x² ÷ {a}x"
+   },
+   "answer": "{b}x",
+   "wrong": [
+    {
+     "expr": "{b}x^2",
+     "tag": "forgot_exponent"
+    },
+    {
+     "expr": "{a*b}x",
+     "tag": "forgot_to_divide"
+    }
+   ],
+   "explanationId": "exp_m2_expr_mono_002"
+  },
+  {
+   "id": "m2_expr_use_001",
+   "templateVersion": 1,
+   "unitId": "m2_expr_use",
+   "type": "expr",
+   "difficulty": 0.5,
+   "params": {
+    "a": {
+     "int": [
+      2,
+      5
+     ]
+    },
+    "b": {
+     "int": [
+      2,
+      5
+     ]
+    },
+    "p": {
+     "int": [
+      -4,
+      4
+     ]
+    },
+    "q": {
+     "int": [
+      -4,
+      4
+     ]
+    }
+   },
+   "constraints": [
+    "p != 0",
+    "q != 0"
+   ],
+   "display": {
+    "expr": "{a}x+{b}y",
+    "x": "{&p}",
+    "y": "{&q}"
+   },
+   "answer": "{a*p+b*q}",
+   "wrong": [
+    {
+     "expr": "{a*p-b*q}",
+     "tag": "sign_error"
+    },
+    {
+     "expr": "{a+b+p+q}",
+     "tag": "wrong_substitution"
+    }
+   ],
+   "explanationId": "exp_m2_expr_use_001"
+  },
+  {
+   "id": "m2_sim_solve_001",
+   "templateVersion": 1,
+   "unitId": "m2_sim_solve",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "p": {
+     "int": [
+      1,
+      9
+     ]
+    },
+    "q": {
+     "int": [
+      1,
+      9
+     ]
+    }
+   },
+   "constraints": [
+    "p != q"
+   ],
+   "display": {
+    "eq1": "x+y={p+q}",
+    "eq2": "x-y={p-q}"
+   },
+   "answer": "{p}",
+   "wrong": [
+    {
+     "expr": "{q}",
+     "tag": "swapped_xy"
+    },
+    {
+     "expr": "{p+q}",
+     "tag": "used_one_equation"
+    }
+   ],
+   "explanationId": "exp_m2_sim_solve_001"
+  },
+  {
+   "id": "m2_sim_solve_002",
+   "templateVersion": 1,
+   "unitId": "m2_sim_solve",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "p": {
+     "int": [
+      1,
+      9
+     ]
+    },
+    "q": {
+     "int": [
+      1,
+      9
+     ]
+    }
+   },
+   "constraints": [
+    "p != q"
+   ],
+   "display": {
+    "eq1": "x+y={p+q}",
+    "eq2": "x-y={p-q}"
+   },
+   "answer": "{q}",
+   "wrong": [
+    {
+     "expr": "{p}",
+     "tag": "swapped_xy"
+    },
+    {
+     "expr": "{p-q}",
+     "tag": "used_one_equation"
+    }
+   ],
+   "explanationId": "exp_m2_sim_solve_002"
+  },
+  {
+   "id": "m2_sim_solve_003",
+   "templateVersion": 1,
+   "unitId": "m2_sim_solve",
+   "type": "expr",
+   "difficulty": 0.7,
+   "params": {
+    "a": {
+     "int": [
+      2,
+      5
+     ]
+    },
+    "b": {
+     "int": [
+      -9,
+      9
+     ]
+    },
+    "p": {
+     "int": [
+      1,
+      6
+     ]
+    }
+   },
+   "constraints": [
+    "b != 0"
+   ],
+   "display": {
+    "eq1": "y={a}x{+b}",
+    "eq2": "x+y={p+a*p+b}"
+   },
+   "answer": "{p}",
+   "wrong": [
+    {
+     "expr": "{a*p+b}",
+     "tag": "swapped_xy"
+    },
+    {
+     "expr": "{p+a*p+b}",
+     "tag": "used_one_equation"
+    },
+    {
+     "expr": "{(a*p+b)/a}",
+     "tag": "forgot_to_substitute"
+    }
+   ],
+   "explanationId": "exp_m2_sim_solve_003"
+  },
+  {
+   "id": "m2_sim_word_001",
+   "templateVersion": 1,
+   "unitId": "m2_sim_word",
+   "type": "expr",
+   "difficulty": 0.75,
+   "params": {
+    "a": {
+     "int": [
+      80,
+      200
+     ]
+    },
+    "b": {
+     "int": [
+      40,
+      150
+     ]
+    },
+    "p": {
+     "int": [
+      2,
+      8
+     ]
+    },
+    "q": {
+     "int": [
+      2,
+      8
+     ]
+    }
+   },
+   "constraints": [
+    "a != b",
+    "p != q",
+    "a > b"
+   ],
+   "display": {
+    "v": "{a}"
+   },
+   "answer": "{p}",
+   "wrong": [
+    {
+     "expr": "{q}",
+     "tag": "swapped_xy"
+    },
+    {
+     "expr": "{p+q}",
+     "tag": "total_count"
+    }
+   ],
+   "explanationId": "exp_m2_sim_word_001"
+  },
+  {
+   "id": "m2_lin_graph_001",
+   "templateVersion": 1,
+   "unitId": "m2_lin_graph",
+   "type": "expr",
+   "difficulty": 0.55,
+   "params": {
+    "a": {
+     "int": [
+      -5,
+      5
+     ]
+    },
+    "b": {
+     "int": [
+      -9,
+      9
+     ]
+    },
+    "p": {
+     "int": [
+      -4,
+      4
+     ]
+    },
+    "d": {
+     "int": [
+      1,
+      4
+     ]
+    }
+   },
+   "constraints": [
+    "a != 0",
+    "b != 0"
+   ],
+   "display": {
+    "v": "{a}"
+   },
+   "answer": "{a}",
+   "wrong": [
+    {
+     "expr": "{a*d}",
+     "tag": "change_not_rate"
+    },
+    {
+     "expr": "{b}",
+     "tag": "slope_intercept_mixup"
+    }
+   ],
+   "explanationId": "exp_m2_lin_graph_001"
+  },
+  {
+   "id": "m2_lin_eq_001",
+   "templateVersion": 1,
+   "unitId": "m2_lin_eq",
+   "type": "expr",
+   "difficulty": 0.65,
+   "params": {
+    "a": {
+     "int": [
+      -5,
+      5
+     ]
+    },
+    "b": {
+     "int": [
+      -9,
+      9
+     ]
+    },
+    "p": {
+     "int": [
+      -4,
+      4
+     ]
+    }
+   },
+   "constraints": [
+    "a != 0",
+    "b != 0",
+    "p != 0"
+   ],
+   "display": {
+    "v": "{a}"
+   },
+   "answer": "{b}",
+   "wrong": [
+    {
+     "expr": "{a*p+b}",
+     "tag": "used_y_value"
+    },
+    {
+     "expr": "{a*p}",
+     "tag": "forgot_to_subtract"
+    }
+   ],
+   "explanationId": "exp_m2_lin_eq_001"
+  },
+  {
+   "id": "m2_lin_eq_002",
+   "templateVersion": 1,
+   "unitId": "m2_lin_eq",
+   "type": "expr",
+   "difficulty": 0.7,
+   "params": {
+    "a": {
+     "int": [
+      -5,
+      5
+     ]
+    },
+    "b": {
+     "int": [
+      -9,
+      9
+     ]
+    },
+    "p": {
+     "int": [
+      -4,
+      4
+     ]
+    },
+    "d": {
+     "int": [
+      1,
+      4
+     ]
+    }
+   },
+   "constraints": [
+    "a != 0",
+    "b != 0"
+   ],
+   "display": {
+    "v": "{a}"
+   },
+   "answer": "{a}",
+   "wrong": [
+    {
+     "expr": "{a*d}",
+     "tag": "change_not_rate"
+    },
+    {
+     "expr": "{b}",
+     "tag": "slope_intercept_mixup"
+    }
+   ],
+   "explanationId": "exp_m2_lin_eq_002"
+  },
+  {
+   "id": "m2_par_angle_001",
+   "templateVersion": 1,
+   "unitId": "m2_par_angle",
+   "type": "expr",
+   "difficulty": 0.5,
+   "params": {
+    "a": {
+     "int": [
+      30,
+      150
+     ]
+    }
+   },
+   "constraints": [
+    "a != 90"
+   ],
+   "display": {
+    "v": "{a}"
+   },
+   "answer": "{180-a}",
+   "wrong": [
+    {
+     "expr": "{a}",
+     "tag": "corresponding_supplement_mixup"
+    },
+    {
+     "expr": "{360-a}",
+     "tag": "wrong_total"
+    }
+   ],
+   "explanationId": "exp_m2_par_angle_001"
+  },
+  {
+   "id": "m2_par_angle_002",
+   "templateVersion": 1,
+   "unitId": "m2_par_angle",
+   "type": "expr",
+   "difficulty": 0.55,
+   "params": {
+    "n": {
+     "int": [
+      5,
+      12
+     ]
+    }
+   },
+   "display": {
+    "v": "{n}"
+   },
+   "answer": "{180*(n-2)}",
+   "wrong": [
+    {
+     "expr": "{180*n}",
+     "tag": "forgot_minus_two"
+    },
+    {
+     "expr": "{360}",
+     "tag": "exterior_angle_sum"
+    }
+   ],
+   "explanationId": "exp_m2_par_angle_002"
+  },
+  {
+   "id": "m2_par_angle_003",
+   "templateVersion": 1,
+   "unitId": "m2_par_angle",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "n": {
+     "int": [
+      3,
+      36
+     ]
+    }
+   },
+   "constraints": [
+    "mod(360,n) < 1"
+   ],
+   "display": {
+    "v": "{n}"
+   },
+   "answer": "{360/n}",
+   "wrong": [
+    {
+     "expr": "{180-360/n}",
+     "tag": "interior_angle"
+    },
+    {
+     "expr": "{180/n}",
+     "tag": "half_of_correct"
+    }
+   ],
+   "explanationId": "exp_m2_par_angle_003"
+  },
+  {
+   "id": "m2_prob_count_001",
+   "templateVersion": 1,
+   "unitId": "m2_prob_count",
+   "type": "expr",
+   "difficulty": 0.55,
+   "params": {
+    "n": {
+     "int": [
+      3,
+      7
+     ]
+    }
+   },
+   "display": {
+    "v": "{n}"
+   },
+   "answer": "{n*(n-1)}",
+   "wrong": [
+    {
+     "expr": "{n*n}",
+     "tag": "allowed_repeat"
+    },
+    {
+     "expr": "{n*(n-1)/2}",
+     "tag": "order_ignored"
+    }
+   ],
+   "explanationId": "exp_m2_prob_count_001"
+  },
+  {
+   "id": "m2_prob_count_002",
+   "templateVersion": 1,
+   "unitId": "m2_prob_count",
+   "type": "expr",
+   "difficulty": 0.65,
+   "params": {
+    "n": {
+     "int": [
+      4,
+      8
+     ]
+    }
+   },
+   "display": {
+    "v": "{n}"
+   },
+   "answer": "{n*(n-1)/2}",
+   "wrong": [
+    {
+     "expr": "{n*(n-1)}",
+     "tag": "order_counted"
+    },
+    {
+     "expr": "{n}",
+     "tag": "only_count_people"
+    }
+   ],
+   "explanationId": "exp_m2_prob_count_002"
+  },
+  {
+   "id": "m2_prob_prob_001",
+   "templateVersion": 1,
+   "unitId": "m2_prob_prob",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "n": {
+     "int": [
+      4,
+      25
+     ]
+    },
+    "r": {
+     "int": [
+      1,
+      10
+     ]
+    }
+   },
+   "constraints": [
+    "mod(100,n) < 1",
+    "r < n"
+   ],
+   "display": {
+    "v": "{n}"
+   },
+   "answer": "{r/n}",
+   "wrong": [
+    {
+     "expr": "{r}",
+     "tag": "count_not_probability"
+    },
+    {
+     "expr": "{r/(n-r)}",
+     "tag": "ratio_to_rest"
+    }
+   ],
+   "explanationId": "exp_m2_prob_prob_001"
+  },
+  {
+   "id": "m2_data_box_001",
+   "templateVersion": 1,
+   "unitId": "m2_data_box",
+   "type": "expr",
+   "difficulty": 0.7,
+   "params": {
+    "L": {
+     "list": {
+      "n": [
+       8,
+       12
+      ],
+      "int": [
+       1,
+       60
+      ]
+     }
+    }
+   },
+   "stats": {
+    "a": "q1(L)",
+    "c": "q3(L)",
+    "i": "iqr(L)",
+    "r": "range(L)"
+   },
+   "display": {
+    "data": "{L}"
+   },
+   "answer": "{i}",
+   "wrong": [
+    {
+     "expr": "{r}",
+     "tag": "range_iqr_mixup"
+    },
+    {
+     "expr": "{c}",
+     "tag": "q3_instead_of_iqr"
+    }
+   ],
+   "explanationId": "exp_m2_data_box_001"
+  }
+ ]
+}
