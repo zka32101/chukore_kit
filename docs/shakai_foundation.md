@@ -29,6 +29,7 @@
 - SVG は数学の図と同じ（`currentColor`・余白・XML エスケープ）。数値と軸の目盛りは値から作る。
 
 ### 3.3 地図データ（`MapPack`）— 中〜大
+> **実装済み**（`lib/src/map/map_pack.dart`、`tool/validate_map.dart`、`tool/simplify_map.dart`）: `MapPack`（読み取り・書き出し。整数座標の差分符号化。出典必須）、`validateMapPack`（`map_*` のコード）、`simplifyMapPack`/`simplifyRing`（Douglas–Peucker・小さな島を落とす）、`renderMapSvg`。境界線のデータそのものはコンテンツ側。
 `map` の判定・描画はあるが、**データがない**。基盤が持つのは形式・検証・簡略化・SVG 出力:
 - 形式 `map_packs/*.json`: `{"version":1,"id":"world_countries","bounds":…,"regions":[{"id","label","rings":[…]}], "attribution": "出典"}`。座標は経度緯度か、図法変換後の平面座標。**差分符号化（整数・差分）で容量を抑える**。
 - 検証 `tool/validate_map.dart`: 領域 ID の重複、リングが閉じている、頂点数が少なすぎる・多すぎる（容量の目安）、自己交差、座標が範囲内、出典の記載。
