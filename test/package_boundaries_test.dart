@@ -72,7 +72,7 @@ void main() {
     expect(files, isNotEmpty);
     for (final f in files) {
       for (final i in _imports(f)) {
-        expect(i.startsWith('../') ? allowed.contains(i) : (i == 'dart:convert' || i == 'dart:math'), isTrue, reason: '${f.path}: $i');
+        expect(i.startsWith('../') ? allowed.contains(i) : (i == 'dart:convert' || i == 'dart:math' || i == 'map_pack.dart'), isTrue, reason: '${f.path}: $i');
       }
     }
   });

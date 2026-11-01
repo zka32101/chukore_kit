@@ -30,6 +30,7 @@
 
 ### 3.3 地図データ（`MapPack`）— 中〜大
 > **実装済み**（`lib/src/map/map_pack.dart`、`tool/validate_map.dart`、`tool/simplify_map.dart`）: `MapPack`（読み取り・書き出し。整数座標の差分符号化。出典必須）、`validateMapPack`（`map_*` のコード）、`simplifyMapPack`/`simplifyRing`（Douglas–Peucker・小さな島を落とす）、`renderMapSvg`。境界線のデータそのものはコンテンツ側。
+> **GeoJSON からの変換**: `mapPackFromGeoJson`（`lib/src/map/geojson.dart`）・`tool/geojson_to_map.dart`。外側のリングだけを使い、丸め（既定 scale 1000）でできる重複・とげを除く。実データでの確認（Natural Earth 110m の世界の国 177 領域、小学コレ！社会の `world_countries.geojson`）: 変換だけで 102KB（目標 150KB 以下）、`validateMapPack` でエラーなし。**簡略化の注意**: Douglas–Peucker は位相を保たないため、許容誤差を大きくすると辺が交差することがある（世界では 0.05 度は問題なし、0.1 度でスーダン、0.2 度で西サハラも交差）。交差は `tool/simplify_map.dart` / `validate_map.dart` が報告する。世界は変換だけで容量に収まるので、簡略化は小さな許容誤差にとどめる。日本の都道府県は、国土地理院の利用条件（商用は利用報告が必要）を原典で確認してから同じ手順で変換する。
 `map` の判定・描画はあるが、**データがない**。基盤が持つのは形式・検証・簡略化・SVG 出力:
 - 形式 `map_packs/*.json`: `{"version":1,"id":"world_countries","bounds":…,"regions":[{"id","label","rings":[…]}], "attribution": "出典"}`。座標は経度緯度か、図法変換後の平面座標。**差分符号化（整数・差分）で容量を抑える**。
 - 検証 `tool/validate_map.dart`: 領域 ID の重複、リングが閉じている、頂点数が少なすぎる・多すぎる（容量の目安）、自己交差、座標が範囲内、出典の記載。

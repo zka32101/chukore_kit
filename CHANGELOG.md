@@ -4,6 +4,7 @@
 
 ## [未リリース]
 
+- GeoJSON から地図データへの変換 `mapPackFromGeoJson` と `tool/geojson_to_map.dart`（Polygon・MultiPolygon、外側のリングだけ、丸めでできる重複・とげの除去、`only` で領域を絞る）。世界の国（Natural Earth 110m・177 領域）で 102KB・検証エラーなしを確認。社会の基盤の第 5 段
 - 地図データ `MapPack`・`validateMapPack`・`simplifyMapPack`・`simplifyRing`・`renderMapSvg`（整数座標の差分符号化の形式、出典必須、交差・範囲・容量の検証、Douglas–Peucker の簡略化、SVG）と `tool/validate_map.dart`・`tool/simplify_map.dart`。`MapBounds` を core の入口からも出す。社会の基盤の第 4 段
 - 資料のグラフ `ChartSpec`・`ChartKind`・`ChartSeries`・`niceScale`（棒・折れ線・雨温図・人口ピラミッド・円。仕様の読み取り・SVG・最大/最小/合計/平均/割合・きりのよい目盛り。数学に依存しない `lib/src/chart`）。社会の基盤の第 3 段
 - 式に `floor(…)`・`ceil(…)`・`mod(a, b)` を追加（世紀・時差・周期の計算。整数に近い値は誤差で外れない）。時代区分 `EraTable`・`EraSpan`・`centuryOf`（年 → 時代、時代の前後、表にない年の出来事、世紀）。社会の基盤の第 2 段
