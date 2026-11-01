@@ -16,6 +16,7 @@ pack/
 ├── explorations.json    式を動かす体験（数学）
 ├── constructions.json   作図（数学）
 ├── experiences.json     教科共通の体験（sort・link・dial・balance・timeline）
+├── scenes.json          場面（現実の具体例。型の `scene`・レッスンの導入から参照）
 ├── charts.json          資料のグラフ（`{"version":1,"charts":{ID: グラフ}}`）
 └── map_packs/*.json     地図データ（`MapPack`。出典必須）
 ```
@@ -75,9 +76,10 @@ dart run tool/validate_pack.dart <パックのディレクトリ>
 | `pack_unit_subject_mismatch`（エラー） | 単元の教科が目録の `subject` と違う |
 | `pack_unit_grade_outside`（警告） | 単元の学年が `grades` にない |
 | `pack_prereq_uncovered`（警告） | 前提の定義がない末端の単元 |
+| `pack_scene_missing`（エラー）／`pack_scene_unused`（警告） | 型が使う場面が scenes にない／型もレッスンの導入も使っていない場面 |
 | `pack_experience_id_clash`（エラー） | 体験（`experiences`）の ID が体験型（`explorations`）と重複（レッスンは両方を同じ名前空間で参照するため） |
 
-3. **レッスンの参照**は同じパックの中身で確かめる: 問題 ID（`questions`）・型 ID（`templates`）・体験 ID（`explorations` と `experiences`）・作図 ID（`constructions`）・誤解の型（問題の `misconceptionTags` と型の `wrong`）。型があるパックでは、例題の途中式も `MathLessonChecker` で検査する。
+3. **レッスンの参照**は同じパックの中身で確かめる: 問題 ID（`questions`）・型 ID（`templates`）・体験 ID（`explorations` と `experiences`）・作図 ID（`constructions`）・場面 ID（`scenes`）・誤解の型（問題の `misconceptionTags` と型の `wrong`）。型があるパックでは、例題の途中式も `MathLessonChecker` で検査する。
 
 ## 4. 国ごとの違いはどこに置くか
 国ごとに変わるものは、パックの中身ではなく**国の設定**（すでにある仕組み。`docs/global_alignment.md`）に置く。部品の中に国ごとの分岐は書かない。

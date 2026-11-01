@@ -14,7 +14,10 @@ sealed class LessonBlock {
 
 /// 導入。なぜ学ぶか・身近な例。
 class HookBlock extends LessonBlock {
-  const HookBlock(this.textId);
+  const HookBlock(this.textId, {this.scene});
+
+  /// 導入の場面（現実の具体例。`scenes.json` の ID）。無ければ null。
+  final String? scene;
   final String textId;
   @override
   String get type => 'hook';
@@ -175,8 +178,8 @@ class Lesson {
 
       switch (type) {
         case 'hook':
-          only({'textId'});
-          blocks.add(HookBlock(str(b, 'textId', '$id.hook')));
+          only({'textId', 'scene'});
+          blocks.add(HookBlock(str(b, 'textId', '$id.hook'), scene: b.containsKey('scene') ? str(b, 'scene', '$id.hook') : null));
         case 'text':
           only({'textId'});
           blocks.add(TextBlock(str(b, 'textId', '$id.text')));
@@ -296,6 +299,7 @@ class LessonRefs {
     this.templateIds = const {},
     this.explorationIds = const {},
     this.constructionIds = const {},
+    this.sceneIds = const {},
     this.tags = const {},
   });
 
@@ -303,6 +307,9 @@ class LessonRefs {
   final Set<String> templateIds;
   final Set<String> explorationIds;
   final Set<String> constructionIds;
+
+  /// 場面（現実の具体例）の ID。
+  final Set<String> sceneIds;
 
   /// 誤解の型（問題の `misconceptionTags`・型の `wrong` のタグ）。
   final Set<String> tags;
@@ -382,7 +389,11 @@ List<ValidationIssue> validateLessons(
           if (checker != null && !checker.formulaReadable(b.expr)) {
             err('lesson_formula_unreadable', l.id, '式を読めません: ${b.expr}');
           }
-        case HookBlock() || TextBlock() || SummaryBlock():
+        case HookBlock():
+          if (b.scene != null && !refs.sceneIds.contains(b.scene)) {
+            err('lesson_ref_missing', l.id, '場面 ${b.scene} がありません');
+          }
+        case TextBlock() || SummaryBlock():
           break;
       }
     }

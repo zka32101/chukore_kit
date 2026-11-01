@@ -257,6 +257,61 @@ void main() {
     });
   });
 
+  group('導入の場面 hook.scene', () {
+    test('読み取り: scene は省略できる', () {
+      final withScene = ls({
+        'blocks': [
+          {'type': 'hook', 'textId': 'h', 'scene': 'scene_x'},
+          {'type': 'check', 'questions': ['m1_linear_002~11']},
+          {'type': 'summary', 'textIds': ['s1']},
+        ],
+      });
+      expect((withScene.blocks.first as HookBlock).scene, 'scene_x');
+      expect((ls().blocks.first as HookBlock).scene, isNull);
+    });
+
+    test('書き間違い', () {
+      for (final bad in [
+        {'type': 'hook', 'textId': 'h', 'scene': ''},
+        {'type': 'hook', 'textId': 'h', 'scene': 5},
+        {'type': 'hook', 'textId': 'h', 'zzz': 1},
+      ]) {
+        expect(
+          () => ls({
+            'blocks': [
+              bad,
+              {'type': 'check', 'questions': ['m1_linear_002~11']},
+              {'type': 'summary', 'textIds': ['s1']},
+            ],
+          }),
+          throwsFormatException,
+          reason: '$bad',
+        );
+      }
+    });
+
+    test('検証: 場面が refs にあればよい、なければ lesson_ref_missing', () {
+      final l = ls({
+        'blocks': [
+          {'type': 'hook', 'textId': 'h', 'scene': 'scene_x'},
+          {'type': 'check', 'questions': ['m1_linear_002~11']},
+          {'type': 'summary', 'textIds': ['s1']},
+        ],
+      });
+      final withRefs = LessonRefs(
+        templateIds: refs.templateIds,
+        questionIds: refs.questionIds,
+        sceneIds: {'scene_x'},
+        tags: refs.tags,
+      );
+      expect(check(l, r: withRefs).where((i) => i.isError), isEmpty);
+      final missing = check(l);
+      expect([for (final i in missing) i.code], ['lesson_ref_missing']);
+      expect(missing.single.message, contains('場面 scene_x'));
+      expect(check(ls()), isEmpty); // 場面がなければ何も要らない
+    });
+  });
+
   group('検証 validateLessons', () {
     test('下書きのレッスン（docs/content_drafts）は問題なし。例題の途中式も全部通る', () {
       final set = LessonSet.parse(File('$dir/lessons.json').readAsStringSync());

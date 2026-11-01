@@ -11,6 +11,7 @@ import '../math/exploration.dart';
 import '../math/math_template.dart';
 import '../models/models.dart';
 import '../prereq/prerequisites.dart';
+import '../scene/scene.dart';
 import '../scope/unit_tree.dart';
 
 /// コンテンツパック（国 × 教科 × 学年の範囲の中身 1 式）の目録 `manifest.json`。仕様は docs/content_pack_spec.md。
@@ -54,7 +55,7 @@ class ContentPackManifest {
 
   static const fileKeys = {
     'units', 'prerequisites', 'questions', 'templates', 'lessons',
-    'explorations', 'constructions', 'experiences', 'charts', 'maps',
+    'explorations', 'constructions', 'experiences', 'charts', 'scenes', 'maps',
   };
   static const _keys = {
     'version', 'id', 'country', 'locale', 'subject', 'grades', 'curriculum', 'contentVersion', 'attribution', 'files',
@@ -151,7 +152,8 @@ class ContentPackReport {
 /// 個別の検証（単元・前提・問題・型・レッスン・体験・グラフ・地図）に加えて、ファイルをまたぐ検査をする。
 /// ファイルをまたぐ検査: `pack_unit_subject_mismatch`（単元の教科が目録と違う）・`pack_file_missing`・
 /// `pack_file_path_invalid`（絶対パス・`..`）・`pack_file_malformed`・`pack_experience_id_clash`（体験の ID が体験型と重複）・
-/// 警告 `pack_unit_grade_outside`（単元の学年が目録の grades にない）・`pack_prereq_uncovered`（前提の定義がない末端の単元）。
+/// `pack_scene_missing`（型が使う場面が scenes にない）、警告 `pack_unit_grade_outside`（単元の学年が目録の grades にない）・
+/// `pack_prereq_uncovered`（前提の定義がない末端の単元）・`pack_scene_unused`（型もレッスンも使っていない場面）。
 /// レッスンの参照（問題・型・体験・作図・誤解の型）は、同じパックの中身で確かめる。
 ContentPackReport validateContentPack(String manifestSource, String? Function(String path) read) {
   final issues = <ValidationIssue>[];
@@ -275,6 +277,19 @@ ContentPackReport validateContentPack(String manifestSource, String? Function(St
     }
   }
 
+  // 場面（現実の具体例）
+  final scenesFile = m.files['scenes'] as String?;
+  final sceneIds = <String>{};
+  if (scenesFile != null) {
+    final set = tryParse(scenesFile, SceneSet.parse);
+    if (set != null) {
+      if (tree != null) addAll(scenesFile, validateScenes(set, tree: tree));
+      sceneIds.addAll(set.ids);
+      counts['scenes'] = set.scenes.length;
+    }
+  }
+  final usedScenes = <String>{};
+
   // 型（変種）
   final templatesFile = m.files['templates'] as String?;
   TemplateSet? templates;
@@ -284,6 +299,13 @@ ContentPackReport validateContentPack(String manifestSource, String? Function(St
       if (tree != null) addAll(templatesFile, validateTemplates(templates, tree: tree));
       counts['templates'] = templates.templates.length;
       for (final t in templates.templates) {
+        final sc = t.sceneId;
+        if (sc != null) {
+          usedScenes.add(sc);
+          if (!sceneIds.contains(sc)) {
+            add(IssueSeverity.error, 'pack_scene_missing', t.id, '[$templatesFile] 場面 $sc が scenes にありません');
+          }
+        }
         for (final w in t.wrong) {
           tags.add(w.tag);
         }
@@ -341,6 +363,7 @@ ContentPackReport validateContentPack(String manifestSource, String? Function(St
               templateIds: {for (final t in templates?.templates ?? const <MathTemplate>[]) t.id},
               explorationIds: explorationIds,
               constructionIds: constructionIds,
+              sceneIds: sceneIds,
               tags: tags,
             ),
             checker: templates == null ? null : MathLessonChecker(templates),
@@ -348,7 +371,17 @@ ContentPackReport validateContentPack(String manifestSource, String? Function(St
         );
       }
       counts['lessons'] = set.lessons.length;
+      for (final l in set.lessons) {
+        for (final b in l.blocks) {
+          if (b is HookBlock && b.scene != null) usedScenes.add(b.scene!);
+        }
+      }
     }
+  }
+
+  // 場面は、型かレッスンから使われているか
+  for (final id in sceneIds.difference(usedScenes)) {
+    add(IssueSeverity.warning, 'pack_scene_unused', id, '[$scenesFile] どの型・レッスンからも使われていない場面です');
   }
 
   // グラフ

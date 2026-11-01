@@ -78,7 +78,14 @@
      "tag": "multiply_instead_of_divide"
     }
    ],
-   "explanationId": "exp_m3_fn_graph_001"
+   "explanationId": "exp_m3_fn_graph_001",
+   "scene": "scene_rect_area",
+   "plausible": {
+    "q": [
+     1,
+     30
+    ]
+   }
   },
   {
    "id": "m3_fn_graph_002",
@@ -181,6 +188,105 @@
     }
    ],
    "explanationId": "exp_m3_fn_rate_001"
+  },
+  {
+   "id": "m3_fn_use_001",
+   "templateVersion": 1,
+   "unitId": "m3_fn_use",
+   "type": "expr",
+   "difficulty": 0.7,
+   "params": {
+    "p": {
+     "int": [
+      10,
+      30
+     ]
+    },
+    "d": {
+     "oneOf": [
+      5,
+      10
+     ]
+    }
+   },
+   "derived": {
+    "y": "p*p/d"
+   },
+   "constraints": [
+    "mod(p*p, d) == 0"
+   ],
+   "scene": "scene_braking",
+   "plausible": {
+    "y": [
+     5,
+     200
+    ]
+   },
+   "display": {
+    "p": "{p}",
+    "d": "{d}"
+   },
+   "answer": "{y}",
+   "wrong": [
+    {
+     "expr": "{p*p}",
+     "tag": "forgot_divide_by_constant"
+    },
+    {
+     "expr": "{2*p/d}",
+     "tag": "square_as_double"
+    },
+    {
+     "expr": "{p/d}",
+     "tag": "forgot_square"
+    }
+   ],
+   "explanationId": "exp_m3_fn_use_001"
+  },
+  {
+   "id": "m3_fn_use_002",
+   "templateVersion": 1,
+   "unitId": "m3_fn_use",
+   "type": "expr",
+   "difficulty": 0.65,
+   "params": {
+    "p": {
+     "int": [
+      1,
+      6
+     ]
+    }
+   },
+   "derived": {
+    "y": "5*p*p"
+   },
+   "constraints": [],
+   "scene": "scene_free_fall",
+   "plausible": {
+    "y": [
+     5,
+     200
+    ]
+   },
+   "display": {
+    "p": "{p}"
+   },
+   "answer": "{y}",
+   "wrong": [
+    {
+     "expr": "{(5*p)^2}",
+     "tag": "square_whole_term"
+    },
+    {
+     "expr": "{10*p}",
+     "tag": "square_as_double"
+    },
+    {
+     "expr": "{5*p}",
+     "tag": "forgot_square"
+    }
+   ],
+   "explanationId": "exp_m3_fn_use_002"
   }
  ]
 }

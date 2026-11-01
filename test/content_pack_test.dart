@@ -212,6 +212,62 @@ void main() {
       expect(_codes(r), contains('lesson_example_mismatch:error'));
     });
 
+    test('場面: 型・レッスンの参照を scenes で確かめる。使われていない場面は警告、単元がなければエラー', () {
+      Map<String, dynamic> tpl(String? scene) => {
+            'id': 'tp1', 'templateVersion': 1, 'unitId': 'leaf', 'type': 'expr', 'difficulty': 0.5,
+            'params': {'p': {'int': [1, 5]}},
+            'scene': ?scene,
+            'display': {'p': '{p}'}, 'answer': '{p+1}',
+            'wrong': [{'expr': '{p+2}', 'tag': 't1'}],
+            'explanationId': 'e',
+          };
+      String scenes(List<String> ids, {String unit = 'leaf'}) => jsonEncode({
+            'version': 1,
+            'scenes': [for (final i in ids) {'id': i, 'titleId': 't', 'textId': 'x', 'unitIds': [unit]}],
+          });
+      final m = _manifest({'files': {'units': 'units.json', 'scenes': 's.json', 'templates': 't.json'}});
+      Map<String, String> files(String? scene, List<String> ids, {String unit = 'leaf'}) => {
+            'units.json': _units(),
+            's.json': scenes(ids, unit: unit),
+            't.json': jsonEncode({'version': 1, 'templates': [tpl(scene)]}),
+          };
+      // 型が場面を使う: 問題なし
+      final ok = _run(m, files('scene_a', ['scene_a']));
+      expect(_codes(ok).where((c) => !c.startsWith('unit_empty') && !c.startsWith('template_answer_dup')), isEmpty, reason: ok.issues.join('\n'));
+      expect(ok.counts['scenes'], 1);
+      // 型が使う場面が scenes にない
+      expect(_codes(_run(m, files('scene_zz', ['scene_a']))), containsAll(['pack_scene_missing:error', 'pack_scene_unused:warning']));
+      // どこからも使われていない場面
+      expect(_codes(_run(m, files(null, ['scene_a']))), contains('pack_scene_unused:warning'));
+      // 場面の単元がない
+      expect(_codes(_run(m, files('scene_a', ['scene_a'], unit: 'nope'))), contains('scene_unit_missing:error'));
+      // scenes が読めない
+      final broken = files('scene_a', ['scene_a'])..['s.json'] = '{';
+      expect(_codes(_run(m, broken)), contains('pack_file_malformed:error'));
+    });
+
+    test('場面: レッスンの導入（hook.scene）から使われていれば未使用ではない。参照先がなければ lesson_ref_missing', () {
+      String lesson(String scene) => jsonEncode({
+            'version': 1,
+            'lessons': [
+              {
+                'id': 'l1', 'version': 1, 'unitId': 'leaf', 'minutes': 4, 'titleId': 't',
+                'blocks': [
+                  {'type': 'hook', 'textId': 'h', 'scene': scene},
+                  {'type': 'check', 'questions': ['q1']},
+                  {'type': 'summary', 'textIds': ['s']},
+                ],
+              },
+            ],
+          });
+      final scenes = jsonEncode({'version': 1, 'scenes': [{'id': 'scene_a', 'titleId': 't', 'textId': 'x', 'unitIds': ['leaf']}]});
+      final m = _manifest({'files': {'units': 'units.json', 'questions': 'questions.json', 'scenes': 's.json', 'lessons': 'l.json'}});
+      final ok = _run(m, {..._files(), 's.json': scenes, 'l.json': lesson('scene_a')});
+      expect(ok.issues, isEmpty, reason: ok.issues.join('\n'));
+      final missing = _run(m, {..._files(), 's.json': scenes, 'l.json': lesson('scene_zz')});
+      expect(_codes(missing), containsAll(['lesson_ref_missing:error', 'pack_scene_unused:warning']));
+    });
+
     test('グラフ: 読めればよい・形が違えばエラー', () {
       final chart = {'kind': 'bars', 'altId': 'a', 'categories': ['a', 'b'], 'series': [{'id': 's', 'values': [1, 2]}]};
       Map<String, dynamic> m() => _manifest({'files': {'units': 'units.json', 'charts': 'c.json'}});

@@ -4,6 +4,7 @@
 
 ## [未リリース]
 
+- 場面（現実の具体例）: `Scene`・`SceneSet`・`validateScenes`（`scenes.json`）、型の `scene`・`plausible`（変種は現実にありえる値だけ。`Variant.sceneId`）、レッスン導入の `hook.scene`・`LessonRefs.sceneIds`、コンテンツパックの一括検証（`pack_scene_missing`・`pack_scene_unused`）。中3の関数に場面つきの型 3・レッスン 1
 - 関数のグラフの図 `figure.plot`（`PlotSpec`。軸・曲線（式を折れ線で近似、範囲で切り取り、NaN・無限大で途切れる）・点・目盛り）と `FigureShapeKind.polyline`。中3の型 3 つ（関数 y=ax²: 放物線の図つき）と、中3のパックに `templates.json`
 - 箱ひげ図 `ChartKind.box`（`ChartSpec.boxFromData`・`iqrOf`・`rangeOf`・SVG）と、型の集計 `q1`・`q3`・`iqr`（五数要約は中学校の定義: 中央値で半分に分け、奇数個なら中央値は除く）。中2「データの比較」を支える
 - 数学の中2・中3の単元ツリーと前提の草案 `docs/content_drafts/suugaku_chu2/`・`suugaku_chu3/`（中2 は 7 分野 16 単元、中3 は 8 分野 17 単元。中1・中2への前提は `パックID:単元ID` の外部参照）と、パックどうしのつながりを確かめるテスト。型を書く前の「基盤で足りないもの」の整理つき

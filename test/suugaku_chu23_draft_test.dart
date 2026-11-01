@@ -58,6 +58,31 @@ void main() {
     });
   }
 
+  test('中3の場面（現実の具体例）: 型の変種はすべて現実にありえる値で、場面は型・レッスンから使われている', () {
+    const dir = '$root/suugaku_chu3';
+    final scenes = SceneSet.parse(File('$dir/scenes.json').readAsStringSync());
+    final set = TemplateSet.parse(File('$dir/templates.json').readAsStringSync());
+    final withScene = set.templates.where((t) => t.sceneId != null).toList();
+    expect(withScene.length, 3);
+    for (final t in withScene) {
+      expect(scenes.ids, contains(t.sceneId), reason: t.id);
+      for (var s = 1; s <= 60; s++) {
+        final v = t.generate(s);
+        expect(v.sceneId, t.sceneId);
+        for (final e in t.plausible.entries) {
+          expect(v.params[e.key], inInclusiveRange(e.value.lo, e.value.hi), reason: '${t.id} ${e.key}');
+        }
+      }
+    }
+    // 制動距離: 速さ p m/s、停止距離 y = p²/d（現実の範囲）
+    final braking = set.templates.firstWhere((t) => t.id == 'm3_fn_use_001');
+    for (var s = 1; s <= 30; s++) {
+      final v = braking.generate(s);
+      expect(v.params['y'], v.params['p']! * v.params['p']! / v.params['d']!);
+      expect(v.question.answer, '${v.params['y']!.round()}');
+    }
+  });
+
   test('中2・中3の単元の ID は m2_・m3_ で始まり、全パックで重複しない', () {
     final all = <String>[
       for (final d in ['suugaku_chu1', 'suugaku_chu2', 'suugaku_chu3']) ...units(d).map((u) => u.id),

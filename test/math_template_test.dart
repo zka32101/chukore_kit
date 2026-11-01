@@ -420,6 +420,84 @@ void dataTests() {
   };
   MathTemplate dt([Map<String, dynamic> over = const {}]) => MathTemplate.fromJson(dbase(over));
 
+  group('場面 scene・plausible（現実の具体例）', () {
+    Map<String, dynamic> sc([Map<String, dynamic> over = const {}]) => {
+          'id': 'sc',
+          'templateVersion': 1,
+          'unitId': 'u',
+          'type': 'expr',
+          'difficulty': 0.5,
+          'params': {
+            'p': {'int': [1, 20]},
+          },
+          'derived': {'y': 'p*p'},
+          'scene': 'scene_x',
+          'plausible': {'y': [10, 200]},
+          'display': {'p': '{p}'},
+          'answer': '{y}',
+          'wrong': [
+            {'expr': '{2*p}', 'tag': 't1'},
+          ],
+          'explanationId': 'e',
+          ...over,
+        };
+
+    test('変種は場面の ID を持ち、値はすべて現実にありえる範囲に入る（外れる引き方は引き直す）', () {
+      final t = MathTemplate.fromJson(sc());
+      expect(t.sceneId, 'scene_x');
+      expect(t.plausible['y']!.lo, 10);
+      expect(t.plausible['y']!.hi, 200);
+      final ys = <double>{};
+      for (var s = 1; s <= 80; s++) {
+        final v = t.generate(s);
+        expect(v.sceneId, 'scene_x');
+        expect(v.params['y'], inInclusiveRange(10, 200));
+        ys.add(v.params['y']!);
+      }
+      expect(ys.length, greaterThan(5));
+      expect(ys.contains(1.0) || ys.contains(4.0) || ys.contains(9.0), isFalse); // 10 未満は出ない
+      expect(ys.every((y) => y <= 196), isTrue); // 15² = 225 以上は出ない（14² = 196 まで）
+    });
+
+    test('範囲の端はよい。パラメータそのものにも付けられる', () {
+      final t = MathTemplate.fromJson(sc({
+        'params': {
+          'p': {'int': [4, 6]},
+        },
+        'derived': {'y': 'p'},
+        'plausible': {'p': [5, 5]},
+      }));
+      for (var s = 1; s <= 20; s++) {
+        expect(t.generate(s).params['p'], 5);
+      }
+    });
+
+    test('場面のない型は sceneId が null', () {
+      final t = MathTemplate.fromJson(sc()..remove('scene')..remove('plausible'));
+      expect(t.sceneId, isNull);
+      expect(t.plausible, isEmpty);
+      expect(t.generate(1).sceneId, isNull);
+    });
+
+    test('plausible の範囲に入る値がなければ StateError（毎回引き直しても合わない）', () {
+      final t = MathTemplate.fromJson(sc({'plausible': {'y': [1000, 2000]}}));
+      expect(() => t.generate(1), throwsStateError);
+    });
+
+    test('書き間違い', () {
+      Matcher bad(String part) => throwsA(isA<FormatException>().having((e) => e.message, 'm', contains(part)));
+      expect(() => MathTemplate.fromJson(sc({'scene': 'a-b'})), bad('scene'));
+      expect(() => MathTemplate.fromJson(sc({'scene': 5})), bad('scene'));
+      expect(() => MathTemplate.fromJson(sc()..remove('scene')), bad('scene と一緒'));
+      expect(() => MathTemplate.fromJson(sc({'plausible': {}})), bad('plausible'));
+      expect(() => MathTemplate.fromJson(sc({'plausible': []})), bad('plausible'));
+      expect(() => MathTemplate.fromJson(sc({'plausible': {'y': [1]}})), bad('下限'));
+      expect(() => MathTemplate.fromJson(sc({'plausible': {'y': [5, 1]}})), bad('下限'));
+      expect(() => MathTemplate.fromJson(sc({'plausible': {'y': ['a', 1]}})), bad('下限'));
+      expect(() => MathTemplate.fromJson(sc({'plausible': {'zz': [1, 2]}})), bad('型にない名前'));
+    });
+  });
+
   group('データ（数列と集計）', () {
     test('数列は種で決まり、個数・値の範囲に収まる。表示は {L}', () {
       final t = dt();
