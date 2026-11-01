@@ -4,6 +4,7 @@
 
 ## [未リリース]
 
+- 動く図 `figure.animation`（`FigureAnimationSpec`・`FigureAnimation`。時間 `t` が from〜to を動く間の frames コマ。静止画は最後のコマ。`Variant.animation`・`indexAt`・`figureAt`・`toSvgFrames`）。中3の落下距離の型に使用
 - 場面（現実の具体例）: `Scene`・`SceneSet`・`validateScenes`（`scenes.json`）、型の `scene`・`plausible`（変種は現実にありえる値だけ。`Variant.sceneId`）、レッスン導入の `hook.scene`・`LessonRefs.sceneIds`、コンテンツパックの一括検証（`pack_scene_missing`・`pack_scene_unused`）。中3の関数に場面つきの型 3・レッスン 1
 - 関数のグラフの図 `figure.plot`（`PlotSpec`。軸・曲線（式を折れ線で近似、範囲で切り取り、NaN・無限大で途切れる）・点・目盛り）と `FigureShapeKind.polyline`。中3の型 3 つ（関数 y=ax²: 放物線の図つき）と、中3のパックに `templates.json`
 - 箱ひげ図 `ChartKind.box`（`ChartSpec.boxFromData`・`iqrOf`・`rangeOf`・SVG）と、型の集計 `q1`・`q3`・`iqr`（五数要約は中学校の定義: 中央値で半分に分け、奇数個なら中央値は除く）。中2「データの比較」を支える

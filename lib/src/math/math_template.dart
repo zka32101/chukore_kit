@@ -184,6 +184,7 @@ class Variant {
     this.figure,
     this.choiceFigures = const {},
     this.sceneId,
+    this.animation,
   });
 
   /// 出題・判定に使う問題（ID は `{templateId}~{seed}`）。
@@ -191,6 +192,9 @@ class Variant {
 
   /// 題材の場面（現実の具体例。型に `scene` があるとき。`scenes.json` の ID）。
   final String? sceneId;
+
+  /// 時間で変わる図（型の `figure` に `animation` があるとき）。[figure] はその最後のコマ。
+  final FigureAnimation? animation;
   final int seed;
 
   /// 図（型に `figure` があるとき）。画面が描くか、`figure.toSvg()` で SVG にする。
@@ -543,12 +547,18 @@ class MathTemplate {
       choiceFigures[e.key] = f;
     }
     Figure? fig;
+    FigureAnimation? anim;
     if (figure != null) {
       fig = figure!.resolve(values, r);
       if (fig == null) return null; // 図が枠の外・点が重なる・角が作れない
+      if (figure!.animation != null) {
+        anim = figure!.animate(values, r);
+        if (anim == null) return null; // どれかのコマが描けない
+      }
     }
     return Variant(
       sceneId: sceneId,
+      animation: anim,
       figure: fig,
       choiceFigures: choiceFigures,
       question: Question(

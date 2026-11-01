@@ -74,6 +74,16 @@ void main() {
         }
       }
     }
+    // 落下距離は動く図（点が曲線の上を p 秒まで動く）
+    final fall = set.templates.firstWhere((t) => t.id == 'm3_fn_use_002');
+    for (var s = 1; s <= 12; s++) {
+      final v = fall.generate(s);
+      final a = v.animation!;
+      expect(a.frames.length, 13);
+      expect(a.times.last, v.params['p']);
+      expect(a.durationMs, 2600);
+      expect(v.figure!.toSvg(), a.frames.last.toSvg());
+    }
     // 制動距離: 速さ p m/s、停止距離 y = p²/d（現実の範囲）
     final braking = set.templates.firstWhere((t) => t.id == 'm3_fn_use_001');
     for (var s = 1; s <= 30; s++) {
