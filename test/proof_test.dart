@@ -217,7 +217,7 @@ void main() {
     );
   });
 
-  for (final dir in ['docs/content_drafts/suugaku_chu2', 'docs/content_drafts/suugaku_chu3'])
+  for (final dir in ['docs/content_drafts/suugaku_chu2', 'docs/content_drafts/suugaku_chu3']) {
   test('$dir の証明 2 つ: 文言がそろい、全部の遊び方で正解の並びが正解になる', () {
     final r = validateContentPack(
       File('$dir/manifest.json').readAsStringSync(),
@@ -253,6 +253,7 @@ void main() {
       }
     }
   });
+  }
 }
 
 Map<String, dynamic> _json() => {
