@@ -13,6 +13,8 @@
  "files": {
   "units": "units.json",
   "prerequisites": "prerequisites.json",
-  "templates": "templates.json"
+  "templates": "templates.json",
+  "scenes": "scenes.json",
+  "lessons": "lessons.json"
  }
 }

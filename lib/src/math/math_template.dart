@@ -183,10 +183,14 @@ class Variant {
     this.lists = const {},
     this.figure,
     this.choiceFigures = const {},
+    this.sceneId,
   });
 
   /// 出題・判定に使う問題（ID は `{templateId}~{seed}`）。
   final Question question;
+
+  /// 題材の場面（現実の具体例。型に `scene` があるとき。`scenes.json` の ID）。
+  final String? sceneId;
   final int seed;
 
   /// 図（型に `figure` があるとき）。画面が描くか、`figure.toSvg()` で SVG にする。
@@ -229,6 +233,8 @@ class MathTemplate {
     required this.figure,
     required this.figures,
     required this.constraints,
+    required this.sceneId,
+    required this.plausible,
     required this.display,
     required this.answer,
     required this.choices,
@@ -255,6 +261,12 @@ class MathTemplate {
   /// 選択肢が図の問題の、選択肢の ID → 図の仕様（どれにするかを式で選ぶ `pick` もある）。
   final Map<String, FigureChoice> figures;
   final List<String> constraints;
+
+  /// 題材の場面の ID（現実の具体例）。無ければ null。
+  final String? sceneId;
+
+  /// 現実にありえる値の範囲（名前 → [下限, 上限]）。変種はすべてこの範囲に入る（外れる引き方は引き直す）。`scene` が要る。
+  final Map<String, ({double lo, double hi})> plausible;
   final Map<String, String> display;
   final String answer;
   final List<String> choices;
@@ -276,6 +288,7 @@ class MathTemplate {
     'figure',
     'figures',
     'constraints', //
+    'scene', 'plausible',
     'display', 'answer', 'choices', 'wrong', 'explanationId',
   };
 
@@ -341,6 +354,23 @@ class MathTemplate {
     final rawFigure = j['figure'];
     if (rawFigure != null && rawFigure is! Map) throw FormatException('$id: figure はオブジェクト');
     final constraints = [for (final c in (j['constraints'] as List? ?? const [])) c as String];
+    final rawScene = j['scene'];
+    if (rawScene != null && (rawScene is! String || !RegExp(r'^[A-Za-z0-9_]+$').hasMatch(rawScene))) {
+      throw FormatException('$id: scene は場面の ID（英数字と _）');
+    }
+    final rawPlausible = j['plausible'];
+    final plausible = <String, ({double lo, double hi})>{};
+    if (rawPlausible != null) {
+      if (rawScene == null) throw FormatException('$id: plausible は scene と一緒に書きます');
+      if (rawPlausible is! Map || rawPlausible.isEmpty) throw FormatException('$id: plausible は 名前 → [下限, 上限]');
+      for (final e in rawPlausible.entries) {
+        final v = e.value;
+        if (v is! List || v.length != 2 || v.any((x) => x is! num) || (v[0] as num) > (v[1] as num)) {
+          throw FormatException('$id: plausible の ${e.key} は [下限, 上限]（下限 ≤ 上限の数）');
+        }
+        plausible[e.key as String] = (lo: (v[0] as num).toDouble(), hi: (v[1] as num).toDouble());
+      }
+    }
     final choices = [for (final c in (j['choices'] as List? ?? const [])) c as String];
     final rawFigures = j['figures'];
     final figures = <String, FigureChoice>{};
@@ -387,6 +417,8 @@ class MathTemplate {
               ...derived.keys,
             }),
       constraints: constraints,
+      sceneId: rawScene as String?,
+      plausible: plausible,
       display: strMap('display', required: true),
       answer: str('answer'),
       choices: choices,
@@ -426,6 +458,10 @@ class MathTemplate {
       final x = MathExpr.tryParse(e);
       if (x == null || x.variables.any((v) => !known.contains(v))) throw FormatException('$id: derived の式が不正: $e');
     }
+    final unknownPlausible = plausible.keys.where((k) => !known.contains(k));
+    if (unknownPlausible.isNotEmpty) {
+      throw FormatException('$id: plausible に型にない名前: ${unknownPlausible.join(', ')}');
+    }
     final fake = {for (final k in known) k: 1.0};
     for (final c in constraints) {
       evalConstraint(c, fake);
@@ -447,6 +483,7 @@ class MathTemplate {
       }
       if (values.values.any((v) => v.isNaN || v.isInfinite)) continue;
       if (!constraints.every((c) => evalConstraint(c, values))) continue;
+      if (plausible.entries.any((e) => !(values[e.key]! >= e.value.lo && values[e.key]! <= e.value.hi))) continue;
       try {
         final v = _build(seed, values, drawn, rng);
         if (v != null) return v;
@@ -511,6 +548,7 @@ class MathTemplate {
       if (fig == null) return null; // 図が枠の外・点が重なる・角が作れない
     }
     return Variant(
+      sceneId: sceneId,
       figure: fig,
       choiceFigures: choiceFigures,
       question: Question(

@@ -1,0 +1,47 @@
+{
+ "version": 1,
+ "lessons": [
+  {
+   "id": "les_m3_fn_graph_01",
+   "version": 1,
+   "unitId": "m3_fn_graph",
+   "minutes": 4,
+   "titleId": "les_m3_fn_graph_01_title",
+   "blocks": [
+    {
+     "type": "hook",
+     "textId": "les_m3_fn_graph_01_hook",
+     "scene": "scene_free_fall"
+    },
+    {
+     "type": "text",
+     "textId": "les_m3_fn_graph_01_t1"
+    },
+    {
+     "type": "formula",
+     "expr": "a*x^2",
+     "textId": "les_m3_fn_graph_01_f1"
+    },
+    {
+     "type": "check",
+     "questions": [
+      "m3_fn_graph_002~11",
+      "m3_fn_use_002~12"
+     ]
+    },
+    {
+     "type": "pitfall",
+     "tag": "square_whole_term",
+     "textId": "les_m3_fn_graph_01_p1"
+    },
+    {
+     "type": "summary",
+     "textIds": [
+      "les_m3_fn_graph_01_s1",
+      "les_m3_fn_graph_01_s2"
+     ]
+    }
+   ]
+  }
+ ]
+}

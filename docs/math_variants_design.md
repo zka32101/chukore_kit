@@ -95,3 +95,13 @@
 
 ## 11. 数列とデータの集計（追加）
 `params` に英大文字 1 字の数列、`stats` に集計を書ける。詳細は [`math_figures_design.md`](math_figures_design.md) §5C。引き直しの条件に「最頻値が複数」も入る。
+
+
+## 場面（現実の具体例）`scene`・`plausible`
+図やグラフは**身近な場面**と結ぶと分かりやすい（ボールの落下、ブレーキの停止距離、影で木の高さを測る、海外の試合の中継時刻）。
+- 場面の目録 `scenes.json`: `{"version":1,"scenes":[{"id","titleId","textId","unitIds"}]}`（`lib/src/scene/scene.dart`。`validateScenes` は単元の実在を確かめる）。本文は ID だけで、文言は国・言語ごとのコンテンツ側（その国の暮らしに合う場面を選べる）。
+- 型の `scene`（場面の ID）と `plausible`（`{"y": [下限, 上限]}`。パラメータ・stats・derived の名前）: **変種はすべて現実にありえる値に入る**（外れる引き方は引き直す。範囲に入る値がなければ `template_unsatisfiable`）。`Variant.sceneId` で画面が場面の文言・絵を選ぶ。
+- レッスンの導入 `hook` に `scene` を付けられる（`LessonRefs.sceneIds` で参照を確かめる）。
+- コンテンツパック: `manifest.files.scenes`。一括検証が `pack_scene_missing`（型が使う場面がない）・`pack_scene_unused`（警告。使われていない場面）・`scene_unit_missing` を確かめる。
+- 見本: `docs/content_drafts/suugaku_chu3/`（`scene_free_fall` 落下距離 y=5x²、`scene_braking` 停止距離 y=x²/d、`scene_rect_area` 縦が横の a 倍の長方形の面積。型 `m3_fn_use_001`・`m3_fn_use_002`・`m3_fn_graph_001`、レッスン `les_m3_fn_graph_01`）。
+- 動く図（時間 t で変わる図）と写真・動画は、この次の段階（場面の ID から引ける）。

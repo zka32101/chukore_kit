@@ -4,7 +4,8 @@
 
 - `manifest.json`: 目録（学年 3）
 - `units.json`: 8 分野・17 単元（葉）。`estimatedQuestions` の計 約 340 問
-- `templates.json`: 型 3 つ（関数 y=ax²: グラフの上の点から a を求める＝**放物線の図つき**、x のときの y、変化の割合）。残りの単元はこれから
+- `scenes.json`: 場面（現実の具体例）3 つ。`lessons.json`: レッスン 1（導入に場面）
+- `templates.json`: 型 5 つ（うち場面つき 3 つ。`m3_fn_use_001` 停止距離・`m3_fn_use_002` 落下距離）。最初の 3 つ（関数 y=ax²: グラフの上の点から a を求める＝**放物線の図つき**、x のときの y、変化の割合）。残りの単元はこれから
 - `prerequisites.json`: 前提。中1・中2の単元は `external`（`パックID:単元ID`）で指す
 
 検証: `dart run tool/validate_pack.dart docs/content_drafts/suugaku_chu3`（エラー・警告 0）
