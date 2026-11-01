@@ -26,6 +26,15 @@ DialExperience _dial({double tol = 0, double initial = 0, double target = 9}) =>
       'min': -12, 'max': 12, 'step': 1, 'initial': initial, 'target': target, 'tolerance': tol,
     }) as DialExperience;
 
+TimelineExperience _tl([List<Map<String, dynamic>>? events]) => _p('timeline', {
+      'events': events ?? [
+        {'id': 'c', 'year': 710},
+        {'id': 'a', 'year': -300},
+        {'id': 'b', 'year': 593},
+        {'id': 'd', 'year': 794},
+      ],
+    }) as TimelineExperience;
+
 BalanceExperience _bal(Map<String, dynamic> extra) => _p('balance', extra) as BalanceExperience;
 
 UnitTree _tree() => UnitTree(1, [Unit(id: 'u', subject: 'math', grade: 1, title: 'U')]);
@@ -125,6 +134,96 @@ void main() {
       expect(() => _p('link', m(directed: false, edges: [{'from': 'a', 'to': 'b'}, {'from': 'b', 'to': 'a'}])), _bad('重複'));
       // 向きありなら逆向きは別の辺
       expect((_p('link', m(edges: [{'from': 'a', 'to': 'b'}, {'from': 'b', 'to': 'a'}])) as LinkExperience).edges.length, 2);
+    });
+  });
+
+  group('link: 向きだけ逆（原因と結果の取り違え）', () {
+    test('逆向きの辺は reversed（extra にも入る）。向きなしでは出ない', () {
+      final r = _link().check([('n2', 'n1'), ('n2', 'n3'), ('n4', 'n3')]);
+      expect(r.reversed, ['n2>n1']);
+      expect(r.extra, ['n2>n1', 'n4>n3']);
+      expect(r.correct, ['n2>n3']);
+      expect(r.missing, ['n1>n2']);
+      expect(_link(directed: false).check([('n2', 'n1')]).reversed, isEmpty);
+      expect(_link().check([('n1', 'n2'), ('n2', 'n3')]).reversed, isEmpty);
+    });
+
+    test('両方向とも正解の辺なら、どちらも逆向きとは言わない', () {
+      final both = _p('link', {
+        'nodes': ['a', 'b'],
+        'edges': [{'from': 'a', 'to': 'b'}, {'from': 'b', 'to': 'a'}],
+      }) as LinkExperience;
+      final r = both.check([('a', 'b')]);
+      expect([r.reversed, r.extra, r.missing], [isEmpty, isEmpty, ['b>a']]);
+    });
+
+    test('両方向をつないだら、逆向きの方が reversed', () {
+      final r = _link().check([('n1', 'n2'), ('n2', 'n1')]);
+      expect(r.reversed, ['n2>n1']);
+      expect(r.complete, isFalse);
+    });
+  });
+
+  group('timeline（年表づくり）', () {
+    test('古い順に並べて読み取る。同じ年は order の順', () {
+      expect(_tl().order, ['a', 'b', 'c', 'd']);
+      final same = _tl([
+        {'id': 'x', 'year': 100, 'order': 2},
+        {'id': 'y', 'year': 100, 'order': 1},
+        {'id': 'z', 'year': -5},
+      ]);
+      expect(same.order, ['z', 'y', 'x']);
+      expect(same.events.first.year, -5);
+      expect(same.kind, 'timeline');
+    });
+
+    test('判定: 前後が逆の組と、まだ置いていないもの', () {
+      final t = _tl();
+      var r = t.check(['a', 'b', 'c', 'd']);
+      expect([r.complete, r.reversedPairs, r.unplaced], [true, isEmpty, isEmpty]);
+      r = t.check(['b', 'a', 'c', 'd']);
+      expect(r.reversedPairs, [('b', 'a')]);
+      expect(r.misplaced, ['b', 'a']);
+      expect(r.complete, isFalse);
+      r = t.check(['d', 'c', 'b', 'a']);
+      expect(r.reversedPairs.length, 6);
+      expect(r.misplaced, ['d', 'c', 'b', 'a']);
+      r = t.check(['a', 'c']);
+      expect([r.reversedPairs, r.unplaced, r.complete], [isEmpty, ['b', 'd'], false]);
+      // 全部置いていなくても、置いた分の前後が合っていれば逆の組はない
+      r = t.check(['c', 'a']);
+      expect(r.reversedPairs, [('c', 'a')]);
+    });
+
+    test('知らない ID・重複は無視。何も置かなければ全部まだ', () {
+      final t = _tl();
+      expect(t.check(['b', 'b', 'a']).reversedPairs, [('b', 'a')]); // 重複した b で組を二重に数えない
+      final r = t.check(['zz', 'a', 'a', 'b']);
+      expect([r.reversedPairs, r.unplaced], [isEmpty, ['c', 'd']]);
+      expect(t.check(const []).unplaced, ['a', 'b', 'c', 'd']);
+      expect(t.check(const []).complete, isFalse);
+    });
+
+    test('形の誤り', () {
+      List<Map<String, dynamic>> ev(List<Map<String, dynamic>> xs) => xs;
+      expect(() => _tl(ev([{'id': 'a', 'year': 1}])), _bad('events'));
+      expect(() => _tl([for (var i = 1; i <= 31; i++) {'id': 'e$i', 'year': i}]), _bad('events'));
+      _tl([for (var i = 1; i <= 30; i++) {'id': 'e$i', 'year': i}]);
+      expect(() => _tl(ev([{'id': 'a', 'year': 0}, {'id': 'b', 'year': 1}])), _bad('year'));
+      expect(() => _tl(ev([{'id': 'a', 'year': 1.5}, {'id': 'b', 'year': 1}])), _bad('year'));
+      expect(() => _tl(ev([{'id': 'a', 'year': 1, 'order': 'x'}, {'id': 'b', 'year': 2}])), _bad('order'));
+      expect(() => _tl(ev([{'id': 'a', 'year': 1}, {'id': 'a', 'year': 2}])), _bad('重複'));
+      expect(() => _tl(ev([{'id': 'a', 'year': 1}, {'id': 'b', 'year': 1}])), _bad('前後が決まりません'));
+      expect(() => _tl(ev([{'id': 'a', 'year': 1, 'x': 1}, {'id': 'b', 'year': 2}])), _bad('events'));
+      expect(() => _p('timeline', {'events': [{'id': 'a', 'year': 1}, {'id': 'b', 'year': 2}], 'bins': []}), _bad('未知のキー'));
+      _tl(ev([{'id': 'a', 'year': 1, 'order': 1}, {'id': 'b', 'year': 1, 'order': 2}])); // 同じ年でも order が違えばよい
+    });
+
+    test('検証: 単元がなければエラー、問題なければ指摘なし', () {
+      final ok = jsonEncode({'version': 1, 'experiences': [_base('timeline', {'events': [{'id': 'a', 'year': 1}, {'id': 'b', 'year': 2}]})]});
+      expect(validateExperiences(ExperienceSet.parse(ok), tree: _tree()), isEmpty);
+      final bad = jsonEncode({'version': 1, 'experiences': [{..._base('timeline', {'events': [{'id': 'a', 'year': 1}, {'id': 'b', 'year': 2}]}), 'unitId': 'zz'}]});
+      expect([for (final i in validateExperiences(ExperienceSet.parse(bad), tree: _tree())) i.code], ['experience_unit_missing']);
     });
   });
 

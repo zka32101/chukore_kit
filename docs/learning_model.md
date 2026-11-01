@@ -89,7 +89,7 @@
 | 理科 | 条件を変えて結果を見る（スライダーの `Exploration`: 力・電流・濃度）、実験の手順の並べ替え、観察の図選び |
 | 国語 | 文を並べ替える・つなぐ、漢字の部品を組み立てる、言葉の分類 |
 - 体験の仕様は教科共通の `Exploration` の種類を増やして持つ（`slider_graph`・`construction` に続き `balance`・`sort`・`link`・`dial`）。画面は教科アプリ側。
-  - **実装済み**（`lib/src/experience/experience.dart`、教科共通・数学に依存しない）: `Experience`（`experiences.json`・`ExperienceSet.parse`・`validateExperiences`）の 4 種。`sort`（入れ物に仕分け: `check` → 正しい／違う／まだ）、`link`（点を矢印・線でつなぐ: 過不足）、`dial`（目盛を回して目標に: 許容つき）、`balance`（天秤: 傾き・つりあい・解の探索）。レッスンの `explore` ブロックからは体験の ID を `LessonRefs.explorationIds` に入れて参照する。
+  - **実装済み**（`lib/src/experience/experience.dart`、教科共通・数学に依存しない）: `Experience`（`experiences.json`・`ExperienceSet.parse`・`validateExperiences`）の 5 種（`timeline` 年表づくりを追加: 置き方を「前後が逆の組」で返す）。`sort`（入れ物に仕分け: `check` → 正しい／違う／まだ）、`link`（点を矢印・線でつなぐ: 過不足）、`dial`（目盛を回して目標に: 許容つき）、`balance`（天秤: 傾き・つりあい・解の探索）。レッスンの `explore` ブロックからは体験の ID を `LessonRefs.explorationIds` に入れて参照する。
 
 ### 4.2 遊び（`PlayRound`、案）
 **練習を遊びの形にする**だけで、問題と判定は③と同じ。

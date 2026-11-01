@@ -4,6 +4,7 @@
 
 ## [未リリース]
 
+- 社会の体験型: 年表づくり `TimelineExperience`・`TimelineResult`（体験の 5 種目 `timeline`）、`LinkResult.reversed`（向きだけ逆の辺 = 原因と結果の取り違え）、時差の計算 `timeOffsetHours`・`localTimeAt`・`LocalTime`。社会の基盤の第 7 段
 - 中 1 社会（日本）の内容の草案 `docs/content_drafts/shakai_chu1/`（単元 19・前提 12・見本の問題 18・雨温図の見本 4・誤解の型）と検証テスト。社会の基盤の第 6 段
 - GeoJSON から地図データへの変換 `mapPackFromGeoJson` と `tool/geojson_to_map.dart`（Polygon・MultiPolygon、外側のリングだけ、丸めでできる重複・とげの除去、`only` で領域を絞る）。世界の国（Natural Earth 110m・177 領域）で 102KB・検証エラーなしを確認。社会の基盤の第 5 段
 - 地図データ `MapPack`・`validateMapPack`・`simplifyMapPack`・`simplifyRing`・`renderMapSvg`（整数座標の差分符号化の形式、出典必須、交差・範囲・容量の検証、Douglas–Peucker の簡略化、SVG）と `tool/validate_map.dart`・`tool/simplify_map.dart`。`MapBounds` を core の入口からも出す。社会の基盤の第 4 段
