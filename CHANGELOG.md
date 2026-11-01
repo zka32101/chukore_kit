@@ -5,7 +5,7 @@
 ## [未リリース]
 
 - 中2の数学: 型 19 と問題文・解説の草案（`docs/content_drafts/suugaku_chu2/`）
-- 証明の問題（`ProofSpec`・`gradeProofOrder`・`gradeProofReasons`・`validateProofs`）と、目録の `proofs`。中2に合同の証明 2 つ
+- 証明の問題（`ProofSpec`・`gradeProofOrder`・`gradeProofReasons`・`validateProofs`）と、目録の `proofs`。中2に合同の証明 2 つ、中3に相似の証明 2 つ
 - 中3の数学: 型を 21 追加して 26 に（展開・因数分解・平方根・二次方程式・相似・円周角・三平方・標本調査）と文言
 - 中1の数学の 81 の型すべての問題文と解説、図の説明（文言 222。目録は文言の範囲を絞らない）。全変種で値が入って読めること、式の問題の解説が答えを含むことをテスト
 - 目録の `textsCover`（文言がそろっていなければならない範囲: scenes・lessons・templates・figures・questions。省略は全部）。中1の数学の 4 つのレッスンの説明文 40（実例つき。例題の行ごとの説明は例題の値を差し込んで読めることをテスト）
