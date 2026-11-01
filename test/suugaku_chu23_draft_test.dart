@@ -93,6 +93,33 @@ void main() {
     }
   });
 
+  test('中3の文言（教科書のような説明）: 全変種で問題文・解説の差し込みができ、解説は答えを含む', () {
+    const dir = '$root/suugaku_chu3';
+    final texts = ContentTexts.parse(File('$dir/texts.json').readAsStringSync());
+    final set = TemplateSet.parse(File('$dir/templates.json').readAsStringSync());
+    for (final t in set.templates) {
+      final prompt = texts.texts['prompt_${t.id}']!, exp = texts.texts[t.explanationId]!;
+      for (var s = 1; s <= 40; s++) {
+        final v = t.generate(s);
+        final p = renderVariantText(prompt, v), e = renderVariantText(exp, v);
+        expect(p.contains('{') || p.contains('}'), isFalse, reason: '${t.id} $p');
+        expect(e.contains('{') || e.contains('}'), isFalse, reason: '${t.id} $e');
+        expect(e, contains(v.question.answer), reason: '${t.id}~$s 解説が答えを含む: $e');
+      }
+    }
+    // 実例（ボール）の解説: x = 3 のとき 5 × 3² = 45
+    final fall = set.templates.firstWhere((t) => t.id == 'm3_fn_use_002');
+    final v = fall.generate(4);
+    final p = v.params['p']!.toInt(), y = v.params['y']!.toInt();
+    expect(renderVariantText(texts.texts['exp_m3_fn_use_002']!, v), 'y = 5x² に x = $p を代入します。y = 5 × $p² = 5 × ${p * p} = $y。$p 秒間に $y m 落ちます。');
+    // 場面の文言と、レッスンの文言の一覧
+    final lesson = LessonSet.parse(File('$dir/lessons.json').readAsStringSync()).lessons.single;
+    for (final id in lesson.textIds) {
+      expect(texts.texts, contains(id));
+    }
+    expect(texts.texts.length, greaterThan(20));
+  });
+
   test('中2・中3の単元の ID は m2_・m3_ で始まり、全パックで重複しない', () {
     final all = <String>[
       for (final d in ['suugaku_chu1', 'suugaku_chu2', 'suugaku_chu3']) ...units(d).map((u) => u.id),

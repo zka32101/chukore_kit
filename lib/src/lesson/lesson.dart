@@ -128,6 +128,32 @@ class Lesson {
   final List<String> pre;
   final List<LessonBlock> blocks;
 
+  /// このレッスンが使う文言の ID（題名と、各ブロックの説明）。出てくる順・重複なし。
+  List<String> get textIds {
+    final out = <String>[titleId];
+    for (final b in blocks) {
+      switch (b) {
+        case HookBlock():
+          out.add(b.textId);
+        case TextBlock():
+          out.add(b.textId);
+        case FormulaBlock():
+          if (b.textId != null) out.add(b.textId!);
+        case ExampleBlock():
+          out.addAll(b.textIds);
+        case PitfallBlock():
+          out.add(b.textId);
+        case SummaryBlock():
+          out.addAll(b.textIds);
+        case FigureBlock():
+          out.add(b.altId);
+        case ExploreBlock() || CheckBlock():
+          break;
+      }
+    }
+    return out.toSet().toList();
+  }
+
   /// 確認クイズの問題 ID（出てくる順）。
   List<String> get checkQuestions => [
     for (final b in blocks)

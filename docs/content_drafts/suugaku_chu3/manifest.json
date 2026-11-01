@@ -15,6 +15,7 @@
   "prerequisites": "prerequisites.json",
   "templates": "templates.json",
   "scenes": "scenes.json",
-  "lessons": "lessons.json"
+  "lessons": "lessons.json",
+  "texts": "texts.json"
  }
 }

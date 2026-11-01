@@ -268,6 +268,173 @@ void main() {
       expect(_codes(missing), containsAll(['lesson_ref_missing:error', 'pack_scene_unused:warning']));
     });
 
+    group('文言 texts（教科書のような説明・問題文・解説）', () {
+      // 場面 1・型 1（問題文と解説）・レッスン 1（導入・説明・要点）を持つ小さなパック
+      Map<String, dynamic> manifest() => _manifest({
+            'files': {'units': 'units.json', 'scenes': 's.json', 'templates': 't.json', 'lessons': 'l.json', 'texts': 'x.json'},
+          });
+      final scenes = jsonEncode({'version': 1, 'scenes': [{'id': 'sc', 'titleId': 'sc_title', 'textId': 'sc_text', 'unitIds': ['leaf']}]});
+      final templates = jsonEncode({
+        'version': 1,
+        'templates': [
+          {
+            'id': 'tp', 'templateVersion': 1, 'unitId': 'leaf', 'type': 'expr', 'difficulty': 0.5,
+            'params': {'p': {'int': [1, 5]}},
+            'scene': 'sc',
+            'display': {'point': '({p}, 0)'}, 'answer': '{p+1}',
+            'wrong': [{'expr': '{p+2}', 'tag': 't1'}],
+            'explanationId': 'exp_tp',
+          },
+        ],
+      });
+      final lessons = jsonEncode({
+        'version': 1,
+        'lessons': [
+          {
+            'id': 'l1', 'version': 1, 'unitId': 'leaf', 'minutes': 4, 'titleId': 'l1_title',
+            'blocks': [
+              {'type': 'hook', 'textId': 'l1_hook', 'scene': 'sc'},
+              {'type': 'text', 'textId': 'l1_t1'},
+              {'type': 'check', 'questions': ['tp~1']},
+              {'type': 'summary', 'textIds': ['l1_s1']},
+            ],
+          },
+        ],
+      });
+      Map<String, String> good() => {
+            'sc_title': '場面',
+            'sc_text': '身近な場面の説明。',
+            'prompt_tp': '点 {point} から {p} 進む。',
+            'exp_tp': '答えは {p+1}。',
+            'l1_title': '題',
+            'l1_hook': 'はじめに {p+1}',
+            'l1_t1': '説明',
+            'l1_s1': 'まとめ',
+          };
+      ContentPackReport run(Map<String, String> texts, {Object locale = 'ja'}) => _run(manifest(), {
+            'units.json': _units(),
+            's.json': scenes,
+            't.json': templates,
+            'l.json': lessons,
+            'x.json': jsonEncode({'version': 1, 'locale': locale, 'texts': texts}),
+          });
+      List<String> codes(ContentPackReport r) => [for (final i in r.issues) if (i.code != 'unit_empty' && i.code != 'template_answer_dup') '${i.code}:${i.subjectId}:${i.severity.name}'];
+
+      test('必要な文言がそろっていれば指摘なし。件数が出る', () {
+        final r = run(good());
+        expect(codes(r), isEmpty, reason: r.issues.join('\n'));
+        expect(r.counts['texts'], 8);
+      });
+
+      test('足りない文言は pack_text_missing（場面・問題文・解説・レッスンの各ブロック）', () {
+        for (final id in good().keys) {
+          final t = {...good()}..remove(id);
+          final c = codes(run(t));
+          expect(c, contains('pack_text_missing:$id:error'), reason: id);
+        }
+      });
+
+      test('使われていない文言は警告', () {
+        final r = run({...good(), 'extra': '余り'});
+        expect(codes(r), ['pack_text_unused:extra:warning']);
+        expect(r.hasErrors, isFalse);
+      });
+
+      test('差し込めない名前は pack_text_placeholder_unknown。型の値の名前・式・display の名前はよい', () {
+        expect(codes(run({...good(), 'exp_tp': '答えは {zz}。'})), ['pack_text_placeholder_unknown:exp_tp:error']);
+        expect(codes(run({...good(), 'exp_tp': '答えは {p+q}。'})), ['pack_text_placeholder_unknown:exp_tp:error']);
+        expect(codes(run({...good(), 'sc_text': '値は {p}。'})), ['pack_text_placeholder_unknown:sc_text:error']); // 場面には差し込みなし
+        expect(codes(run({...good(), 'exp_tp': '{point} と {p} と {p*2} と {+p} と {\$p}'})), isEmpty);
+        expect(codes(run({...good(), 'exp_tp': '空 {}'})), ['pack_text_placeholder_unknown:exp_tp:error']);
+      });
+
+      test('波かっこが合わない文言・長すぎる文言・言語が目録と違う文言', () {
+        final unbalanced = run({...good(), 'l1_t1': '{p'});
+        expect(unbalanced.issues.map((i) => i.code), contains('text_unbalanced_braces'));
+        expect(unbalanced.issues.where((i) => i.code == 'pack_text_placeholder_unknown'), isEmpty);
+        expect(run({...good(), 'l1_t1': 'あ' * 301}).issues.map((i) => i.code), contains('text_too_long'));
+        expect(codes(run(good(), locale: 'en')), contains('pack_texts_locale_mismatch:x.json:error'));
+      });
+
+      test('波かっこが合わない文言は、差し込みの検査をしない（別のエラーで報告済み）', () {
+        final r = run({...good(), 'exp_tp': '{zz}}'});
+        expect(r.issues.map((i) => i.code), contains('text_unbalanced_braces'));
+        expect(r.issues.map((i) => i.code), isNot(contains('pack_text_placeholder_unknown')));
+      });
+
+      test('問題集の問題の解説（explanationId）も文言が要る', () {
+        final m = _manifest({'files': {'units': 'units.json', 'questions': 'questions.json', 'texts': 'x.json'}});
+        String texts(Map<String, String> t) => jsonEncode({'version': 1, 'locale': 'ja', 'texts': t});
+        final ok = _run(m, {..._files(), 'x.json': texts({'e': '解説'})});
+        expect(ok.issues, isEmpty, reason: ok.issues.join('\n'));
+        final missing = _run(m, {..._files(), 'x.json': texts({'other': '別'})});
+        expect(
+          [for (final i in missing.issues) '${i.code}:${i.subjectId}:${i.severity.name}'],
+          containsAll(['pack_text_missing:e:error', 'pack_text_unused:other:warning']),
+        );
+      });
+
+      test('数列の差し込み {L}・{~L} と、集計の名前。図が選択肢の問題の選択肢の図の説明（altId）も文言が要る', () {
+        Map<String, dynamic> fig(String alt) => {
+              'viewBox': [0, 0, 100, 100],
+              'points': {'A': [10, 10], 'B': [90, 90]},
+              'draw': [{'seg': ['A', 'B']}],
+              'altId': alt,
+            };
+        final data = {
+          'id': 'dt', 'templateVersion': 1, 'unitId': 'leaf', 'type': 'expr', 'difficulty': 0.5,
+          'params': {'L': {'list': {'n': [5, 9], 'int': [1, 20]}}},
+          'stats': {'m': 'mean(L)'},
+          'display': {'data': '{L}'}, 'answer': '{m}',
+          'wrong': [{'expr': '{m+1}', 'tag': 't1'}],
+          'explanationId': 'exp_dt',
+        };
+        final choice = {
+          'id': 'ch', 'templateVersion': 1, 'unitId': 'leaf', 'type': 'choice', 'difficulty': 0.5,
+          'params': {'k': {'oneOf': [1, 2]}},
+          'display': {'k': '{k}'},
+          'answer': '{k}',
+          'choices': ['1', '2'],
+          'figures': {
+            '1': fig('alt_one'),
+            '2': {'pick': {'index': 'k-1', 'of': [fig('alt_pick_a'), fig('alt_pick_b')]}},
+          },
+          'wrong': [{'expr': '{3-k}', 'tag': 't2'}],
+          'explanationId': 'exp_ch',
+        };
+        final m = _manifest({'files': {'units': 'units.json', 'templates': 't.json', 'texts': 'x.json'}});
+        Map<String, String> texts() => {
+              'prompt_dt': '次のデータ {L}（小さい順 {~L}）の平均は。',
+              'exp_dt': '平均は {m}。',
+              'prompt_ch': '{k} 番を選ぶ。',
+              'exp_ch': '正解は {k}。',
+              'alt_one': '図 1',
+              'alt_pick_a': '図 a',
+              'alt_pick_b': '図 b',
+            };
+        ContentPackReport go(Map<String, String> t) => _run(m, {
+              'units.json': _units(),
+              't.json': jsonEncode({'version': 1, 'templates': [data, choice]}),
+              'x.json': jsonEncode({'version': 1, 'locale': 'ja', 'texts': t}),
+            });
+        List<String> only(ContentPackReport r) => [for (final i in r.issues) if (i.code.startsWith('pack_text')) '${i.code}:${i.subjectId}'];
+        expect(only(go(texts())), isEmpty, reason: go(texts()).issues.join('\n'));
+        for (final id in ['alt_one', 'alt_pick_a', 'alt_pick_b']) {
+          expect(only(go({...texts()}..remove(id))), ['pack_text_missing:$id'], reason: id);
+        }
+        // 数列の名前（{L}・{~L}）は数列のある型だけ
+        expect(only(go({...texts(), 'prompt_ch': '{L}'})), ['pack_text_placeholder_unknown:prompt_ch']);
+        expect(only(go({...texts(), 'prompt_ch': '{~L}'})), ['pack_text_placeholder_unknown:prompt_ch']);
+      });
+
+      test('texts がないパックは文言を確かめない。texts が読めなければ pack_file_malformed', () {
+        final plain = _manifest({'files': {'units': 'units.json', 's': null}..remove('s')});
+        expect(_run(plain).issues, isEmpty);
+        final broken = _run(manifest(), {'units.json': _units(), 's.json': scenes, 't.json': templates, 'l.json': lessons, 'x.json': '{'});
+        expect(_codes(broken), contains('pack_file_malformed:error'));
+      });
+    });
+
     test('グラフ: 読めればよい・形が違えばエラー', () {
       final chart = {'kind': 'bars', 'altId': 'a', 'categories': ['a', 'b'], 'series': [{'id': 's', 'values': [1, 2]}]};
       Map<String, dynamic> m() => _manifest({'files': {'units': 'units.json', 'charts': 'c.json'}});
