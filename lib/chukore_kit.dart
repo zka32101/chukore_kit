@@ -74,6 +74,7 @@ export 'src/question/answer.dart';
 export 'src/question/match_pairs.dart';
 export 'src/math/exploration.dart';
 export 'src/experience/experience.dart';
+export 'src/chart/chart.dart';
 export 'src/lesson/lesson.dart';
 export 'src/lesson/lesson_progress.dart';
 export 'src/lesson/lesson_analysis.dart';
