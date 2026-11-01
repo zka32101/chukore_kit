@@ -1,0 +1,214 @@
+{
+ "version": 1,
+ "units": [
+  {
+   "id": "m3_poly",
+   "subject": "math",
+   "grade": 3,
+   "title": "式の展開と因数分解",
+   "order": 1
+  },
+  {
+   "id": "m3_poly_expand",
+   "subject": "math",
+   "grade": 3,
+   "parentId": "m3_poly",
+   "title": "多項式の展開",
+   "order": 1,
+   "estimatedQuestions": 25
+  },
+  {
+   "id": "m3_poly_factor",
+   "subject": "math",
+   "grade": 3,
+   "parentId": "m3_poly",
+   "title": "因数分解",
+   "order": 2,
+   "estimatedQuestions": 25
+  },
+  {
+   "id": "m3_poly_use",
+   "subject": "math",
+   "grade": 3,
+   "parentId": "m3_poly",
+   "title": "式の利用",
+   "order": 3,
+   "estimatedQuestions": 15
+  },
+  {
+   "id": "m3_sqrt",
+   "subject": "math",
+   "grade": 3,
+   "title": "平方根",
+   "order": 2
+  },
+  {
+   "id": "m3_sqrt_def",
+   "subject": "math",
+   "grade": 3,
+   "parentId": "m3_sqrt",
+   "title": "平方根の意味と大小",
+   "order": 1,
+   "estimatedQuestions": 15
+  },
+  {
+   "id": "m3_sqrt_calc",
+   "subject": "math",
+   "grade": 3,
+   "parentId": "m3_sqrt",
+   "title": "平方根の計算",
+   "order": 2,
+   "estimatedQuestions": 25
+  },
+  {
+   "id": "m3_quad",
+   "subject": "math",
+   "grade": 3,
+   "title": "二次方程式",
+   "order": 3
+  },
+  {
+   "id": "m3_quad_solve",
+   "subject": "math",
+   "grade": 3,
+   "parentId": "m3_quad",
+   "title": "二次方程式の解き方（平方根・因数分解・解の公式）",
+   "order": 1,
+   "estimatedQuestions": 30
+  },
+  {
+   "id": "m3_quad_word",
+   "subject": "math",
+   "grade": 3,
+   "parentId": "m3_quad",
+   "title": "二次方程式の利用",
+   "order": 2,
+   "estimatedQuestions": 20
+  },
+  {
+   "id": "m3_fn",
+   "subject": "math",
+   "grade": 3,
+   "title": "関数 y=ax²",
+   "order": 4
+  },
+  {
+   "id": "m3_fn_graph",
+   "subject": "math",
+   "grade": 3,
+   "parentId": "m3_fn",
+   "title": "y=ax² のグラフ",
+   "order": 1,
+   "estimatedQuestions": 20
+  },
+  {
+   "id": "m3_fn_rate",
+   "subject": "math",
+   "grade": 3,
+   "parentId": "m3_fn",
+   "title": "変化の割合",
+   "order": 2,
+   "estimatedQuestions": 15
+  },
+  {
+   "id": "m3_fn_use",
+   "subject": "math",
+   "grade": 3,
+   "parentId": "m3_fn",
+   "title": "関数の利用",
+   "order": 3,
+   "estimatedQuestions": 20
+  },
+  {
+   "id": "m3_sim",
+   "subject": "math",
+   "grade": 3,
+   "title": "相似な図形",
+   "order": 5
+  },
+  {
+   "id": "m3_sim_def",
+   "subject": "math",
+   "grade": 3,
+   "parentId": "m3_sim",
+   "title": "相似な図形と証明",
+   "order": 1,
+   "estimatedQuestions": 20
+  },
+  {
+   "id": "m3_sim_ratio",
+   "subject": "math",
+   "grade": 3,
+   "parentId": "m3_sim",
+   "title": "平行線と線分の比",
+   "order": 2,
+   "estimatedQuestions": 20
+  },
+  {
+   "id": "m3_sim_area",
+   "subject": "math",
+   "grade": 3,
+   "parentId": "m3_sim",
+   "title": "相似比と面積・体積",
+   "order": 3,
+   "estimatedQuestions": 15
+  },
+  {
+   "id": "m3_circ",
+   "subject": "math",
+   "grade": 3,
+   "title": "円",
+   "order": 6
+  },
+  {
+   "id": "m3_circ_angle",
+   "subject": "math",
+   "grade": 3,
+   "parentId": "m3_circ",
+   "title": "円周角の定理",
+   "order": 1,
+   "estimatedQuestions": 20
+  },
+  {
+   "id": "m3_pyth",
+   "subject": "math",
+   "grade": 3,
+   "title": "三平方の定理",
+   "order": 7
+  },
+  {
+   "id": "m3_pyth_thm",
+   "subject": "math",
+   "grade": 3,
+   "parentId": "m3_pyth",
+   "title": "三平方の定理",
+   "order": 1,
+   "estimatedQuestions": 20
+  },
+  {
+   "id": "m3_pyth_use",
+   "subject": "math",
+   "grade": 3,
+   "parentId": "m3_pyth",
+   "title": "三平方の定理の利用",
+   "order": 2,
+   "estimatedQuestions": 20
+  },
+  {
+   "id": "m3_samp",
+   "subject": "math",
+   "grade": 3,
+   "title": "標本調査",
+   "order": 8
+  },
+  {
+   "id": "m3_samp_sample",
+   "subject": "math",
+   "grade": 3,
+   "parentId": "m3_samp",
+   "title": "標本調査",
+   "order": 1,
+   "estimatedQuestions": 12
+  }
+ ]
+}

@@ -1,0 +1,158 @@
+{
+ "version": 1,
+ "prerequisites": [
+  {
+   "unitId": "m3_poly_expand",
+   "external": [
+    {
+     "id": "chukore_jp_suugaku_chu2:m2_expr_poly",
+     "title": "多項式の加法・減法"
+    },
+    {
+     "id": "chukore_jp_suugaku_chu2:m2_expr_mono",
+     "title": "単項式の乗法・除法"
+    }
+   ]
+  },
+  {
+   "unitId": "m3_poly_factor",
+   "requires": [
+    "m3_poly_expand"
+   ]
+  },
+  {
+   "unitId": "m3_poly_use",
+   "requires": [
+    "m3_poly_factor"
+   ]
+  },
+  {
+   "unitId": "m3_sqrt_def",
+   "external": [
+    {
+     "id": "chukore_jp_suugaku_chu1:m1_num_mix",
+     "title": "累乗と四則の混じった計算"
+    }
+   ]
+  },
+  {
+   "unitId": "m3_sqrt_calc",
+   "requires": [
+    "m3_sqrt_def",
+    "m3_poly_expand"
+   ]
+  },
+  {
+   "unitId": "m3_quad_solve",
+   "requires": [
+    "m3_poly_factor",
+    "m3_sqrt_calc"
+   ]
+  },
+  {
+   "unitId": "m3_quad_word",
+   "requires": [
+    "m3_quad_solve"
+   ]
+  },
+  {
+   "unitId": "m3_fn_graph",
+   "external": [
+    {
+     "id": "chukore_jp_suugaku_chu2:m2_lin_graph",
+     "title": "一次関数と変化の割合・グラフ"
+    }
+   ]
+  },
+  {
+   "unitId": "m3_fn_rate",
+   "requires": [
+    "m3_fn_graph"
+   ],
+   "external": [
+    {
+     "id": "chukore_jp_suugaku_chu2:m2_lin_graph",
+     "title": "一次関数と変化の割合・グラフ"
+    }
+   ]
+  },
+  {
+   "unitId": "m3_fn_use",
+   "requires": [
+    "m3_fn_rate",
+    "m3_quad_solve"
+   ]
+  },
+  {
+   "unitId": "m3_sim_def",
+   "external": [
+    {
+     "id": "chukore_jp_suugaku_chu2:m2_par_cong",
+     "title": "合同な図形と証明"
+    }
+   ]
+  },
+  {
+   "unitId": "m3_sim_ratio",
+   "requires": [
+    "m3_sim_def"
+   ]
+  },
+  {
+   "unitId": "m3_sim_area",
+   "requires": [
+    "m3_sim_ratio"
+   ],
+   "external": [
+    {
+     "id": "chukore_jp_suugaku_chu1:m1_space_vol",
+     "title": "表面積と体積"
+    }
+   ]
+  },
+  {
+   "unitId": "m3_circ_angle",
+   "requires": [
+    "m3_sim_def"
+   ],
+   "external": [
+    {
+     "id": "chukore_jp_suugaku_chu2:m2_par_angle",
+     "title": "平行線と角・多角形の角"
+    }
+   ]
+  },
+  {
+   "unitId": "m3_pyth_thm",
+   "requires": [
+    "m3_sqrt_calc"
+   ],
+   "external": [
+    {
+     "id": "chukore_jp_suugaku_chu2:m2_tri_iso",
+     "title": "二等辺三角形・直角三角形"
+    }
+   ]
+  },
+  {
+   "unitId": "m3_pyth_use",
+   "requires": [
+    "m3_pyth_thm",
+    "m3_sim_ratio"
+   ]
+  },
+  {
+   "unitId": "m3_samp_sample",
+   "external": [
+    {
+     "id": "chukore_jp_suugaku_chu2:m2_data_box",
+     "title": "四分位数と箱ひげ図"
+    },
+    {
+     "id": "chukore_jp_suugaku_chu2:m2_prob_prob",
+     "title": "確率"
+    }
+   ]
+  }
+ ]
+}
