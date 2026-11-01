@@ -88,6 +88,10 @@ void chu3() {
         double.parse(v.question.answer),
         closeTo((90 - p(v, 'a')).toDouble(), 1e-9),
       );
+      v = g('m3_poly_use_001');
+      expect(double.parse(v.question.answer), closeTo(((10 * p(v, 'k') + 1) * (10 * p(v, 'k') - 1)).toDouble(), 1e-9));
+      v = g('m3_poly_use_004');
+      expect(double.parse(v.question.answer), closeTo(((p(v, 'a') + p(v, 'k')) * (p(v, 'b') - p(v, 'k'))).toDouble(), 1e-9));
       v = g('m3_samp_sample_001');
       expect(
         double.parse(v.question.answer),

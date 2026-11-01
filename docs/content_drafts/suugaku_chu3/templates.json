@@ -1105,6 +1105,138 @@
     }
    ],
    "explanationId": "exp_m3_samp_sample_001"
+  },
+  {
+   "id": "m3_poly_use_001",
+   "templateVersion": 1,
+   "unitId": "m3_poly_use",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "k": {
+     "int": [
+      2,
+      9
+     ]
+    }
+   },
+   "display": {
+    "x": "{10*k+1} × {10*k-1}"
+   },
+   "answer": "{100*k*k-1}",
+   "wrong": [
+    {
+     "expr": "{100*k*k+1}",
+     "tag": "sign_error"
+    },
+    {
+     "expr": "{100*k*k}",
+     "tag": "forgot_square_of_one"
+    }
+   ],
+   "explanationId": "exp_m3_poly_use_001"
+  },
+  {
+   "id": "m3_poly_use_002",
+   "templateVersion": 1,
+   "unitId": "m3_poly_use",
+   "type": "expr",
+   "difficulty": 0.65,
+   "params": {
+    "s": {
+     "int": [
+      1,
+      4
+     ]
+    }
+   },
+   "display": {
+    "x": "{100+s}²"
+   },
+   "answer": "{(100+s)*(100+s)}",
+   "wrong": [
+    {
+     "expr": "{10000+s*s}",
+     "tag": "forgot_middle_term"
+    },
+    {
+     "expr": "{10000+100*s+s*s}",
+     "tag": "middle_term_not_doubled"
+    }
+   ],
+   "explanationId": "exp_m3_poly_use_002"
+  },
+  {
+   "id": "m3_poly_use_003",
+   "templateVersion": 1,
+   "unitId": "m3_poly_use",
+   "type": "expr",
+   "difficulty": 0.7,
+   "params": {
+    "n": {
+     "int": [
+      2,
+      30
+     ]
+    }
+   },
+   "display": {
+    "d": "{2*n+1}"
+   },
+   "answer": "{n}",
+   "wrong": [
+    {
+     "expr": "{n+1}",
+     "tag": "larger_number"
+    },
+    {
+     "expr": "{2*n}",
+     "tag": "wrong_equation"
+    }
+   ],
+   "explanationId": "exp_m3_poly_use_003"
+  },
+  {
+   "id": "m3_poly_use_004",
+   "templateVersion": 1,
+   "unitId": "m3_poly_use",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "a": {
+     "int": [
+      10,
+      20
+     ]
+    },
+    "b": {
+     "int": [
+      10,
+      20
+     ]
+    },
+    "k": {
+     "int": [
+      1,
+      4
+     ]
+    }
+   },
+   "display": {
+    "k": "{k}"
+   },
+   "answer": "{(a+k)*(b-k)}",
+   "wrong": [
+    {
+     "expr": "{a*b}",
+     "tag": "unchanged_area"
+    },
+    {
+     "expr": "{(a+k)*(b+k)}",
+     "tag": "sign_error"
+    }
+   ],
+   "explanationId": "exp_m3_poly_use_004"
   }
  ]
 }
