@@ -4,6 +4,7 @@
 
 - `manifest.json`: 目録（学年 3）
 - `units.json`: 8 分野・17 単元（葉）。`estimatedQuestions` の計 約 340 問
+- `templates.json`: 型 3 つ（関数 y=ax²: グラフの上の点から a を求める＝**放物線の図つき**、x のときの y、変化の割合）。残りの単元はこれから
 - `prerequisites.json`: 前提。中1・中2の単元は `external`（`パックID:単元ID`）で指す
 
 検証: `dart run tool/validate_pack.dart docs/content_drafts/suugaku_chu3`（エラー・警告 0）
@@ -17,7 +18,7 @@
 | 式の展開と因数分解 | 同値判定・`form: expanded`・`form: factored`、誤答の型（和の平方など） | 乗法公式の途中式の判定 |
 | 平方根 | `sqrt`・`form: simplest_radical`・分母の有理化の判定 | 有理化の誤答の型の整理 |
 | 二次方程式 | 式の判定、`multi`（2 つの解） | 二次方程式の途中式の判定、解の公式の穴埋め |
-| 関数 y=ax² | スライダーの体験（式 `a*x^2`）、座標 | 放物線を描く図（曲線。`Figure` は折れ線で近似するか、`ChartSpec` に追加） |
+| 関数 y=ax² | スライダーの体験（式 `a*x^2`）、座標、**放物線の図**（`figure.plot`。曲線・軸・目盛り・点。`docs/math_figures_design.md`） | グラフの読み取りの型を増やす（頂点・対称性・2 点を通る） |
 | 相似な図形 | 図（多角形・長さ・印）、答えの形（比） | 相似条件の図、**証明**の問題 |
 | 円 | 円・弧・角の図 | 円周角の図の型（中心・円周上の 4 点） |
 | 三平方の定理 | `sqrt`・図（直角三角形・長さ） | 特別な直角三角形の図の型 |

@@ -83,6 +83,7 @@ export 'src/lesson/math_lesson_checker.dart';
 export 'src/math/construction.dart';
 export 'src/math/figure.dart';
 export 'src/math/solid.dart';
+export 'src/math/plot.dart';
 export 'src/math/steps.dart';
 export 'src/math/math_expr.dart';
 export 'src/math/math_template.dart';
