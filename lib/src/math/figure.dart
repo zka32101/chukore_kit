@@ -1,15 +1,17 @@
 import 'dart:math' as math;
 
 import 'math_expr.dart';
+import 'plot.dart';
 import 'solid.dart';
 
 /// 図の仕様（平面図形）。点・線分・円・弧・多角形・角印・直角印・長さの印・ラベルを、座標で持つ。
 /// 型（`MathTemplate`）の `figure` に書き、数は式（`"10+a*2"`）と `{…}` で差し込む。描くのは画面側か [Figure.toSvg]。
 /// 設計は docs/math_figures_design.md §3。
 class FigureTemplate {
-  FigureTemplate._(this._points, this._draw, this._marks, this.viewBox, this.names, this.altId, [this._solid]);
+  FigureTemplate._(this._points, this._draw, this._marks, this.viewBox, this.names, this.altId, [this._solid, this._plot]);
 
   final SolidSpec? _solid;
+  final PlotSpec? _plot;
 
   final List<({String name, Object spec})> _points;
   final List<Map<String, dynamic>> _draw;
@@ -18,7 +20,7 @@ class FigureTemplate {
   final bool names;
   final String altId;
 
-  static const _keys = {'viewBox', 'points', 'draw', 'marks', 'names', 'altId', 'solid'};
+  static const _keys = {'viewBox', 'points', 'draw', 'marks', 'names', 'altId', 'solid', 'plot'};
   static const _drawKinds = {'seg', 'circle', 'arc', 'poly'};
   static const _markKinds = {'angle', 'right', 'tick', 'length', 'text'};
 
@@ -50,6 +52,26 @@ class FigureTemplate {
         false,
         altId0,
         SolidSpec.fromJson(Map<String, dynamic>.from(s), check),
+      );
+    }
+    if (j.containsKey('plot')) {
+      // 関数のグラフ: 枠は 100 × 100 に決まっている。点・描画・印・立体とは併用しない
+      final other = j.keys.where((k) => k != 'plot' && k != 'altId');
+      if (other.isNotEmpty) throw FormatException('figure: plot は altId 以外と併用できません: ${other.join(', ')}');
+      if (altId0 is! String || altId0.isEmpty) throw const FormatException('figure: altId（図の説明の ID）が必要です');
+      final pl = j['plot'];
+      if (pl is! Map) throw const FormatException('figure: plot はオブジェクト');
+      void check(Object? e, String where) {
+        if (e is num) return;
+        final x = e is String ? MathExpr.tryParse(e) : null;
+        if (x == null) throw FormatException('figure: $where は数か式: $e');
+        final bad = x.variables.where((v) => !known.contains(v));
+        if (bad.isNotEmpty) throw FormatException('figure: $where にパラメータにない文字 ${bad.join()}: $e');
+      }
+
+      return FigureTemplate._(
+        const [], const [], const [], const [0, 0, 100, 100], false, altId0, null,
+        PlotSpec.fromJson(Map<String, dynamic>.from(pl), check, known),
       );
     }
     final vb = j['viewBox'];
@@ -190,6 +212,13 @@ class FigureTemplate {
       return Figure._(viewBox, const {}, built.shapes, built.labels, altId, solid.cells);
     }
 
+    final plot = _plot;
+    if (plot != null) {
+      final built = plot.build(ev, render, values);
+      if (built == null) return null;
+      return Figure._(viewBox, const {}, built.shapes, built.labels, altId);
+    }
+
     final pts = <String, ({double x, double y})>{};
     for (final p in _points) {
       final s = p.spec;
@@ -307,7 +336,7 @@ class FigureTemplate {
 }
 
 /// 図の要素の種類。
-enum FigureShapeKind { seg, poly, circle, arc, angle, rightAngle, tick, ellipse, ellipseHalf }
+enum FigureShapeKind { seg, poly, polyline, circle, arc, angle, rightAngle, tick, ellipse, ellipseHalf }
 
 /// 描く図形 1 つ（座標は図の座標系。y は下向き）。
 class FigureShape {
@@ -337,6 +366,8 @@ class FigureShape {
       FigureShape._(FigureShapeKind.seg, [a, b], dashed: dashed);
   factory FigureShape.poly(List<({double x, double y})> p, {bool fill = false, bool dashed = false}) =>
       FigureShape._(FigureShapeKind.poly, p, fill: fill, dashed: dashed);
+  factory FigureShape.polyline(List<({double x, double y})> p, {bool dashed = false}) =>
+      FigureShape._(FigureShapeKind.polyline, p, dashed: dashed);
   factory FigureShape.circle(({double x, double y}) c, double r, {bool dashed = false}) =>
       FigureShape._(FigureShapeKind.circle, [c], r: r, dashed: dashed);
   factory FigureShape.arc(({double x, double y}) c, double r, double start, double end, {bool dashed = false}) =>
@@ -415,6 +446,8 @@ class Figure {
         case FigureShapeKind.poly:
           final fill = s.fill ? ' fill="currentColor" fill-opacity="0.12"' : '';
           b.write('<polygon points="${p.map((e) => '${_n(e.x)},${_n(e.y)}').join(' ')}"$fill$dash/>');
+        case FigureShapeKind.polyline:
+          b.write('<polyline points="${p.map((e) => '${_n(e.x)},${_n(e.y)}').join(' ')}"$dash/>');
         case FigureShapeKind.circle:
           b.write('<circle cx="${_n(p[0].x)}" cy="${_n(p[0].y)}" r="${_n(s.r)}"$dash/>');
         case FigureShapeKind.arc:

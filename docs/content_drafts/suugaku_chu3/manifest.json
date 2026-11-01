@@ -12,6 +12,7 @@
  "attribution": [],
  "files": {
   "units": "units.json",
-  "prerequisites": "prerequisites.json"
+  "prerequisites": "prerequisites.json",
+  "templates": "templates.json"
  }
 }

@@ -1,0 +1,186 @@
+{
+ "version": 1,
+ "templates": [
+  {
+   "id": "m3_fn_graph_001",
+   "templateVersion": 1,
+   "unitId": "m3_fn_graph",
+   "type": "expr",
+   "difficulty": 0.7,
+   "params": {
+    "a": {
+     "int": [
+      1,
+      3
+     ]
+    },
+    "p": {
+     "int": [
+      1,
+      3
+     ]
+    }
+   },
+   "derived": {
+    "q": "a*p*p"
+   },
+   "constraints": [
+    "q != p",
+    "q/p != a"
+   ],
+   "figure": {
+    "plot": {
+     "x": [
+      -4,
+      4
+     ],
+     "y": [
+      -3,
+      30
+     ],
+     "curves": [
+      {
+       "expr": "a*x^2"
+      }
+     ],
+     "points": [
+      {
+       "at": [
+        "p",
+        "q"
+       ],
+       "label": "A({p}, {q})"
+      }
+     ],
+     "ticks": {
+      "x": 1,
+      "y": 5
+     }
+    },
+    "altId": "fig_parabola_point"
+   },
+   "display": {
+    "p": "{p}",
+    "q": "{q}"
+   },
+   "answer": "{a}",
+   "wrong": [
+    {
+     "expr": "{q/p}",
+     "tag": "forgot_square"
+    },
+    {
+     "expr": "{q-p}",
+     "tag": "subtract_instead_of_divide"
+    },
+    {
+     "expr": "{q*p}",
+     "tag": "multiply_instead_of_divide"
+    }
+   ],
+   "explanationId": "exp_m3_fn_graph_001"
+  },
+  {
+   "id": "m3_fn_graph_002",
+   "templateVersion": 1,
+   "unitId": "m3_fn_graph",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "a": {
+     "int": [
+      -4,
+      4
+     ]
+    },
+    "p": {
+     "int": [
+      -5,
+      5
+     ]
+    }
+   },
+   "constraints": [
+    "a != 0",
+    "p != 0",
+    "a != 1",
+    "a != -1",
+    "a != 2",
+    "a != -2"
+   ],
+   "display": {
+    "a": "{a}",
+    "p": "{p}"
+   },
+   "answer": "{a*p^2}",
+   "wrong": [
+    {
+     "expr": "{(a*p)^2}",
+     "tag": "square_whole_term"
+    },
+    {
+     "expr": "{2*a*p}",
+     "tag": "square_as_double"
+    },
+    {
+     "expr": "{-a*p^2}",
+     "tag": "sign_of_square"
+    }
+   ],
+   "explanationId": "exp_m3_fn_graph_002"
+  },
+  {
+   "id": "m3_fn_rate_001",
+   "templateVersion": 1,
+   "unitId": "m3_fn_rate",
+   "type": "expr",
+   "difficulty": 0.8,
+   "params": {
+    "a": {
+     "int": [
+      1,
+      4
+     ]
+    },
+    "p": {
+     "int": [
+      -5,
+      3
+     ]
+    },
+    "w": {
+     "int": [
+      1,
+      4
+     ]
+    }
+   },
+   "constraints": [
+    "2*p+w != 0",
+    "2*p+w != w",
+    "a*(2*p+w) != a*w"
+   ],
+   "display": {
+    "a": "{a}",
+    "p": "{p}",
+    "q": "{p+w}"
+   },
+   "answer": "{a*(2*p+w)}",
+   "wrong": [
+    {
+     "expr": "{a*w}",
+     "tag": "rate_vs_difference"
+    },
+    {
+     "expr": "{a*((p+w)^2-p^2)}",
+     "tag": "forgot_divide_by_dx"
+    },
+    {
+     "expr": "{a*2*p}",
+     "tag": "only_start_point"
+    }
+   ],
+   "explanationId": "exp_m3_fn_rate_001"
+  }
+ ]
+}
