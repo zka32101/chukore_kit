@@ -24,8 +24,8 @@ void main() {
     expect(r.issues.where((i) => i.code.startsWith('pack_text') || i.code.startsWith('text_')), isEmpty);
   });
 
-  test('全 81 の型: 問題文と解説は、全変種で値が入って読める（波かっこが残らない）。式の問題は解説が答えを含む', () {
-    expect(set.templates.length, 81);
+  test('全 91 の型: 問題文と解説は、全変種で値が入って読める（波かっこが残らない）。式の問題は解説が答えを含む', () {
+    expect(set.templates.length, 91);
     for (final t in set.templates) {
       final prompt = text('prompt_${t.id}'), exp = text(t.explanationId);
       expect(t.explanationId, 'exp_${t.id}');

@@ -5917,6 +5917,396 @@
     }
    ],
    "explanationId": "exp_m1_space_pyramid_002"
+  },
+  {
+   "id": "m1_space_cut_001",
+   "templateVersion": 1,
+   "unitId": "m1_space_solid",
+   "type": "choice",
+   "difficulty": 0.6,
+   "params": {
+    "a": {
+     "int": [
+      1,
+      9
+     ]
+    }
+   },
+   "display": {
+    "note": "cut"
+   },
+   "answer": "円",
+   "choices": [
+    "円",
+    "長方形",
+    "三角形",
+    "だ円"
+   ],
+   "wrong": [
+    {
+     "expr": "長方形",
+     "tag": "side_view_mixup"
+    },
+    {
+     "expr": "三角形",
+     "tag": "cone_mixup"
+    },
+    {
+     "expr": "だ円",
+     "tag": "oval_mixup"
+    }
+   ],
+   "explanationId": "exp_m1_space_cut_001"
+  },
+  {
+   "id": "m1_space_cut_002",
+   "templateVersion": 1,
+   "unitId": "m1_space_solid",
+   "type": "choice",
+   "difficulty": 0.65,
+   "params": {
+    "a": {
+     "int": [
+      1,
+      9
+     ]
+    }
+   },
+   "display": {
+    "note": "cut"
+   },
+   "answer": "長方形",
+   "choices": [
+    "長方形",
+    "円",
+    "三角形",
+    "ひし形"
+   ],
+   "wrong": [
+    {
+     "expr": "円",
+     "tag": "parallel_cut_mixup"
+    },
+    {
+     "expr": "三角形",
+     "tag": "cone_mixup"
+    },
+    {
+     "expr": "ひし形",
+     "tag": "shape_mixup"
+    }
+   ],
+   "explanationId": "exp_m1_space_cut_002"
+  },
+  {
+   "id": "m1_space_cut_003",
+   "templateVersion": 1,
+   "unitId": "m1_space_solid",
+   "type": "choice",
+   "difficulty": 0.65,
+   "params": {
+    "a": {
+     "int": [
+      1,
+      9
+     ]
+    }
+   },
+   "display": {
+    "note": "cut"
+   },
+   "answer": "円",
+   "choices": [
+    "円",
+    "三角形",
+    "長方形",
+    "台形"
+   ],
+   "wrong": [
+    {
+     "expr": "三角形",
+     "tag": "vertical_cut_mixup"
+    },
+    {
+     "expr": "長方形",
+     "tag": "cylinder_mixup"
+    },
+    {
+     "expr": "台形",
+     "tag": "side_view_mixup"
+    }
+   ],
+   "explanationId": "exp_m1_space_cut_003"
+  },
+  {
+   "id": "m1_space_cut_004",
+   "templateVersion": 1,
+   "unitId": "m1_space_solid",
+   "type": "choice",
+   "difficulty": 0.75,
+   "params": {
+    "a": {
+     "int": [
+      1,
+      9
+     ]
+    }
+   },
+   "display": {
+    "note": "cut"
+   },
+   "answer": "二等辺三角形",
+   "choices": [
+    "二等辺三角形",
+    "円",
+    "長方形",
+    "正三角形"
+   ],
+   "wrong": [
+    {
+     "expr": "円",
+     "tag": "parallel_cut_mixup"
+    },
+    {
+     "expr": "長方形",
+     "tag": "cylinder_mixup"
+    },
+    {
+     "expr": "正三角形",
+     "tag": "equilateral_mixup"
+    }
+   ],
+   "explanationId": "exp_m1_space_cut_004"
+  },
+  {
+   "id": "m1_space_cut_005",
+   "templateVersion": 1,
+   "unitId": "m1_space_solid",
+   "type": "choice",
+   "difficulty": 0.5,
+   "params": {
+    "a": {
+     "int": [
+      1,
+      9
+     ]
+    }
+   },
+   "display": {
+    "note": "cut"
+   },
+   "answer": "円",
+   "choices": [
+    "円",
+    "だ円",
+    "長方形",
+    "三角形"
+   ],
+   "wrong": [
+    {
+     "expr": "だ円",
+     "tag": "oval_mixup"
+    },
+    {
+     "expr": "長方形",
+     "tag": "cylinder_mixup"
+    },
+    {
+     "expr": "三角形",
+     "tag": "cone_mixup"
+    }
+   ],
+   "explanationId": "exp_m1_space_cut_005"
+  },
+  {
+   "id": "m1_space_cut_face_001",
+   "templateVersion": 1,
+   "unitId": "m1_space_solid",
+   "type": "expr",
+   "difficulty": 0.7,
+   "params": {
+    "k": {
+     "int": [
+      1,
+      8
+     ]
+    }
+   },
+   "display": {
+    "v": "{k}"
+   },
+   "answer": "{6+k}",
+   "wrong": [
+    {
+     "expr": "{6-k}",
+     "tag": "cut_removes_face"
+    },
+    {
+     "expr": "{6}",
+     "tag": "faces_unchanged"
+    }
+   ],
+   "explanationId": "exp_m1_space_cut_face_001"
+  },
+  {
+   "id": "m1_space_cut_vertex_001",
+   "templateVersion": 1,
+   "unitId": "m1_space_solid",
+   "type": "expr",
+   "difficulty": 0.8,
+   "params": {
+    "k": {
+     "int": [
+      1,
+      8
+     ]
+    }
+   },
+   "display": {
+    "v": "{k}"
+   },
+   "answer": "{8+2*k}",
+   "wrong": [
+    {
+     "expr": "{8+k}",
+     "tag": "one_per_cut"
+    },
+    {
+     "expr": "{8-k}",
+     "tag": "cut_removes_vertex"
+    }
+   ],
+   "explanationId": "exp_m1_space_cut_vertex_001"
+  },
+  {
+   "id": "m1_space_cut_edge_001",
+   "templateVersion": 1,
+   "unitId": "m1_space_solid",
+   "type": "expr",
+   "difficulty": 0.8,
+   "params": {
+    "k": {
+     "int": [
+      1,
+      8
+     ]
+    }
+   },
+   "display": {
+    "v": "{k}"
+   },
+   "answer": "{12+3*k}",
+   "wrong": [
+    {
+     "expr": "{12+k}",
+     "tag": "one_per_cut"
+    },
+    {
+     "expr": "{12+2*k}",
+     "tag": "two_per_cut"
+    }
+   ],
+   "explanationId": "exp_m1_space_cut_edge_001"
+  },
+  {
+   "id": "m1_linear_check_001",
+   "templateVersion": 1,
+   "unitId": "m1_linear",
+   "type": "expr",
+   "difficulty": 0.5,
+   "params": {
+    "a": {
+     "int": [
+      2,
+      9
+     ]
+    },
+    "k": {
+     "int": [
+      -9,
+      9
+     ]
+    },
+    "b": {
+     "int": [
+      -9,
+      9
+     ]
+    }
+   },
+   "constraints": [
+    "k != 0",
+    "b != 0"
+   ],
+   "display": {
+    "eq": "{a}x{+b}={a*k+b}"
+   },
+   "answer": "{a*k+b}",
+   "wrong": [
+    {
+     "expr": "{k}",
+     "tag": "answer_not_left_side"
+    },
+    {
+     "expr": "{a+k+b}",
+     "tag": "added_instead"
+    }
+   ],
+   "explanationId": "exp_m1_linear_check_001"
+  },
+  {
+   "id": "m1_num_mul_sign_001",
+   "templateVersion": 1,
+   "unitId": "m1_num_mul",
+   "type": "expr",
+   "difficulty": 0.45,
+   "params": {
+    "a": {
+     "int": [
+      -9,
+      9
+     ]
+    },
+    "b": {
+     "int": [
+      -9,
+      9
+     ]
+    },
+    "c": {
+     "int": [
+      -9,
+      9
+     ]
+    },
+    "d": {
+     "int": [
+      -9,
+      9
+     ]
+    }
+   },
+   "constraints": [
+    "a != 0",
+    "b != 0",
+    "c != 0",
+    "d != 0"
+   ],
+   "display": {
+    "x": "{&a} × {&b} × {&c} × {&d}"
+   },
+   "answer": "{(a/sqrt(a*a))*(b/sqrt(b*b))*(c/sqrt(c*c))*(d/sqrt(d*d))}",
+   "wrong": [
+    {
+     "expr": "{-(a/sqrt(a*a))*(b/sqrt(b*b))*(c/sqrt(c*c))*(d/sqrt(d*d))}",
+     "tag": "sign_flip"
+    },
+    {
+     "expr": "{0}",
+     "tag": "zero"
+    }
+   ],
+   "explanationId": "exp_m1_num_mul_sign_001"
   }
  ]
 }
