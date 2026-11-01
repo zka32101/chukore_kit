@@ -66,6 +66,17 @@ void main() {
     }
   });
 
+  test('lib/src/map（地図データ）は Flutter・数学に依存しない', () {
+    const allowed = {'../bank/question_bank.dart', '../question/map_tap.dart', '../question/map_viewport.dart'};
+    final files = Directory('lib/src/map').listSync().whereType<File>().where((f) => f.path.endsWith('.dart'));
+    expect(files, isNotEmpty);
+    for (final f in files) {
+      for (final i in _imports(f)) {
+        expect(i.startsWith('../') ? allowed.contains(i) : (i == 'dart:convert' || i == 'dart:math'), isTrue, reason: '${f.path}: $i');
+      }
+    }
+  });
+
   test('画面部品の入口（chukore_kit_ui.dart）は core の入口から出していない', () {
     final core = File('lib/chukore_kit.dart').readAsStringSync();
     expect(core.contains('chukore_kit_ui'), isFalse);

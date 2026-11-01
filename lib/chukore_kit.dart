@@ -90,6 +90,8 @@ export 'src/math/template_text.dart';
 export 'src/question/card.dart';
 export 'src/question/text_match.dart';
 export 'src/question/map_tap.dart';
+export 'src/question/map_viewport.dart';
+export 'src/map/map_pack.dart';
 export 'src/question/timeline.dart';
 export 'src/question/era_table.dart';
 export 'src/store/attempt_store.dart';
