@@ -18,6 +18,7 @@ pack/
 ├── experiences.json     教科共通の体験（sort・link・dial・balance・timeline）
 ├── texts.json           文言（教科書のような説明・問題文・解説・場面の説明。ID → 本文。言語ごとに 1 ファイル）
 ├── scenes.json          場面（現実の具体例。型の `scene`・レッスンの導入から参照）
+├── proofs.json          証明の問題（合同・相似。主張と根拠の並び。文言は texts.json）
 ├── charts.json          資料のグラフ（`{"version":1,"charts":{ID: グラフ}}`）
 └── map_packs/*.json     地図データ（`MapPack`。出典必須）
 ```
@@ -96,7 +97,7 @@ dart run tool/validate_pack.dart <パックのディレクトリ>
 - **必要な文言**（`texts` を持つパックだけ確かめる）: 場面の名前と説明、レッスンの題名と各ブロックの説明（導入・説明・式・例題の行・つまずき・要点・図の説明）、型の**問題文 `prompt_<型ID>`**・解説（`explanationId`）・図の説明（`altId`）、問題集の解説。
 - 1 つの本文は 300 文字までを目安にする（教科書の 1 段落ほどに区切る）。`{` `}` は対応させる（入れ子なし）。
 - 検証: `pack_text_missing`（足りない）・`pack_text_placeholder_unknown`（差し込めない名前。問題文・解説は**その型の値の名前**だけ、レッスンはパックの型の名前、場面は差し込みなし）・`pack_texts_locale_mismatch`・`text_unbalanced_braces`（エラー）、`pack_text_unused`・`text_too_long`（警告）。
-- **範囲 `textsCover`**（目録。省略すると全部）: 文言を書いた分だけ増やしていくパックは、そろっていなければならない範囲を絞れる。`scenes`（場面）・`lessons`（レッスン）・`templates`（型の問題文と解説）・`figures`（図の説明）・`questions`（問題集の解説）。範囲の外は、なくても未使用の警告にもならず（使われていれば）、あれば差し込みの名前は確かめる。例: 中1の数学は `["lessons"]`（まずレッスンの説明だけ）。
+- **範囲 `textsCover`**（目録。省略すると全部）: 文言を書いた分だけ増やしていくパックは、そろっていなければならない範囲を絞れる。`scenes`（場面）・`lessons`（レッスン）・`templates`（型の問題文と解説）・`figures`（図の説明）・`questions`（問題集の解説）・`proofs`（証明の題・仮定・結論・各行・根拠）。範囲の外は、なくても未使用の警告にもならず（使われていれば）、あれば差し込みの名前は確かめる。例: 中1の数学は `["lessons"]`（まずレッスンの説明だけ）。
 - 見本: `docs/content_drafts/suugaku_chu3/texts.json`（場面 3・レッスン 1・型 5 の問題文と解説。落下・停止距離などの実例）。
 
 ## 4. 国ごとの違いはどこに置くか
@@ -114,3 +115,7 @@ dart run tool/validate_pack.dart <パックのディレクトリ>
 
 ## 5. 同梱の草案
 `docs/content_drafts/{shakai_chu1,eigo_jp_chu1,suugaku_chu1}/manifest.json`（`test/content_pack_test.dart` が検証）。リポジトリ（`chukore_jp_shakai` など）ができたら、ディレクトリごと移す。
+
+## 証明の問題（`proofs.json`）
+証明を「主張（だから…）と根拠（なぜなら…）」の行の並びで持つ。遊び方は 2 つ: ①手順を並べる（`gradeProofOrder`。同じ前提から出る行の入れ替えは正解、まぎらわしい行は入れると指摘）②各行の根拠を語群から選ぶ（`gradeProofReasons`。語群のうち使われない根拠がまぎらわしい選択肢）。点や順位は付けず、「どの行がちがうか」だけを返す。
+`validateProofs`: `proof_unit_missing`・`proof_too_short`（3 行未満）・`proof_id_duplicate`・`proof_reason_missing`・`proof_after_invalid`（after は前の行だけ）・`proof_not_connected`（最後の行＝結論に結びつかない行）。警告 `proof_no_decoy_reason`・`proof_no_decoy_step`。文言（題・仮定・結論・各行・根拠）は texts.json に書く。

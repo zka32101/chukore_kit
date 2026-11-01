@@ -14,6 +14,7 @@
   "units": "units.json",
   "prerequisites": "prerequisites.json",
   "templates": "templates.json",
-  "texts": "texts.json"
+  "texts": "texts.json",
+  "proofs": "proofs.json"
  }
 }
