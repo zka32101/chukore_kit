@@ -298,6 +298,259 @@
     "names": true,
     "altId": "pffig_m2_cong_isosceles"
    }
+  },
+  {
+   "id": "pf_m2_para_opposite",
+   "unitId": "m2_tri_para",
+   "titleId": "pf_m2_para_opposite_title",
+   "givenId": "pf_m2_para_opposite_given",
+   "goalId": "pf_m2_para_opposite_goal",
+   "reasons": [
+    {
+     "id": "r_alt",
+     "textId": "pfr_alternate"
+    },
+    {
+     "id": "r_common",
+     "textId": "pfr_common"
+    },
+    {
+     "id": "r_asa",
+     "textId": "pfr_asa"
+    },
+    {
+     "id": "r_cside",
+     "textId": "pfr_corr_side"
+    },
+    {
+     "id": "r_sas",
+     "textId": "pfr_sas"
+    },
+    {
+     "id": "r_sss",
+     "textId": "pfr_sss"
+    }
+   ],
+   "steps": [
+    {
+     "id": "s1",
+     "claimId": "pf_m2_para_opposite_s1",
+     "reasonId": "r_alt"
+    },
+    {
+     "id": "s2",
+     "claimId": "pf_m2_para_opposite_s2",
+     "reasonId": "r_alt"
+    },
+    {
+     "id": "s3",
+     "claimId": "pf_m2_para_opposite_s3",
+     "reasonId": "r_common"
+    },
+    {
+     "id": "s4",
+     "claimId": "pf_m2_para_opposite_s4",
+     "reasonId": "r_asa",
+     "after": [
+      "s1",
+      "s2",
+      "s3"
+     ]
+    },
+    {
+     "id": "s5",
+     "claimId": "pf_m2_para_opposite_s5",
+     "reasonId": "r_cside",
+     "after": [
+      "s4"
+     ]
+    }
+   ],
+   "decoys": [
+    {
+     "id": "d1",
+     "claimId": "pf_m2_para_opposite_d1",
+     "tag": "assumed_conclusion"
+    },
+    {
+     "id": "d2",
+     "claimId": "pf_m2_para_opposite_d2",
+     "tag": "assumed_not_given"
+    }
+   ],
+   "figure": {
+    "viewBox": [
+     0,
+     0,
+     100,
+     80
+    ],
+    "points": {
+     "A": [
+      28,
+      12
+     ],
+     "B": [
+      10,
+      68
+     ],
+     "C": [
+      72,
+      68
+     ],
+     "D": [
+      90,
+      12
+     ]
+    },
+    "draw": [
+     {
+      "poly": [
+       "A",
+       "B",
+       "C",
+       "D"
+      ]
+     },
+     {
+      "seg": [
+       "A",
+       "C"
+      ]
+     }
+    ],
+    "marks": [],
+    "names": true,
+    "altId": "pffig_m2_para_opposite"
+   }
+  },
+  {
+   "id": "pf_m2_iso_bisect",
+   "unitId": "m2_tri_iso",
+   "titleId": "pf_m2_iso_bisect_title",
+   "givenId": "pf_m2_iso_bisect_given",
+   "goalId": "pf_m2_iso_bisect_goal",
+   "reasons": [
+    {
+     "id": "r_given",
+     "textId": "pfr_given"
+    },
+    {
+     "id": "r_common",
+     "textId": "pfr_common"
+    },
+    {
+     "id": "r_sas",
+     "textId": "pfr_sas"
+    },
+    {
+     "id": "r_cside",
+     "textId": "pfr_corr_side"
+    },
+    {
+     "id": "r_asa",
+     "textId": "pfr_asa"
+    }
+   ],
+   "steps": [
+    {
+     "id": "s1",
+     "claimId": "pf_m2_iso_bisect_s1",
+     "reasonId": "r_given"
+    },
+    {
+     "id": "s2",
+     "claimId": "pf_m2_iso_bisect_s2",
+     "reasonId": "r_given"
+    },
+    {
+     "id": "s3",
+     "claimId": "pf_m2_iso_bisect_s3",
+     "reasonId": "r_common"
+    },
+    {
+     "id": "s4",
+     "claimId": "pf_m2_iso_bisect_s4",
+     "reasonId": "r_sas",
+     "after": [
+      "s1",
+      "s2",
+      "s3"
+     ]
+    },
+    {
+     "id": "s5",
+     "claimId": "pf_m2_iso_bisect_s5",
+     "reasonId": "r_cside",
+     "after": [
+      "s4"
+     ]
+    }
+   ],
+   "decoys": [
+    {
+     "id": "d1",
+     "claimId": "pf_m2_iso_bisect_d1",
+     "tag": "assumed_conclusion"
+    }
+   ],
+   "figure": {
+    "viewBox": [
+     0,
+     0,
+     100,
+     80
+    ],
+    "points": {
+     "A": [
+      50,
+      8
+     ],
+     "B": [
+      14,
+      70
+     ],
+     "C": [
+      86,
+      70
+     ],
+     "D": [
+      50,
+      70
+     ]
+    },
+    "draw": [
+     {
+      "poly": [
+       "A",
+       "B",
+       "C"
+      ]
+     },
+     {
+      "seg": [
+       "A",
+       "D"
+      ]
+     }
+    ],
+    "marks": [
+     {
+      "tick": [
+       "A",
+       "B"
+      ]
+     },
+     {
+      "tick": [
+       "A",
+       "C"
+      ]
+     }
+    ],
+    "names": true,
+    "altId": "pffig_m2_iso_bisect"
+   }
   }
  ]
 }

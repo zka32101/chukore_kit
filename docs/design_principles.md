@@ -37,6 +37,7 @@ chukore_kit の設計方針を1か所にまとめる。詳細は各ドキュメ�
 
 ## 5. 関連
 
+- コンセプト整理: [`concept.md`](concept.md)
 - 機能一覧: [`features.md`](features.md)
 - 海外版との対応: [`global_alignment.md`](global_alignment.md)
 - アプリ共通部品との接続: [`integration_app_common_kit.md`](integration_app_common_kit.md)
