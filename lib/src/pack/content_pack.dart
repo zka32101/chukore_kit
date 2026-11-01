@@ -8,11 +8,13 @@ import '../lesson/math_lesson_checker.dart';
 import '../map/map_pack.dart';
 import '../math/construction.dart';
 import '../math/exploration.dart';
+import '../math/math_expr.dart';
 import '../math/math_template.dart';
 import '../models/models.dart';
 import '../prereq/prerequisites.dart';
 import '../scene/scene.dart';
 import '../scope/unit_tree.dart';
+import '../text/content_texts.dart';
 
 /// コンテンツパック（国 × 教科 × 学年の範囲の中身 1 式）の目録 `manifest.json`。仕様は docs/content_pack_spec.md。
 /// 内容（問題・レッスンなど）は国ごとのリポジトリ（`chukore_<国>_<教科>`）が持ち、この基盤は形式と検証だけを持つ。
@@ -55,7 +57,7 @@ class ContentPackManifest {
 
   static const fileKeys = {
     'units', 'prerequisites', 'questions', 'templates', 'lessons',
-    'explorations', 'constructions', 'experiences', 'charts', 'scenes', 'maps',
+    'explorations', 'constructions', 'experiences', 'charts', 'scenes', 'texts', 'maps',
   };
   static const _keys = {
     'version', 'id', 'country', 'locale', 'subject', 'grades', 'curriculum', 'contentVersion', 'attribution', 'files',
@@ -262,6 +264,7 @@ ContentPackReport validateContentPack(String manifestSource, String? Function(St
 
   // 問題
   final questionIds = <String>{}, tags = <String>{};
+  final questionExplanations = <String>{};
   final questionsFile = m.files['questions'] as String?;
   if (questionsFile != null) {
     final qj = json(questionsFile);
@@ -270,6 +273,7 @@ ContentPackReport validateContentPack(String manifestSource, String? Function(St
       addAll(questionsFile, bank.issues);
       addAll(questionsFile, validateQuestionBank(questions: bank.questions, tree: tree, mistakeLines: bank.mistakeLines));
       for (final q in bank.questions) {
+        questionExplanations.add(q.explanationId);
         questionIds.add(q.id);
         tags.addAll(q.misconceptionTags.values);
       }
@@ -280,9 +284,11 @@ ContentPackReport validateContentPack(String manifestSource, String? Function(St
   // 場面（現実の具体例）
   final scenesFile = m.files['scenes'] as String?;
   final sceneIds = <String>{};
+  SceneSet? sceneSet;
   if (scenesFile != null) {
     final set = tryParse(scenesFile, SceneSet.parse);
     if (set != null) {
+      sceneSet = set;
       if (tree != null) addAll(scenesFile, validateScenes(set, tree: tree));
       sceneIds.addAll(set.ids);
       counts['scenes'] = set.scenes.length;
@@ -349,9 +355,11 @@ ContentPackReport validateContentPack(String manifestSource, String? Function(St
 
   // レッスン（上の中身を参照として確かめる）
   final lessonsFile = m.files['lessons'] as String?;
+  LessonSet? lessonSet;
   if (lessonsFile != null) {
     final set = tryParse(lessonsFile, LessonSet.parse);
     if (set != null) {
+      lessonSet = set;
       if (tree != null) {
         addAll(
           lessonsFile,
@@ -376,6 +384,28 @@ ContentPackReport validateContentPack(String manifestSource, String? Function(St
           if (b is HookBlock && b.scene != null) usedScenes.add(b.scene!);
         }
       }
+    }
+  }
+
+  // 文言（教科書のような説明・問題文・解説）。texts を持つパックでは、使う文言がそろっているか確かめる
+  final textsFile = m.files['texts'] as String?;
+  if (textsFile != null) {
+    final texts = tryParse(textsFile, ContentTexts.parse);
+    if (texts != null) {
+      counts['texts'] = texts.texts.length;
+      if (texts.locale != m.locale) {
+        add(IssueSeverity.error, 'pack_texts_locale_mismatch', textsFile, '[$textsFile] locale ${texts.locale} が目録の ${m.locale} と違います');
+      }
+      addAll(textsFile, validateContentTexts(texts));
+      _checkTexts(
+        texts: texts,
+        file: textsFile,
+        templates: templates?.templates ?? const <MathTemplate>[],
+        lessons: lessonSet?.lessons ?? const <Lesson>[],
+        sceneSet: sceneSet,
+        questionExplanations: questionExplanations,
+        add: add,
+      );
     }
   }
 
@@ -425,4 +455,88 @@ ContentPackReport validateContentPack(String manifestSource, String? Function(St
   }
 
   return ContentPackReport(manifest: m, issues: issues, counts: counts);
+}
+
+
+/// 文言の検査。使う文言（場面の名前と説明・レッスンの題名と各ブロック・型の問題文 `prompt_<型ID>`・型と問題の解説・図の説明）が
+/// すべてあるか（`pack_text_missing`）、本文の `{…}` が型の値の名前だけを使っているか（`pack_text_placeholder_unknown`）、
+/// どこからも使われない文言がないか（警告 `pack_text_unused`）。
+void _checkTexts({
+  required ContentTexts texts,
+  required String file,
+  required List<MathTemplate> templates,
+  required List<Lesson> lessons,
+  required SceneSet? sceneSet,
+  required Set<String> questionExplanations,
+  required void Function(IssueSeverity, String, String, String) add,
+}) {
+  // 文言 ID → 差し込める名前（null は差し込みなし）
+  final required = <String, ({Set<String> keys, Set<String> vars, Set<String> lists})?>{};
+  void need(String id, [({Set<String> keys, Set<String> vars, Set<String> lists})? names]) {
+    if (!required.containsKey(id)) required[id] = names;
+  }
+
+  ({Set<String> keys, Set<String> vars, Set<String> lists}) namesOf(Iterable<MathTemplate> ts) => (
+    keys: {for (final t in ts) ...t.display.keys},
+    vars: {for (final t in ts) ...[...t.params.keys, ...t.derived.keys, ...t.stats.keys]},
+    lists: {for (final t in ts) ...t.lists.keys},
+  );
+
+  for (final s in sceneSet?.scenes ?? const <Scene>[]) {
+    need(s.titleId);
+    need(s.textId);
+  }
+  final all = namesOf(templates);
+  for (final l in lessons) {
+    for (final id in l.textIds) {
+      need(id, all);
+    }
+  }
+  for (final t in templates) {
+    final own = namesOf([t]);
+    need('prompt_${t.id}', own);
+    need(t.explanationId, own);
+    final f = t.figure;
+    if (f != null) need(f.altId);
+    for (final c in t.figures.values) {
+      final one = c.one;
+      if (one != null) need(one.altId);
+      for (final o in c.of) {
+        need(o.altId);
+      }
+    }
+  }
+  for (final id in questionExplanations) {
+    need(id);
+  }
+
+  for (final e in required.entries) {
+    final body = texts.texts[e.key];
+    if (body == null) {
+      add(IssueSeverity.error, 'pack_text_missing', e.key, '[$file] 文言 ${e.key} がありません');
+      continue;
+    }
+    if (!ContentTexts.balanced(body)) continue; // 別のエラー（text_unbalanced_braces）で報告済み
+    final names = e.value;
+    for (final ph in ContentTexts.placeholders(body)) {
+      if (!_placeholderOk(ph, names)) {
+        add(IssueSeverity.error, 'pack_text_placeholder_unknown', e.key, '[$file] {$ph} は差し込める名前ではありません');
+      }
+    }
+  }
+  for (final id in texts.texts.keys) {
+    if (!required.containsKey(id)) {
+      add(IssueSeverity.warning, 'pack_text_unused', id, '[$file] どこからも使われていない文言です');
+    }
+  }
+}
+
+/// 本文の `{…}` の中身 [ph] が、差し込める名前だけでできているか。型の表示の名前（`{point}`）、または式（`{c-b}`・`{+b}`・`{$r*r}`・`{~L}`）。
+bool _placeholderOk(String ph, ({Set<String> keys, Set<String> vars, Set<String> lists})? names) {
+  if (names == null) return false;
+  if (names.keys.contains(ph)) return true;
+  final body = ph.isNotEmpty && '+&\$~'.contains(ph[0]) ? ph.substring(1) : ph;
+  if (names.lists.contains(body)) return true;
+  final x = MathExpr.tryParse(body);
+  return x != null && x.variables.every(names.vars.contains);
 }

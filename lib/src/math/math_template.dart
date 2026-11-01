@@ -213,6 +213,14 @@ class Variant {
   final Map<String, String> display;
 }
 
+/// 文言 [text]（問題文・解説・レッスンの説明）の `{…}` に、変種 [v] の値を差し込む。
+/// `{p}`・`{q}` のように型の `display` の名前ならその表示の文字列、そうでなければ式（`{c-b}`・`{+b}`・`{$r*r}`・`{~L}`）として
+/// 型と同じ書き方で値を入れる（整数か既約分数。書けない値は [InexactValueException]、知らない名前は [FormatException]）。
+String renderVariantText(String text, Variant v) => text.replaceAllMapped(RegExp(r'\{([^{}]*)\}'), (m) {
+  final body = m.group(1)!;
+  return v.display[body] ?? renderTemplateString('{$body}', v.params, lists: v.lists);
+});
+
 /// 変種の ID `{templateId}~{seed}` を分ける。変種でなければ null。
 ({String templateId, int seed})? parseVariantId(String id) {
   final m = RegExp(r'^([A-Za-z0-9_]+)~(\d+)$').firstMatch(id);

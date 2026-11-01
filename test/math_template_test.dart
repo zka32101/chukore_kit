@@ -420,6 +420,45 @@ void dataTests() {
   };
   MathTemplate dt([Map<String, dynamic> over = const {}]) => MathTemplate.fromJson(dbase(over));
 
+  group('文言への差し込み renderVariantText', () {
+    MathTemplate rt() => MathTemplate.fromJson({
+          'id': 'rt',
+          'templateVersion': 1,
+          'unitId': 'u',
+          'type': 'expr',
+          'difficulty': 0.5,
+          'params': {
+            'a': {'int': [2, 9]},
+            'k': {'int': [2, 9]},
+            'b': {'int': [1, 9]},
+          },
+          'derived': {'c': 'a*k+b'},
+          'display': {'eq': '{a}x{+b}={c}', 'b': '{b}'},
+          'answer': '{k}',
+          'wrong': [
+            {'expr': '{k+1}', 'tag': 't1'},
+          ],
+          'explanationId': 'e',
+        });
+
+    test('display の名前はその表示、式は型と同じ書き方で値を入れる', () {
+      final v = rt().generate(3);
+      final a = v.params['a']!.toInt(), b = v.params['b']!.toInt(), c = v.params['c']!.toInt(), k = v.params['k']!.toInt();
+      expect(renderVariantText('{eq}', v), '${a}x+$b=$c');
+      expect(renderVariantText('{a}x{+b}={c}', v), '${a}x+$b=$c'); // 式でも同じ
+      expect(renderVariantText('x = {c-b} ÷ {a} = {k}', v), 'x = ${c - b} ÷ $a = $k');
+      expect(renderVariantText('{b}', v), '$b'); // display に b があればその表示
+      expect(renderVariantText('なし', v), 'なし');
+      expect(renderVariantText('', v), '');
+    });
+
+    test('符号つき {+b}。知らない名前は FormatException', () {
+      final v = rt().generate(5);
+      expect(renderVariantText('{+b}', v), '+${v.params['b']!.toInt()}');
+      expect(() => renderVariantText('{zz}', v), throwsFormatException);
+    });
+  });
+
   group('場面 scene・plausible（現実の具体例）', () {
     Map<String, dynamic> sc([Map<String, dynamic> over = const {}]) => {
           'id': 'sc',
