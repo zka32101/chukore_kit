@@ -4,6 +4,7 @@
 
 ## [未リリース]
 
+- 中1の数学の 81 の型すべての問題文と解説、図の説明（文言 222。目録は文言の範囲を絞らない）。全変種で値が入って読めること、式の問題の解説が答えを含むことをテスト
 - 目録の `textsCover`（文言がそろっていなければならない範囲: scenes・lessons・templates・figures・questions。省略は全部）。中1の数学の 4 つのレッスンの説明文 40（実例つき。例題の行ごとの説明は例題の値を差し込んで読めることをテスト）
 - 文言（教科書のような説明）: `ContentTexts`・`validateContentTexts`（`texts.json`。ID → 本文、`{…}` で変種の値を差し込む）、`renderVariantText`、`Lesson.textIds`。コンテンツパックの一括検証が、必要な文言（場面・レッスン・型の問題文 `prompt_<型ID>` と解説・図の説明・問題集の解説）がそろっているか、差し込める名前だけを使っているかを確認。中3の関数に実例つきの説明 25
 - 動く図 `figure.animation`（`FigureAnimationSpec`・`FigureAnimation`。時間 `t` が from〜to を動く間の frames コマ。静止画は最後のコマ。`Variant.animation`・`indexAt`・`figureAt`・`toSvgFrames`）。中3の落下距離の型に使用
