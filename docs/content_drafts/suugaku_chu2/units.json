@@ -1,0 +1,198 @@
+{
+ "version": 1,
+ "units": [
+  {
+   "id": "m2_expr",
+   "subject": "math",
+   "grade": 2,
+   "title": "式の計算",
+   "order": 1
+  },
+  {
+   "id": "m2_expr_poly",
+   "subject": "math",
+   "grade": 2,
+   "parentId": "m2_expr",
+   "title": "多項式の加法・減法",
+   "order": 1,
+   "estimatedQuestions": 20
+  },
+  {
+   "id": "m2_expr_mono",
+   "subject": "math",
+   "grade": 2,
+   "parentId": "m2_expr",
+   "title": "単項式の乗法・除法",
+   "order": 2,
+   "estimatedQuestions": 20
+  },
+  {
+   "id": "m2_expr_use",
+   "subject": "math",
+   "grade": 2,
+   "parentId": "m2_expr",
+   "title": "式の利用（文字による説明）",
+   "order": 3,
+   "estimatedQuestions": 15
+  },
+  {
+   "id": "m2_sim",
+   "subject": "math",
+   "grade": 2,
+   "title": "連立方程式",
+   "order": 2
+  },
+  {
+   "id": "m2_sim_solve",
+   "subject": "math",
+   "grade": 2,
+   "parentId": "m2_sim",
+   "title": "連立方程式の解き方（加減法・代入法）",
+   "order": 1,
+   "estimatedQuestions": 30
+  },
+  {
+   "id": "m2_sim_word",
+   "subject": "math",
+   "grade": 2,
+   "parentId": "m2_sim",
+   "title": "連立方程式の利用",
+   "order": 2,
+   "estimatedQuestions": 20
+  },
+  {
+   "id": "m2_lin",
+   "subject": "math",
+   "grade": 2,
+   "title": "一次関数",
+   "order": 3
+  },
+  {
+   "id": "m2_lin_graph",
+   "subject": "math",
+   "grade": 2,
+   "parentId": "m2_lin",
+   "title": "一次関数と変化の割合・グラフ",
+   "order": 1,
+   "estimatedQuestions": 30
+  },
+  {
+   "id": "m2_lin_eq",
+   "subject": "math",
+   "grade": 2,
+   "parentId": "m2_lin",
+   "title": "一次関数の式を求める",
+   "order": 2,
+   "estimatedQuestions": 20
+  },
+  {
+   "id": "m2_lin_sim",
+   "subject": "math",
+   "grade": 2,
+   "parentId": "m2_lin",
+   "title": "二元一次方程式とグラフ",
+   "order": 3,
+   "estimatedQuestions": 15
+  },
+  {
+   "id": "m2_lin_use",
+   "subject": "math",
+   "grade": 2,
+   "parentId": "m2_lin",
+   "title": "一次関数の利用",
+   "order": 4,
+   "estimatedQuestions": 20
+  },
+  {
+   "id": "m2_par",
+   "subject": "math",
+   "grade": 2,
+   "title": "平行と合同",
+   "order": 4
+  },
+  {
+   "id": "m2_par_angle",
+   "subject": "math",
+   "grade": 2,
+   "parentId": "m2_par",
+   "title": "平行線と角・多角形の角",
+   "order": 1,
+   "estimatedQuestions": 20
+  },
+  {
+   "id": "m2_par_cong",
+   "subject": "math",
+   "grade": 2,
+   "parentId": "m2_par",
+   "title": "合同な図形と証明",
+   "order": 2,
+   "estimatedQuestions": 20
+  },
+  {
+   "id": "m2_tri",
+   "subject": "math",
+   "grade": 2,
+   "title": "三角形と四角形",
+   "order": 5
+  },
+  {
+   "id": "m2_tri_iso",
+   "subject": "math",
+   "grade": 2,
+   "parentId": "m2_tri",
+   "title": "二等辺三角形・直角三角形",
+   "order": 1,
+   "estimatedQuestions": 15
+  },
+  {
+   "id": "m2_tri_para",
+   "subject": "math",
+   "grade": 2,
+   "parentId": "m2_tri",
+   "title": "平行四辺形",
+   "order": 2,
+   "estimatedQuestions": 20
+  },
+  {
+   "id": "m2_prob",
+   "subject": "math",
+   "grade": 2,
+   "title": "確率",
+   "order": 6
+  },
+  {
+   "id": "m2_prob_count",
+   "subject": "math",
+   "grade": 2,
+   "parentId": "m2_prob",
+   "title": "場合の数",
+   "order": 1,
+   "estimatedQuestions": 12
+  },
+  {
+   "id": "m2_prob_prob",
+   "subject": "math",
+   "grade": 2,
+   "parentId": "m2_prob",
+   "title": "確率",
+   "order": 2,
+   "estimatedQuestions": 20
+  },
+  {
+   "id": "m2_data",
+   "subject": "math",
+   "grade": 2,
+   "title": "データの比較",
+   "order": 7
+  },
+  {
+   "id": "m2_data_box",
+   "subject": "math",
+   "grade": 2,
+   "parentId": "m2_data",
+   "title": "四分位数と箱ひげ図",
+   "order": 1,
+   "estimatedQuestions": 15
+  }
+ ]
+}

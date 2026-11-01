@@ -1,0 +1,143 @@
+{
+ "version": 1,
+ "prerequisites": [
+  {
+   "unitId": "m2_expr_poly",
+   "external": [
+    {
+     "id": "chukore_jp_suugaku_chu1:m1_expr",
+     "title": "文字式の計算（同類項・かっこ）"
+    }
+   ]
+  },
+  {
+   "unitId": "m2_expr_mono",
+   "requires": [
+    "m2_expr_poly"
+   ],
+   "external": [
+    {
+     "id": "chukore_jp_suugaku_chu1:m1_num_mix",
+     "title": "累乗と四則の混じった計算"
+    }
+   ]
+  },
+  {
+   "unitId": "m2_expr_use",
+   "requires": [
+    "m2_expr_mono"
+   ]
+  },
+  {
+   "unitId": "m2_sim_solve",
+   "requires": [
+    "m2_expr_poly"
+   ],
+   "external": [
+    {
+     "id": "chukore_jp_suugaku_chu1:m1_linear",
+     "title": "一次方程式の解き方"
+    }
+   ]
+  },
+  {
+   "unitId": "m2_sim_word",
+   "requires": [
+    "m2_sim_solve"
+   ],
+   "external": [
+    {
+     "id": "chukore_jp_suugaku_chu1:m1_eq_word",
+     "title": "方程式の文章題"
+    }
+   ]
+  },
+  {
+   "unitId": "m2_lin_graph",
+   "external": [
+    {
+     "id": "chukore_jp_suugaku_chu1:m1_func_graph",
+     "title": "比例・反比例のグラフと利用"
+    },
+    {
+     "id": "chukore_jp_suugaku_chu1:m1_func_prop",
+     "title": "比例"
+    }
+   ]
+  },
+  {
+   "unitId": "m2_lin_eq",
+   "requires": [
+    "m2_lin_graph"
+   ]
+  },
+  {
+   "unitId": "m2_lin_sim",
+   "requires": [
+    "m2_lin_graph",
+    "m2_sim_solve"
+   ]
+  },
+  {
+   "unitId": "m2_lin_use",
+   "requires": [
+    "m2_lin_eq"
+   ]
+  },
+  {
+   "unitId": "m2_par_angle",
+   "external": [
+    {
+     "id": "chukore_jp_suugaku_chu1:m1_geo_basic",
+     "title": "直線・角・円と作図"
+    }
+   ]
+  },
+  {
+   "unitId": "m2_par_cong",
+   "requires": [
+    "m2_par_angle"
+   ]
+  },
+  {
+   "unitId": "m2_tri_iso",
+   "requires": [
+    "m2_par_cong"
+   ]
+  },
+  {
+   "unitId": "m2_tri_para",
+   "requires": [
+    "m2_tri_iso"
+   ]
+  },
+  {
+   "unitId": "m2_prob_count",
+   "external": [
+    {
+     "id": "chukore_jp_suugaku_chu1:m1_data_rep",
+     "title": "代表値と確率的な見方"
+    }
+   ]
+  },
+  {
+   "unitId": "m2_prob_prob",
+   "requires": [
+    "m2_prob_count"
+   ]
+  },
+  {
+   "unitId": "m2_data_box",
+   "external": [
+    {
+     "id": "chukore_jp_suugaku_chu1:m1_data_hist",
+     "title": "度数分布・ヒストグラム・相対度数"
+    },
+    {
+     "id": "chukore_jp_suugaku_chu1:m1_data_rep",
+     "title": "代表値と確率的な見方"
+    }
+   ]
+  }
+ ]
+}
