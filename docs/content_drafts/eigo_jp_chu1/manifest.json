@@ -1,0 +1,18 @@
+{
+ "version": 1,
+ "id": "chukore_jp_eigo_chu1",
+ "country": "JP",
+ "locale": "ja",
+ "subject": "en",
+ "grades": [
+  1
+ ],
+ "curriculum": "文部科学省 学習指導要領（中学校 外国語）",
+ "contentVersion": "0.1.0",
+ "attribution": [],
+ "files": {
+  "units": "units.json",
+  "prerequisites": "prerequisites.json",
+  "questions": "questions.json"
+ }
+}

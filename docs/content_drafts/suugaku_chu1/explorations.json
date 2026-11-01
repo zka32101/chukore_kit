@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "explorations": [
+    {
+      "id": "ex_prop_slope", "version": 1, "unitId": "m1_func_graph", "kind": "slider_graph",
+      "promptId": "ex_prop_slope_prompt",
+      "expr": "a*x",
+      "params": [{"name": "a", "min": -5, "max": 5, "step": 0.5, "initial": 1}],
+      "predict": {"promptId": "ex_prop_slope_predict", "choices": ["steeper", "shift_up", "same"], "answer": "steeper"},
+      "goal": {"expr": "3*x"},
+      "explanationId": "exp_ex_prop_slope"
+    },
+    {
+      "id": "ex_linear_ab", "version": 1, "unitId": "m1_func_graph", "kind": "slider_graph",
+      "promptId": "ex_linear_ab_prompt",
+      "expr": "a*x+b",
+      "params": [
+        {"name": "a", "min": -3, "max": 3, "step": 0.5, "initial": 0},
+        {"name": "b", "min": -5, "max": 5, "step": 1, "initial": 0}
+      ],
+      "goal": {"expr": "2*x+1"},
+      "explanationId": "exp_ex_linear_ab"
+    },
+    {
+      "id": "ex_inverse_a", "version": 1, "unitId": "m1_func_graph", "kind": "slider_graph",
+      "promptId": "ex_inverse_a_prompt",
+      "expr": "a/x",
+      "params": [{"name": "a", "min": 1, "max": 12, "step": 1, "initial": 6}],
+      "predict": {"promptId": "ex_inverse_a_predict", "choices": ["away_from_axes", "toward_axes"], "answer": "away_from_axes"},
+      "goal": {"expr": "9/x"},
+      "explanationId": "exp_ex_inverse_a"
+    }
+  ]
+}

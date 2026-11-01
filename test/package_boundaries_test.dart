@@ -35,6 +35,7 @@ void main() {
       'lib/src/question/answer.dart',
       'lib/src/bank/question_bank.dart',
       'lib/src/lesson/math_lesson_checker.dart', // 数学のレッスンの検査（教科ごとの検査は lesson 側に置き、math は lesson を知らない）
+      'lib/src/pack/content_pack.dart', // コンテンツパックの検証（型・体験型・作図・レッスンの検査をまとめる統合の層）
       'lib/chukore_kit.dart',
     };
     final found = <String>{};
