@@ -15,6 +15,7 @@
   "prerequisites": "prerequisites.json",
   "templates": "templates.json",
   "texts": "texts.json",
-  "proofs": "proofs.json"
+  "proofs": "proofs.json",
+  "lessons": "lessons.json"
  }
 }

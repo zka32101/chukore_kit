@@ -44,6 +44,24 @@ void main() {
     }
   });
 
+
+  test('中2のレッスン 4 つ: 文言がそろい 1 つ 300 文字以内。例題の行の説明は変種の値を差し込んで読める', () {
+    final lessons = LessonSet.parse(File('$dir/lessons.json').readAsStringSync()).lessons;
+    expect(lessons.length, 4);
+    for (final l in lessons) {
+      for (final id in l.textIds) {
+        expect(texts.texts, contains(id), reason: '${l.id} $id');
+        expect(texts.texts[id]!.runes.length, lessThanOrEqualTo(ContentTexts.longText), reason: id);
+      }
+    }
+    final l = lessons.firstWhere((l) => l.id == 'les_m2_expr_poly_01');
+    final ex = l.blocks.whereType<ExampleBlock>().single;
+    final t = set.templates.firstWhere((t) => t.id == ex.template);
+    final v = t.generate(ex.seed);
+    final a = v.params['a']!.toInt(), c = v.params['c']!.toInt();
+    expect(renderVariantText(texts.texts[ex.textIds.last]!, v), 'x の項と数の項をまとめて、${a - c}x${renderVariantText('{+b-d}', v)}。');
+  });
+
   test('代表例を実際の値で読む', () {
     final t = set.templates.firstWhere((t) => t.id == 'm2_par_angle_002');
     final v = t.generate(3);

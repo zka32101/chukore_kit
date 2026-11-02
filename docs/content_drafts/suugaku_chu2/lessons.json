@@ -1,0 +1,196 @@
+{
+ "version": 1,
+ "lessons": [
+  {
+   "id": "les_m2_expr_poly_01",
+   "version": 1,
+   "unitId": "m2_expr_poly",
+   "minutes": 5,
+   "titleId": "les_m2_expr_poly_01_title",
+   "pre": [
+    "m2_expr_poly_002~21"
+   ],
+   "blocks": [
+    {
+     "type": "hook",
+     "textId": "les_m2_expr_poly_01_hook"
+    },
+    {
+     "type": "text",
+     "textId": "les_m2_expr_poly_01_t1"
+    },
+    {
+     "type": "example",
+     "template": "m2_expr_poly_002",
+     "seed": 3,
+     "lines": [
+      "({a}x{+b})-({c}x{+d})",
+      "{a}x{+b}-{c}x-({d})",
+      "{a-c}x{+b-d}"
+     ],
+     "target": "{a-c}x{+b-d}",
+     "textIds": [
+      "les_m2_expr_poly_01_e1",
+      "les_m2_expr_poly_01_e2",
+      "les_m2_expr_poly_01_e3"
+     ],
+     "form": "expanded"
+    },
+    {
+     "type": "check",
+     "questions": [
+      "m2_expr_poly_002~13",
+      "m2_expr_poly_002~14"
+     ]
+    },
+    {
+     "type": "pitfall",
+     "tag": "forgot_sign_change",
+     "textId": "les_m2_expr_poly_01_p1"
+    },
+    {
+     "type": "summary",
+     "textIds": [
+      "les_m2_expr_poly_01_s1",
+      "les_m2_expr_poly_01_s2"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "les_m2_sim_solve_01",
+   "version": 1,
+   "unitId": "m2_sim_solve",
+   "minutes": 5,
+   "titleId": "les_m2_sim_solve_01_title",
+   "pre": [
+    "m2_sim_solve_001~21"
+   ],
+   "blocks": [
+    {
+     "type": "hook",
+     "textId": "les_m2_sim_solve_01_hook"
+    },
+    {
+     "type": "text",
+     "textId": "les_m2_sim_solve_01_t1"
+    },
+    {
+     "type": "check",
+     "questions": [
+      "m2_sim_solve_001~5",
+      "m2_sim_solve_002~6"
+     ]
+    },
+    {
+     "type": "pitfall",
+     "tag": "swapped_xy",
+     "textId": "les_m2_sim_solve_01_p1"
+    },
+    {
+     "type": "pitfall",
+     "tag": "used_one_equation",
+     "textId": "les_m2_sim_solve_01_p2"
+    },
+    {
+     "type": "summary",
+     "textIds": [
+      "les_m2_sim_solve_01_s1",
+      "les_m2_sim_solve_01_s2",
+      "les_m2_sim_solve_01_s3"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "les_m2_lin_graph_01",
+   "version": 1,
+   "unitId": "m2_lin_graph",
+   "minutes": 5,
+   "titleId": "les_m2_lin_graph_01_title",
+   "pre": [
+    "m2_lin_graph_001~21"
+   ],
+   "blocks": [
+    {
+     "type": "hook",
+     "textId": "les_m2_lin_graph_01_hook"
+    },
+    {
+     "type": "text",
+     "textId": "les_m2_lin_graph_01_t1"
+    },
+    {
+     "type": "check",
+     "questions": [
+      "m2_lin_graph_001~5",
+      "m2_lin_graph_001~6"
+     ]
+    },
+    {
+     "type": "pitfall",
+     "tag": "change_not_rate",
+     "textId": "les_m2_lin_graph_01_p1"
+    },
+    {
+     "type": "pitfall",
+     "tag": "slope_intercept_mixup",
+     "textId": "les_m2_lin_graph_01_p2"
+    },
+    {
+     "type": "summary",
+     "textIds": [
+      "les_m2_lin_graph_01_s1",
+      "les_m2_lin_graph_01_s2",
+      "les_m2_lin_graph_01_s3"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "les_m2_tri_para_01",
+   "version": 1,
+   "unitId": "m2_tri_para",
+   "minutes": 5,
+   "titleId": "les_m2_tri_para_01_title",
+   "pre": [
+    "m2_tri_para_001~21"
+   ],
+   "blocks": [
+    {
+     "type": "hook",
+     "textId": "les_m2_tri_para_01_hook"
+    },
+    {
+     "type": "text",
+     "textId": "les_m2_tri_para_01_t1"
+    },
+    {
+     "type": "check",
+     "questions": [
+      "m2_tri_para_001~5",
+      "m2_tri_para_002~6"
+     ]
+    },
+    {
+     "type": "pitfall",
+     "tag": "adjacent_angle",
+     "textId": "les_m2_tri_para_01_p1"
+    },
+    {
+     "type": "pitfall",
+     "tag": "opposite_angle",
+     "textId": "les_m2_tri_para_01_p2"
+    },
+    {
+     "type": "summary",
+     "textIds": [
+      "les_m2_tri_para_01_s1",
+      "les_m2_tri_para_01_s2",
+      "les_m2_tri_para_01_s3"
+     ]
+    }
+   ]
+  }
+ ]
+}

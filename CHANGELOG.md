@@ -7,6 +7,8 @@
 - 中2の数学: 型 19 と問題文・解説の草案（`docs/content_drafts/suugaku_chu2/`）
 - 証明の問題（`ProofSpec`・`gradeProofOrder`・`gradeProofReasons`・`validateProofs`）と、目録の `proofs`。中2に合同の証明 2 つ、中3に相似の証明 2 つ
 - 証明に図（`ProofSpec.figure`）。描けない図は `pack_proof_figure_invalid`。中2・中3の草案の証明 4 つに図を付けた
+- 中2の数学: レッスンの説明文 4 つ（多項式のひき算・連立方程式・変化の割合・平行四辺形）
+- 共通基盤の置き場の決定を `docs/design_principles.md` に記録
 - コンセプト整理（`docs/concept.md`）
 - 中2の数学: 型を 13 追加して 32 に（合同・二等辺三角形・平行四辺形・二元一次方程式とグラフ・一次関数の利用）と、平行四辺形・二等辺三角形の証明 2 つ
 - 中1の数学: 立体の切断の型 8 つ、検算・符号の型 2 つ（型は 91 に）。`docs/concept.md` に数学へ取り込んだ案
