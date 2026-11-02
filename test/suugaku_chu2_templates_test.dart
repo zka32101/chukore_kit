@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:chukore_kit/chukore_kit.dart';
@@ -10,8 +11,8 @@ void main() {
   final texts = ContentTexts.parse(File('$dir/texts.json').readAsStringSync());
   final set = TemplateSet.parse(File('$dir/templates.json').readAsStringSync());
 
-  test('32 の型。一括検証にエラーなし', () {
-    expect(set.templates.length, 32);
+  test('36 の型。一括検証にエラーなし', () {
+    expect(set.templates.length, 36);
     final r = validateContentPack(
       File('$dir/manifest.json').readAsStringSync(),
       (p) => File('$dir/$p').readAsStringSync(),
@@ -60,6 +61,20 @@ void main() {
     final v = t.generate(ex.seed);
     final a = v.params['a']!.toInt(), c = v.params['c']!.toInt();
     expect(renderVariantText(texts.texts[ex.textIds.last]!, v), 'x の項と数の項をまとめて、${a - c}x${renderVariantText('{+b-d}', v)}。');
+  });
+
+
+  test('図つきの型: 全変種で図が描け（SVG）、読み取りの答えは図の点と一致する。箱ひげ図の見本は四分位範囲を計算できる', () {
+    for (final id in ['m2_lin_graph_002', 'm2_lin_graph_003', 'm2_lin_sim_003', 'm2_prob_count_003']) {
+      final t = set.templates.firstWhere((t) => t.id == id);
+      expect(t.figure, isNotNull, reason: id);
+      for (var s = 1; s <= 30; s++) {
+        final v = t.generate(s);
+        expect(v.figure!.toSvg(), startsWith('<svg'), reason: '$id~$s');
+      }
+    }
+    final box = ChartSpec.fromJson((jsonDecode(File('$dir/charts.json').readAsStringSync()) as Map)['charts']['chart_box_class_ab'] as Map<String, dynamic>);
+    expect([box.iqrOf(0), box.iqrOf(1)], [24, 12]);
   });
 
   test('代表例を実際の値で読む', () {
