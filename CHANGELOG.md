@@ -7,6 +7,7 @@
 - 中2の数学: 型 19 と問題文・解説の草案（`docs/content_drafts/suugaku_chu2/`）
 - 証明の問題（`ProofSpec`・`gradeProofOrder`・`gradeProofReasons`・`validateProofs`）と、目録の `proofs`。中2に合同の証明 2 つ、中3に相似の証明 2 つ
 - 証明に図（`ProofSpec.figure`）。描けない図は `pack_proof_figure_invalid`。中2・中3の草案の証明 4 つに図を付けた
+- オフライン対応の設計 `docs/offline_design.md`（勉強の中心は通信なしで動く。基盤はネットワーク用ライブラリを持たないことをテストで固定。国の最初の教科（数学）を同梱し、反応のよい国に教科を広げる）
 - 対象国の順番の評価 `docs/country_priority.md`（教育格差を優先: 教育の機会の少なさ（塾が少ない等）を新設して 20%、物価は価格の付け方に反映。15 か国を暫定評価。第 1 波の候補はブラジル・インドネシア）
 - 相棒は 10 段階に進化（完全クリアが最後。単元のマスター状況 6 割＋頑張り 4 割の進化ポイント `evolutionScore`/`stageFor`。序盤はすぐ進む）
 - 絵のトーン B の見本づくりと確認の手順 `docs/art_tone_sample_plan.md`
