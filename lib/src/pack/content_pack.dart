@@ -565,6 +565,11 @@ void _checkTexts({
   for (final t in templates) {
     final own = namesOf([t]);
     need('prompt_${t.id}', 'templates', own);
+    if (t.choiceLabels) {
+      for (final c in t.choices) {
+        need(choiceLabelTextId(t.id, c), 'templates', own);
+      }
+    }
     need(t.explanationId, 'templates', own);
     final f = t.figure;
     if (f != null) need(f.altId, 'figures');

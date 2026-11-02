@@ -34,6 +34,8 @@ void main() {
       'm1_space_solid_face_001', 'm1_space_solid_edge_001', 'm1_space_solid_vertex_001', 'm1_space_solid_edge_002',
       'm1_space_solid_face_002', 'm1_space_solid_edge_003', 'm1_space_solid_vertex_002',
       'm1_space_solid_face_003', 'm1_space_solid_edge_004', 'm1_space_solid_vertex_003',
+      // 選択肢が ID の型（choiceLabels）: 答えの ID は固定で、文言は値を差し込んで変わる
+      'm1_eq_prop_001', 'm1_alg_rel_001',
       // 立体の切断: 切り口の形は事実を問うので答えは 1 通り。角を切り落とす数え上げは k=1〜8
       'm1_space_cut_001', 'm1_space_cut_002', 'm1_space_cut_003', 'm1_space_cut_004', 'm1_space_cut_005',
       'm1_space_cut_face_001', 'm1_space_cut_vertex_001', 'm1_space_cut_edge_001',

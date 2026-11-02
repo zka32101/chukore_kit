@@ -250,6 +250,7 @@ class MathTemplate {
     required this.display,
     required this.answer,
     required this.choices,
+    this.choiceLabels = false,
     required this.wrong,
     required this.explanationId,
   });
@@ -282,6 +283,10 @@ class MathTemplate {
   final Map<String, String> display;
   final String answer;
   final List<String> choices;
+
+  /// 選択肢の文言が国・言語ごとに違う型。`choices` は文言でなく**ID**（英数字と `_`）で、画面に出す文言は文言（`texts.json`）の
+  /// `choice_<型ID>_<選択肢ID>`（`{…}` で型の値を差し込める）。国ごとに差し替えられる（例: 通貨、図形の名前）。
+  final bool choiceLabels;
   final List<({String expr, String tag})> wrong;
   final String explanationId;
 
@@ -301,7 +306,7 @@ class MathTemplate {
     'figures',
     'constraints', //
     'scene', 'plausible',
-    'display', 'answer', 'choices', 'wrong', 'explanationId',
+    'display', 'answer', 'choices', 'choiceLabels', 'wrong', 'explanationId',
   };
 
   /// 読めなければ [FormatException]（未知のキー・型違い・範囲外を含む）。
@@ -399,6 +404,15 @@ class MathTemplate {
         figures[e.key as String] = FigureChoice.fromJson(id, e.value, known);
       }
     }
+    final choiceLabels = j['choiceLabels'] == true;
+    if (j['choiceLabels'] != null && j['choiceLabels'] is! bool) throw FormatException('$id: choiceLabels は true か false');
+    if (choiceLabels) {
+      if (type != 'choice') throw FormatException('$id: choiceLabels は choice の型だけ');
+      if (rawFigures != null) throw FormatException('$id: choiceLabels と figures は同時に使えません（図の選択肢は図で見せる）');
+      if (choices.any((c) => !RegExp(r'^[A-Za-z0-9_]+$').hasMatch(c))) {
+        throw FormatException('$id: choiceLabels の choices は ID（英数字と _）');
+      }
+    }
     if (type == 'choice' && choices.length < 2) throw FormatException('$id: choice の型は choices が 2 つ以上');
     if (type == 'expr' && choices.isNotEmpty) throw FormatException('$id: expr の型に choices は使えません');
     final wrong = <({String expr, String tag})>[];
@@ -434,6 +448,7 @@ class MathTemplate {
       display: strMap('display', required: true),
       answer: str('answer'),
       choices: choices,
+      choiceLabels: choiceLabels,
       wrong: wrong,
       explanationId: str('explanationId'),
     );
@@ -624,12 +639,25 @@ class TemplateSet {
 
 /// 型を検証する: 各型を種 1..[count] で展開し、展開した問題集に [validateQuestionBank] をかける。
 /// 型ごとのコード: `template_unsatisfiable`（制約が厳しすぎる、表示がすでに目標の形、など）・`template_expression_invalid`（エラー）、
+/// `template_choice_locale_text`（警告: 選択肢に国・言語の文字が直接ある。`choiceLabels` にして文言へ）、
 /// `template_answer_dup`（警告: 変種の答え［選択肢が図の型は選択肢の並びと図］が半分以上かぶる＝範囲が狭い）、
 /// `template_net_mismatch`（エラー: 展開図の選択肢で、正解だけが立方体の展開図になっていない）。
+/// 選択肢の文言の文言 ID（`choiceLabels` の型）。
+String choiceLabelTextId(String templateId, String choiceId) => 'choice_${templateId}_$choiceId';
+
+/// 国・言語に依存する文字（漢字・かな・ハングル・アラビア文字・キリル文字・デーヴァナーガリー・タイ文字など）。
+final _localeScript = RegExp(
+  r'[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}\p{Script=Arabic}\p{Script=Cyrillic}\p{Script=Devanagari}\p{Script=Thai}\p{Script=Hebrew}\p{Script=Bengali}]',
+  unicode: true,
+);
+
 List<ValidationIssue> validateTemplates(TemplateSet set, {required UnitTree tree, int count = 40}) {
   final issues = <ValidationIssue>[];
   final questions = <Question>[];
   for (final t in set.templates) {
+    if (!t.choiceLabels && t.choices.any(_localeScript.hasMatch)) {
+      issues.add(ValidationIssue(IssueSeverity.warning, 'template_choice_locale_text', t.id, '選択肢に国・言語の文字が直接書かれています（choiceLabels にして文言に出すと、国ごとに差し替えられます）'));
+    }
     final mine = <Question>[];
     final looks = <String>[]; // 変種の見かけ（答え。選択肢が図の型は、選択肢の並びと図）
     try {
