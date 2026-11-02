@@ -26,18 +26,33 @@
 **競合**: 今回の検索では比較資料が見つからなかった。候補として私が知っている名前（Khan Academy ポルトガル語版、Descomplica、Me Salva!、Stoodi、Matific）は**未検証**。ストアの画面で、評価件数・価格・無料か・BNCC への対応を確認する。
 **決済**: Pix が非現金決済の約半分（古い資料）。Google Play が Pix を個別購入で受け付けた報道がある。定期購読での Pix は日付が不明（公式の開始日なし）。→ 低価格の定期購読で Pix が使えるかを確認する。
 
+## 3.5 ストアの検索結果（スナップショット。運営者が確認できないため、公開ページから取得）
+> 2026-11-02 に Google Play の検索ページから取得。**検索の並び＝人気ではない**（ダウンロード数は取れなかった）。取得した場所・端末の設定で並びは変わる。参考程度で、運営者によるストア画面の確認に置き換える。
+- **ブラジル**（検索語「matemática ensino fundamental」「matemática 6º ao 9º ano BNCC」）: 上位に出たのは、問題集（Questões - Ensino Fundamental、Testes de matemáticando）、計算ゲーム（Jogos de matemática & Frações、Matemática: Somar, Subtrair、Toon Math）、Photomath（Google）、Matific、小さな開発者のアプリ。評価は 4.4〜4.8 が多い。BNCC 検索で出たのは、教員向けの BNCC の資料・計画アプリで、**生徒向けの BNCC 準拠の練習アプリは目立たなかった**。
+- **インドネシア**（検索語「matematika SMP」）: 上位は、問題集（Latihan Soal SMP、Soal Ujian SMP + TKA、Soal Matematika Kelas 7／8／9 SMP）、ゲーム（AnyMath）、教科書アプリ（Buku Guru Matematika SMP）など、小さな開発者のアプリ。評価は 3.8〜4.9 とばらつく。**Ruangguru・Zenius などの大手は、この検索の上位には出なかった**（大手は別の入り口で使われている可能性）。
+- 読み取り（仮説）: 両国とも、**問題集形式・ゲーム形式の小さなアプリが並び、カリキュラムの単元に沿って「できた」を積み上げ、解説・計画・振り返りまでそろう無料中心のアプリは、検索上位では目立たない**。差別化の余地がある可能性。ただし、ダウンロード数・収益・大手の動画サービスの強さは未確認。
+
+## 3.6 予算がない間の進め方（運営者の決定 2026-11-02: 今は予算なし）
+- **有料の調査サービスは使わない**。無料の公開情報で進める（国連 WPP、世界銀行、GSMA の公開データ、ストアの公開ページ、各国政府の公式文書）。ダウンロード数・収益は**わからないまま**、仮説として扱う。
+- **現地の確認は無償の窓口から**: 大学の教育学部の学生・教員、教員の SNS コミュニティ、教育系 NGO、オープンソースや翻訳のボランティア。謝礼が出せないので、**小さな依頼**（文言 30 個の確認など）にして、成果物（無料で使える教材）の公開を共通の目的にする。
+- **文言は AI で下書きして、人が確認する**: 翻訳の初稿は機械で作る。ネイティブ確認は、**公開前の必須ではなく、最初の公開の条件を絞って**（数式・図は言語に依存しないので、文言が少ない単元から）。収益が出たら有償の確認に置き換える。
+- **法務は専門家なしでは進めない**: 海外では、法務確認が終わるまで公開しない方針（`design_principles.md` §2-9）のまま。予算がない間は**日本で数学以外を先に進め、日本での検証を重ねる**。第 1 波の国の公開は、法務確認と最初の協力者が決まってから。
+- **実地テストは費用をかけない形で**: 無料の限定公開（クローズドテスト、テスター募集）で、少人数に使ってもらい、**最初の 1 問に届く割合・単元が「できた」になる割合**だけを見る（個人情報は集めない）。
+- この間にできること（費用なし）: 対応表の第 1 版づくり（公式文書から）、パックの国別化の整備、日本の他教科の単元ツリーと型づくり、世界観・キャラの設計。
+
 ## 4. 学年の形（コードに関わること）
 - この基盤は「中学 3 年」を前提にした部分がある（`EvolutionRule` は学年を 1〜3 とみなして段階を決める。`growth.dart`）。ブラジルのように 4 年のときは、`EvolutionRule` を見直す（相棒の進化は学年に依らない設計なので影響は限定的）。単元の `grade` は整数で、目録の `grades` に `[6,7,8,9]` のように書けるが、**画面や計画で 1〜3 を前提にした箇所がないか**を、ブラジルのパックを作る前に確かめる。
 - インドネシアは SMP 7〜9。日本と同じ 3 年なので影響は少ない（学年の数え方を 7〜9 にするか 1〜3 にするかは決める）。
 
 ## 5. 次にやること（調査）
 1. 公式文書の入手: インドネシアの SK BSKAP 032/2024 の学年別の目標、ブラジルの BNCC の学年別の objetos de conhecimento。→ 日本の草案との対応表の第 1 版。
-2. ストアの確認（運営者）: 両国のストアで数学の上位アプリ（評価件数・価格・無料か・ダウンロード数）と、教育カテゴリの収益。
+2. ストアの確認: 運営者による確認は難しい（2026-11-02）。公開ページから取れた範囲は §3.5。ダウンロード数・収益は、**予算がない間は取らない**（§3.6）。収益が出てから、有料の調査サービスで補う。
 3. 法務確認: PP Tunas／ECA Digital／LGPD。学習アプリの分類、保護者の同意、年齢確認、データの保持、広告なしの扱い、子どもの端末内だけで完結する設計の扱い。
 4. 決済: Google Play の定期購読で使える決済手段（Pix、電子ウォレット、キャリア決済）と、価格の現地化（`country_priority.md` §5.5）。
-5. 現地の協力者: 教育者（カリキュラムの確認）、ネイティブ（文言）、可能なら NGO・学校の連携先。
+5. 現地の協力者: 教育者（カリキュラムの確認）、ネイティブ（文言）、可能なら NGO・学校の連携先。**既存のつながりがない場合**（運営者 2026-11-02）: 公開の窓口から探す（大学の教育学部、教員団体、教育系の NGO、フリーランスの翻訳者・教師のマーケットプレイス）。まず、文言と単元の対応表の確認だけを少額で依頼する。
 
 ## 出どころ
+- Google Play の検索ページ（公開ページ。2026-11-02 取得）: [pt-BR の検索](https://play.google.com/store/search?q=matem%C3%A1tica%20ensino%20fundamental&c=apps&hl=pt_BR&gl=BR)、[id の検索](https://play.google.com/store/search?q=matematika%20SMP&c=apps&hl=id&gl=ID)。
 - BNCC の数学の 5 つの区分: [UFSJ の資料](https://ufsj.edu.br/portal2-repositorio/File/comat/Matematica%20dos%20anos%20finais%20do%20Ens_%20Fundamental(2).pdf)、[IFPE の論文](https://repositorio.ifpe.edu.br/xmlui/handle/123456789/678) ほか（公式の MEC 文書は未確認）。
 - ECA Digital: [Demarest](https://www.demarest.com.br/eca-digital-entrada-em-vigor-em-17-de-marco-de-2026/)、[Poder360](https://www.poder360.com.br/poder-governo/eca-digital-entra-em-vigor-nesta-3a-feira-entenda-o-que-muda/)、[TJRJ](https://www.tjrj.jus.br/web/portal-conhecimento/noticias/noticia/-/visualizar-conteudo/5736540/405705378)。
 - Kurikulum Merdeka 数学 Fase D: [kurikulummerdeka.com](https://kurikulummerdeka.com/capaian-pembelajaran-cp-matematika-smp-kurikulum-merdeka-2024/)（SK BSKAP 032/2024 を参照。公式は未確認）。
