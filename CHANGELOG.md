@@ -7,7 +7,7 @@
 - 中2の数学: 型 19 と問題文・解説の草案（`docs/content_drafts/suugaku_chu2/`）
 - 証明の問題（`ProofSpec`・`gradeProofOrder`・`gradeProofReasons`・`validateProofs`）と、目録の `proofs`。中2に合同の証明 2 つ、中3に相似の証明 2 つ
 - 証明に図（`ProofSpec.figure`）。描けない図は `pack_proof_figure_invalid`。中2・中3の草案の証明 4 つに図を付けた
-- 対象国の順番の評価の枠組みと暫定の見立て `docs/country_priority.md`（市場・購買力・課金しやすさ・競合・出しやすさ。第 1 波の候補はブラジル・メキシコ）
+- 対象国の順番の評価の枠組み `docs/country_priority.md`（教育格差を減らす方針: 学習ニーズと市場を重く、支払いを軽く。第 1 波の候補はインドネシア・ブラジル。15 か国を暫定評価）
 - 相棒は 10 段階に進化（完全クリアが最後。単元のマスター状況 6 割＋頑張り 4 割の進化ポイント `evolutionScore`/`stageFor`。序盤はすぐ進む）
 - 絵のトーン B の見本づくりと確認の手順 `docs/art_tone_sample_plan.md`
 - 世界観の方針 `docs/world_design.md`（基地から旅に出て、分野をマスターして仲間の部屋に入る。部屋は学年ごと。絵のトーンは B「ゆるかわ・落ち着いた」に決定）
