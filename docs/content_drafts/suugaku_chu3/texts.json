@@ -149,6 +149,26 @@
   "les_m3_pyth_thm_01_p2": "x² = 25 のとき、x は 25 ではなく、2 乗して 25 になる正の数 5 です。",
   "les_m3_pyth_thm_01_s1": "直角三角形では a² + b² = c²（c は斜辺）。",
   "les_m3_pyth_thm_01_s2": "斜辺が未知なら足す、他の辺が未知ならひく。",
-  "les_m3_pyth_thm_01_s3": "最後に平方根をとって、長さ（正の数）を答える。"
+  "les_m3_pyth_thm_01_s3": "最後に平方根をとって、長さ（正の数）を答える。",
+  "pf_m3_sim_rt_title": "直角三角形の高さでできる相似",
+  "pf_m3_sim_rt_given": "∠A = 90° の △ABC で、A から辺 BC に垂線 AD を下ろす。",
+  "pf_m3_sim_rt_goal": "AB² = BD × BC",
+  "pf_m3_sim_rt_s1": "∠BAC = ∠BDA = 90°",
+  "pf_m3_sim_rt_s2": "∠ABC = ∠DBA",
+  "pf_m3_sim_rt_s3": "△ABC ∽ △DBA",
+  "pf_m3_sim_rt_s4": "AB : DB = BC : BA",
+  "pf_m3_sim_rt_d1": "AB = AC",
+  "pffig_m3_sim_rt": "∠A が直角の三角形 ABC。A から辺 BC に垂線 AD を下ろした図。",
+  "pf_m3_circ_chords_title": "円の 2 つの弦でできる相似",
+  "pf_m3_circ_chords_given": "円の 2 つの弦 AC、BD が円の内部の点 P で交わっている。",
+  "pf_m3_circ_chords_goal": "PA : PD = PC : PB",
+  "pf_m3_circ_chords_s1": "∠CAP = ∠BDP",
+  "pf_m3_circ_chords_s2": "∠APC = ∠DPB",
+  "pf_m3_circ_chords_s3": "△PAC ∽ △PDB",
+  "pf_m3_circ_chords_s4": "PA : PD = PC : PB",
+  "pf_m3_circ_chords_d1": "AB // CD",
+  "pf_m3_circ_chords_d2": "PA = PD",
+  "pffig_m3_circ_chords": "円の中で、2 つの弦 AC、BD が点 P で交わっている図。",
+  "pfr3_inscribed": "同じ弧に対する円周角は等しい"
  }
 }

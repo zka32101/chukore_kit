@@ -229,7 +229,7 @@ void main() {
       isEmpty,
       reason: r.issues.join('\n'),
     );
-    expect(r.counts['proofs'], dir.endsWith('chu2') ? 4 : 2);
+    expect(r.counts['proofs'], dir.endsWith('chu2') ? 6 : 4);
     final set = ProofSet.parse(File('$dir/proofs.json').readAsStringSync());
     for (final p in set.proofs) {
       expect(
