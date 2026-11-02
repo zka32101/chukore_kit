@@ -34,6 +34,11 @@ void main() {
       'm1_space_solid_face_001', 'm1_space_solid_edge_001', 'm1_space_solid_vertex_001', 'm1_space_solid_edge_002',
       'm1_space_solid_face_002', 'm1_space_solid_edge_003', 'm1_space_solid_vertex_002',
       'm1_space_solid_face_003', 'm1_space_solid_edge_004', 'm1_space_solid_vertex_003',
+      // 立体の切断: 切り口の形は事実を問うので答えは 1 通り。角を切り落とす数え上げは k=1〜8
+      'm1_space_cut_001', 'm1_space_cut_002', 'm1_space_cut_003', 'm1_space_cut_004', 'm1_space_cut_005',
+      'm1_space_cut_face_001', 'm1_space_cut_vertex_001', 'm1_space_cut_edge_001',
+      // 符号を先に決める型は答えが 1 か -1 の 2 通り
+      'm1_num_mul_sign_001',
     };
     final issues = validateTemplates(
       set,
