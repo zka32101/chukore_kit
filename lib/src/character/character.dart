@@ -75,6 +75,9 @@ class FormSpec {
   final int scale;
 }
 
+/// 分野のキャラ 1 匹につき、スタンプはちょうどこの枚数。
+const stickersPerField = 8;
+
 /// スタンプ（分野をマスターしたごほうびの、チャット風のキャラ画像）の 1 枚。
 /// 画像には**名前・点数・日付など、その子の情報を入れない**（決まったひとことだけ）。
 class StickerSpec {
@@ -132,7 +135,7 @@ class CharacterSpec {
   /// 分野のキャラの絵（成長しないので 1 枚。分野をマスターして**ゲット**したときの姿）。
   final String? artId;
 
-  /// 分野をマスターしたらもらえるスタンプ（分野のキャラだけ。8・16・24 枚のどれか）。
+  /// 分野をマスターしたらもらえるスタンプ（分野のキャラだけ。ちょうど 8 枚）。
   final List<StickerSpec> stickers;
 
   bool availableIn({String? region, String? subject}) =>
@@ -496,7 +499,7 @@ class CompanionProgress {
 /// キャラとバッジの検証。
 /// エラー: `character_stage_invalid`（段階は 3〜6 個、最初は 0 点、点は増える順）・`character_region_invalid`（国コードは大文字 2 文字）・
 /// `character_regional_no_region`（地域キャラは国を指定する）・`character_metric_unknown`・`character_threshold_invalid`（1 以上）・
-/// `character_field_invalid`（分野のキャラは artId が要り、段階・姿は付けない）・`character_sticker_invalid`（スタンプは分野のキャラだけ・8/16/24 枚）・`character_field_missing`（分野のキャラの分野がない・分野以外に fieldId）・`character_field_duplicate`（同じ分野に 2 つ）・`character_form_invalid`（姿の分岐は 2〜4 個・scale は 1 以上）・`character_no_starter`（教科ごとに、はじめの共通キャラが無い）。
+/// `character_field_invalid`（分野のキャラは artId が要り、段階・姿は付けない）・`character_sticker_invalid`（スタンプは分野のキャラだけ・ちょうど 8 枚）・`character_field_missing`（分野のキャラの分野がない・分野以外に fieldId）・`character_field_duplicate`（同じ分野に 2 つ）・`character_form_invalid`（姿の分岐は 2〜4 個・scale は 1 以上）・`character_no_starter`（教科ごとに、はじめの共通キャラが無い）。
 List<ValidationIssue> validateCharacters(
   CharacterSet set, {
   Set<String>? fieldIds,
@@ -557,11 +560,11 @@ List<ValidationIssue> validateCharacters(
       if (c.kind != CharacterKind.field) {
         err('character_sticker_invalid', c.id, 'スタンプは分野のキャラだけに付けます');
       }
-      if (![8, 16, 24].contains(c.stickers.length)) {
+      if (c.stickers.length != stickersPerField) {
         err(
           'character_sticker_invalid',
           c.id,
-          'スタンプは 8・16・24 枚のどれか（${c.stickers.length}）',
+          'スタンプは $stickersPerField 枚（${c.stickers.length}）',
         );
       }
       final sids = <String>{};

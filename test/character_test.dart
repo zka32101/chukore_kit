@@ -490,7 +490,8 @@ void artTests() {
       expect(stickersEarned(set, tree, eq, subject: 'en'), isEmpty);
       expect(stickersEarned(set, tree, {}), isEmpty);
       for (final c in set.fieldCharacters) {
-        expect(c.stickers.length, 8);
+        expect(c.stickers.length, stickersPerField);
+        expect(stickersPerField, 8);
       }
       // スタンプの一言は決まった言葉だけ（名前・点数・日付を入れる差し込み {…} を持たない）
       final texts = ContentTexts.parse(
