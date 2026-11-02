@@ -7,6 +7,7 @@
 - 中2の数学: 型 19 と問題文・解説の草案（`docs/content_drafts/suugaku_chu2/`）
 - 証明の問題（`ProofSpec`・`gradeProofOrder`・`gradeProofReasons`・`validateProofs`）と、目録の `proofs`。中2に合同の証明 2 つ、中3に相似の証明 2 つ
 - 証明に図（`ProofSpec.figure`）。描けない図は `pack_proof_figure_invalid`。中2・中3の草案の証明 4 つに図を付けた
+- 教科ごとの分野分けの案（`docs/field_division.md`。数学 22・社会 13・英語 16・理科 15・国語 15 の計 81 分野）
 - キャラとバッジの基盤（`CharacterSet`・進化・姿の分岐・分野キャラ（マスターでゲット・図鑑・スタンプ）・画像のダウンロード `ensureArt`・バッジ・`validateCharacters`）と設計 `docs/character_design.md`。相棒は教科ごとに 1 匹を育てる（集めない）。各国の地域キャラ。進化は増えるだけ・運で決まる入手なし
 - 中2の数学: 場面 4 つ（買い物・水そう・タクシー・さいころ）を型とレッスンにつなげ、水そうは動く図（型は 37）
 - 検算ツール（`test/answer_oracle_test.dart`）: 中1〜中3の 147 型を、問題文の数字から解き直して型の答えと照合（食い違いなし）。壊した型を見つけることも確認
