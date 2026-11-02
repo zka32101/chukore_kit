@@ -293,7 +293,12 @@ void main() {
           bad.add('${t.id}~$s 問題文の数が足りません: $prompt');
           break;
         }
-        final input = want is num ? ex(want) : want as String;
+        var input = want is num ? ex(want) : want as String;
+        if (t.choiceLabels) {
+          // 選択肢が ID の型: 解き直した文言（国・言語の文言）に合う選択肢の ID に直す
+          final key = t.choices.where((c) => renderVariantText(texts.texts[choiceLabelTextId(t.id, c)]!, v) == input).firstOrNull;
+          input = key ?? 'no_such_label:$input';
+        }
         if (!checkAnswer(v.question, input).correct) {
           bad.add(
             '${t.id}~$s\n  問題文: $prompt\n  型の答え: ${v.question.answer}\n  検算: $input',

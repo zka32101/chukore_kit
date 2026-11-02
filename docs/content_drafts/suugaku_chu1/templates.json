@@ -400,28 +400,29 @@
    "display": {
     "eq": "x+{b}={c}"
    },
-   "answer": "両辺から{b}をひく",
+   "answer": "sub",
    "choices": [
-    "両辺から{b}をひく",
-    "両辺に{b}をたす",
-    "両辺に{b}をかける",
-    "両辺を{b}でわる"
+    "sub",
+    "add",
+    "mul",
+    "div"
    ],
    "wrong": [
     {
-     "expr": "両辺に{b}をたす",
+     "expr": "add",
      "tag": "move_term_sign"
     },
     {
-     "expr": "両辺に{b}をかける",
+     "expr": "mul",
      "tag": "wrong_inverse_operation"
     },
     {
-     "expr": "両辺を{b}でわる",
+     "expr": "div",
      "tag": "wrong_inverse_operation"
     }
    ],
-   "explanationId": "exp_m1_eq_prop_001"
+   "explanationId": "exp_m1_eq_prop_001",
+   "choiceLabels": true
   },
   {
    "id": "m1_alg_rel_001",
@@ -449,28 +450,29 @@
    "display": {
     "situation": "1個{a}円の品物をx個買い、{b}円の箱に入れる"
    },
-   "answer": "{a}x{+b}円",
+   "answer": "ok",
    "choices": [
-    "{a}x{+b}円",
-    "{b}x{+a}円",
-    "{a+b}x円",
-    "{a}x{+-b}円"
+    "ok",
+    "swap",
+    "sum",
+    "neg"
    ],
    "wrong": [
     {
-     "expr": "{b}x{+a}円",
+     "expr": "swap",
      "tag": "coefficient_swap"
     },
     {
-     "expr": "{a+b}x円",
+     "expr": "sum",
      "tag": "like_terms_mixup"
     },
     {
-     "expr": "{a}x{+-b}円",
+     "expr": "neg",
      "tag": "sign_flip"
     }
    ],
-   "explanationId": "exp_m1_alg_rel_001"
+   "explanationId": "exp_m1_alg_rel_001",
+   "choiceLabels": true
   },
   {
    "id": "m1_num_abs_001",
@@ -5935,28 +5937,29 @@
    "display": {
     "note": "cut"
    },
-   "answer": "円",
+   "answer": "circle",
    "choices": [
-    "円",
-    "長方形",
-    "三角形",
-    "だ円"
+    "circle",
+    "rect",
+    "tri",
+    "oval"
    ],
    "wrong": [
     {
-     "expr": "長方形",
+     "expr": "rect",
      "tag": "side_view_mixup"
     },
     {
-     "expr": "三角形",
+     "expr": "tri",
      "tag": "cone_mixup"
     },
     {
-     "expr": "だ円",
+     "expr": "oval",
      "tag": "oval_mixup"
     }
    ],
-   "explanationId": "exp_m1_space_cut_001"
+   "explanationId": "exp_m1_space_cut_001",
+   "choiceLabels": true
   },
   {
    "id": "m1_space_cut_002",
@@ -5975,28 +5978,29 @@
    "display": {
     "note": "cut"
    },
-   "answer": "長方形",
+   "answer": "rect",
    "choices": [
-    "長方形",
-    "円",
-    "三角形",
-    "ひし形"
+    "rect",
+    "circle",
+    "tri",
+    "rhombus"
    ],
    "wrong": [
     {
-     "expr": "円",
+     "expr": "circle",
      "tag": "parallel_cut_mixup"
     },
     {
-     "expr": "三角形",
+     "expr": "tri",
      "tag": "cone_mixup"
     },
     {
-     "expr": "ひし形",
+     "expr": "rhombus",
      "tag": "shape_mixup"
     }
    ],
-   "explanationId": "exp_m1_space_cut_002"
+   "explanationId": "exp_m1_space_cut_002",
+   "choiceLabels": true
   },
   {
    "id": "m1_space_cut_003",
@@ -6015,28 +6019,29 @@
    "display": {
     "note": "cut"
    },
-   "answer": "円",
+   "answer": "circle",
    "choices": [
-    "円",
-    "三角形",
-    "長方形",
-    "台形"
+    "circle",
+    "tri",
+    "rect",
+    "trapezoid"
    ],
    "wrong": [
     {
-     "expr": "三角形",
+     "expr": "tri",
      "tag": "vertical_cut_mixup"
     },
     {
-     "expr": "長方形",
+     "expr": "rect",
      "tag": "cylinder_mixup"
     },
     {
-     "expr": "台形",
+     "expr": "trapezoid",
      "tag": "side_view_mixup"
     }
    ],
-   "explanationId": "exp_m1_space_cut_003"
+   "explanationId": "exp_m1_space_cut_003",
+   "choiceLabels": true
   },
   {
    "id": "m1_space_cut_004",
@@ -6055,28 +6060,29 @@
    "display": {
     "note": "cut"
    },
-   "answer": "二等辺三角形",
+   "answer": "isosceles",
    "choices": [
-    "二等辺三角形",
-    "円",
-    "長方形",
-    "正三角形"
+    "isosceles",
+    "circle",
+    "rect",
+    "equilateral"
    ],
    "wrong": [
     {
-     "expr": "円",
+     "expr": "circle",
      "tag": "parallel_cut_mixup"
     },
     {
-     "expr": "長方形",
+     "expr": "rect",
      "tag": "cylinder_mixup"
     },
     {
-     "expr": "正三角形",
+     "expr": "equilateral",
      "tag": "equilateral_mixup"
     }
    ],
-   "explanationId": "exp_m1_space_cut_004"
+   "explanationId": "exp_m1_space_cut_004",
+   "choiceLabels": true
   },
   {
    "id": "m1_space_cut_005",
@@ -6095,28 +6101,29 @@
    "display": {
     "note": "cut"
    },
-   "answer": "円",
+   "answer": "circle",
    "choices": [
-    "円",
-    "だ円",
-    "長方形",
-    "三角形"
+    "circle",
+    "oval",
+    "rect",
+    "tri"
    ],
    "wrong": [
     {
-     "expr": "だ円",
+     "expr": "oval",
      "tag": "oval_mixup"
     },
     {
-     "expr": "長方形",
+     "expr": "rect",
      "tag": "cylinder_mixup"
     },
     {
-     "expr": "三角形",
+     "expr": "tri",
      "tag": "cone_mixup"
     }
    ],
-   "explanationId": "exp_m1_space_cut_005"
+   "explanationId": "exp_m1_space_cut_005",
+   "choiceLabels": true
   },
   {
    "id": "m1_space_cut_face_001",
