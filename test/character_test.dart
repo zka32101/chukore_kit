@@ -458,7 +458,81 @@ void artTests() {
     },
   );
 
-  test('分野のキャラ: 分野ごとに 1 匹（相棒とは別）。その分野の正解と「できた」の数で育ち、下がらない。図鑑に並ぶ', () {
+  test(
+    'スタンプ: 分野をマスターしたら（その分野の単元がすべて「できた」）もらえる。一部だけではもらえない。画像には子どもの情報を入れない',
+    () {
+      final set = _set();
+      final tree = UnitTree.fromJson(
+        jsonDecode(
+              File(
+                'docs/content_drafts/suugaku_chu1/units.json',
+              ).readAsStringSync(),
+            )
+            as Map<String, dynamic>,
+      );
+      final eq = tree.resolveLeaves(['m1_eq']).map((u) => u.id).toSet();
+      expect(eq.length, 3); // 等式の性質・一次方程式の解き方・方程式の文章題
+      expect(fieldMastered(tree, 'm1_eq', {}), isFalse);
+      expect(
+        fieldMastered(tree, 'm1_eq', {...eq}..remove('m1_linear')),
+        isFalse,
+      );
+      expect(fieldMastered(tree, 'm1_eq', eq), isTrue);
+      expect(
+        fieldMastered(tree, 'm1_eq', {...eq, 'm1_data_hist'}),
+        isTrue,
+      ); // 余計な単元が入っていてもよい
+      expect(fieldMastered(tree, 'nothing', eq), isFalse);
+      expect(
+        stickersEarned(set, tree, eq, subject: 'math').map((c) => c.fieldId),
+        ['m1_eq'],
+      );
+      expect(stickersEarned(set, tree, eq, subject: 'en'), isEmpty);
+      expect(stickersEarned(set, tree, {}), isEmpty);
+      for (final c in set.fieldCharacters) {
+        expect(c.stickers.length, 8);
+      }
+      // スタンプの一言は決まった言葉だけ（名前・点数・日付を入れる差し込み {…} を持たない）
+      final texts = ContentTexts.parse(
+        File('$_dir/texts.json').readAsStringSync(),
+      );
+      for (final c in set.fieldCharacters) {
+        for (final k in c.stickers) {
+          expect(texts.texts[k.textId], isNotNull);
+          expect(
+            texts.texts[k.textId]!.contains('{') ||
+                texts.texts[k.textId]!.contains('}'),
+            isFalse,
+            reason: k.textId,
+          );
+        }
+      }
+      // 検証: 分野のキャラ以外にスタンプ・枚数の違いはエラー
+      Set<String> codes(void Function(Map<String, dynamic>) f) {
+        final j = _json();
+        f(j);
+        return validateCharacters(
+          CharacterSet.parse(jsonEncode(j)),
+        ).map((i) => i.code).toSet();
+      }
+
+      List ch(Map<String, dynamic> j) => j['characters'] as List;
+      expect(
+        codes((j) => (ch(j).last['stickers'] as List).removeLast()),
+        contains('character_sticker_invalid'),
+      ); // 7 枚
+      expect(
+        codes((j) => ch(j)[0]['stickers'] = ch(j).last['stickers']),
+        contains('character_sticker_invalid'),
+      ); // 相棒には付けない
+      expect(
+        codes((j) => ch(j).last['stickers'][1]['id'] = 'st1'),
+        contains('character_sticker_invalid'),
+      );
+    },
+  );
+
+  test('分野のキャラ: 分野ごとに 1 匹（相棒とは別）。成長せず、その分野をマスターしたらゲット。図鑑に並ぶ', () {
     final set = _set();
     expect(set.fieldCharacters.map((c) => c.fieldId).toSet(), {
       'm1_eq',
@@ -467,23 +541,30 @@ void artTests() {
     });
     final c = set.fieldCharacterFor('m1_eq')!;
     expect(c.kind, CharacterKind.field);
+    expect(c.stages, isEmpty); // 成長しない
+    expect(c.artId, 'ch_field_m1_eq');
     expect(set.fieldCharacterFor('m1_num'), isNull);
-    expect(growthPointsForField(correct: 12, unitsDone: 0), 12);
-    expect(growthPointsForField(correct: 12, unitsDone: 2), 22);
-    expect(growthPointsForField(correct: -3, unitsDone: -1), 0);
-    expect(
-      [
-        for (final pts in [0, 7, 8, 24, 25, 49, 50])
-          c.stageOf(growthPointsForField(correct: pts, unitsDone: 0)),
-      ],
-      [0, 0, 1, 1, 2, 2, 3],
+    // 図鑑: 教科ごと。マスターしたらゲット。まだのものは「あと N 単元」のシルエット（比べる相手はいない）
+    final tree = UnitTree.fromJson(
+      jsonDecode(
+            File(
+              'docs/content_drafts/suugaku_chu1/units.json',
+            ).readAsStringSync(),
+          )
+          as Map<String, dynamic>,
     );
-    // 図鑑: 教科ごと。出会っていない分野はシルエット（met が偽）。育ちは自分の分だけ
-    final z = zukan(set, 'math', {'m1_eq': 30});
+    final eq = tree.resolveLeaves(['m1_eq']).map((u) => u.id).toSet();
+    var z = zukan(set, tree, 'math', {'m1_linear'});
     expect(z.map((e) => e.character.fieldId), ['m1_eq', 'm2_lin', 'm3_sim']);
-    expect([for (final e in z) e.met], [true, false, false]);
-    expect(z.first.stage, 2);
-    expect(zukan(set, 'en', {'m1_eq': 30}), isEmpty);
+    expect(z.first.unitsDone, 1);
+    expect(z.first.unitsTotal, 3);
+    expect(z.first.remaining, 2);
+    expect(z.first.obtained, isFalse);
+    z = zukan(set, tree, 'math', eq);
+    expect(z.first.obtained, isTrue);
+    expect(z.first.remaining, 0);
+    expect(z[1].obtained, isFalse); // 中2 の分野の単元は、この木にない（単元 0 ならゲットにならない）
+    expect(zukan(set, tree, 'en', eq), isEmpty);
     // 分野のキャラは、はじめの相棒にも解放のキャラにも入らない
     expect(set.startersFor('math', region: 'JP').map((x) => x.id), ['ch_math']);
     expect(
@@ -519,6 +600,28 @@ void artTests() {
         fieldIds: fields,
       ).map((i) => i.code),
       contains('character_field_missing'),
+    );
+    // 分野のキャラは成長しない: 段階を付ける・絵がない、はエラー
+    final grow =
+        jsonDecode(File('$_dir/characters.json').readAsStringSync())
+            as Map<String, dynamic>;
+    ((grow['characters'] as List).last as Map)['stages'] =
+        (grow['characters'] as List).first['stages'];
+    expect(
+      validateCharacters(
+        CharacterSet.parse(jsonEncode(grow)),
+      ).map((i) => i.code),
+      contains('character_field_invalid'),
+    );
+    final noArt =
+        jsonDecode(File('$_dir/characters.json').readAsStringSync())
+            as Map<String, dynamic>;
+    ((noArt['characters'] as List).last as Map).remove('artId');
+    expect(
+      validateCharacters(
+        CharacterSet.parse(jsonEncode(noArt)),
+      ).map((i) => i.code),
+      contains('character_field_invalid'),
     );
     // 同じ分野に 2 つ、分野の指定がない、はエラー
     final j =

@@ -684,97 +684,217 @@
    "bundled": false
   },
   {
-   "id": "ch_field_m1_eq_s1",
-   "path": "ch_field_m1_eq_s1.svg",
+   "id": "ch_field_m1_eq_st1",
+   "path": "ch_field_m1_eq_st1.svg",
+   "sha256": "c2fd68833f178fa1ca7aa7ab208d121ccf9fb4c4b0d97c261a070c29dc252701",
+   "bytes": 241,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m1_eq_st2",
+   "path": "ch_field_m1_eq_st2.svg",
+   "sha256": "7717a78bd04b7556dfcfabb26db4e2e81538fa01dc14a5046f0906db1c477789",
+   "bytes": 241,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m1_eq_st3",
+   "path": "ch_field_m1_eq_st3.svg",
+   "sha256": "d2192329f4a1af705570bf7ae9825212d5cb0c4d6f4437471d4730830b26795f",
+   "bytes": 241,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m1_eq_st4",
+   "path": "ch_field_m1_eq_st4.svg",
+   "sha256": "9d349e3bafc266a151a040e160b5ba1407f0dfbf7aa56b1b524db7b356d81128",
+   "bytes": 241,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m1_eq_st5",
+   "path": "ch_field_m1_eq_st5.svg",
+   "sha256": "d7c8277616dbe0d75b415627dc917f470a3471e94fa6a512fd2492de81b7b205",
+   "bytes": 241,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m1_eq_st6",
+   "path": "ch_field_m1_eq_st6.svg",
+   "sha256": "c22a9303440ccbd9c0774fd1ef63706a7e07ee88426ef42e10d53004ad5051ea",
+   "bytes": 241,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m1_eq_st7",
+   "path": "ch_field_m1_eq_st7.svg",
+   "sha256": "23ce529950f98fc9a06acfc179fea144d041647efc344e17645292366628a305",
+   "bytes": 241,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m1_eq_st8",
+   "path": "ch_field_m1_eq_st8.svg",
+   "sha256": "23df2103bc40647e35ff6ef715624e709d5b5ef78447567665a0bbb8694858bc",
+   "bytes": 241,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m2_lin_st1",
+   "path": "ch_field_m2_lin_st1.svg",
+   "sha256": "3d3928af011627b690032969cd4e3a437b498185543091cb92cedd50b97ab473",
+   "bytes": 242,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m2_lin_st2",
+   "path": "ch_field_m2_lin_st2.svg",
+   "sha256": "26e6904bc228bb9847b972d2c68934f6cfcbded405414f695f3dbe61c5103b52",
+   "bytes": 242,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m2_lin_st3",
+   "path": "ch_field_m2_lin_st3.svg",
+   "sha256": "c27d5391b36a142c77627adfe93906f4b971c9887761e0715fed6ef434d610b7",
+   "bytes": 242,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m2_lin_st4",
+   "path": "ch_field_m2_lin_st4.svg",
+   "sha256": "1869fe62e90574b53be0e22f8463cea99b18c46417ade3d8d47cd8df7823566a",
+   "bytes": 242,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m2_lin_st5",
+   "path": "ch_field_m2_lin_st5.svg",
+   "sha256": "e586bba94f438bf3cb8c0852e432a0a44c5fe01368fbf0aea01809d0a1095e02",
+   "bytes": 242,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m2_lin_st6",
+   "path": "ch_field_m2_lin_st6.svg",
+   "sha256": "1654e567d869d73d347cd64f5f4d7b489032823101335a95ddf645b778159901",
+   "bytes": 242,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m2_lin_st7",
+   "path": "ch_field_m2_lin_st7.svg",
+   "sha256": "fba5493446bd76683c90f368a9a9e59a3683c8a0da8b129427e3164e93352d6c",
+   "bytes": 242,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m2_lin_st8",
+   "path": "ch_field_m2_lin_st8.svg",
+   "sha256": "0b13c0dcade378f4036dcfc07bece463d771db13aeba3d798a4b30c2f176f682",
+   "bytes": 242,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m3_sim_st1",
+   "path": "ch_field_m3_sim_st1.svg",
+   "sha256": "67731be7478d2cb52e1761b051a14407e10491a841d8ead202c2466d68f8b54e",
+   "bytes": 242,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m3_sim_st2",
+   "path": "ch_field_m3_sim_st2.svg",
+   "sha256": "3480948e66a4fc5bc80d065c453305c117e8206a513aaa64b45bf5783d7c1bdb",
+   "bytes": 242,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m3_sim_st3",
+   "path": "ch_field_m3_sim_st3.svg",
+   "sha256": "35eacaebf7a628c87cee478a62e2d73517061c1558127c85c5135026758e54ee",
+   "bytes": 242,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m3_sim_st4",
+   "path": "ch_field_m3_sim_st4.svg",
+   "sha256": "6a574342a9fd14e5adc0fef05c10280f81f24f0c8959010c671227213efdcf08",
+   "bytes": 242,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m3_sim_st5",
+   "path": "ch_field_m3_sim_st5.svg",
+   "sha256": "221d2bc4f8bdfb01aadab92f626fa0e33413c3fa83e909992375a41ab7df408c",
+   "bytes": 242,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m3_sim_st6",
+   "path": "ch_field_m3_sim_st6.svg",
+   "sha256": "779c72934beac9b93af18d0a5c75d830efcf3da6aebb7da1acce574596165ab4",
+   "bytes": 242,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m3_sim_st7",
+   "path": "ch_field_m3_sim_st7.svg",
+   "sha256": "5b5e856f7d8024b96b6b2d34f18fc3e97704aa5542a4d94d46d2ed700af1b1c8",
+   "bytes": 242,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m3_sim_st8",
+   "path": "ch_field_m3_sim_st8.svg",
+   "sha256": "6c6b5a0b6a10633862b9ca9cb27fb855c67cc256801aa011ebf27fee73ff2841",
+   "bytes": 242,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m1_eq",
+   "path": "ch_field_m1_eq.svg",
    "sha256": "52b2e40a6af0753407efa0daa0ffe94c6b8436788e9b40b49ea881aeb93b8b46",
    "bytes": 231,
    "format": "svg",
    "bundled": false
   },
   {
-   "id": "ch_field_m1_eq_s2",
-   "path": "ch_field_m1_eq_s2.svg",
-   "sha256": "68fed52d6a81dc48cb73e6f88f49cf6760247210f84f4547e8c8956eeb2c8014",
-   "bytes": 231,
-   "format": "svg",
-   "bundled": false
-  },
-  {
-   "id": "ch_field_m1_eq_s3",
-   "path": "ch_field_m1_eq_s3.svg",
-   "sha256": "2e8e29bd11acb7fc097f319453d8a71c26d655f40b13f4a870bce7f898e89414",
-   "bytes": 231,
-   "format": "svg",
-   "bundled": false
-  },
-  {
-   "id": "ch_field_m1_eq_s4",
-   "path": "ch_field_m1_eq_s4.svg",
-   "sha256": "1bf3c3406ab504ab91e3f459e29a420f49bc05de97f3d4b3d7908094b27c111a",
-   "bytes": 231,
-   "format": "svg",
-   "bundled": false
-  },
-  {
-   "id": "ch_field_m2_lin_s1",
-   "path": "ch_field_m2_lin_s1.svg",
-   "sha256": "130a2145d2a517747349954170a9d5db453760f07dc70f0ac8157c1664c0fee2",
-   "bytes": 231,
-   "format": "svg",
-   "bundled": false
-  },
-  {
-   "id": "ch_field_m2_lin_s2",
-   "path": "ch_field_m2_lin_s2.svg",
-   "sha256": "8f580305c695f815d3ee6004a5f164318677d0507620d2dcefa8a24b89fcf3c6",
-   "bytes": 231,
-   "format": "svg",
-   "bundled": false
-  },
-  {
-   "id": "ch_field_m2_lin_s3",
-   "path": "ch_field_m2_lin_s3.svg",
-   "sha256": "583c0e4f317d65ca717596b3f2895e0866ad25f77d2887f70d39e1039f981b10",
-   "bytes": 231,
-   "format": "svg",
-   "bundled": false
-  },
-  {
-   "id": "ch_field_m2_lin_s4",
-   "path": "ch_field_m2_lin_s4.svg",
+   "id": "ch_field_m2_lin",
+   "path": "ch_field_m2_lin.svg",
    "sha256": "27d9e3bd43a25da6ec9933296c1d59257bce0ad50998b305dcd11e36f388981b",
    "bytes": 231,
    "format": "svg",
    "bundled": false
   },
   {
-   "id": "ch_field_m3_sim_s1",
-   "path": "ch_field_m3_sim_s1.svg",
+   "id": "ch_field_m3_sim",
+   "path": "ch_field_m3_sim.svg",
    "sha256": "c9404a93b5f981ab36f504aad5c962f61b5d2a060d5fc813de63d525c3b3ec57",
-   "bytes": 231,
-   "format": "svg",
-   "bundled": false
-  },
-  {
-   "id": "ch_field_m3_sim_s2",
-   "path": "ch_field_m3_sim_s2.svg",
-   "sha256": "a8208d07b2098c27ce447e7902a7fee446d1ea0ee26d1ba8e4f814d4102cbf31",
-   "bytes": 231,
-   "format": "svg",
-   "bundled": false
-  },
-  {
-   "id": "ch_field_m3_sim_s3",
-   "path": "ch_field_m3_sim_s3.svg",
-   "sha256": "7a1857276198113b7d7eab372c60ef994cee5a5cdf12bf64bdb184e685705464",
-   "bytes": 231,
-   "format": "svg",
-   "bundled": false
-  },
-  {
-   "id": "ch_field_m3_sim_s4",
-   "path": "ch_field_m3_sim_s4.svg",
-   "sha256": "b3403c56d394bd10d2446054fb4b0d83ae8d1a277e2a99f1f0eedce9b06c96f9",
    "bytes": 231,
    "format": "svg",
    "bundled": false

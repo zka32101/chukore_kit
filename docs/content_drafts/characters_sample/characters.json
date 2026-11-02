@@ -625,32 +625,50 @@
    ],
    "nameId": "ch_field_m1_eq_name",
    "storyId": "ch_field_m1_eq_story",
-   "stages": [
+   "stages": [],
+   "stickers": [
     {
-     "nameId": "ch_field_m1_eq_s1_name",
-     "textId": "ch_field_m1_eq_s1_text",
-     "artId": "ch_field_m1_eq_s1",
-     "points": 0
+     "id": "st1",
+     "artId": "ch_field_m1_eq_st1",
+     "textId": "ch_field_m1_eq_st1_text"
     },
     {
-     "nameId": "ch_field_m1_eq_s2_name",
-     "textId": "ch_field_m1_eq_s2_text",
-     "artId": "ch_field_m1_eq_s2",
-     "points": 8
+     "id": "st2",
+     "artId": "ch_field_m1_eq_st2",
+     "textId": "ch_field_m1_eq_st2_text"
     },
     {
-     "nameId": "ch_field_m1_eq_s3_name",
-     "textId": "ch_field_m1_eq_s3_text",
-     "artId": "ch_field_m1_eq_s3",
-     "points": 25
+     "id": "st3",
+     "artId": "ch_field_m1_eq_st3",
+     "textId": "ch_field_m1_eq_st3_text"
     },
     {
-     "nameId": "ch_field_m1_eq_s4_name",
-     "textId": "ch_field_m1_eq_s4_text",
-     "artId": "ch_field_m1_eq_s4",
-     "points": 50
+     "id": "st4",
+     "artId": "ch_field_m1_eq_st4",
+     "textId": "ch_field_m1_eq_st4_text"
+    },
+    {
+     "id": "st5",
+     "artId": "ch_field_m1_eq_st5",
+     "textId": "ch_field_m1_eq_st5_text"
+    },
+    {
+     "id": "st6",
+     "artId": "ch_field_m1_eq_st6",
+     "textId": "ch_field_m1_eq_st6_text"
+    },
+    {
+     "id": "st7",
+     "artId": "ch_field_m1_eq_st7",
+     "textId": "ch_field_m1_eq_st7_text"
+    },
+    {
+     "id": "st8",
+     "artId": "ch_field_m1_eq_st8",
+     "textId": "ch_field_m1_eq_st8_text"
     }
-   ]
+   ],
+   "artId": "ch_field_m1_eq"
   },
   {
    "id": "ch_field_m2_lin",
@@ -661,32 +679,50 @@
    ],
    "nameId": "ch_field_m2_lin_name",
    "storyId": "ch_field_m2_lin_story",
-   "stages": [
+   "stages": [],
+   "stickers": [
     {
-     "nameId": "ch_field_m2_lin_s1_name",
-     "textId": "ch_field_m2_lin_s1_text",
-     "artId": "ch_field_m2_lin_s1",
-     "points": 0
+     "id": "st1",
+     "artId": "ch_field_m2_lin_st1",
+     "textId": "ch_field_m2_lin_st1_text"
     },
     {
-     "nameId": "ch_field_m2_lin_s2_name",
-     "textId": "ch_field_m2_lin_s2_text",
-     "artId": "ch_field_m2_lin_s2",
-     "points": 8
+     "id": "st2",
+     "artId": "ch_field_m2_lin_st2",
+     "textId": "ch_field_m2_lin_st2_text"
     },
     {
-     "nameId": "ch_field_m2_lin_s3_name",
-     "textId": "ch_field_m2_lin_s3_text",
-     "artId": "ch_field_m2_lin_s3",
-     "points": 25
+     "id": "st3",
+     "artId": "ch_field_m2_lin_st3",
+     "textId": "ch_field_m2_lin_st3_text"
     },
     {
-     "nameId": "ch_field_m2_lin_s4_name",
-     "textId": "ch_field_m2_lin_s4_text",
-     "artId": "ch_field_m2_lin_s4",
-     "points": 50
+     "id": "st4",
+     "artId": "ch_field_m2_lin_st4",
+     "textId": "ch_field_m2_lin_st4_text"
+    },
+    {
+     "id": "st5",
+     "artId": "ch_field_m2_lin_st5",
+     "textId": "ch_field_m2_lin_st5_text"
+    },
+    {
+     "id": "st6",
+     "artId": "ch_field_m2_lin_st6",
+     "textId": "ch_field_m2_lin_st6_text"
+    },
+    {
+     "id": "st7",
+     "artId": "ch_field_m2_lin_st7",
+     "textId": "ch_field_m2_lin_st7_text"
+    },
+    {
+     "id": "st8",
+     "artId": "ch_field_m2_lin_st8",
+     "textId": "ch_field_m2_lin_st8_text"
     }
-   ]
+   ],
+   "artId": "ch_field_m2_lin"
   },
   {
    "id": "ch_field_m3_sim",
@@ -697,32 +733,50 @@
    ],
    "nameId": "ch_field_m3_sim_name",
    "storyId": "ch_field_m3_sim_story",
-   "stages": [
+   "stages": [],
+   "stickers": [
     {
-     "nameId": "ch_field_m3_sim_s1_name",
-     "textId": "ch_field_m3_sim_s1_text",
-     "artId": "ch_field_m3_sim_s1",
-     "points": 0
+     "id": "st1",
+     "artId": "ch_field_m3_sim_st1",
+     "textId": "ch_field_m3_sim_st1_text"
     },
     {
-     "nameId": "ch_field_m3_sim_s2_name",
-     "textId": "ch_field_m3_sim_s2_text",
-     "artId": "ch_field_m3_sim_s2",
-     "points": 8
+     "id": "st2",
+     "artId": "ch_field_m3_sim_st2",
+     "textId": "ch_field_m3_sim_st2_text"
     },
     {
-     "nameId": "ch_field_m3_sim_s3_name",
-     "textId": "ch_field_m3_sim_s3_text",
-     "artId": "ch_field_m3_sim_s3",
-     "points": 25
+     "id": "st3",
+     "artId": "ch_field_m3_sim_st3",
+     "textId": "ch_field_m3_sim_st3_text"
     },
     {
-     "nameId": "ch_field_m3_sim_s4_name",
-     "textId": "ch_field_m3_sim_s4_text",
-     "artId": "ch_field_m3_sim_s4",
-     "points": 50
+     "id": "st4",
+     "artId": "ch_field_m3_sim_st4",
+     "textId": "ch_field_m3_sim_st4_text"
+    },
+    {
+     "id": "st5",
+     "artId": "ch_field_m3_sim_st5",
+     "textId": "ch_field_m3_sim_st5_text"
+    },
+    {
+     "id": "st6",
+     "artId": "ch_field_m3_sim_st6",
+     "textId": "ch_field_m3_sim_st6_text"
+    },
+    {
+     "id": "st7",
+     "artId": "ch_field_m3_sim_st7",
+     "textId": "ch_field_m3_sim_st7_text"
+    },
+    {
+     "id": "st8",
+     "artId": "ch_field_m3_sim_st8",
+     "textId": "ch_field_m3_sim_st8_text"
     }
-   ]
+   ],
+   "artId": "ch_field_m3_sim"
   }
  ],
  "badges": [

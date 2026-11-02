@@ -141,7 +141,9 @@ List<ValidationIssue> validateArt(ArtManifest m, {CharacterSet? characters}) {
     final used = <String>{
       for (final c in characters.characters) ...[
         for (final s in c.stages) s.artId,
+        if (c.artId != null) c.artId!,
         for (final f in c.forms) f.artId,
+        for (final k in c.stickers) k.artId,
       ],
       for (final b in characters.badges) b.artId,
     };

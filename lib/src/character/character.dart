@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import '../bank/question_bank.dart';
 import '../practice/play_round.dart';
+import '../scope/unit_tree.dart';
 
 /// 相棒（キャラ）とバッジ。国をまたいで使える共通の部品と、その国らしいキャラ（地域キャラ）を、同じ仕組みのデータ
 /// （`characters.json`）で扱う。設計は `docs/character_design.md`。
@@ -74,7 +75,22 @@ class FormSpec {
   final int scale;
 }
 
-/// 種類: 共通の相棒／その国らしい相棒（地域キャラ）／分野のキャラ（その分野の学びといっしょに育つ。図鑑に並ぶ）。
+/// スタンプ（分野をマスターしたごほうびの、チャット風のキャラ画像）の 1 枚。
+/// 画像には**名前・点数・日付など、その子の情報を入れない**（決まったひとことだけ）。
+class StickerSpec {
+  const StickerSpec({
+    required this.id,
+    required this.artId,
+    required this.textId,
+  });
+
+  final String id, artId;
+
+  /// 画像に添える一言（文言の ID）。読み上げ・代替文にも使う。
+  final String textId;
+}
+
+/// 種類: 共通の相棒／その国らしい相棒（地域キャラ）／分野のキャラ（その分野を**マスターするとゲット**。成長はしない。図鑑に並ぶ）。
 enum CharacterKind { common, regional, field }
 
 class CharacterSpec {
@@ -89,6 +105,8 @@ class CharacterSpec {
     this.forms = const [],
     this.unlock,
     this.fieldId,
+    this.artId,
+    this.stickers = const [],
   });
 
   final String id;
@@ -110,6 +128,12 @@ class CharacterSpec {
 
   /// 分野のキャラ（`kind` が `field`）が育つ分野（単元ツリーの一番上の単元）。成長ポイントは、その分野の正解の数（と「できた」）から数える。
   final String? fieldId;
+
+  /// 分野のキャラの絵（成長しないので 1 枚。分野をマスターして**ゲット**したときの姿）。
+  final String? artId;
+
+  /// 分野をマスターしたらもらえるスタンプ（分野のキャラだけ。8・16・24 枚のどれか）。
+  final List<StickerSpec> stickers;
 
   bool availableIn({String? region, String? subject}) =>
       (regions.isEmpty || (region != null && regions.contains(region))) &&
@@ -145,6 +169,7 @@ class CharacterSpec {
     storyId,
     for (final s in stages) ...[s.nameId, s.textId],
     for (final f in forms) ...[f.nameId, f.textId],
+    for (final k in stickers) k.textId,
   ];
 }
 
@@ -268,6 +293,18 @@ class CharacterSet {
                   atLeast: _int(u, 'atLeast', '$id の入手条件'),
                 ),
           fieldId: c['fieldId'] as String?,
+          artId: c['artId'] as String?,
+          stickers: [
+            for (final raw in (c['stickers'] as List? ?? const []))
+              () {
+                final k = Map<String, dynamic>.from(raw as Map);
+                return StickerSpec(
+                  id: _str(k, 'id', '$id のスタンプ'),
+                  artId: _str(k, 'artId', '$id のスタンプ'),
+                  textId: _str(k, 'textId', '$id のスタンプ'),
+                );
+              }(),
+          ],
         ),
       );
     }
@@ -347,6 +384,28 @@ class CharacterSet {
   ];
 }
 
+/// 分野 [fieldId] の単元（一番下の単元）がすべて「できた」か。単元がなければ偽。
+bool fieldMastered(UnitTree tree, String fieldId, Set<String> doneUnitIds) {
+  final leaves = tree.resolveLeaves([fieldId]);
+  return leaves.isNotEmpty && leaves.every((u) => doneUnitIds.contains(u.id));
+}
+
+/// スタンプがもらえる（分野をマスターした）分野のキャラ。教科・並びは `characters.json` の順。
+/// スタンプの画像を端末に保存・共有するのは**アプリ側**（キットは送らない）。外へ渡すので、年齢・保護者の設定に従う
+/// （`docs/character_design.md` §5.5）。
+List<CharacterSpec> stickersEarned(
+  CharacterSet set,
+  UnitTree tree,
+  Set<String> doneUnitIds, {
+  String? subject,
+}) => [
+  for (final c in set.fieldCharacters)
+    if (c.stickers.isNotEmpty &&
+        (subject == null || c.availableIn(subject: subject)) &&
+        fieldMastered(tree, c.fieldId!, doneUnitIds))
+      c,
+];
+
 /// 1 回の遊び（ラウンド）で増える成長ポイント。最後までやれば必ず 1 点（正解数に依らない）。
 /// つながり・立て直しは少し多く。**マイナスはない**。
 int growthPointsForRound(Set<PlayReward> rewards) {
@@ -358,47 +417,44 @@ int growthPointsForRound(Set<PlayReward> rewards) {
   return p;
 }
 
-/// 分野のキャラの成長ポイント: その分野で正解した数（1 問 1 点）に、「できた」になった単元 1 つにつき +5。
-/// どちらも増えるだけなので、下がらない。
-int growthPointsForField({required int correct, required int unitsDone}) =>
-    (correct < 0 ? 0 : correct) +
-    (unitsDone < 0 ? 0 : unitsDone) * growthPointsForUnitDone;
-
 /// 単元テストで「できた」になったときの成長ポイント。
 const growthPointsForUnitDone = 5;
 
-/// 図鑑の 1 項目: 分野のキャラと、いまの育ち。まだ出会っていない（ポイント 0）ものは `met` が偽（シルエットで見せる）。
-/// 図鑑は**自分の育ちを見る**ためのもので、順位や他の子との比較は載せない。
+/// 図鑑の 1 項目: 分野のキャラと、その分野の進み具合。マスター（単元がすべて「できた」）したら `obtained`（ゲット）。
+/// まだのものは「あと [remaining] 単元」で、シルエットで見せる。
+/// 図鑑は**自分の進みを見る**ためのもので、順位や他の子との比較は載せない。
 class ZukanEntry {
   const ZukanEntry({
     required this.character,
-    required this.points,
-    required this.stage,
+    required this.unitsDone,
+    required this.unitsTotal,
   });
 
   final CharacterSpec character;
-  final int points;
+  final int unitsDone, unitsTotal;
 
-  /// 段階（0 始まり）。
-  final int stage;
+  bool get obtained => unitsTotal > 0 && unitsDone >= unitsTotal;
 
-  bool get met => points > 0;
+  int get remaining => unitsTotal - unitsDone;
 }
 
-/// 教科 [subject] の分野のキャラの図鑑（並びは `characters.json` の順）。
-/// [fieldPoints] は 分野ID → 成長ポイント（アプリが [growthPointsForField] で数える）。
+/// 教科 [subject] の分野のキャラの図鑑（並びは `characters.json` の順）。[doneUnitIds] は「できた」になった単元。
 List<ZukanEntry> zukan(
   CharacterSet set,
+  UnitTree tree,
   String subject,
-  Map<String, int> fieldPoints,
+  Set<String> doneUnitIds,
 ) => [
   for (final c in set.fieldCharacters)
     if (c.availableIn(subject: subject))
-      ZukanEntry(
-        character: c,
-        points: fieldPoints[c.fieldId] ?? 0,
-        stage: c.stageOf(fieldPoints[c.fieldId] ?? 0),
-      ),
+      () {
+        final leaves = tree.resolveLeaves([c.fieldId!]);
+        return ZukanEntry(
+          character: c,
+          unitsDone: leaves.where((u) => doneUnitIds.contains(u.id)).length,
+          unitsTotal: leaves.length,
+        );
+      }(),
 ];
 
 /// 相棒ごとの成長ポイント。増えるだけ（負の値は 0 として扱い、休んでも下がらない）。
@@ -440,7 +496,7 @@ class CompanionProgress {
 /// キャラとバッジの検証。
 /// エラー: `character_stage_invalid`（段階は 3〜6 個、最初は 0 点、点は増える順）・`character_region_invalid`（国コードは大文字 2 文字）・
 /// `character_regional_no_region`（地域キャラは国を指定する）・`character_metric_unknown`・`character_threshold_invalid`（1 以上）・
-/// `character_field_missing`（分野のキャラの分野がない・分野以外に fieldId）・`character_field_duplicate`（同じ分野に 2 つ）・`character_form_invalid`（姿の分岐は 2〜4 個・scale は 1 以上）・`character_no_starter`（教科ごとに、はじめの共通キャラが無い）。
+/// `character_field_invalid`（分野のキャラは artId が要り、段階・姿は付けない）・`character_sticker_invalid`（スタンプは分野のキャラだけ・8/16/24 枚）・`character_field_missing`（分野のキャラの分野がない・分野以外に fieldId）・`character_field_duplicate`（同じ分野に 2 つ）・`character_form_invalid`（姿の分岐は 2〜4 個・scale は 1 以上）・`character_no_starter`（教科ごとに、はじめの共通キャラが無い）。
 List<ValidationIssue> validateCharacters(
   CharacterSet set, {
   Set<String>? fieldIds,
@@ -461,7 +517,15 @@ List<ValidationIssue> validateCharacters(
     }
   }
   for (final c in set.characters) {
-    if (c.stages.length < 3 || c.stages.length > 6) {
+    if (c.kind == CharacterKind.field) {
+      // 分野のキャラは成長しない: 絵は 1 枚（artId）。段階・姿は持たない
+      if (c.artId == null || !art.hasMatch(c.artId!)) {
+        err('character_field_invalid', c.id, '分野のキャラは artId（小文字・数字・_ だけ）が要ります');
+      }
+      if (c.stages.isNotEmpty || c.forms.isNotEmpty) {
+        err('character_field_invalid', c.id, '分野のキャラは成長しません（段階・姿は付けない）');
+      }
+    } else if (c.stages.length < 3 || c.stages.length > 6) {
       err('character_stage_invalid', c.id, '段階は 3〜6 個（${c.stages.length}）');
     }
     if (c.stages.isNotEmpty && c.stages.first.points != 0) {
@@ -488,6 +552,31 @@ List<ValidationIssue> validateCharacters(
     }
     if (c.kind != CharacterKind.field && c.fieldId != null) {
       err('character_field_missing', c.id, 'fieldId は分野のキャラだけに書きます');
+    }
+    if (c.stickers.isNotEmpty) {
+      if (c.kind != CharacterKind.field) {
+        err('character_sticker_invalid', c.id, 'スタンプは分野のキャラだけに付けます');
+      }
+      if (![8, 16, 24].contains(c.stickers.length)) {
+        err(
+          'character_sticker_invalid',
+          c.id,
+          'スタンプは 8・16・24 枚のどれか（${c.stickers.length}）',
+        );
+      }
+      final sids = <String>{};
+      for (final k in c.stickers) {
+        if (!sids.add(k.id)) {
+          err('character_sticker_invalid', c.id, 'スタンプの id が重複: ${k.id}');
+        }
+        if (!art.hasMatch(k.artId)) {
+          err(
+            'character_sticker_invalid',
+            c.id,
+            '絵の名前は小文字・数字・_ だけ: ${k.artId}',
+          );
+        }
+      }
     }
     if (c.kind == CharacterKind.regional && c.regions.isEmpty) {
       err('character_regional_no_region', c.id, '地域キャラは国を指定します');
