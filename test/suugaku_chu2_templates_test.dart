@@ -77,6 +77,22 @@ void main() {
     expect([box.iqrOf(0), box.iqrOf(1)], [24, 12]);
   });
 
+
+  test('中3の図つきの型: 全変種で図が描け、答えを値から計算し直して一致する（三平方・相似）', () {
+    final s3 = TemplateSet.parse(File('docs/content_drafts/suugaku_chu3/templates.json').readAsStringSync());
+    for (final id in ['m3_circ_angle_003', 'm3_circ_angle_004', 'm3_sim_ratio_002', 'm3_pyth_thm_003', 'm3_pyth_thm_004']) {
+      final t = s3.templates.firstWhere((t) => t.id == id);
+      for (var s = 1; s <= 30; s++) {
+        final v = t.generate(s);
+        expect(v.figure!.toSvg(), startsWith('<svg'), reason: '$id~$s');
+        if (id == 'm3_pyth_thm_003') expect(double.parse(v.question.answer), 5 * v.params['k']!.toDouble());
+        if (id == 'm3_pyth_thm_004') expect(double.parse(v.question.answer), 3 * v.params['k']!.toDouble());
+        if (id == 'm3_sim_ratio_002') expect(double.parse(v.question.answer), v.params['a']! * v.params['m']!);
+        if (id == 'm3_circ_angle_004') expect(double.parse(v.question.answer), 90 - v.params['a']!);
+      }
+    }
+  });
+
   test('代表例を実際の値で読む', () {
     final t = set.templates.firstWhere((t) => t.id == 'm2_par_angle_002');
     final v = t.generate(3);
