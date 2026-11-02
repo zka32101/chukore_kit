@@ -42,6 +42,7 @@ chukore_kit の設計方針を1か所にまとめる。詳細は各ドキュメ�
 
 ## 5. 関連
 
+- 世界観（基地・旅・部屋）: [`world_design.md`](world_design.md)
 - キャラクターとバッジ: [`character_design.md`](character_design.md)
 - コンセプト整理: [`concept.md`](concept.md)
 - 機能一覧: [`features.md`](features.md)
