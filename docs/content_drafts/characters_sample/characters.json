@@ -1,0 +1,371 @@
+{
+ "version": 1,
+ "characters": [
+  {
+   "id": "ch_mochi",
+   "kind": "common",
+   "nameId": "ch_mochi_name",
+   "storyId": "ch_mochi_story",
+   "stages": [
+    {
+     "nameId": "ch_mochi_s1_name",
+     "textId": "ch_mochi_s1_text",
+     "artId": "ch_mochi_s1",
+     "points": 0
+    },
+    {
+     "nameId": "ch_mochi_s2_name",
+     "textId": "ch_mochi_s2_text",
+     "artId": "ch_mochi_s2",
+     "points": 12
+    },
+    {
+     "nameId": "ch_mochi_s3_name",
+     "textId": "ch_mochi_s3_text",
+     "artId": "ch_mochi_s3",
+     "points": 40
+    },
+    {
+     "nameId": "ch_mochi_s4_name",
+     "textId": "ch_mochi_s4_text",
+     "artId": "ch_mochi_s4",
+     "points": 90
+    },
+    {
+     "nameId": "ch_mochi_s5_name",
+     "textId": "ch_mochi_s5_text",
+     "artId": "ch_mochi_s5",
+     "points": 160
+    }
+   ]
+  },
+  {
+   "id": "ch_sora",
+   "kind": "common",
+   "nameId": "ch_sora_name",
+   "storyId": "ch_sora_story",
+   "unlock": {
+    "metric": "rounds_finished",
+    "atLeast": 10
+   },
+   "stages": [
+    {
+     "nameId": "ch_sora_s1_name",
+     "textId": "ch_sora_s1_text",
+     "artId": "ch_sora_s1",
+     "points": 0
+    },
+    {
+     "nameId": "ch_sora_s2_name",
+     "textId": "ch_sora_s2_text",
+     "artId": "ch_sora_s2",
+     "points": 12
+    },
+    {
+     "nameId": "ch_sora_s3_name",
+     "textId": "ch_sora_s3_text",
+     "artId": "ch_sora_s3",
+     "points": 40
+    },
+    {
+     "nameId": "ch_sora_s4_name",
+     "textId": "ch_sora_s4_text",
+     "artId": "ch_sora_s4",
+     "points": 90
+    },
+    {
+     "nameId": "ch_sora_s5_name",
+     "textId": "ch_sora_s5_text",
+     "artId": "ch_sora_s5",
+     "points": 160
+    }
+   ]
+  },
+  {
+   "id": "ch_kodama",
+   "kind": "regional",
+   "regions": [
+    "JP"
+   ],
+   "nameId": "ch_kodama_name",
+   "storyId": "ch_kodama_story",
+   "unlock": {
+    "metric": "regional_units",
+    "atLeast": 3
+   },
+   "stages": [
+    {
+     "nameId": "ch_kodama_s1_name",
+     "textId": "ch_kodama_s1_text",
+     "artId": "ch_kodama_s1",
+     "points": 0
+    },
+    {
+     "nameId": "ch_kodama_s2_name",
+     "textId": "ch_kodama_s2_text",
+     "artId": "ch_kodama_s2",
+     "points": 12
+    },
+    {
+     "nameId": "ch_kodama_s3_name",
+     "textId": "ch_kodama_s3_text",
+     "artId": "ch_kodama_s3",
+     "points": 40
+    },
+    {
+     "nameId": "ch_kodama_s4_name",
+     "textId": "ch_kodama_s4_text",
+     "artId": "ch_kodama_s4",
+     "points": 90
+    },
+    {
+     "nameId": "ch_kodama_s5_name",
+     "textId": "ch_kodama_s5_text",
+     "artId": "ch_kodama_s5",
+     "points": 160
+    }
+   ]
+  },
+  {
+   "id": "ch_tatu",
+   "kind": "regional",
+   "regions": [
+    "BR"
+   ],
+   "nameId": "ch_tatu_name",
+   "storyId": "ch_tatu_story",
+   "unlock": {
+    "metric": "regional_units",
+    "atLeast": 3
+   },
+   "stages": [
+    {
+     "nameId": "ch_tatu_s1_name",
+     "textId": "ch_tatu_s1_text",
+     "artId": "ch_tatu_s1",
+     "points": 0
+    },
+    {
+     "nameId": "ch_tatu_s2_name",
+     "textId": "ch_tatu_s2_text",
+     "artId": "ch_tatu_s2",
+     "points": 12
+    },
+    {
+     "nameId": "ch_tatu_s3_name",
+     "textId": "ch_tatu_s3_text",
+     "artId": "ch_tatu_s3",
+     "points": 40
+    },
+    {
+     "nameId": "ch_tatu_s4_name",
+     "textId": "ch_tatu_s4_text",
+     "artId": "ch_tatu_s4",
+     "points": 90
+    },
+    {
+     "nameId": "ch_tatu_s5_name",
+     "textId": "ch_tatu_s5_text",
+     "artId": "ch_tatu_s5",
+     "points": 160
+    }
+   ]
+  },
+  {
+   "id": "ch_axolotl",
+   "kind": "regional",
+   "regions": [
+    "MX"
+   ],
+   "nameId": "ch_axolotl_name",
+   "storyId": "ch_axolotl_story",
+   "unlock": {
+    "metric": "regional_units",
+    "atLeast": 3
+   },
+   "stages": [
+    {
+     "nameId": "ch_axolotl_s1_name",
+     "textId": "ch_axolotl_s1_text",
+     "artId": "ch_axolotl_s1",
+     "points": 0
+    },
+    {
+     "nameId": "ch_axolotl_s2_name",
+     "textId": "ch_axolotl_s2_text",
+     "artId": "ch_axolotl_s2",
+     "points": 12
+    },
+    {
+     "nameId": "ch_axolotl_s3_name",
+     "textId": "ch_axolotl_s3_text",
+     "artId": "ch_axolotl_s3",
+     "points": 40
+    },
+    {
+     "nameId": "ch_axolotl_s4_name",
+     "textId": "ch_axolotl_s4_text",
+     "artId": "ch_axolotl_s4",
+     "points": 90
+    },
+    {
+     "nameId": "ch_axolotl_s5_name",
+     "textId": "ch_axolotl_s5_text",
+     "artId": "ch_axolotl_s5",
+     "points": 160
+    }
+   ]
+  },
+  {
+   "id": "ch_elephant",
+   "kind": "regional",
+   "regions": [
+    "IN"
+   ],
+   "nameId": "ch_elephant_name",
+   "storyId": "ch_elephant_story",
+   "unlock": {
+    "metric": "regional_units",
+    "atLeast": 3
+   },
+   "stages": [
+    {
+     "nameId": "ch_elephant_s1_name",
+     "textId": "ch_elephant_s1_text",
+     "artId": "ch_elephant_s1",
+     "points": 0
+    },
+    {
+     "nameId": "ch_elephant_s2_name",
+     "textId": "ch_elephant_s2_text",
+     "artId": "ch_elephant_s2",
+     "points": 12
+    },
+    {
+     "nameId": "ch_elephant_s3_name",
+     "textId": "ch_elephant_s3_text",
+     "artId": "ch_elephant_s3",
+     "points": 40
+    },
+    {
+     "nameId": "ch_elephant_s4_name",
+     "textId": "ch_elephant_s4_text",
+     "artId": "ch_elephant_s4",
+     "points": 90
+    },
+    {
+     "nameId": "ch_elephant_s5_name",
+     "textId": "ch_elephant_s5_text",
+     "artId": "ch_elephant_s5",
+     "points": 160
+    }
+   ]
+  }
+ ],
+ "badges": [
+  {
+   "id": "bd_first_round",
+   "titleId": "bd_first_round_title",
+   "textId": "bd_first_round_text",
+   "artId": "bd_first_round",
+   "metric": "rounds_finished",
+   "atLeast": 1
+  },
+  {
+   "id": "bd_rounds_10",
+   "titleId": "bd_rounds_10_title",
+   "textId": "bd_rounds_10_text",
+   "artId": "bd_rounds_10",
+   "metric": "rounds_finished",
+   "atLeast": 10
+  },
+  {
+   "id": "bd_rounds_50",
+   "titleId": "bd_rounds_50_title",
+   "textId": "bd_rounds_50_text",
+   "artId": "bd_rounds_50",
+   "metric": "rounds_finished",
+   "atLeast": 50
+  },
+  {
+   "id": "bd_link5",
+   "titleId": "bd_link5_title",
+   "textId": "bd_link5_text",
+   "artId": "bd_link5",
+   "metric": "best_link",
+   "atLeast": 5
+  },
+  {
+   "id": "bd_link10",
+   "titleId": "bd_link10_title",
+   "textId": "bd_link10_text",
+   "artId": "bd_link10",
+   "metric": "best_link",
+   "atLeast": 10
+  },
+  {
+   "id": "bd_comeback3",
+   "titleId": "bd_comeback3_title",
+   "textId": "bd_comeback3_text",
+   "artId": "bd_comeback3",
+   "metric": "comebacks",
+   "atLeast": 3
+  },
+  {
+   "id": "bd_comeback20",
+   "titleId": "bd_comeback20_title",
+   "textId": "bd_comeback20_text",
+   "artId": "bd_comeback20",
+   "metric": "comebacks",
+   "atLeast": 20
+  },
+  {
+   "id": "bd_unit1",
+   "titleId": "bd_unit1_title",
+   "textId": "bd_unit1_text",
+   "artId": "bd_unit1",
+   "metric": "units_done",
+   "atLeast": 1
+  },
+  {
+   "id": "bd_unit10",
+   "titleId": "bd_unit10_title",
+   "textId": "bd_unit10_text",
+   "artId": "bd_unit10",
+   "metric": "units_done",
+   "atLeast": 10
+  },
+  {
+   "id": "bd_overcome10",
+   "titleId": "bd_overcome10_title",
+   "textId": "bd_overcome10_text",
+   "artId": "bd_overcome10",
+   "metric": "overcome_stamps",
+   "atLeast": 10
+  },
+  {
+   "id": "bd_days7",
+   "titleId": "bd_days7_title",
+   "textId": "bd_days7_text",
+   "artId": "bd_days7",
+   "metric": "days_studied",
+   "atLeast": 7
+  },
+  {
+   "id": "bd_days30",
+   "titleId": "bd_days30_title",
+   "textId": "bd_days30_text",
+   "artId": "bd_days30",
+   "metric": "days_studied",
+   "atLeast": 30
+  },
+  {
+   "id": "bd_test1",
+   "titleId": "bd_test1_title",
+   "textId": "bd_test1_text",
+   "artId": "bd_test1",
+   "metric": "tests_done",
+   "atLeast": 1
+  }
+ ]
+}
