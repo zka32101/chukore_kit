@@ -419,7 +419,18 @@
      "tag": "total_count"
     }
    ],
-   "explanationId": "exp_m2_sim_word_001"
+   "explanationId": "exp_m2_sim_word_001",
+   "scene": "scene_shopping",
+   "plausible": {
+    "p": [
+     2,
+     8
+    ],
+    "q": [
+     2,
+     8
+    ]
+   }
   },
   {
    "id": "m2_lin_graph_001",
@@ -766,7 +777,14 @@
      "tag": "ratio_to_rest"
     }
    ],
-   "explanationId": "exp_m2_prob_prob_001"
+   "explanationId": "exp_m2_prob_prob_001",
+   "scene": "scene_dice_lottery",
+   "plausible": {
+    "n": [
+     4,
+     25
+    ]
+   }
   },
   {
    "id": "m2_data_box_001",
@@ -1270,7 +1288,54 @@
      "tag": "added_not_multiplied"
     }
    ],
-   "explanationId": "exp_m2_lin_use_001"
+   "explanationId": "exp_m2_lin_use_001",
+   "scene": "scene_water_tank",
+   "plausible": {
+    "b": [
+     5,
+     40
+    ],
+    "a": [
+     2,
+     9
+    ]
+   },
+   "figure": {
+    "plot": {
+     "x": [
+      0,
+      16
+     ],
+     "y": [
+      0,
+      200
+     ],
+     "curves": [
+      {
+       "expr": "a*x+b"
+      }
+     ],
+     "points": [
+      {
+       "at": [
+        "t",
+        "a*t+b"
+       ]
+      }
+     ],
+     "ticks": {
+      "x": 2,
+      "y": 40
+     }
+    },
+    "altId": "fig_water_tank_motion",
+    "animation": {
+     "from": 0,
+     "to": "p",
+     "frames": 13,
+     "durationMs": 2600
+    }
+   }
   },
   {
    "id": "m2_lin_use_002",
@@ -1312,7 +1377,18 @@
      "tag": "forgot_initial"
     }
    ],
-   "explanationId": "exp_m2_lin_use_002"
+   "explanationId": "exp_m2_lin_use_002",
+   "scene": "scene_water_tank",
+   "plausible": {
+    "b": [
+     5,
+     40
+    ],
+    "a": [
+     2,
+     9
+    ]
+   }
   },
   {
    "id": "m2_lin_graph_002",
@@ -1767,6 +1843,63 @@
     }
    ],
    "explanationId": "exp_m2_prob_count_003"
+  },
+  {
+   "id": "m2_lin_use_003",
+   "templateVersion": 1,
+   "unitId": "m2_lin_use",
+   "type": "expr",
+   "difficulty": 0.55,
+   "params": {
+    "a": {
+     "int": [
+      50,
+      150
+     ]
+    },
+    "b": {
+     "int": [
+      400,
+      700
+     ]
+    },
+    "p": {
+     "int": [
+      2,
+      15
+     ]
+    }
+   },
+   "display": {
+    "v": "{p}"
+   },
+   "answer": "{b+a*p}",
+   "wrong": [
+    {
+     "expr": "{a*p}",
+     "tag": "forgot_base_fare"
+    },
+    {
+     "expr": "{b+a+p}",
+     "tag": "added_instead"
+    }
+   ],
+   "explanationId": "exp_m2_lin_use_003",
+   "scene": "scene_taxi_fare",
+   "plausible": {
+    "b": [
+     400,
+     700
+    ],
+    "a": [
+     50,
+     150
+    ],
+    "p": [
+     2,
+     15
+    ]
+   }
   }
  ]
 }

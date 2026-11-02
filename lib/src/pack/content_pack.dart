@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import '../bank/question_bank.dart';
 import '../chart/chart.dart';
+import '../character/character.dart';
 import '../experience/experience.dart';
 import '../lesson/lesson.dart';
 import '../lesson/math_lesson_checker.dart';
@@ -63,12 +64,12 @@ class ContentPackManifest {
   final Set<String> textsCover;
 
   /// `textsCover` に書ける種類: `scenes`（場面の名前と説明）・`lessons`（レッスン）・`templates`（型の問題文と解説）・
-  /// `figures`（型の図の説明）・`questions`（問題集の解説）・`proofs`（証明の題・仮定・結論・各行・根拠）。
-  static const textKinds = {'scenes', 'lessons', 'templates', 'figures', 'questions', 'proofs'};
+  /// `figures`（型の図の説明）・`questions`（問題集の解説）・`proofs`（証明の題・仮定・結論・各行・根拠）・`characters`（キャラの名前・物語・進化の段階、バッジの名前と説明）。
+  static const textKinds = {'scenes', 'lessons', 'templates', 'figures', 'questions', 'proofs', 'characters'};
 
   static const fileKeys = {
     'units', 'prerequisites', 'questions', 'templates', 'lessons',
-    'explorations', 'constructions', 'experiences', 'charts', 'scenes', 'proofs', 'texts', 'maps',
+    'explorations', 'constructions', 'experiences', 'charts', 'scenes', 'proofs', 'characters', 'texts', 'maps',
   };
   static const _keys = {
     'version', 'id', 'country', 'locale', 'subject', 'grades', 'curriculum', 'contentVersion', 'attribution', 'files', 'textsCover',
@@ -312,6 +313,18 @@ ContentPackReport validateContentPack(String manifestSource, String? Function(St
     }
   }
   final usedScenes = <String>{};
+  // キャラとバッジ
+  final charactersFile = m.files['characters'] as String?;
+  CharacterSet? characterSet;
+  if (charactersFile != null) {
+    final set = tryParse(charactersFile, CharacterSet.parse);
+    if (set != null) {
+      characterSet = set;
+      addAll(charactersFile, validateCharacters(set));
+      counts['characters'] = set.characters.length;
+      counts['badges'] = set.badges.length;
+    }
+  }
   // 証明（合同・相似など）
   final proofsFile = m.files['proofs'] as String?;
   ProofSet? proofSet;
@@ -443,6 +456,7 @@ ContentPackReport validateContentPack(String manifestSource, String? Function(St
         lessons: lessonSet?.lessons ?? const <Lesson>[],
         sceneSet: sceneSet,
         proofs: proofSet?.proofs ?? const <ProofSpec>[],
+        characters: characterSet,
         questionExplanations: questionExplanations,
         cover: m.textsCover,
         add: add,
@@ -509,6 +523,7 @@ void _checkTexts({
   required List<Lesson> lessons,
   required SceneSet? sceneSet,
   required List<ProofSpec> proofs,
+  required CharacterSet? characters,
   required Set<String> questionExplanations,
   required Set<String> cover,
   required void Function(IssueSeverity, String, String, String) add,
@@ -537,6 +552,9 @@ void _checkTexts({
     }
     final altId = p.figure?['altId'];
     if (altId is String) need(altId, 'figures');
+  }
+  for (final id in characters?.textIds ?? const <String>[]) {
+    need(id, 'characters');
   }
   final all = namesOf(templates);
   for (final l in lessons) {

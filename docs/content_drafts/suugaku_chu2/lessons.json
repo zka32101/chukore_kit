@@ -69,7 +69,8 @@
    "blocks": [
     {
      "type": "hook",
-     "textId": "les_m2_sim_solve_01_hook"
+     "textId": "les_m2_sim_solve_01_hook",
+     "scene": "scene_shopping"
     },
     {
      "type": "text",
@@ -114,7 +115,8 @@
    "blocks": [
     {
      "type": "hook",
-     "textId": "les_m2_lin_graph_01_hook"
+     "textId": "les_m2_lin_graph_01_hook",
+     "scene": "scene_water_tank"
     },
     {
      "type": "text",

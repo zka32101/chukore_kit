@@ -59,7 +59,7 @@ void main() {
 
     test('textsCover: 既定はすべて。指定すれば絞る', () {
       expect(ContentPackManifest.parse(jsonEncode(_manifest())).textsCover, ContentPackManifest.textKinds);
-      expect(ContentPackManifest.textKinds, {'scenes', 'lessons', 'templates', 'figures', 'questions', 'proofs'});
+      expect(ContentPackManifest.textKinds, {'scenes', 'lessons', 'templates', 'figures', 'questions', 'proofs', 'characters'});
       final m = ContentPackManifest.parse(jsonEncode(_manifest({'textsCover': ['lessons', 'scenes']})));
       expect(m.textsCover, {'lessons', 'scenes'});
     });
