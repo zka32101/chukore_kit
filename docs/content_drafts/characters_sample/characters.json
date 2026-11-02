@@ -617,101 +617,110 @@
    ]
   },
   {
-   "id": "ch_unit_m1_linear",
-   "kind": "unit",
-   "unitId": "m1_linear",
-   "nameId": "ch_unit_m1_linear_name",
-   "storyId": "ch_unit_m1_linear_story",
+   "id": "ch_field_m1_eq",
+   "kind": "field",
+   "fieldId": "m1_eq",
+   "subjects": [
+    "math"
+   ],
+   "nameId": "ch_field_m1_eq_name",
+   "storyId": "ch_field_m1_eq_story",
    "stages": [
     {
-     "nameId": "ch_unit_m1_linear_s1_name",
-     "textId": "ch_unit_m1_linear_s1_text",
-     "artId": "ch_unit_m1_linear_s1",
+     "nameId": "ch_field_m1_eq_s1_name",
+     "textId": "ch_field_m1_eq_s1_text",
+     "artId": "ch_field_m1_eq_s1",
      "points": 0
     },
     {
-     "nameId": "ch_unit_m1_linear_s2_name",
-     "textId": "ch_unit_m1_linear_s2_text",
-     "artId": "ch_unit_m1_linear_s2",
-     "points": 5
+     "nameId": "ch_field_m1_eq_s2_name",
+     "textId": "ch_field_m1_eq_s2_text",
+     "artId": "ch_field_m1_eq_s2",
+     "points": 8
     },
     {
-     "nameId": "ch_unit_m1_linear_s3_name",
-     "textId": "ch_unit_m1_linear_s3_text",
-     "artId": "ch_unit_m1_linear_s3",
-     "points": 15
+     "nameId": "ch_field_m1_eq_s3_name",
+     "textId": "ch_field_m1_eq_s3_text",
+     "artId": "ch_field_m1_eq_s3",
+     "points": 25
     },
     {
-     "nameId": "ch_unit_m1_linear_s4_name",
-     "textId": "ch_unit_m1_linear_s4_text",
-     "artId": "ch_unit_m1_linear_s4",
-     "points": 30
+     "nameId": "ch_field_m1_eq_s4_name",
+     "textId": "ch_field_m1_eq_s4_text",
+     "artId": "ch_field_m1_eq_s4",
+     "points": 50
     }
    ]
   },
   {
-   "id": "ch_unit_m2_sim_solve",
-   "kind": "unit",
-   "unitId": "m2_sim_solve",
-   "nameId": "ch_unit_m2_sim_solve_name",
-   "storyId": "ch_unit_m2_sim_solve_story",
+   "id": "ch_field_m2_lin",
+   "kind": "field",
+   "fieldId": "m2_lin",
+   "subjects": [
+    "math"
+   ],
+   "nameId": "ch_field_m2_lin_name",
+   "storyId": "ch_field_m2_lin_story",
    "stages": [
     {
-     "nameId": "ch_unit_m2_sim_solve_s1_name",
-     "textId": "ch_unit_m2_sim_solve_s1_text",
-     "artId": "ch_unit_m2_sim_solve_s1",
+     "nameId": "ch_field_m2_lin_s1_name",
+     "textId": "ch_field_m2_lin_s1_text",
+     "artId": "ch_field_m2_lin_s1",
      "points": 0
     },
     {
-     "nameId": "ch_unit_m2_sim_solve_s2_name",
-     "textId": "ch_unit_m2_sim_solve_s2_text",
-     "artId": "ch_unit_m2_sim_solve_s2",
-     "points": 5
+     "nameId": "ch_field_m2_lin_s2_name",
+     "textId": "ch_field_m2_lin_s2_text",
+     "artId": "ch_field_m2_lin_s2",
+     "points": 8
     },
     {
-     "nameId": "ch_unit_m2_sim_solve_s3_name",
-     "textId": "ch_unit_m2_sim_solve_s3_text",
-     "artId": "ch_unit_m2_sim_solve_s3",
-     "points": 15
+     "nameId": "ch_field_m2_lin_s3_name",
+     "textId": "ch_field_m2_lin_s3_text",
+     "artId": "ch_field_m2_lin_s3",
+     "points": 25
     },
     {
-     "nameId": "ch_unit_m2_sim_solve_s4_name",
-     "textId": "ch_unit_m2_sim_solve_s4_text",
-     "artId": "ch_unit_m2_sim_solve_s4",
-     "points": 30
+     "nameId": "ch_field_m2_lin_s4_name",
+     "textId": "ch_field_m2_lin_s4_text",
+     "artId": "ch_field_m2_lin_s4",
+     "points": 50
     }
    ]
   },
   {
-   "id": "ch_unit_m3_quad_solve",
-   "kind": "unit",
-   "unitId": "m3_quad_solve",
-   "nameId": "ch_unit_m3_quad_solve_name",
-   "storyId": "ch_unit_m3_quad_solve_story",
+   "id": "ch_field_m3_sim",
+   "kind": "field",
+   "fieldId": "m3_sim",
+   "subjects": [
+    "math"
+   ],
+   "nameId": "ch_field_m3_sim_name",
+   "storyId": "ch_field_m3_sim_story",
    "stages": [
     {
-     "nameId": "ch_unit_m3_quad_solve_s1_name",
-     "textId": "ch_unit_m3_quad_solve_s1_text",
-     "artId": "ch_unit_m3_quad_solve_s1",
+     "nameId": "ch_field_m3_sim_s1_name",
+     "textId": "ch_field_m3_sim_s1_text",
+     "artId": "ch_field_m3_sim_s1",
      "points": 0
     },
     {
-     "nameId": "ch_unit_m3_quad_solve_s2_name",
-     "textId": "ch_unit_m3_quad_solve_s2_text",
-     "artId": "ch_unit_m3_quad_solve_s2",
-     "points": 5
+     "nameId": "ch_field_m3_sim_s2_name",
+     "textId": "ch_field_m3_sim_s2_text",
+     "artId": "ch_field_m3_sim_s2",
+     "points": 8
     },
     {
-     "nameId": "ch_unit_m3_quad_solve_s3_name",
-     "textId": "ch_unit_m3_quad_solve_s3_text",
-     "artId": "ch_unit_m3_quad_solve_s3",
-     "points": 15
+     "nameId": "ch_field_m3_sim_s3_name",
+     "textId": "ch_field_m3_sim_s3_text",
+     "artId": "ch_field_m3_sim_s3",
+     "points": 25
     },
     {
-     "nameId": "ch_unit_m3_quad_solve_s4_name",
-     "textId": "ch_unit_m3_quad_solve_s4_text",
-     "artId": "ch_unit_m3_quad_solve_s4",
-     "points": 30
+     "nameId": "ch_field_m3_sim_s4_name",
+     "textId": "ch_field_m3_sim_s4_text",
+     "artId": "ch_field_m3_sim_s4",
+     "points": 50
     }
    ]
   }

@@ -458,30 +458,40 @@ void artTests() {
     },
   );
 
-  test('単元のキャラ: 単元ごとに 1 匹。その単元の正解の数で育ち、下がらない。単元がない・重複はエラー', () {
+  test('分野のキャラ: 分野ごとに 1 匹（相棒とは別）。その分野の正解と「できた」の数で育ち、下がらない。図鑑に並ぶ', () {
     final set = _set();
-    expect(set.unitCharacters.map((c) => c.unitId).toSet(), {
-      'm1_linear',
-      'm2_sim_solve',
-      'm3_quad_solve',
+    expect(set.fieldCharacters.map((c) => c.fieldId).toSet(), {
+      'm1_eq',
+      'm2_lin',
+      'm3_sim',
     });
-    final c = set.unitCharacterFor('m1_linear')!;
-    expect(c.kind, CharacterKind.unit);
-    expect(set.unitCharacterFor('m1_data_rep'), isNull);
-    expect(growthPointsForUnit(correct: 12, done: false), 12);
-    expect(growthPointsForUnit(correct: 12, done: true), 17);
-    expect(growthPointsForUnit(correct: -3, done: false), 0);
+    final c = set.fieldCharacterFor('m1_eq')!;
+    expect(c.kind, CharacterKind.field);
+    expect(set.fieldCharacterFor('m1_num'), isNull);
+    expect(growthPointsForField(correct: 12, unitsDone: 0), 12);
+    expect(growthPointsForField(correct: 12, unitsDone: 2), 22);
+    expect(growthPointsForField(correct: -3, unitsDone: -1), 0);
     expect(
       [
-        for (final pts in [0, 4, 5, 14, 15, 29, 30])
-          c.stageOf(growthPointsForUnit(correct: pts, done: false)),
+        for (final pts in [0, 7, 8, 24, 25, 49, 50])
+          c.stageOf(growthPointsForField(correct: pts, unitsDone: 0)),
       ],
       [0, 0, 1, 1, 2, 2, 3],
     );
-    // 単元のキャラははじめの相棒には入らない
+    // 図鑑: 教科ごと。出会っていない分野はシルエット（met が偽）。育ちは自分の分だけ
+    final z = zukan(set, 'math', {'m1_eq': 30});
+    expect(z.map((e) => e.character.fieldId), ['m1_eq', 'm2_lin', 'm3_sim']);
+    expect([for (final e in z) e.met], [true, false, false]);
+    expect(z.first.stage, 2);
+    expect(zukan(set, 'en', {'m1_eq': 30}), isEmpty);
+    // 分野のキャラは、はじめの相棒にも解放のキャラにも入らない
     expect(set.startersFor('math', region: 'JP').map((x) => x.id), ['ch_math']);
-    // 単元の確認（実際の単元ツリーと突き合わせる）
-    final units = <String>{};
+    expect(
+      set.unlocked(const LearnerMetrics(), subject: 'math').map((x) => x.id),
+      ['ch_math'],
+    );
+    // 分野の確認（実際の単元ツリーの一番上の単元＝分野と突き合わせる）
+    final fields = <String>{};
     for (final d in ['suugaku_chu1', 'suugaku_chu2', 'suugaku_chu3']) {
       final j =
           jsonDecode(
@@ -489,33 +499,44 @@ void artTests() {
               )
               as Map<String, dynamic>;
       for (final u in j['units'] as List) {
-        units.add((u as Map)['id'] as String);
+        if ((u as Map)['parentId'] == null) fields.add(u['id'] as String);
       }
     }
-    expect(validateCharacters(set, unitIds: units), isEmpty);
+    expect(fields.length, 22); // 数学の分野: 中1 が 7・中2 が 7・中3 が 8
+    expect(validateCharacters(set, fieldIds: fields), isEmpty);
+    expect(
+      validateCharacters(set, fieldIds: {'m1_eq'}).map((i) => i.code).toSet(),
+      {'character_field_missing'},
+    );
+    // 分野の下の単元を指すとエラー
+    final bad =
+        jsonDecode(File('$_dir/characters.json').readAsStringSync())
+            as Map<String, dynamic>;
+    ((bad['characters'] as List).last as Map)['fieldId'] = 'm3_sim_def';
     expect(
       validateCharacters(
-        set,
-        unitIds: {'m1_linear'},
-      ).map((i) => i.code).toSet(),
-      {'character_unit_missing'},
+        CharacterSet.parse(jsonEncode(bad)),
+        fieldIds: fields,
+      ).map((i) => i.code),
+      contains('character_field_missing'),
     );
+    // 同じ分野に 2 つ、分野の指定がない、はエラー
     final j =
         jsonDecode(File('$_dir/characters.json').readAsStringSync())
             as Map<String, dynamic>;
     final extra = Map<String, dynamic>.from(
       (j['characters'] as List).last as Map,
-    )..['id'] = 'ch_unit_dup';
+    )..['id'] = 'ch_field_dup';
     (j['characters'] as List).add(extra);
     expect(
       validateCharacters(CharacterSet.parse(jsonEncode(j))).map((i) => i.code),
-      contains('character_unit_duplicate'),
+      contains('character_field_duplicate'),
     );
     (j['characters'] as List).removeLast();
-    ((j['characters'] as List).last as Map).remove('unitId');
+    ((j['characters'] as List).last as Map).remove('fieldId');
     expect(
       validateCharacters(CharacterSet.parse(jsonEncode(j))).map((i) => i.code),
-      contains('character_unit_missing'),
+      contains('character_field_missing'),
     );
   });
 }

@@ -580,102 +580,6 @@
    "bundled": false
   },
   {
-   "id": "ch_unit_m1_linear_s1",
-   "path": "ch_unit_m1_linear_s1.svg",
-   "sha256": "71f35da6a094e0e5889fa3944111842628fff878867f33aa16831229d2c3d2fc",
-   "bytes": 231,
-   "format": "svg",
-   "bundled": false
-  },
-  {
-   "id": "ch_unit_m1_linear_s2",
-   "path": "ch_unit_m1_linear_s2.svg",
-   "sha256": "2667fdc3bdd0a224f61f6f0ac7d5f0070f163e8088a500e9f8e8cef23c8c52ac",
-   "bytes": 231,
-   "format": "svg",
-   "bundled": false
-  },
-  {
-   "id": "ch_unit_m1_linear_s3",
-   "path": "ch_unit_m1_linear_s3.svg",
-   "sha256": "d94f74e0707e59ce704c75f2db584623516d69dd3cc22f3fc9884088df1b83fe",
-   "bytes": 231,
-   "format": "svg",
-   "bundled": false
-  },
-  {
-   "id": "ch_unit_m1_linear_s4",
-   "path": "ch_unit_m1_linear_s4.svg",
-   "sha256": "d61bf88f42213dff0c3b683847f0e8556fdadf3b364cdd6911827351384f5d2c",
-   "bytes": 231,
-   "format": "svg",
-   "bundled": false
-  },
-  {
-   "id": "ch_unit_m2_sim_solve_s1",
-   "path": "ch_unit_m2_sim_solve_s1.svg",
-   "sha256": "6b8f1c0223dafcbe90d1d6da47e5a5419c4bfd298000963826c2a82f60cf7ea9",
-   "bytes": 231,
-   "format": "svg",
-   "bundled": false
-  },
-  {
-   "id": "ch_unit_m2_sim_solve_s2",
-   "path": "ch_unit_m2_sim_solve_s2.svg",
-   "sha256": "9cac82d76d2f03e88902118072b0dde79fc9230fdbe29876caa18efe63f0130c",
-   "bytes": 231,
-   "format": "svg",
-   "bundled": false
-  },
-  {
-   "id": "ch_unit_m2_sim_solve_s3",
-   "path": "ch_unit_m2_sim_solve_s3.svg",
-   "sha256": "f18f8e71b4240f54c136bc6f7af9e9a0c697e897993f22de836a5198b65b2221",
-   "bytes": 231,
-   "format": "svg",
-   "bundled": false
-  },
-  {
-   "id": "ch_unit_m2_sim_solve_s4",
-   "path": "ch_unit_m2_sim_solve_s4.svg",
-   "sha256": "eb9741c0f6410fa7f814cd1cfd8342c225713d424d8807c7a4d99eafbecd9345",
-   "bytes": 231,
-   "format": "svg",
-   "bundled": false
-  },
-  {
-   "id": "ch_unit_m3_quad_solve_s1",
-   "path": "ch_unit_m3_quad_solve_s1.svg",
-   "sha256": "ef90e019576f3968a5c13bd9ea8d0592851c5048d0a536c867b21f3a15432c5c",
-   "bytes": 231,
-   "format": "svg",
-   "bundled": false
-  },
-  {
-   "id": "ch_unit_m3_quad_solve_s2",
-   "path": "ch_unit_m3_quad_solve_s2.svg",
-   "sha256": "99dccc808520d06ae9e3c2592c3adb54cc59187d6577d8f8bc91324edf139b2e",
-   "bytes": 231,
-   "format": "svg",
-   "bundled": false
-  },
-  {
-   "id": "ch_unit_m3_quad_solve_s3",
-   "path": "ch_unit_m3_quad_solve_s3.svg",
-   "sha256": "d1bf1dcae311b4e93f11452d12b8949f90c1da5322d909cfd1cdfc2e7c0d361c",
-   "bytes": 231,
-   "format": "svg",
-   "bundled": false
-  },
-  {
-   "id": "ch_unit_m3_quad_solve_s4",
-   "path": "ch_unit_m3_quad_solve_s4.svg",
-   "sha256": "31476f50b3a5794b66d74c652857c349dbe8a5a709c0cd49190d8b58ff8f4809",
-   "bytes": 231,
-   "format": "svg",
-   "bundled": false
-  },
-  {
    "id": "bd_first_round",
    "path": "bd_first_round.svg",
    "sha256": "e4ad1e4288e60038ba6a3dc023cebf5ba70f7400164b6ba699f40aa0d6dc94dd",
@@ -776,6 +680,102 @@
    "path": "bd_test1.svg",
    "sha256": "e1095d7e3ece8e16634be39e5a371603fc8aa567a19374574c1138f8c23a9972",
    "bytes": 225,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m1_eq_s1",
+   "path": "ch_field_m1_eq_s1.svg",
+   "sha256": "52b2e40a6af0753407efa0daa0ffe94c6b8436788e9b40b49ea881aeb93b8b46",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m1_eq_s2",
+   "path": "ch_field_m1_eq_s2.svg",
+   "sha256": "68fed52d6a81dc48cb73e6f88f49cf6760247210f84f4547e8c8956eeb2c8014",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m1_eq_s3",
+   "path": "ch_field_m1_eq_s3.svg",
+   "sha256": "2e8e29bd11acb7fc097f319453d8a71c26d655f40b13f4a870bce7f898e89414",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m1_eq_s4",
+   "path": "ch_field_m1_eq_s4.svg",
+   "sha256": "1bf3c3406ab504ab91e3f459e29a420f49bc05de97f3d4b3d7908094b27c111a",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m2_lin_s1",
+   "path": "ch_field_m2_lin_s1.svg",
+   "sha256": "130a2145d2a517747349954170a9d5db453760f07dc70f0ac8157c1664c0fee2",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m2_lin_s2",
+   "path": "ch_field_m2_lin_s2.svg",
+   "sha256": "8f580305c695f815d3ee6004a5f164318677d0507620d2dcefa8a24b89fcf3c6",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m2_lin_s3",
+   "path": "ch_field_m2_lin_s3.svg",
+   "sha256": "583c0e4f317d65ca717596b3f2895e0866ad25f77d2887f70d39e1039f981b10",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m2_lin_s4",
+   "path": "ch_field_m2_lin_s4.svg",
+   "sha256": "27d9e3bd43a25da6ec9933296c1d59257bce0ad50998b305dcd11e36f388981b",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m3_sim_s1",
+   "path": "ch_field_m3_sim_s1.svg",
+   "sha256": "c9404a93b5f981ab36f504aad5c962f61b5d2a060d5fc813de63d525c3b3ec57",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m3_sim_s2",
+   "path": "ch_field_m3_sim_s2.svg",
+   "sha256": "a8208d07b2098c27ce447e7902a7fee446d1ea0ee26d1ba8e4f814d4102cbf31",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m3_sim_s3",
+   "path": "ch_field_m3_sim_s3.svg",
+   "sha256": "7a1857276198113b7d7eab372c60ef994cee5a5cdf12bf64bdb184e685705464",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_field_m3_sim_s4",
+   "path": "ch_field_m3_sim_s4.svg",
+   "sha256": "b3403c56d394bd10d2446054fb4b0d83ae8d1a277e2a99f1f0eedce9b06c96f9",
+   "bytes": 231,
    "format": "svg",
    "bundled": false
   }

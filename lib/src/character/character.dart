@@ -74,8 +74,8 @@ class FormSpec {
   final int scale;
 }
 
-/// 種類: 共通の相棒／その国らしい相棒（地域キャラ）／単元のキャラ（その単元の学びといっしょに育つ）。
-enum CharacterKind { common, regional, unit }
+/// 種類: 共通の相棒／その国らしい相棒（地域キャラ）／分野のキャラ（その分野の学びといっしょに育つ。図鑑に並ぶ）。
+enum CharacterKind { common, regional, field }
 
 class CharacterSpec {
   const CharacterSpec({
@@ -88,7 +88,7 @@ class CharacterSpec {
     required this.stages,
     this.forms = const [],
     this.unlock,
-    this.unitId,
+    this.fieldId,
   });
 
   final String id;
@@ -108,8 +108,8 @@ class CharacterSpec {
   final List<FormSpec> forms;
   final UnlockRule? unlock;
 
-  /// 単元のキャラ（`kind` が `unit`）が育つ単元。成長ポイントは、その単元の正解の数（と「できた」）から数える。
-  final String? unitId;
+  /// 分野のキャラ（`kind` が `field`）が育つ分野（単元ツリーの一番上の単元）。成長ポイントは、その分野の正解の数（と「できた」）から数える。
+  final String? fieldId;
 
   bool availableIn({String? region, String? subject}) =>
       (regions.isEmpty || (region != null && regions.contains(region))) &&
@@ -220,7 +220,7 @@ class CharacterSet {
           .where((k) => k.name == kindName)
           .firstOrNull;
       if (kind == null) {
-        throw FormatException('$id: kind は common・regional・unit のどれか');
+        throw FormatException('$id: kind は common・regional・field のどれか');
       }
       final stages = [
         for (final raw in (c['stages'] as List? ?? const []))
@@ -267,7 +267,7 @@ class CharacterSet {
                   metric: _str(u, 'metric', '$id の入手条件'),
                   atLeast: _int(u, 'atLeast', '$id の入手条件'),
                 ),
-          unitId: c['unitId'] as String?,
+          fieldId: c['fieldId'] as String?,
         ),
       );
     }
@@ -299,7 +299,7 @@ class CharacterSet {
   List<CharacterSpec> startersFor(String subject, {String? region}) {
     final all = [
       for (final c in characters)
-        if (c.kind != CharacterKind.unit &&
+        if (c.kind != CharacterKind.field &&
             c.unlock == null &&
             c.availableIn(region: region, subject: subject))
           c,
@@ -310,18 +310,18 @@ class CharacterSet {
     ];
   }
 
-  /// 単元 [unitId] のキャラ（無ければ null）。
-  CharacterSpec? unitCharacterFor(String unitId) {
+  /// 分野 [fieldId] のキャラ（無ければ null）。
+  CharacterSpec? fieldCharacterFor(String fieldId) {
     for (final c in characters) {
-      if (c.kind == CharacterKind.unit && c.unitId == unitId) return c;
+      if (c.kind == CharacterKind.field && c.fieldId == fieldId) return c;
     }
     return null;
   }
 
-  /// 単元のキャラ全部。
-  List<CharacterSpec> get unitCharacters => [
+  /// 分野のキャラ全部（図鑑に並ぶもの）。
+  List<CharacterSpec> get fieldCharacters => [
     for (final c in characters)
-      if (c.kind == CharacterKind.unit) c,
+      if (c.kind == CharacterKind.field) c,
   ];
 
   /// キャラに書かれた教科の一覧。
@@ -334,7 +334,8 @@ class CharacterSet {
     String? subject,
   }) => [
     for (final c in characters)
-      if (c.availableIn(region: region, subject: subject) &&
+      if (c.kind != CharacterKind.field &&
+          c.availableIn(region: region, subject: subject) &&
           (c.unlock?.met(m) ?? true))
         c,
   ];
@@ -357,13 +358,48 @@ int growthPointsForRound(Set<PlayReward> rewards) {
   return p;
 }
 
-/// 単元のキャラの成長ポイント: その単元で正解した数（1 問 1 点）。「できた」になったら +5。
-/// 正解の数が増えるだけなので、下がらない。
-int growthPointsForUnit({required int correct, required bool done}) =>
-    (correct < 0 ? 0 : correct) + (done ? growthPointsForUnitDone : 0);
+/// 分野のキャラの成長ポイント: その分野で正解した数（1 問 1 点）に、「できた」になった単元 1 つにつき +5。
+/// どちらも増えるだけなので、下がらない。
+int growthPointsForField({required int correct, required int unitsDone}) =>
+    (correct < 0 ? 0 : correct) +
+    (unitsDone < 0 ? 0 : unitsDone) * growthPointsForUnitDone;
 
 /// 単元テストで「できた」になったときの成長ポイント。
 const growthPointsForUnitDone = 5;
+
+/// 図鑑の 1 項目: 分野のキャラと、いまの育ち。まだ出会っていない（ポイント 0）ものは `met` が偽（シルエットで見せる）。
+/// 図鑑は**自分の育ちを見る**ためのもので、順位や他の子との比較は載せない。
+class ZukanEntry {
+  const ZukanEntry({
+    required this.character,
+    required this.points,
+    required this.stage,
+  });
+
+  final CharacterSpec character;
+  final int points;
+
+  /// 段階（0 始まり）。
+  final int stage;
+
+  bool get met => points > 0;
+}
+
+/// 教科 [subject] の分野のキャラの図鑑（並びは `characters.json` の順）。
+/// [fieldPoints] は 分野ID → 成長ポイント（アプリが [growthPointsForField] で数える）。
+List<ZukanEntry> zukan(
+  CharacterSet set,
+  String subject,
+  Map<String, int> fieldPoints,
+) => [
+  for (final c in set.fieldCharacters)
+    if (c.availableIn(subject: subject))
+      ZukanEntry(
+        character: c,
+        points: fieldPoints[c.fieldId] ?? 0,
+        stage: c.stageOf(fieldPoints[c.fieldId] ?? 0),
+      ),
+];
 
 /// 相棒ごとの成長ポイント。増えるだけ（負の値は 0 として扱い、休んでも下がらない）。
 /// **相棒は教科ごとに 1 匹**: 教科アプリごとに連れる相棒が別で、その教科の勉強でだけ育つ。
@@ -404,10 +440,10 @@ class CompanionProgress {
 /// キャラとバッジの検証。
 /// エラー: `character_stage_invalid`（段階は 3〜6 個、最初は 0 点、点は増える順）・`character_region_invalid`（国コードは大文字 2 文字）・
 /// `character_regional_no_region`（地域キャラは国を指定する）・`character_metric_unknown`・`character_threshold_invalid`（1 以上）・
-/// `character_unit_missing`（単元のキャラの単元がない・単元以外に unitId）・`character_unit_duplicate`（同じ単元に 2 つ）・`character_form_invalid`（姿の分岐は 2〜4 個・scale は 1 以上）・`character_no_starter`（教科ごとに、はじめの共通キャラが無い）。
+/// `character_field_missing`（分野のキャラの分野がない・分野以外に fieldId）・`character_field_duplicate`（同じ分野に 2 つ）・`character_form_invalid`（姿の分岐は 2〜4 個・scale は 1 以上）・`character_no_starter`（教科ごとに、はじめの共通キャラが無い）。
 List<ValidationIssue> validateCharacters(
   CharacterSet set, {
-  Set<String>? unitIds,
+  Set<String>? fieldIds,
 }) {
   final issues = <ValidationIssue>[];
   void err(String code, String id, String msg) =>
@@ -415,13 +451,13 @@ List<ValidationIssue> validateCharacters(
   final art = RegExp(r'^[a-z0-9_]+$');
   final seenUnits = <String>{};
   for (final c in set.characters) {
-    final u = c.unitId;
-    if (c.kind != CharacterKind.unit || u == null) continue;
+    final u = c.fieldId;
+    if (c.kind != CharacterKind.field || u == null) continue;
     if (!seenUnits.add(u)) {
-      err('character_unit_duplicate', c.id, '単元 $u のキャラが 2 つあります');
+      err('character_field_duplicate', c.id, '分野 $u のキャラが 2 つあります');
     }
-    if (unitIds != null && !unitIds.contains(u)) {
-      err('character_unit_missing', c.id, '単元 $u がありません');
+    if (fieldIds != null && !fieldIds.contains(u)) {
+      err('character_field_missing', c.id, '分野 $u がありません');
     }
   }
   for (final c in set.characters) {
@@ -446,12 +482,12 @@ List<ValidationIssue> validateCharacters(
         err('character_region_invalid', c.id, '国コードは大文字 2 文字: $r');
       }
     }
-    if (c.kind == CharacterKind.unit &&
-        (c.unitId == null || c.unitId!.isEmpty)) {
-      err('character_unit_missing', c.id, '単元のキャラは unitId が要ります');
+    if (c.kind == CharacterKind.field &&
+        (c.fieldId == null || c.fieldId!.isEmpty)) {
+      err('character_field_missing', c.id, '分野のキャラは fieldId が要ります');
     }
-    if (c.kind != CharacterKind.unit && c.unitId != null) {
-      err('character_unit_missing', c.id, 'unitId は単元のキャラだけに書きます');
+    if (c.kind != CharacterKind.field && c.fieldId != null) {
+      err('character_field_missing', c.id, 'fieldId は分野のキャラだけに書きます');
     }
     if (c.kind == CharacterKind.regional && c.regions.isEmpty) {
       err('character_regional_no_region', c.id, '地域キャラは国を指定します');

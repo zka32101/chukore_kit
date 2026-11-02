@@ -127,11 +127,11 @@ List<ValidationIssue> validateArt(ArtManifest m, {CharacterSet? characters}) {
       err('art_sha_invalid', e.id, 'sha256 は小文字 16 進 64 文字');
     }
     if (e.bytes < 1 || e.bytes > ArtManifest.maxBytes) {
-        err(
-          'art_size_invalid',
-          e.id,
-          '大きさは 1〜${ArtManifest.maxBytes} バイト（${e.bytes}）',
-        );
+      err(
+        'art_size_invalid',
+        e.id,
+        '大きさは 1〜${ArtManifest.maxBytes} バイト（${e.bytes}）',
+      );
     }
     if (!ArtManifest.formats.contains(e.format)) {
       err('art_format_invalid', e.id, '形式は png・webp・svg: ${e.format}');
