@@ -1,0 +1,783 @@
+{
+ "version": 1,
+ "baseUrl": "https://example.invalid/chukore/art/v1/",
+ "note": "見本。画像は仮の絵（色つきの四角）。baseUrl は実際の配信元に置き換える",
+ "arts": [
+  {
+   "id": "ch_math_s1",
+   "path": "ch_math_s1.svg",
+   "sha256": "b6acf9f4f4d02a10852afc63d4955423083424e4ac1d5f8272b7f4baf0a3a0ce",
+   "bytes": 227,
+   "format": "svg",
+   "bundled": true
+  },
+  {
+   "id": "ch_math_s2",
+   "path": "ch_math_s2.svg",
+   "sha256": "a22c98e82eb4677fdb3b72eddeeb2fb3ef83ddea8bde71d8adb5605ea3b6e1bf",
+   "bytes": 227,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_math_s3",
+   "path": "ch_math_s3.svg",
+   "sha256": "92b76ff0eb45c5b83bc2dc317383c2e5fc013436309a44f45258e4176ca0be17",
+   "bytes": 227,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_math_s4",
+   "path": "ch_math_s4.svg",
+   "sha256": "bd2b05e1c67d5c4e92f9bf0e8c0c258b451d2a642c4b127a1a3d61f993fdbd5d",
+   "bytes": 227,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_math_s5",
+   "path": "ch_math_s5.svg",
+   "sha256": "f300b364363c50a5e9c07328278e8b84b18e3a565abb332a3e6abccfc62f186b",
+   "bytes": 227,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_math_f1",
+   "path": "ch_math_f1.svg",
+   "sha256": "a43761fa91fe7bb822f27b624e28357bfe7c04fbc4f0d9daa985e6143a1e20d4",
+   "bytes": 227,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_math_f2",
+   "path": "ch_math_f2.svg",
+   "sha256": "f75dd3d65154ca359997f863133c9b2fc567d9672da337de6395146d4fef2937",
+   "bytes": 227,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_math_f3",
+   "path": "ch_math_f3.svg",
+   "sha256": "a785310f56ff10c8550cb0800c14f33ff7bdb842142855726cf66a1249f863e7",
+   "bytes": 227,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_en_s1",
+   "path": "ch_en_s1.svg",
+   "sha256": "9e8dd287b1b4760832631cf21fdbdc44ca747f1870e18441b87b217ad9c6afbf",
+   "bytes": 225,
+   "format": "svg",
+   "bundled": true
+  },
+  {
+   "id": "ch_en_s2",
+   "path": "ch_en_s2.svg",
+   "sha256": "96595baec2b6eb31f4d605a68a0e7db174318a9051dd1d87666fee8255e9642b",
+   "bytes": 225,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_en_s3",
+   "path": "ch_en_s3.svg",
+   "sha256": "9be6c117a6d2459a37176639885810ca23bdbba1b3755e3f0433429fb5b92c6d",
+   "bytes": 225,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_en_s4",
+   "path": "ch_en_s4.svg",
+   "sha256": "1d9d773cd9eb419948eadcb0d2d2fd413b574d615e893a4b872a499bbb4fb7fa",
+   "bytes": 225,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_en_s5",
+   "path": "ch_en_s5.svg",
+   "sha256": "58a6619e101b9bbee6e8370b5ebbd2a1b49234f787b0239f3fe534ac18db5066",
+   "bytes": 225,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_en_f1",
+   "path": "ch_en_f1.svg",
+   "sha256": "01eea39c3164ac46b95d283f629113565f16bb4c8393b8eaed6743d04c5cedae",
+   "bytes": 225,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_en_f2",
+   "path": "ch_en_f2.svg",
+   "sha256": "be9a934cf815c2a3d97fa3e117028f7ec05e6d7436467fe0c9b6a7d46145a31d",
+   "bytes": 225,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_en_f3",
+   "path": "ch_en_f3.svg",
+   "sha256": "eaac91c99276795f57f2aec9efc0ea50457714c88a9ab25479a95d57dff45bee",
+   "bytes": 225,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_s1",
+   "path": "ch_social_s1.svg",
+   "sha256": "2030710b4ddfa89598578bc27b5a5504c99987174ef881d59a2dd58f70a51965",
+   "bytes": 229,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_s2",
+   "path": "ch_social_s2.svg",
+   "sha256": "4a212c626973300192bc0dbd156dcf8b0f0c15682c3338d3b05e1e0be1403415",
+   "bytes": 229,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_s3",
+   "path": "ch_social_s3.svg",
+   "sha256": "e5cc79e2ad2a6bcc875e9813c830ac3716dfb376fdf01bc12162cae3e0b1db57",
+   "bytes": 229,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_s4",
+   "path": "ch_social_s4.svg",
+   "sha256": "3271f92a387fc4586a8d43f4d10d38d565737e1a60dea061795b711f5b01ba30",
+   "bytes": 229,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_s5",
+   "path": "ch_social_s5.svg",
+   "sha256": "b7e2fca6ca039bb227a0e41df0128bcf78e9a87d4d96702549d125ef37c46b29",
+   "bytes": 229,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_f1",
+   "path": "ch_social_f1.svg",
+   "sha256": "5ae8ff100dca02282579c56303e3ad319a1cdc3f3d5dac198131974bc4a98e0d",
+   "bytes": 229,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_f2",
+   "path": "ch_social_f2.svg",
+   "sha256": "1514062ad65e482d941c29d5bd936acab7c4a0a92acf952d98447712be24e40c",
+   "bytes": 229,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_f3",
+   "path": "ch_social_f3.svg",
+   "sha256": "06308e9384d81fb94ceaa2e7aa147997f3800bafcd87adbf50d97ce2e1e07fb7",
+   "bytes": 229,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_science_s1",
+   "path": "ch_science_s1.svg",
+   "sha256": "211c4def97c9587b41223c6b584e57d4defe285b11dc3271eb31d41c0dcc63d9",
+   "bytes": 230,
+   "format": "svg",
+   "bundled": true
+  },
+  {
+   "id": "ch_science_s2",
+   "path": "ch_science_s2.svg",
+   "sha256": "eb143964db15f28071625a82da5df18fafdb24d6ed0964ce02cca290b7ebc488",
+   "bytes": 230,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_science_s3",
+   "path": "ch_science_s3.svg",
+   "sha256": "f4ff934201c0d5e0cc95400c23c90d46d6073d1585bf8a08f65f7ca87dcf90bf",
+   "bytes": 230,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_science_s4",
+   "path": "ch_science_s4.svg",
+   "sha256": "6f6b4eec562975eed067ff6e5fab97455e8ee21adde82d5dd169aaa7ca5dd583",
+   "bytes": 230,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_science_s5",
+   "path": "ch_science_s5.svg",
+   "sha256": "1ad5a9be0298b3e090d5491e9fe4b92345610d952ef40f486a567db07f4a7195",
+   "bytes": 230,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_science_f1",
+   "path": "ch_science_f1.svg",
+   "sha256": "ee4b56a072f8ad5d243a06fd1e162d7b6c6562b4954c76a9322ee254f39c17cc",
+   "bytes": 230,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_science_f2",
+   "path": "ch_science_f2.svg",
+   "sha256": "7b1bd5de7a4214b2de50d91b489d60bb368520acbe30b8ca5d2bc03e0006e37e",
+   "bytes": 230,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_science_f3",
+   "path": "ch_science_f3.svg",
+   "sha256": "e8aa3cce813d5aa748380c2a82e78035ac9a4a1320ee77cf1aec7ff186e2aff7",
+   "bytes": 230,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_language_s1",
+   "path": "ch_language_s1.svg",
+   "sha256": "afafae534bb0ea527481256acab277b701144e4b402df0626214880700362c3a",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": true
+  },
+  {
+   "id": "ch_language_s2",
+   "path": "ch_language_s2.svg",
+   "sha256": "1c737683bc67087ee2a46290f5f0f4f14815b6bd4b0999854c9875efc55a88c0",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_language_s3",
+   "path": "ch_language_s3.svg",
+   "sha256": "7bd501668b9daa88c7e18f0501e90d33cddf6f0d7fa70ff798125f84cb13a72c",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_language_s4",
+   "path": "ch_language_s4.svg",
+   "sha256": "b7434d2823dd4aa10afd709ca02569ef176bea90d0c2e71ff7509b64c48e66a5",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_language_s5",
+   "path": "ch_language_s5.svg",
+   "sha256": "eedc1c8df161273adf017d082cbfb6fe7412ff935b15f2ee5b1cb349bfb035ee",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_language_f1",
+   "path": "ch_language_f1.svg",
+   "sha256": "6f29c7bc133759190cb9e944235ab8e11cdb9ff9ee172a53d8b3b999877c47b9",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_language_f2",
+   "path": "ch_language_f2.svg",
+   "sha256": "a09192ad22b53e857ac3848c320059995cb3d19adead462c76613932b35c445c",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_language_f3",
+   "path": "ch_language_f3.svg",
+   "sha256": "bd5b7b73ad3a467e155b325d09f34d91798666cee3504c3225b778bbfe401a6b",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_jp_s1",
+   "path": "ch_social_jp_s1.svg",
+   "sha256": "d3ec98e67658fa8123d8bd5dc5cd07a09ea732e7d5d4e48ef16ce71f3283d329",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_jp_s2",
+   "path": "ch_social_jp_s2.svg",
+   "sha256": "0b3cb6c8e4f06cb8c73b062f972935fe5f786d39176a9e3c2d8fa453203dd0d3",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_jp_s3",
+   "path": "ch_social_jp_s3.svg",
+   "sha256": "0a891b015fc10e67cdf83c8551743663849d4616c3f8e7bfbc028fe1a2fbd9f6",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_jp_s4",
+   "path": "ch_social_jp_s4.svg",
+   "sha256": "e54e787cfd72dee485687941165fec87c069bcdc9a209322663d4e6d388ed932",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_jp_s5",
+   "path": "ch_social_jp_s5.svg",
+   "sha256": "59c704b935106c2b85bf017803abf66d4664407709b86c5a65b6c904a800c422",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_jp_f1",
+   "path": "ch_social_jp_f1.svg",
+   "sha256": "b92282f8ee73596b21c953d85bd2222396034d051abcaaa1e0c56613f8ce0c0a",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_jp_f2",
+   "path": "ch_social_jp_f2.svg",
+   "sha256": "a7c6b5c0dd366122f231d97c4d97d930d56705d03d13c24d40ea8a5353f92684",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_jp_f3",
+   "path": "ch_social_jp_f3.svg",
+   "sha256": "d5e465ca5aa70de7511baaa86cc4f1bb68d953e93b1797779629d6fc28d14cf0",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_br_s1",
+   "path": "ch_social_br_s1.svg",
+   "sha256": "ff97070961c67cb0d799cfc497181d81ebb27c16c2f1d258be4bfbf2ce45f458",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_br_s2",
+   "path": "ch_social_br_s2.svg",
+   "sha256": "810136b5d324bec9c7e494028eec79923f9812c0db9b38fb17cd6a8ffccdf3a0",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_br_s3",
+   "path": "ch_social_br_s3.svg",
+   "sha256": "ae43ccef4f6468bca47664a874d4ff2855a4c8d8c0c80180d5bea1ae8d6181c4",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_br_s4",
+   "path": "ch_social_br_s4.svg",
+   "sha256": "cb4c83c5616f3ae41555091620b34a1ed4bd4ddbaf32839d4ef18ce19bcf93ef",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_br_s5",
+   "path": "ch_social_br_s5.svg",
+   "sha256": "a77a5ce47d301b2be0e452cac87c19e4b992b7fe2d1ef293cf7ae69ba2094a18",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_br_f1",
+   "path": "ch_social_br_f1.svg",
+   "sha256": "395343d942586dcf21716934a76811f3b53354590150722db048a5b43750f6db",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_br_f2",
+   "path": "ch_social_br_f2.svg",
+   "sha256": "aaf3ec5b06d35849d85a52ead4dd4146c949a8c3af8abc14a679d8298d4358fe",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_br_f3",
+   "path": "ch_social_br_f3.svg",
+   "sha256": "56665f844b991791c62a53cfc0c7113f61377eed72b478edb7ff825459c6f055",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_mx_s1",
+   "path": "ch_social_mx_s1.svg",
+   "sha256": "c110c3b4999c376652820cfe900cd19de6214ee43628d18d966d1d6d8d7af02c",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_mx_s2",
+   "path": "ch_social_mx_s2.svg",
+   "sha256": "7eb51645919b16437851952b4437aa01a53850dc0c756e2998cd318f2395872b",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_mx_s3",
+   "path": "ch_social_mx_s3.svg",
+   "sha256": "b2d827017228e67de1ac972ca002f5b055dea3cf972841940adb242214d39249",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_mx_s4",
+   "path": "ch_social_mx_s4.svg",
+   "sha256": "77fb4ada685fdb683b9e043014a27e46334667402015b962c661eb338a495ad7",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_mx_s5",
+   "path": "ch_social_mx_s5.svg",
+   "sha256": "ff71740743b8256b46c525faf5ff95828e7b56f61bd2634373b66e6b76162248",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_mx_f1",
+   "path": "ch_social_mx_f1.svg",
+   "sha256": "4a6d16cac3a3b28fb97f5847a9d3d0b682128b39e833b099e28830b6c0ccac82",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_mx_f2",
+   "path": "ch_social_mx_f2.svg",
+   "sha256": "849503c07ef422c02f34385d66a596cf19f9cb7fcea869c14e45184788ff8cb0",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_mx_f3",
+   "path": "ch_social_mx_f3.svg",
+   "sha256": "1d65de20555686f3746de7cf29e8654217fe02441e14512dd6f5f4b0c856c3df",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_in_s1",
+   "path": "ch_social_in_s1.svg",
+   "sha256": "0dd641de8c8e37146ecb7173cde05fecef3a3f0f64f009685d60e08534e5689e",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_in_s2",
+   "path": "ch_social_in_s2.svg",
+   "sha256": "b4cbcf83ea76e83eb90eba3c026dd47ecbe237e30e59534461603b04724d6ef9",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_in_s3",
+   "path": "ch_social_in_s3.svg",
+   "sha256": "604129f5342e29a3bcc5c77d94d4be9d17799327a50dd4c443706632711dff66",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_in_s4",
+   "path": "ch_social_in_s4.svg",
+   "sha256": "49ced9152c9ab5345df5da0920e032f2f2d0aee646436088ede35840771933eb",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_in_s5",
+   "path": "ch_social_in_s5.svg",
+   "sha256": "07ce15f3168290f2fccd3dbe27a4df079aba2352ae5cf1902659eb6a2c2c2441",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_in_f1",
+   "path": "ch_social_in_f1.svg",
+   "sha256": "a82360adf34f0231a1c68aee04376f1517c144daf3319db9cf4f1cc4a271b499",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_in_f2",
+   "path": "ch_social_in_f2.svg",
+   "sha256": "7c3ffd1aa1bf203522ec6d42242399fbf8e8f18778115af8e3dd8d3ee69bf38f",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_social_in_f3",
+   "path": "ch_social_in_f3.svg",
+   "sha256": "5fe9a48985ef28a82426a6217e3eccb7efbf53ac27354497dd1b4cc2c9ef2ff8",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_unit_m1_linear_s1",
+   "path": "ch_unit_m1_linear_s1.svg",
+   "sha256": "71f35da6a094e0e5889fa3944111842628fff878867f33aa16831229d2c3d2fc",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_unit_m1_linear_s2",
+   "path": "ch_unit_m1_linear_s2.svg",
+   "sha256": "2667fdc3bdd0a224f61f6f0ac7d5f0070f163e8088a500e9f8e8cef23c8c52ac",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_unit_m1_linear_s3",
+   "path": "ch_unit_m1_linear_s3.svg",
+   "sha256": "d94f74e0707e59ce704c75f2db584623516d69dd3cc22f3fc9884088df1b83fe",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_unit_m1_linear_s4",
+   "path": "ch_unit_m1_linear_s4.svg",
+   "sha256": "d61bf88f42213dff0c3b683847f0e8556fdadf3b364cdd6911827351384f5d2c",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_unit_m2_sim_solve_s1",
+   "path": "ch_unit_m2_sim_solve_s1.svg",
+   "sha256": "6b8f1c0223dafcbe90d1d6da47e5a5419c4bfd298000963826c2a82f60cf7ea9",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_unit_m2_sim_solve_s2",
+   "path": "ch_unit_m2_sim_solve_s2.svg",
+   "sha256": "9cac82d76d2f03e88902118072b0dde79fc9230fdbe29876caa18efe63f0130c",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_unit_m2_sim_solve_s3",
+   "path": "ch_unit_m2_sim_solve_s3.svg",
+   "sha256": "f18f8e71b4240f54c136bc6f7af9e9a0c697e897993f22de836a5198b65b2221",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_unit_m2_sim_solve_s4",
+   "path": "ch_unit_m2_sim_solve_s4.svg",
+   "sha256": "eb9741c0f6410fa7f814cd1cfd8342c225713d424d8807c7a4d99eafbecd9345",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_unit_m3_quad_solve_s1",
+   "path": "ch_unit_m3_quad_solve_s1.svg",
+   "sha256": "ef90e019576f3968a5c13bd9ea8d0592851c5048d0a536c867b21f3a15432c5c",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_unit_m3_quad_solve_s2",
+   "path": "ch_unit_m3_quad_solve_s2.svg",
+   "sha256": "99dccc808520d06ae9e3c2592c3adb54cc59187d6577d8f8bc91324edf139b2e",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_unit_m3_quad_solve_s3",
+   "path": "ch_unit_m3_quad_solve_s3.svg",
+   "sha256": "d1bf1dcae311b4e93f11452d12b8949f90c1da5322d909cfd1cdfc2e7c0d361c",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "ch_unit_m3_quad_solve_s4",
+   "path": "ch_unit_m3_quad_solve_s4.svg",
+   "sha256": "31476f50b3a5794b66d74c652857c349dbe8a5a709c0cd49190d8b58ff8f4809",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "bd_first_round",
+   "path": "bd_first_round.svg",
+   "sha256": "e4ad1e4288e60038ba6a3dc023cebf5ba70f7400164b6ba699f40aa0d6dc94dd",
+   "bytes": 231,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "bd_rounds_10",
+   "path": "bd_rounds_10.svg",
+   "sha256": "cefe063c2672a8705fea82b830def6ae4f24ff7ed47a6cb63fc6d3976b1c6e38",
+   "bytes": 229,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "bd_rounds_50",
+   "path": "bd_rounds_50.svg",
+   "sha256": "935c2e71b9beab29a52e60464d26218d6ff1e8ed8d805f8869716a3340379664",
+   "bytes": 229,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "bd_link5",
+   "path": "bd_link5.svg",
+   "sha256": "1bfb87af6826fe6fdfa38e6ae84241dfb23d09251bf39e752bb75a1b5ff87021",
+   "bytes": 225,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "bd_link10",
+   "path": "bd_link10.svg",
+   "sha256": "dd4a6dd439b1123b2a422eca5d4b55cc2759f29c4a0c18c7caa1562deff993b3",
+   "bytes": 226,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "bd_comeback3",
+   "path": "bd_comeback3.svg",
+   "sha256": "67b5d584209b5baa2d0771aa5d8a901f66902ce2773d47fa14fd03c79b575434",
+   "bytes": 229,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "bd_comeback20",
+   "path": "bd_comeback20.svg",
+   "sha256": "aa2f8aa009a1868c4510d48e185dcc682e059a139fd299c560d32b7eb221dba3",
+   "bytes": 230,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "bd_unit1",
+   "path": "bd_unit1.svg",
+   "sha256": "e28a5e9b784a734a28fb69ad920f7ea59568d030b175a13e1d2e656a21556dd9",
+   "bytes": 225,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "bd_unit10",
+   "path": "bd_unit10.svg",
+   "sha256": "0b167a74e39bd932eb91740915f6d31844c8112c171e561fad6aede7960a875e",
+   "bytes": 226,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "bd_overcome10",
+   "path": "bd_overcome10.svg",
+   "sha256": "565ee745a6e60fb40f749856d334922bc7dd145c58b7b0cfcbd80c66df29759b",
+   "bytes": 230,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "bd_days7",
+   "path": "bd_days7.svg",
+   "sha256": "14a9a7549c308912ca9d6f8747818dc0336d53e599c23ce39c349435e2418cb3",
+   "bytes": 225,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "bd_days30",
+   "path": "bd_days30.svg",
+   "sha256": "3e2e0b70f24cada3b431526754b3579f5c8e7d001b23de2aaac38a7657ab769a",
+   "bytes": 226,
+   "format": "svg",
+   "bundled": false
+  },
+  {
+   "id": "bd_test1",
+   "path": "bd_test1.svg",
+   "sha256": "e1095d7e3ece8e16634be39e5a371603fc8aa567a19374574c1138f8c23a9972",
+   "bytes": 225,
+   "format": "svg",
+   "bundled": false
+  }
+ ]
+}

@@ -58,7 +58,24 @@ class UnlockRule {
   bool met(LearnerMetrics m) => m[metric] >= atLeast;
 }
 
-enum CharacterKind { common, regional }
+/// 進化の分岐（最後の段階の姿）。**勉強の仕方**で決まり、どれも同じ価値（上下はない）。
+/// 実績 [metric] を [scale] でわった値がいちばん大きい姿になる（同じなら先に書いたもの）。運では決まらない。
+class FormSpec {
+  const FormSpec({
+    required this.id,
+    required this.nameId,
+    required this.textId,
+    required this.artId,
+    required this.metric,
+    required this.scale,
+  });
+
+  final String id, nameId, textId, artId, metric;
+  final int scale;
+}
+
+/// 種類: 共通の相棒／その国らしい相棒（地域キャラ）／単元のキャラ（その単元の学びといっしょに育つ）。
+enum CharacterKind { common, regional, unit }
 
 class CharacterSpec {
   const CharacterSpec({
@@ -69,7 +86,9 @@ class CharacterSpec {
     required this.nameId,
     required this.storyId,
     required this.stages,
+    this.forms = const [],
     this.unlock,
+    this.unitId,
   });
 
   final String id;
@@ -84,7 +103,13 @@ class CharacterSpec {
   final List<String> subjects;
   final String nameId, storyId;
   final List<EvolutionStage> stages;
+
+  /// 最後の段階の姿の分岐（無ければ空）。
+  final List<FormSpec> forms;
   final UnlockRule? unlock;
+
+  /// 単元のキャラ（`kind` が `unit`）が育つ単元。成長ポイントは、その単元の正解の数（と「できた」）から数える。
+  final String? unitId;
 
   bool availableIn({String? region, String? subject}) =>
       (regions.isEmpty || (region != null && regions.contains(region))) &&
@@ -105,10 +130,21 @@ class CharacterSpec {
     return s + 1 < stages.length ? stages[s + 1].points - points : null;
   }
 
+  /// 最後の段階にいるときの姿。勉強の仕方（実績）でいちばん多いものに合う姿（分岐がなければ null）。
+  FormSpec? formFor(int points, LearnerMetrics m) {
+    if (forms.isEmpty || stageOf(points) != stages.length - 1) return null;
+    var best = forms.first;
+    for (final f in forms) {
+      if (m[f.metric] / f.scale > m[best.metric] / best.scale) best = f;
+    }
+    return best;
+  }
+
   Iterable<String> get textIds => [
     nameId,
     storyId,
     for (final s in stages) ...[s.nameId, s.textId],
+    for (final f in forms) ...[f.nameId, f.textId],
   ];
 }
 
@@ -183,7 +219,9 @@ class CharacterSet {
       final kind = CharacterKind.values
           .where((k) => k.name == kindName)
           .firstOrNull;
-      if (kind == null) throw FormatException('$id: kind は common か regional');
+      if (kind == null) {
+        throw FormatException('$id: kind は common・regional・unit のどれか');
+      }
       final stages = [
         for (final raw in (c['stages'] as List? ?? const []))
           () {
@@ -193,6 +231,20 @@ class CharacterSet {
               textId: _str(s, 'textId', '$id の段階'),
               artId: _str(s, 'artId', '$id の段階'),
               points: _int(s, 'points', '$id の段階'),
+            );
+          }(),
+      ];
+      final forms = [
+        for (final raw in (c['forms'] as List? ?? const []))
+          () {
+            final f = Map<String, dynamic>.from(raw as Map);
+            return FormSpec(
+              id: _str(f, 'id', '$id の姿'),
+              nameId: _str(f, 'nameId', '$id の姿'),
+              textId: _str(f, 'textId', '$id の姿'),
+              artId: _str(f, 'artId', '$id の姿'),
+              metric: _str(f, 'metric', '$id の姿'),
+              scale: _int(f, 'scale', '$id の姿'),
             );
           }(),
       ];
@@ -208,12 +260,14 @@ class CharacterSet {
           nameId: _str(c, 'nameId', id),
           storyId: _str(c, 'storyId', id),
           stages: stages,
+          forms: forms,
           unlock: u == null
               ? null
               : UnlockRule(
                   metric: _str(u, 'metric', '$id の入手条件'),
                   atLeast: _int(u, 'atLeast', '$id の入手条件'),
                 ),
+          unitId: c['unitId'] as String?,
         ),
       );
     }
@@ -240,6 +294,38 @@ class CharacterSet {
     }
     return CharacterSet(characters: chars, badges: badges);
   }
+
+  /// その国・その教科で、はじめに選べる相棒（入手条件のないもの）。その国らしい地域キャラを先に、共通キャラを後に並べる。
+  List<CharacterSpec> startersFor(String subject, {String? region}) {
+    final all = [
+      for (final c in characters)
+        if (c.kind != CharacterKind.unit &&
+            c.unlock == null &&
+            c.availableIn(region: region, subject: subject))
+          c,
+    ];
+    return [
+      ...all.where((c) => c.kind == CharacterKind.regional),
+      ...all.where((c) => c.kind == CharacterKind.common),
+    ];
+  }
+
+  /// 単元 [unitId] のキャラ（無ければ null）。
+  CharacterSpec? unitCharacterFor(String unitId) {
+    for (final c in characters) {
+      if (c.kind == CharacterKind.unit && c.unitId == unitId) return c;
+    }
+    return null;
+  }
+
+  /// 単元のキャラ全部。
+  List<CharacterSpec> get unitCharacters => [
+    for (final c in characters)
+      if (c.kind == CharacterKind.unit) c,
+  ];
+
+  /// キャラに書かれた教科の一覧。
+  Set<String> get subjects => {for (final c in characters) ...c.subjects};
 
   /// この国・この教科で出せるキャラのうち、入手条件を満たしたもの。
   List<CharacterSpec> unlocked(
@@ -271,39 +357,73 @@ int growthPointsForRound(Set<PlayReward> rewards) {
   return p;
 }
 
+/// 単元のキャラの成長ポイント: その単元で正解した数（1 問 1 点）。「できた」になったら +5。
+/// 正解の数が増えるだけなので、下がらない。
+int growthPointsForUnit({required int correct, required bool done}) =>
+    (correct < 0 ? 0 : correct) + (done ? growthPointsForUnitDone : 0);
+
 /// 単元テストで「できた」になったときの成長ポイント。
 const growthPointsForUnitDone = 5;
 
 /// 相棒ごとの成長ポイント。増えるだけ（負の値は 0 として扱い、休んでも下がらない）。
+/// **相棒は教科ごとに 1 匹**: 教科アプリごとに連れる相棒が別で、その教科の勉強でだけ育つ。
 class CompanionProgress {
-  const CompanionProgress({this.points = const {}, this.activeId});
+  const CompanionProgress({
+    this.points = const {},
+    this.activeBySubject = const {},
+  });
 
   final Map<String, int> points;
 
-  /// いま連れている相棒。
-  final String? activeId;
+  /// 教科 → いま育てている相棒。
+  final Map<String, String> activeBySubject;
 
   int pointsOf(String id) => points[id] ?? 0;
+
+  String? activeIn(String subject) => activeBySubject[subject];
 
   /// 相棒 [id] に [add] ポイントを足す。
   CompanionProgress grow(String id, int add) => CompanionProgress(
     points: {...points, id: pointsOf(id) + (add < 0 ? 0 : add)},
-    activeId: activeId,
+    activeBySubject: activeBySubject,
   );
 
-  CompanionProgress choose(String id) =>
-      CompanionProgress(points: points, activeId: id);
+  /// 教科 [subject] で育てる相棒を [id] にする。
+  CompanionProgress choose(String subject, String id) => CompanionProgress(
+    points: points,
+    activeBySubject: {...activeBySubject, subject: id},
+  );
+
+  /// 教科 [subject] の勉強で得た成長ポイント [add] を、育てている相棒に足す（いなければ変えない）。
+  CompanionProgress growActive(String subject, int add) {
+    final id = activeIn(subject);
+    return id == null ? this : grow(id, add);
+  }
 }
 
 /// キャラとバッジの検証。
 /// エラー: `character_stage_invalid`（段階は 3〜6 個、最初は 0 点、点は増える順）・`character_region_invalid`（国コードは大文字 2 文字）・
 /// `character_regional_no_region`（地域キャラは国を指定する）・`character_metric_unknown`・`character_threshold_invalid`（1 以上）・
-/// `character_no_starter`（入手条件のないはじめの共通キャラが無い）。
-List<ValidationIssue> validateCharacters(CharacterSet set) {
+/// `character_unit_missing`（単元のキャラの単元がない・単元以外に unitId）・`character_unit_duplicate`（同じ単元に 2 つ）・`character_form_invalid`（姿の分岐は 2〜4 個・scale は 1 以上）・`character_no_starter`（教科ごとに、はじめの共通キャラが無い）。
+List<ValidationIssue> validateCharacters(
+  CharacterSet set, {
+  Set<String>? unitIds,
+}) {
   final issues = <ValidationIssue>[];
   void err(String code, String id, String msg) =>
       issues.add(ValidationIssue(IssueSeverity.error, code, id, msg));
   final art = RegExp(r'^[a-z0-9_]+$');
+  final seenUnits = <String>{};
+  for (final c in set.characters) {
+    final u = c.unitId;
+    if (c.kind != CharacterKind.unit || u == null) continue;
+    if (!seenUnits.add(u)) {
+      err('character_unit_duplicate', c.id, '単元 $u のキャラが 2 つあります');
+    }
+    if (unitIds != null && !unitIds.contains(u)) {
+      err('character_unit_missing', c.id, '単元 $u がありません');
+    }
+  }
   for (final c in set.characters) {
     if (c.stages.length < 3 || c.stages.length > 6) {
       err('character_stage_invalid', c.id, '段階は 3〜6 個（${c.stages.length}）');
@@ -326,8 +446,29 @@ List<ValidationIssue> validateCharacters(CharacterSet set) {
         err('character_region_invalid', c.id, '国コードは大文字 2 文字: $r');
       }
     }
+    if (c.kind == CharacterKind.unit &&
+        (c.unitId == null || c.unitId!.isEmpty)) {
+      err('character_unit_missing', c.id, '単元のキャラは unitId が要ります');
+    }
+    if (c.kind != CharacterKind.unit && c.unitId != null) {
+      err('character_unit_missing', c.id, 'unitId は単元のキャラだけに書きます');
+    }
     if (c.kind == CharacterKind.regional && c.regions.isEmpty) {
       err('character_regional_no_region', c.id, '地域キャラは国を指定します');
+    }
+    if (c.forms.isNotEmpty && (c.forms.length < 2 || c.forms.length > 4)) {
+      err('character_form_invalid', c.id, '姿の分岐は 2〜4 個（${c.forms.length}）');
+    }
+    for (final f in c.forms) {
+      if (!knownMetrics.contains(f.metric)) {
+        err('character_metric_unknown', c.id, '知らない実績: ${f.metric}');
+      }
+      if (f.scale < 1) {
+        err('character_form_invalid', c.id, '姿 ${f.id} の scale は 1 以上');
+      }
+      if (!art.hasMatch(f.artId)) {
+        err('character_form_invalid', c.id, '絵の名前は小文字・数字・_ だけ: ${f.artId}');
+      }
     }
     final u = c.unlock;
     if (u != null) {
@@ -346,15 +487,28 @@ List<ValidationIssue> validateCharacters(CharacterSet set) {
       err('character_stage_invalid', b.id, '絵の名前は小文字・数字・_ だけ: ${b.artId}');
     }
   }
-  if (set.characters.isNotEmpty &&
-      !set.characters.any(
-        (c) => c.unlock == null && c.kind == CharacterKind.common,
-      )) {
-    err(
-      'character_no_starter',
-      'characters',
-      '入手条件のないはじめの共通キャラが必要です（どの国でも最初の相棒がいるように）',
+  if (set.characters.isNotEmpty) {
+    // 教科ごとの相棒: キャラに書かれた教科のそれぞれに、はじめに選べる共通キャラ（入手条件なし）が要る。
+    // 教科の指定がなければ、全教科で使うはじめの共通キャラが 1 匹要る。
+    bool hasCommonStarter(String? sub) => set.characters.any(
+      (c) =>
+          c.kind == CharacterKind.common &&
+          c.unlock == null &&
+          (sub == null ? c.subjects.isEmpty : c.availableIn(subject: sub)),
     );
+    final subjects = set.subjects;
+    if (subjects.isEmpty && !hasCommonStarter(null)) {
+      err('character_no_starter', 'characters', '入手条件のないはじめの共通キャラが必要です');
+    }
+    for (final sub in subjects) {
+      if (!hasCommonStarter(sub)) {
+        err(
+          'character_no_starter',
+          sub,
+          '教科 $sub に、入手条件のないはじめの共通キャラが必要です（どの国でも最初の相棒がいるように）',
+        );
+      }
+    }
   }
   return issues;
 }
