@@ -1237,6 +1237,522 @@
     }
    ],
    "explanationId": "exp_m3_poly_use_004"
+  },
+  {
+   "id": "m3_circ_angle_003",
+   "templateVersion": 1,
+   "unitId": "m3_circ_angle",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "a": {
+     "int": [
+      15,
+      80
+     ]
+    }
+   },
+   "figure": {
+    "viewBox": [
+     0,
+     0,
+     100,
+     80
+    ],
+    "points": {
+     "O": [
+      50,
+      40
+     ],
+     "A": [
+      24,
+      55
+     ],
+     "B": [
+      76,
+      55
+     ],
+     "C": [
+      50,
+      10
+     ]
+    },
+    "draw": [
+     {
+      "circle": [
+       "O",
+       30
+      ]
+     },
+     {
+      "seg": [
+       "O",
+       "A"
+      ]
+     },
+     {
+      "seg": [
+       "O",
+       "B"
+      ]
+     },
+     {
+      "seg": [
+       "C",
+       "A"
+      ]
+     },
+     {
+      "seg": [
+       "C",
+       "B"
+      ]
+     }
+    ],
+    "marks": [
+     {
+      "angle": [
+       "A",
+       "O",
+       "B"
+      ],
+      "label": "{c}°"
+     },
+     {
+      "angle": [
+       "A",
+       "C",
+       "B"
+      ],
+      "label": "x°"
+     }
+    ],
+    "names": true,
+    "altId": "fig_circle_inscribed"
+   },
+   "display": {
+    "v": "{a}"
+   },
+   "answer": "{a}",
+   "wrong": [
+    {
+     "expr": "{2*a}",
+     "tag": "central_equals_inscribed"
+    },
+    {
+     "expr": "{90-a}",
+     "tag": "complement"
+    }
+   ],
+   "explanationId": "exp_m3_circ_angle_003",
+   "derived": {
+    "c": "2*a"
+   }
+  },
+  {
+   "id": "m3_circ_angle_004",
+   "templateVersion": 1,
+   "unitId": "m3_circ_angle",
+   "type": "expr",
+   "difficulty": 0.65,
+   "params": {
+    "a": {
+     "int": [
+      15,
+      75
+     ]
+    }
+   },
+   "figure": {
+    "viewBox": [
+     0,
+     0,
+     100,
+     80
+    ],
+    "points": {
+     "O": [
+      50,
+      40
+     ],
+     "A": [
+      20,
+      40
+     ],
+     "B": [
+      80,
+      40
+     ],
+     "C": [
+      50,
+      10
+     ]
+    },
+    "draw": [
+     {
+      "circle": [
+       "O",
+       30
+      ]
+     },
+     {
+      "seg": [
+       "A",
+       "B"
+      ]
+     },
+     {
+      "seg": [
+       "C",
+       "A"
+      ]
+     },
+     {
+      "seg": [
+       "C",
+       "B"
+      ]
+     }
+    ],
+    "marks": [
+     {
+      "angle": [
+       "B",
+       "A",
+       "C"
+      ],
+      "label": "{a}°"
+     },
+     {
+      "angle": [
+       "C",
+       "B",
+       "A"
+      ],
+      "label": "x°"
+     },
+     {
+      "right": [
+       "A",
+       "C",
+       "B"
+      ]
+     }
+    ],
+    "names": true,
+    "altId": "fig_circle_diameter"
+   },
+   "display": {
+    "c": "{a}"
+   },
+   "answer": "{90-a}",
+   "wrong": [
+    {
+     "expr": "{a}",
+     "tag": "same_angle"
+    },
+    {
+     "expr": "{180-a}",
+     "tag": "supplement"
+    }
+   ],
+   "explanationId": "exp_m3_circ_angle_004"
+  },
+  {
+   "id": "m3_sim_ratio_002",
+   "templateVersion": 1,
+   "unitId": "m3_sim_ratio",
+   "type": "expr",
+   "difficulty": 0.65,
+   "params": {
+    "a": {
+     "int": [
+      1,
+      5
+     ]
+    },
+    "b": {
+     "int": [
+      1,
+      5
+     ]
+    },
+    "m": {
+     "int": [
+      2,
+      6
+     ]
+    }
+   },
+   "figure": {
+    "viewBox": [
+     0,
+     0,
+     100,
+     80
+    ],
+    "points": {
+     "A": [
+      50,
+      8
+     ],
+     "B": [
+      12,
+      70
+     ],
+     "C": [
+      88,
+      70
+     ],
+     "D": [
+      31,
+      39
+     ],
+     "E": [
+      69,
+      39
+     ]
+    },
+    "draw": [
+     {
+      "poly": [
+       "A",
+       "B",
+       "C"
+      ]
+     },
+     {
+      "seg": [
+       "D",
+       "E"
+      ]
+     }
+    ],
+    "marks": [
+     {
+      "length": [
+       "B",
+       "C"
+      ],
+      "label": "{w} cm"
+     },
+     {
+      "length": [
+       "D",
+       "E"
+      ],
+      "label": "x cm"
+     }
+    ],
+    "names": true,
+    "altId": "fig_sim_parallel"
+   },
+   "display": {
+    "ad": "{a}",
+    "db": "{b}",
+    "bc": "{w}"
+   },
+   "answer": "{a*m}",
+   "wrong": [
+    {
+     "expr": "{b*m}",
+     "tag": "swapped_ratio"
+    },
+    {
+     "expr": "{m*(a+b)}",
+     "tag": "used_whole"
+    }
+   ],
+   "explanationId": "exp_m3_sim_ratio_002",
+   "derived": {
+    "w": "m*(a+b)"
+   }
+  },
+  {
+   "id": "m3_pyth_thm_003",
+   "templateVersion": 1,
+   "unitId": "m3_pyth_thm",
+   "type": "expr",
+   "difficulty": 0.55,
+   "params": {
+    "k": {
+     "int": [
+      1,
+      9
+     ]
+    }
+   },
+   "figure": {
+    "viewBox": [
+     0,
+     0,
+     100,
+     80
+    ],
+    "points": {
+     "A": [
+      15,
+      12
+     ],
+     "B": [
+      15,
+      68
+     ],
+     "C": [
+      85,
+      68
+     ]
+    },
+    "draw": [
+     {
+      "poly": [
+       "A",
+       "B",
+       "C"
+      ]
+     }
+    ],
+    "marks": [
+     {
+      "right": [
+       "A",
+       "B",
+       "C"
+      ]
+     },
+     {
+      "length": [
+       "A",
+       "B"
+      ],
+      "label": "{3*k} cm"
+     },
+     {
+      "length": [
+       "B",
+       "C"
+      ],
+      "label": "{4*k} cm"
+     },
+     {
+      "length": [
+       "A",
+       "C"
+      ],
+      "label": "x cm"
+     }
+    ],
+    "names": true,
+    "altId": "fig_right_triangle_hyp"
+   },
+   "display": {
+    "v": "{k}"
+   },
+   "answer": "{5*k}",
+   "wrong": [
+    {
+     "expr": "{7*k}",
+     "tag": "added_legs"
+    },
+    {
+     "expr": "{k}",
+     "tag": "wrong_root"
+    }
+   ],
+   "explanationId": "exp_m3_pyth_thm_003"
+  },
+  {
+   "id": "m3_pyth_thm_004",
+   "templateVersion": 1,
+   "unitId": "m3_pyth_thm",
+   "type": "expr",
+   "difficulty": 0.65,
+   "params": {
+    "k": {
+     "int": [
+      1,
+      9
+     ]
+    }
+   },
+   "figure": {
+    "viewBox": [
+     0,
+     0,
+     100,
+     80
+    ],
+    "points": {
+     "A": [
+      15,
+      12
+     ],
+     "B": [
+      15,
+      68
+     ],
+     "C": [
+      85,
+      68
+     ]
+    },
+    "draw": [
+     {
+      "poly": [
+       "A",
+       "B",
+       "C"
+      ]
+     }
+    ],
+    "marks": [
+     {
+      "right": [
+       "A",
+       "B",
+       "C"
+      ]
+     },
+     {
+      "length": [
+       "A",
+       "B"
+      ],
+      "label": "x cm"
+     },
+     {
+      "length": [
+       "B",
+       "C"
+      ],
+      "label": "{4*k} cm"
+     },
+     {
+      "length": [
+       "A",
+       "C"
+      ],
+      "label": "{5*k} cm"
+     }
+    ],
+    "names": true,
+    "altId": "fig_right_triangle_leg"
+   },
+   "display": {
+    "v": "{k}"
+   },
+   "answer": "{3*k}",
+   "wrong": [
+    {
+     "expr": "{k}",
+     "tag": "wrong_root"
+    },
+    {
+     "expr": "{9*k}",
+     "tag": "added_instead"
+    }
+   ],
+   "explanationId": "exp_m3_pyth_thm_004"
   }
  ]
 }

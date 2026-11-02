@@ -42,6 +42,186 @@
      ]
     }
    ]
+  },
+  {
+   "id": "les_m3_quad_solve_01",
+   "version": 1,
+   "unitId": "m3_quad_solve",
+   "minutes": 5,
+   "titleId": "les_m3_quad_solve_01_title",
+   "pre": [
+    "m3_quad_solve_001~21"
+   ],
+   "blocks": [
+    {
+     "type": "hook",
+     "textId": "les_m3_quad_solve_01_hook"
+    },
+    {
+     "type": "text",
+     "textId": "les_m3_quad_solve_01_t1"
+    },
+    {
+     "type": "check",
+     "questions": [
+      "m3_quad_solve_001~5",
+      "m3_quad_solve_002~6"
+     ]
+    },
+    {
+     "type": "pitfall",
+     "tag": "sign_error",
+     "textId": "les_m3_quad_solve_01_p1"
+    },
+    {
+     "type": "pitfall",
+     "tag": "smaller_solution",
+     "textId": "les_m3_quad_solve_01_p2"
+    },
+    {
+     "type": "summary",
+     "textIds": [
+      "les_m3_quad_solve_01_s1",
+      "les_m3_quad_solve_01_s2",
+      "les_m3_quad_solve_01_s3"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "les_m3_sim_ratio_01",
+   "version": 1,
+   "unitId": "m3_sim_ratio",
+   "minutes": 5,
+   "titleId": "les_m3_sim_ratio_01_title",
+   "pre": [
+    "m3_sim_ratio_001~21"
+   ],
+   "blocks": [
+    {
+     "type": "hook",
+     "textId": "les_m3_sim_ratio_01_hook"
+    },
+    {
+     "type": "text",
+     "textId": "les_m3_sim_ratio_01_t1"
+    },
+    {
+     "type": "check",
+     "questions": [
+      "m3_sim_ratio_001~5",
+      "m3_sim_ratio_002~6"
+     ]
+    },
+    {
+     "type": "pitfall",
+     "tag": "swapped_ratio",
+     "textId": "les_m3_sim_ratio_01_p1"
+    },
+    {
+     "type": "pitfall",
+     "tag": "used_whole",
+     "textId": "les_m3_sim_ratio_01_p2"
+    },
+    {
+     "type": "summary",
+     "textIds": [
+      "les_m3_sim_ratio_01_s1",
+      "les_m3_sim_ratio_01_s2",
+      "les_m3_sim_ratio_01_s3"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "les_m3_circ_angle_01",
+   "version": 1,
+   "unitId": "m3_circ_angle",
+   "minutes": 5,
+   "titleId": "les_m3_circ_angle_01_title",
+   "pre": [
+    "m3_circ_angle_001~21"
+   ],
+   "blocks": [
+    {
+     "type": "hook",
+     "textId": "les_m3_circ_angle_01_hook"
+    },
+    {
+     "type": "text",
+     "textId": "les_m3_circ_angle_01_t1"
+    },
+    {
+     "type": "check",
+     "questions": [
+      "m3_circ_angle_001~5",
+      "m3_circ_angle_002~6"
+     ]
+    },
+    {
+     "type": "pitfall",
+     "tag": "central_equals_inscribed",
+     "textId": "les_m3_circ_angle_01_p1"
+    },
+    {
+     "type": "pitfall",
+     "tag": "complement",
+     "textId": "les_m3_circ_angle_01_p2"
+    },
+    {
+     "type": "summary",
+     "textIds": [
+      "les_m3_circ_angle_01_s1",
+      "les_m3_circ_angle_01_s2",
+      "les_m3_circ_angle_01_s3"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "les_m3_pyth_thm_01",
+   "version": 1,
+   "unitId": "m3_pyth_thm",
+   "minutes": 5,
+   "titleId": "les_m3_pyth_thm_01_title",
+   "pre": [
+    "m3_pyth_thm_001~21"
+   ],
+   "blocks": [
+    {
+     "type": "hook",
+     "textId": "les_m3_pyth_thm_01_hook"
+    },
+    {
+     "type": "text",
+     "textId": "les_m3_pyth_thm_01_t1"
+    },
+    {
+     "type": "check",
+     "questions": [
+      "m3_pyth_thm_001~5",
+      "m3_pyth_thm_003~6"
+     ]
+    },
+    {
+     "type": "pitfall",
+     "tag": "added_legs",
+     "textId": "les_m3_pyth_thm_01_p1"
+    },
+    {
+     "type": "pitfall",
+     "tag": "wrong_root",
+     "textId": "les_m3_pyth_thm_01_p2"
+    },
+    {
+     "type": "summary",
+     "textIds": [
+      "les_m3_pyth_thm_01_s1",
+      "les_m3_pyth_thm_01_s2",
+      "les_m3_pyth_thm_01_s3"
+     ]
+    }
+   ]
   }
  ]
 }

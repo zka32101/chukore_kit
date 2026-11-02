@@ -113,9 +113,13 @@ void main() {
     final p = v.params['p']!.toInt(), y = v.params['y']!.toInt();
     expect(renderVariantText(texts.texts['exp_m3_fn_use_002']!, v), 'y = 5x² に x = $p を代入します。y = 5 × $p² = 5 × ${p * p} = $y。$p 秒間に $y m 落ちます。');
     // 場面の文言と、レッスンの文言の一覧
-    final lesson = LessonSet.parse(File('$dir/lessons.json').readAsStringSync()).lessons.single;
-    for (final id in lesson.textIds) {
-      expect(texts.texts, contains(id));
+    final lessons = LessonSet.parse(File('$dir/lessons.json').readAsStringSync()).lessons;
+    expect(lessons.length, 5);
+    for (final lesson in lessons) {
+      for (final id in lesson.textIds) {
+        expect(texts.texts, contains(id));
+        expect(texts.texts[id]!.runes.length, lessThanOrEqualTo(ContentTexts.longText), reason: id);
+      }
     }
     expect(texts.texts.length, greaterThan(20));
   });

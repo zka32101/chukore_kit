@@ -7,6 +7,7 @@
 - 中2の数学: 型 19 と問題文・解説の草案（`docs/content_drafts/suugaku_chu2/`）
 - 証明の問題（`ProofSpec`・`gradeProofOrder`・`gradeProofReasons`・`validateProofs`）と、目録の `proofs`。中2に合同の証明 2 つ、中3に相似の証明 2 つ
 - 証明に図（`ProofSpec.figure`）。描けない図は `pack_proof_figure_invalid`。中2・中3の草案の証明 4 つに図を付けた
+- 中3の数学: 図つきの型 5 つ（円周角・平行線と線分の比・三平方）とレッスン 4 つ（型は 35・レッスンは 5）
 - 中2の数学: 図つきの型 4 つ（一次関数のグラフの読み取り・2 直線の交点・樹形図）と、箱ひげ図の見本 2 つ（型は 36）
 - 中2の数学: レッスンの説明文 4 つ（多項式のひき算・連立方程式・変化の割合・平行四辺形）
 - 共通基盤の置き場の決定を `docs/design_principles.md` に記録
