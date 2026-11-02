@@ -31,23 +31,69 @@ void main() {
     }
   });
 
-  test('進化: ポイントが増えるだけで段階が上がり、下がらない。最終段階は次がない', () {
+  test('進化: 10 段階。単元のマスター状況（6 割）と頑張り（4 割）で進み、下がらない。最初は卵。完全クリアで最後の段階', () {
     final c = _set().characters.first;
-    expect(
-      [
-        for (final p in [0, 11, 12, 39, 40, 89, 90, 159, 160, 999])
-          c.stageOf(p),
-      ],
-      [0, 0, 1, 1, 2, 2, 3, 3, 4, 4],
-    );
-    expect(c.pointsToNext(0), 12);
-    expect(c.pointsToNext(11), 1);
-    expect(c.pointsToNext(160), isNull);
+    expect(c.stages.length, 10);
+    expect(maxStages, 10);
+    // 進化ポイント: マスター 6 割＋頑張り 4 割（頑張りは 200 点で満点）
+    expect(evolutionScore(mastery: 0, effort: 0), 0);
+    expect(evolutionScore(mastery: 1, effort: 0), 600);
+    expect(evolutionScore(mastery: 0, effort: 200), 400);
+    expect(evolutionScore(mastery: 0, effort: 9999), 400); // 頑張りは満点で止まる
+    expect(evolutionScore(mastery: 1, effort: 200), 1000);
+    expect(evolutionScore(mastery: -1, effort: -5), 0);
+    expect(evolutionScore(mastery: double.nan, effort: 0), 0);
+    // 最初は卵（段階 0）。ほんの少し頑張るだけで、すぐ次の段階（ひび→ふ化）に進める＝序盤を単調にしない
+    expect(c.stageFor(mastery: 0, effort: 0), 0);
+    expect(c.stageFor(mastery: 0, effort: 4), 1); // 2〜3 回遊ぶと「ひび」
+    expect(c.stageFor(mastery: 0, effort: 15), 2); // 数日で「ふ化」
+    // マスターが進まなくても、頑張れば進化できる。マスターだけでも進化できる
+    expect(c.stageFor(mastery: 0, effort: 200), 6);
+    expect(c.stageFor(mastery: 0.5, effort: 0), 5);
+    // 完全クリア（マスター 100%）でないと最後の段階（10）にはならない。頑張りが満点でも 9 まで
+    expect(c.stageFor(mastery: 0.99, effort: 9999), 8);
+    expect(c.stageFor(mastery: 1, effort: 0), 9); // 完全クリアなら最後の段階（頑張り不足でも）
+    // 段階は増えるだけ（マスターも頑張りも増えるだけ）
     var prev = 0;
-    for (var p = 0; p < 300; p++) {
-      expect(c.stageOf(p), greaterThanOrEqualTo(prev));
-      prev = c.stageOf(p);
+    for (var m = 0; m <= 20; m++) {
+      for (var e = 0; e <= 10; e++) {
+        final st = c.stageFor(mastery: m / 20, effort: e * 20);
+        if (e > 0) {
+          final before = c.stageFor(mastery: m / 20, effort: (e - 1) * 20);
+          expect(st, greaterThanOrEqualTo(before));
+        }
+        if (m > 0) {
+          final before = c.stageFor(mastery: (m - 1) / 20, effort: e * 20);
+          expect(st, greaterThanOrEqualTo(before));
+        }
+        prev = st;
+      }
     }
+    expect(prev, 9);
+    // 段階の間隔は序盤がせまく、終盤が広い
+    final gaps = [
+      for (var k = 1; k < 10; k++) c.stages[k].points - c.stages[k - 1].points,
+    ];
+    expect(gaps.first, lessThan(gaps.last));
+    expect(c.pointsToNext(0), 8);
+    expect(c.pointsToNext(1000), isNull);
+    // 教科のマスター状況（単元ツリーから）
+    final tree = UnitTree.fromJson(
+      jsonDecode(
+            File(
+              'docs/content_drafts/suugaku_chu1/units.json',
+            ).readAsStringSync(),
+          )
+          as Map<String, dynamic>,
+    );
+    final leaves = tree.allLeaves().map((u) => u.id).toList();
+    expect(subjectMastery(tree, 'math', {}), 0);
+    expect(
+      subjectMastery(tree, 'math', {leaves.first}),
+      closeTo(1 / leaves.length, 1e-9),
+    );
+    expect(subjectMastery(tree, 'math', leaves.toSet()), 1);
+    expect(subjectMastery(tree, 'en', leaves.toSet()), 0); // 英語の単元はこの木にない
   });
 
   test('姿の分岐: 最後の段階で、勉強の仕方（実績）に合う姿になる。運では決まらず、同じ実績なら同じ。それまでは姿はない', () {
@@ -67,12 +113,12 @@ void main() {
       'best_link': 3,
       'days_studied': 60,
     });
-    expect(c.formFor(100, persistent), isNull); // まだ最後の段階ではない
-    expect(c.formFor(160, persistent)!.id, 'f1'); // 立て直しが多い → ねばり型
-    expect(c.formFor(160, quick)!.id, 'f2'); // つながりが長い → ひらめき型
-    expect(c.formFor(160, steady)!.id, 'f3'); // 日数が多い → こつこつ型
-    expect(c.formFor(160, const LearnerMetrics())!.id, 'f1'); // 同点は先に書いた姿
-    expect(c.formFor(160, quick)!.id, c.formFor(160, quick)!.id);
+    expect(c.formFor(500, persistent), isNull); // まだ最後の段階ではない
+    expect(c.formFor(1000, persistent)!.id, 'f1'); // 立て直しが多い → ねばり型
+    expect(c.formFor(1000, quick)!.id, 'f2'); // つながりが長い → ひらめき型
+    expect(c.formFor(1000, steady)!.id, 'f3'); // 日数が多い → こつこつ型
+    expect(c.formFor(1000, const LearnerMetrics())!.id, 'f1'); // 同点は先に書いた姿
+    expect(c.formFor(1000, quick)!.id, c.formFor(1000, quick)!.id);
   });
 
   test('成長ポイント: 最後までやれば必ず 1 点。立て直しは多め。マイナスはなく、相棒は教科ごとに 1 匹', () {
@@ -190,7 +236,7 @@ void main() {
       isEmpty,
     ); // 4 段階は許す
     expect(
-      codes((j) => (ch(j)[0]['stages'] as List).removeRange(2, 5)),
+      codes((j) => (ch(j)[0]['stages'] as List).removeRange(2, 10)),
       contains('character_stage_invalid'),
     );
     expect(
@@ -326,8 +372,8 @@ void artTests() {
     }
     expect(
       m.arts.values.where((e) => e.bundled).length,
-      4,
-    ); // はじめの相棒の最初の姿だけアプリに入れる
+      5,
+    ); // 5 教科のはじめの相棒の「たまご」だけアプリに入れる
   });
 
   test('画像の検証: https 以外・クエリ・危ないパス・ハッシュ・大きさ・形式・足りない絵を見つける', () {
