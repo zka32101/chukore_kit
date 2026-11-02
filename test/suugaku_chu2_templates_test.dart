@@ -11,8 +11,8 @@ void main() {
   final texts = ContentTexts.parse(File('$dir/texts.json').readAsStringSync());
   final set = TemplateSet.parse(File('$dir/templates.json').readAsStringSync());
 
-  test('36 の型。一括検証にエラーなし', () {
-    expect(set.templates.length, 36);
+  test('37 の型。一括検証にエラーなし', () {
+    expect(set.templates.length, 37);
     final r = validateContentPack(
       File('$dir/manifest.json').readAsStringSync(),
       (p) => File('$dir/$p').readAsStringSync(),
@@ -90,6 +90,29 @@ void main() {
         if (id == 'm3_sim_ratio_002') expect(double.parse(v.question.answer), v.params['a']! * v.params['m']!);
         if (id == 'm3_circ_angle_004') expect(double.parse(v.question.answer), 90 - v.params['a']!);
       }
+    }
+  });
+
+
+  test('中2の場面（現実の具体例）: 型の変種はすべて現実にありえる値。水そうは動く図（点が直線の上を p 分まで動く）', () {
+    final scenes = SceneSet.parse(File('$dir/scenes.json').readAsStringSync());
+    final withScene = set.templates.where((t) => t.sceneId != null).toList();
+    expect(withScene.map((t) => t.id).toSet(), {'m2_sim_word_001', 'm2_lin_use_001', 'm2_lin_use_002', 'm2_lin_use_003', 'm2_prob_prob_001'});
+    for (final t in withScene) {
+      expect(scenes.ids, contains(t.sceneId), reason: t.id);
+      for (var s = 1; s <= 60; s++) {
+        final v = t.generate(s);
+        for (final e in t.plausible.entries) {
+          expect(v.params[e.key], inInclusiveRange(e.value.lo, e.value.hi), reason: '${t.id} ${e.key}');
+        }
+      }
+    }
+    final tank = set.templates.firstWhere((t) => t.id == 'm2_lin_use_001');
+    for (var s = 1; s <= 12; s++) {
+      final v = tank.generate(s);
+      expect(v.animation, isNotNull);
+      expect(v.animation!.frames.length, 13);
+      expect(v.animation!.frames.last.toSvg(), v.figure!.toSvg()); // 最後のコマは静止した図
     }
   });
 

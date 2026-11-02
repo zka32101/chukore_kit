@@ -17,6 +17,7 @@
   "texts": "texts.json",
   "proofs": "proofs.json",
   "lessons": "lessons.json",
-  "charts": "charts.json"
+  "charts": "charts.json",
+  "scenes": "scenes.json"
  }
 }

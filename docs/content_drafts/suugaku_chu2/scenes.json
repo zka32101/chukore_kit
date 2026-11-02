@@ -1,0 +1,41 @@
+{
+ "version": 1,
+ "scenes": [
+  {
+   "id": "scene_shopping",
+   "titleId": "scene_shopping_title",
+   "textId": "scene_shopping_text",
+   "unitIds": [
+    "m2_sim_word",
+    "m2_sim_solve"
+   ]
+  },
+  {
+   "id": "scene_water_tank",
+   "titleId": "scene_water_tank_title",
+   "textId": "scene_water_tank_text",
+   "unitIds": [
+    "m2_lin_use",
+    "m2_lin_graph"
+   ]
+  },
+  {
+   "id": "scene_taxi_fare",
+   "titleId": "scene_taxi_fare_title",
+   "textId": "scene_taxi_fare_text",
+   "unitIds": [
+    "m2_lin_use",
+    "m2_lin_eq"
+   ]
+  },
+  {
+   "id": "scene_dice_lottery",
+   "titleId": "scene_dice_lottery_title",
+   "textId": "scene_dice_lottery_text",
+   "unitIds": [
+    "m2_prob_prob",
+    "m2_prob_count"
+   ]
+  }
+ ]
+}
