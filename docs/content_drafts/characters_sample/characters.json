@@ -2,264 +2,781 @@
  "version": 1,
  "characters": [
   {
-   "id": "ch_mochi",
+   "id": "ch_math",
    "kind": "common",
-   "nameId": "ch_mochi_name",
-   "storyId": "ch_mochi_story",
+   "subjects": [
+    "math"
+   ],
+   "nameId": "ch_math_name",
+   "storyId": "ch_math_story",
    "stages": [
     {
-     "nameId": "ch_mochi_s1_name",
-     "textId": "ch_mochi_s1_text",
-     "artId": "ch_mochi_s1",
+     "nameId": "ch_math_s1_name",
+     "textId": "ch_math_s1_text",
+     "artId": "ch_math_s1",
      "points": 0
     },
     {
-     "nameId": "ch_mochi_s2_name",
-     "textId": "ch_mochi_s2_text",
-     "artId": "ch_mochi_s2",
+     "nameId": "ch_math_s2_name",
+     "textId": "ch_math_s2_text",
+     "artId": "ch_math_s2",
      "points": 12
     },
     {
-     "nameId": "ch_mochi_s3_name",
-     "textId": "ch_mochi_s3_text",
-     "artId": "ch_mochi_s3",
+     "nameId": "ch_math_s3_name",
+     "textId": "ch_math_s3_text",
+     "artId": "ch_math_s3",
      "points": 40
     },
     {
-     "nameId": "ch_mochi_s4_name",
-     "textId": "ch_mochi_s4_text",
-     "artId": "ch_mochi_s4",
+     "nameId": "ch_math_s4_name",
+     "textId": "ch_math_s4_text",
+     "artId": "ch_math_s4",
      "points": 90
     },
     {
-     "nameId": "ch_mochi_s5_name",
-     "textId": "ch_mochi_s5_text",
-     "artId": "ch_mochi_s5",
+     "nameId": "ch_math_s5_name",
+     "textId": "ch_math_s5_text",
+     "artId": "ch_math_s5",
      "points": 160
+    }
+   ],
+   "forms": [
+    {
+     "id": "f1",
+     "nameId": "ch_math_f1_name",
+     "textId": "ch_math_f1_text",
+     "artId": "ch_math_f1",
+     "metric": "comebacks",
+     "scale": 1
+    },
+    {
+     "id": "f2",
+     "nameId": "ch_math_f2_name",
+     "textId": "ch_math_f2_text",
+     "artId": "ch_math_f2",
+     "metric": "best_link",
+     "scale": 2
+    },
+    {
+     "id": "f3",
+     "nameId": "ch_math_f3_name",
+     "textId": "ch_math_f3_text",
+     "artId": "ch_math_f3",
+     "metric": "days_studied",
+     "scale": 3
     }
    ]
   },
   {
-   "id": "ch_sora",
+   "id": "ch_en",
    "kind": "common",
-   "nameId": "ch_sora_name",
-   "storyId": "ch_sora_story",
-   "unlock": {
-    "metric": "rounds_finished",
-    "atLeast": 10
-   },
+   "subjects": [
+    "en"
+   ],
+   "nameId": "ch_en_name",
+   "storyId": "ch_en_story",
    "stages": [
     {
-     "nameId": "ch_sora_s1_name",
-     "textId": "ch_sora_s1_text",
-     "artId": "ch_sora_s1",
+     "nameId": "ch_en_s1_name",
+     "textId": "ch_en_s1_text",
+     "artId": "ch_en_s1",
      "points": 0
     },
     {
-     "nameId": "ch_sora_s2_name",
-     "textId": "ch_sora_s2_text",
-     "artId": "ch_sora_s2",
+     "nameId": "ch_en_s2_name",
+     "textId": "ch_en_s2_text",
+     "artId": "ch_en_s2",
      "points": 12
     },
     {
-     "nameId": "ch_sora_s3_name",
-     "textId": "ch_sora_s3_text",
-     "artId": "ch_sora_s3",
+     "nameId": "ch_en_s3_name",
+     "textId": "ch_en_s3_text",
+     "artId": "ch_en_s3",
      "points": 40
     },
     {
-     "nameId": "ch_sora_s4_name",
-     "textId": "ch_sora_s4_text",
-     "artId": "ch_sora_s4",
+     "nameId": "ch_en_s4_name",
+     "textId": "ch_en_s4_text",
+     "artId": "ch_en_s4",
      "points": 90
     },
     {
-     "nameId": "ch_sora_s5_name",
-     "textId": "ch_sora_s5_text",
-     "artId": "ch_sora_s5",
+     "nameId": "ch_en_s5_name",
+     "textId": "ch_en_s5_text",
+     "artId": "ch_en_s5",
      "points": 160
+    }
+   ],
+   "forms": [
+    {
+     "id": "f1",
+     "nameId": "ch_en_f1_name",
+     "textId": "ch_en_f1_text",
+     "artId": "ch_en_f1",
+     "metric": "comebacks",
+     "scale": 1
+    },
+    {
+     "id": "f2",
+     "nameId": "ch_en_f2_name",
+     "textId": "ch_en_f2_text",
+     "artId": "ch_en_f2",
+     "metric": "best_link",
+     "scale": 2
+    },
+    {
+     "id": "f3",
+     "nameId": "ch_en_f3_name",
+     "textId": "ch_en_f3_text",
+     "artId": "ch_en_f3",
+     "metric": "days_studied",
+     "scale": 3
     }
    ]
   },
   {
-   "id": "ch_kodama",
+   "id": "ch_social",
+   "kind": "common",
+   "subjects": [
+    "social"
+   ],
+   "nameId": "ch_social_name",
+   "storyId": "ch_social_story",
+   "stages": [
+    {
+     "nameId": "ch_social_s1_name",
+     "textId": "ch_social_s1_text",
+     "artId": "ch_social_s1",
+     "points": 0
+    },
+    {
+     "nameId": "ch_social_s2_name",
+     "textId": "ch_social_s2_text",
+     "artId": "ch_social_s2",
+     "points": 12
+    },
+    {
+     "nameId": "ch_social_s3_name",
+     "textId": "ch_social_s3_text",
+     "artId": "ch_social_s3",
+     "points": 40
+    },
+    {
+     "nameId": "ch_social_s4_name",
+     "textId": "ch_social_s4_text",
+     "artId": "ch_social_s4",
+     "points": 90
+    },
+    {
+     "nameId": "ch_social_s5_name",
+     "textId": "ch_social_s5_text",
+     "artId": "ch_social_s5",
+     "points": 160
+    }
+   ],
+   "forms": [
+    {
+     "id": "f1",
+     "nameId": "ch_social_f1_name",
+     "textId": "ch_social_f1_text",
+     "artId": "ch_social_f1",
+     "metric": "comebacks",
+     "scale": 1
+    },
+    {
+     "id": "f2",
+     "nameId": "ch_social_f2_name",
+     "textId": "ch_social_f2_text",
+     "artId": "ch_social_f2",
+     "metric": "best_link",
+     "scale": 2
+    },
+    {
+     "id": "f3",
+     "nameId": "ch_social_f3_name",
+     "textId": "ch_social_f3_text",
+     "artId": "ch_social_f3",
+     "metric": "days_studied",
+     "scale": 3
+    }
+   ]
+  },
+  {
+   "id": "ch_science",
+   "kind": "common",
+   "subjects": [
+    "science"
+   ],
+   "nameId": "ch_science_name",
+   "storyId": "ch_science_story",
+   "stages": [
+    {
+     "nameId": "ch_science_s1_name",
+     "textId": "ch_science_s1_text",
+     "artId": "ch_science_s1",
+     "points": 0
+    },
+    {
+     "nameId": "ch_science_s2_name",
+     "textId": "ch_science_s2_text",
+     "artId": "ch_science_s2",
+     "points": 12
+    },
+    {
+     "nameId": "ch_science_s3_name",
+     "textId": "ch_science_s3_text",
+     "artId": "ch_science_s3",
+     "points": 40
+    },
+    {
+     "nameId": "ch_science_s4_name",
+     "textId": "ch_science_s4_text",
+     "artId": "ch_science_s4",
+     "points": 90
+    },
+    {
+     "nameId": "ch_science_s5_name",
+     "textId": "ch_science_s5_text",
+     "artId": "ch_science_s5",
+     "points": 160
+    }
+   ],
+   "forms": [
+    {
+     "id": "f1",
+     "nameId": "ch_science_f1_name",
+     "textId": "ch_science_f1_text",
+     "artId": "ch_science_f1",
+     "metric": "comebacks",
+     "scale": 1
+    },
+    {
+     "id": "f2",
+     "nameId": "ch_science_f2_name",
+     "textId": "ch_science_f2_text",
+     "artId": "ch_science_f2",
+     "metric": "best_link",
+     "scale": 2
+    },
+    {
+     "id": "f3",
+     "nameId": "ch_science_f3_name",
+     "textId": "ch_science_f3_text",
+     "artId": "ch_science_f3",
+     "metric": "days_studied",
+     "scale": 3
+    }
+   ]
+  },
+  {
+   "id": "ch_language",
+   "kind": "common",
+   "subjects": [
+    "language"
+   ],
+   "nameId": "ch_language_name",
+   "storyId": "ch_language_story",
+   "stages": [
+    {
+     "nameId": "ch_language_s1_name",
+     "textId": "ch_language_s1_text",
+     "artId": "ch_language_s1",
+     "points": 0
+    },
+    {
+     "nameId": "ch_language_s2_name",
+     "textId": "ch_language_s2_text",
+     "artId": "ch_language_s2",
+     "points": 12
+    },
+    {
+     "nameId": "ch_language_s3_name",
+     "textId": "ch_language_s3_text",
+     "artId": "ch_language_s3",
+     "points": 40
+    },
+    {
+     "nameId": "ch_language_s4_name",
+     "textId": "ch_language_s4_text",
+     "artId": "ch_language_s4",
+     "points": 90
+    },
+    {
+     "nameId": "ch_language_s5_name",
+     "textId": "ch_language_s5_text",
+     "artId": "ch_language_s5",
+     "points": 160
+    }
+   ],
+   "forms": [
+    {
+     "id": "f1",
+     "nameId": "ch_language_f1_name",
+     "textId": "ch_language_f1_text",
+     "artId": "ch_language_f1",
+     "metric": "comebacks",
+     "scale": 1
+    },
+    {
+     "id": "f2",
+     "nameId": "ch_language_f2_name",
+     "textId": "ch_language_f2_text",
+     "artId": "ch_language_f2",
+     "metric": "best_link",
+     "scale": 2
+    },
+    {
+     "id": "f3",
+     "nameId": "ch_language_f3_name",
+     "textId": "ch_language_f3_text",
+     "artId": "ch_language_f3",
+     "metric": "days_studied",
+     "scale": 3
+    }
+   ]
+  },
+  {
+   "id": "ch_social_jp",
    "kind": "regional",
+   "subjects": [
+    "social"
+   ],
+   "nameId": "ch_social_jp_name",
+   "storyId": "ch_social_jp_story",
+   "stages": [
+    {
+     "nameId": "ch_social_jp_s1_name",
+     "textId": "ch_social_jp_s1_text",
+     "artId": "ch_social_jp_s1",
+     "points": 0
+    },
+    {
+     "nameId": "ch_social_jp_s2_name",
+     "textId": "ch_social_jp_s2_text",
+     "artId": "ch_social_jp_s2",
+     "points": 12
+    },
+    {
+     "nameId": "ch_social_jp_s3_name",
+     "textId": "ch_social_jp_s3_text",
+     "artId": "ch_social_jp_s3",
+     "points": 40
+    },
+    {
+     "nameId": "ch_social_jp_s4_name",
+     "textId": "ch_social_jp_s4_text",
+     "artId": "ch_social_jp_s4",
+     "points": 90
+    },
+    {
+     "nameId": "ch_social_jp_s5_name",
+     "textId": "ch_social_jp_s5_text",
+     "artId": "ch_social_jp_s5",
+     "points": 160
+    }
+   ],
+   "forms": [
+    {
+     "id": "f1",
+     "nameId": "ch_social_jp_f1_name",
+     "textId": "ch_social_jp_f1_text",
+     "artId": "ch_social_jp_f1",
+     "metric": "comebacks",
+     "scale": 1
+    },
+    {
+     "id": "f2",
+     "nameId": "ch_social_jp_f2_name",
+     "textId": "ch_social_jp_f2_text",
+     "artId": "ch_social_jp_f2",
+     "metric": "best_link",
+     "scale": 2
+    },
+    {
+     "id": "f3",
+     "nameId": "ch_social_jp_f3_name",
+     "textId": "ch_social_jp_f3_text",
+     "artId": "ch_social_jp_f3",
+     "metric": "days_studied",
+     "scale": 3
+    }
+   ],
    "regions": [
     "JP"
-   ],
-   "nameId": "ch_kodama_name",
-   "storyId": "ch_kodama_story",
-   "unlock": {
-    "metric": "regional_units",
-    "atLeast": 3
-   },
-   "stages": [
-    {
-     "nameId": "ch_kodama_s1_name",
-     "textId": "ch_kodama_s1_text",
-     "artId": "ch_kodama_s1",
-     "points": 0
-    },
-    {
-     "nameId": "ch_kodama_s2_name",
-     "textId": "ch_kodama_s2_text",
-     "artId": "ch_kodama_s2",
-     "points": 12
-    },
-    {
-     "nameId": "ch_kodama_s3_name",
-     "textId": "ch_kodama_s3_text",
-     "artId": "ch_kodama_s3",
-     "points": 40
-    },
-    {
-     "nameId": "ch_kodama_s4_name",
-     "textId": "ch_kodama_s4_text",
-     "artId": "ch_kodama_s4",
-     "points": 90
-    },
-    {
-     "nameId": "ch_kodama_s5_name",
-     "textId": "ch_kodama_s5_text",
-     "artId": "ch_kodama_s5",
-     "points": 160
-    }
    ]
   },
   {
-   "id": "ch_tatu",
+   "id": "ch_social_br",
    "kind": "regional",
+   "subjects": [
+    "social"
+   ],
+   "nameId": "ch_social_br_name",
+   "storyId": "ch_social_br_story",
+   "stages": [
+    {
+     "nameId": "ch_social_br_s1_name",
+     "textId": "ch_social_br_s1_text",
+     "artId": "ch_social_br_s1",
+     "points": 0
+    },
+    {
+     "nameId": "ch_social_br_s2_name",
+     "textId": "ch_social_br_s2_text",
+     "artId": "ch_social_br_s2",
+     "points": 12
+    },
+    {
+     "nameId": "ch_social_br_s3_name",
+     "textId": "ch_social_br_s3_text",
+     "artId": "ch_social_br_s3",
+     "points": 40
+    },
+    {
+     "nameId": "ch_social_br_s4_name",
+     "textId": "ch_social_br_s4_text",
+     "artId": "ch_social_br_s4",
+     "points": 90
+    },
+    {
+     "nameId": "ch_social_br_s5_name",
+     "textId": "ch_social_br_s5_text",
+     "artId": "ch_social_br_s5",
+     "points": 160
+    }
+   ],
+   "forms": [
+    {
+     "id": "f1",
+     "nameId": "ch_social_br_f1_name",
+     "textId": "ch_social_br_f1_text",
+     "artId": "ch_social_br_f1",
+     "metric": "comebacks",
+     "scale": 1
+    },
+    {
+     "id": "f2",
+     "nameId": "ch_social_br_f2_name",
+     "textId": "ch_social_br_f2_text",
+     "artId": "ch_social_br_f2",
+     "metric": "best_link",
+     "scale": 2
+    },
+    {
+     "id": "f3",
+     "nameId": "ch_social_br_f3_name",
+     "textId": "ch_social_br_f3_text",
+     "artId": "ch_social_br_f3",
+     "metric": "days_studied",
+     "scale": 3
+    }
+   ],
    "regions": [
     "BR"
-   ],
-   "nameId": "ch_tatu_name",
-   "storyId": "ch_tatu_story",
-   "unlock": {
-    "metric": "regional_units",
-    "atLeast": 3
-   },
-   "stages": [
-    {
-     "nameId": "ch_tatu_s1_name",
-     "textId": "ch_tatu_s1_text",
-     "artId": "ch_tatu_s1",
-     "points": 0
-    },
-    {
-     "nameId": "ch_tatu_s2_name",
-     "textId": "ch_tatu_s2_text",
-     "artId": "ch_tatu_s2",
-     "points": 12
-    },
-    {
-     "nameId": "ch_tatu_s3_name",
-     "textId": "ch_tatu_s3_text",
-     "artId": "ch_tatu_s3",
-     "points": 40
-    },
-    {
-     "nameId": "ch_tatu_s4_name",
-     "textId": "ch_tatu_s4_text",
-     "artId": "ch_tatu_s4",
-     "points": 90
-    },
-    {
-     "nameId": "ch_tatu_s5_name",
-     "textId": "ch_tatu_s5_text",
-     "artId": "ch_tatu_s5",
-     "points": 160
-    }
    ]
   },
   {
-   "id": "ch_axolotl",
+   "id": "ch_social_mx",
    "kind": "regional",
+   "subjects": [
+    "social"
+   ],
+   "nameId": "ch_social_mx_name",
+   "storyId": "ch_social_mx_story",
+   "stages": [
+    {
+     "nameId": "ch_social_mx_s1_name",
+     "textId": "ch_social_mx_s1_text",
+     "artId": "ch_social_mx_s1",
+     "points": 0
+    },
+    {
+     "nameId": "ch_social_mx_s2_name",
+     "textId": "ch_social_mx_s2_text",
+     "artId": "ch_social_mx_s2",
+     "points": 12
+    },
+    {
+     "nameId": "ch_social_mx_s3_name",
+     "textId": "ch_social_mx_s3_text",
+     "artId": "ch_social_mx_s3",
+     "points": 40
+    },
+    {
+     "nameId": "ch_social_mx_s4_name",
+     "textId": "ch_social_mx_s4_text",
+     "artId": "ch_social_mx_s4",
+     "points": 90
+    },
+    {
+     "nameId": "ch_social_mx_s5_name",
+     "textId": "ch_social_mx_s5_text",
+     "artId": "ch_social_mx_s5",
+     "points": 160
+    }
+   ],
+   "forms": [
+    {
+     "id": "f1",
+     "nameId": "ch_social_mx_f1_name",
+     "textId": "ch_social_mx_f1_text",
+     "artId": "ch_social_mx_f1",
+     "metric": "comebacks",
+     "scale": 1
+    },
+    {
+     "id": "f2",
+     "nameId": "ch_social_mx_f2_name",
+     "textId": "ch_social_mx_f2_text",
+     "artId": "ch_social_mx_f2",
+     "metric": "best_link",
+     "scale": 2
+    },
+    {
+     "id": "f3",
+     "nameId": "ch_social_mx_f3_name",
+     "textId": "ch_social_mx_f3_text",
+     "artId": "ch_social_mx_f3",
+     "metric": "days_studied",
+     "scale": 3
+    }
+   ],
    "regions": [
     "MX"
-   ],
-   "nameId": "ch_axolotl_name",
-   "storyId": "ch_axolotl_story",
-   "unlock": {
-    "metric": "regional_units",
-    "atLeast": 3
-   },
-   "stages": [
-    {
-     "nameId": "ch_axolotl_s1_name",
-     "textId": "ch_axolotl_s1_text",
-     "artId": "ch_axolotl_s1",
-     "points": 0
-    },
-    {
-     "nameId": "ch_axolotl_s2_name",
-     "textId": "ch_axolotl_s2_text",
-     "artId": "ch_axolotl_s2",
-     "points": 12
-    },
-    {
-     "nameId": "ch_axolotl_s3_name",
-     "textId": "ch_axolotl_s3_text",
-     "artId": "ch_axolotl_s3",
-     "points": 40
-    },
-    {
-     "nameId": "ch_axolotl_s4_name",
-     "textId": "ch_axolotl_s4_text",
-     "artId": "ch_axolotl_s4",
-     "points": 90
-    },
-    {
-     "nameId": "ch_axolotl_s5_name",
-     "textId": "ch_axolotl_s5_text",
-     "artId": "ch_axolotl_s5",
-     "points": 160
-    }
    ]
   },
   {
-   "id": "ch_elephant",
+   "id": "ch_social_in",
    "kind": "regional",
-   "regions": [
-    "IN"
+   "subjects": [
+    "social"
    ],
-   "nameId": "ch_elephant_name",
-   "storyId": "ch_elephant_story",
-   "unlock": {
-    "metric": "regional_units",
-    "atLeast": 3
-   },
+   "nameId": "ch_social_in_name",
+   "storyId": "ch_social_in_story",
    "stages": [
     {
-     "nameId": "ch_elephant_s1_name",
-     "textId": "ch_elephant_s1_text",
-     "artId": "ch_elephant_s1",
+     "nameId": "ch_social_in_s1_name",
+     "textId": "ch_social_in_s1_text",
+     "artId": "ch_social_in_s1",
      "points": 0
     },
     {
-     "nameId": "ch_elephant_s2_name",
-     "textId": "ch_elephant_s2_text",
-     "artId": "ch_elephant_s2",
+     "nameId": "ch_social_in_s2_name",
+     "textId": "ch_social_in_s2_text",
+     "artId": "ch_social_in_s2",
      "points": 12
     },
     {
-     "nameId": "ch_elephant_s3_name",
-     "textId": "ch_elephant_s3_text",
-     "artId": "ch_elephant_s3",
+     "nameId": "ch_social_in_s3_name",
+     "textId": "ch_social_in_s3_text",
+     "artId": "ch_social_in_s3",
      "points": 40
     },
     {
-     "nameId": "ch_elephant_s4_name",
-     "textId": "ch_elephant_s4_text",
-     "artId": "ch_elephant_s4",
+     "nameId": "ch_social_in_s4_name",
+     "textId": "ch_social_in_s4_text",
+     "artId": "ch_social_in_s4",
      "points": 90
     },
     {
-     "nameId": "ch_elephant_s5_name",
-     "textId": "ch_elephant_s5_text",
-     "artId": "ch_elephant_s5",
+     "nameId": "ch_social_in_s5_name",
+     "textId": "ch_social_in_s5_text",
+     "artId": "ch_social_in_s5",
      "points": 160
     }
+   ],
+   "forms": [
+    {
+     "id": "f1",
+     "nameId": "ch_social_in_f1_name",
+     "textId": "ch_social_in_f1_text",
+     "artId": "ch_social_in_f1",
+     "metric": "comebacks",
+     "scale": 1
+    },
+    {
+     "id": "f2",
+     "nameId": "ch_social_in_f2_name",
+     "textId": "ch_social_in_f2_text",
+     "artId": "ch_social_in_f2",
+     "metric": "best_link",
+     "scale": 2
+    },
+    {
+     "id": "f3",
+     "nameId": "ch_social_in_f3_name",
+     "textId": "ch_social_in_f3_text",
+     "artId": "ch_social_in_f3",
+     "metric": "days_studied",
+     "scale": 3
+    }
+   ],
+   "regions": [
+    "IN"
    ]
+  },
+  {
+   "id": "ch_field_m1_eq",
+   "kind": "field",
+   "fieldId": "m1_eq",
+   "subjects": [
+    "math"
+   ],
+   "nameId": "ch_field_m1_eq_name",
+   "storyId": "ch_field_m1_eq_story",
+   "stages": [],
+   "stickers": [
+    {
+     "id": "st1",
+     "artId": "ch_field_m1_eq_st1",
+     "textId": "ch_field_m1_eq_st1_text"
+    },
+    {
+     "id": "st2",
+     "artId": "ch_field_m1_eq_st2",
+     "textId": "ch_field_m1_eq_st2_text"
+    },
+    {
+     "id": "st3",
+     "artId": "ch_field_m1_eq_st3",
+     "textId": "ch_field_m1_eq_st3_text"
+    },
+    {
+     "id": "st4",
+     "artId": "ch_field_m1_eq_st4",
+     "textId": "ch_field_m1_eq_st4_text"
+    },
+    {
+     "id": "st5",
+     "artId": "ch_field_m1_eq_st5",
+     "textId": "ch_field_m1_eq_st5_text"
+    },
+    {
+     "id": "st6",
+     "artId": "ch_field_m1_eq_st6",
+     "textId": "ch_field_m1_eq_st6_text"
+    },
+    {
+     "id": "st7",
+     "artId": "ch_field_m1_eq_st7",
+     "textId": "ch_field_m1_eq_st7_text"
+    },
+    {
+     "id": "st8",
+     "artId": "ch_field_m1_eq_st8",
+     "textId": "ch_field_m1_eq_st8_text"
+    }
+   ],
+   "artId": "ch_field_m1_eq"
+  },
+  {
+   "id": "ch_field_m2_lin",
+   "kind": "field",
+   "fieldId": "m2_lin",
+   "subjects": [
+    "math"
+   ],
+   "nameId": "ch_field_m2_lin_name",
+   "storyId": "ch_field_m2_lin_story",
+   "stages": [],
+   "stickers": [
+    {
+     "id": "st1",
+     "artId": "ch_field_m2_lin_st1",
+     "textId": "ch_field_m2_lin_st1_text"
+    },
+    {
+     "id": "st2",
+     "artId": "ch_field_m2_lin_st2",
+     "textId": "ch_field_m2_lin_st2_text"
+    },
+    {
+     "id": "st3",
+     "artId": "ch_field_m2_lin_st3",
+     "textId": "ch_field_m2_lin_st3_text"
+    },
+    {
+     "id": "st4",
+     "artId": "ch_field_m2_lin_st4",
+     "textId": "ch_field_m2_lin_st4_text"
+    },
+    {
+     "id": "st5",
+     "artId": "ch_field_m2_lin_st5",
+     "textId": "ch_field_m2_lin_st5_text"
+    },
+    {
+     "id": "st6",
+     "artId": "ch_field_m2_lin_st6",
+     "textId": "ch_field_m2_lin_st6_text"
+    },
+    {
+     "id": "st7",
+     "artId": "ch_field_m2_lin_st7",
+     "textId": "ch_field_m2_lin_st7_text"
+    },
+    {
+     "id": "st8",
+     "artId": "ch_field_m2_lin_st8",
+     "textId": "ch_field_m2_lin_st8_text"
+    }
+   ],
+   "artId": "ch_field_m2_lin"
+  },
+  {
+   "id": "ch_field_m3_sim",
+   "kind": "field",
+   "fieldId": "m3_sim",
+   "subjects": [
+    "math"
+   ],
+   "nameId": "ch_field_m3_sim_name",
+   "storyId": "ch_field_m3_sim_story",
+   "stages": [],
+   "stickers": [
+    {
+     "id": "st1",
+     "artId": "ch_field_m3_sim_st1",
+     "textId": "ch_field_m3_sim_st1_text"
+    },
+    {
+     "id": "st2",
+     "artId": "ch_field_m3_sim_st2",
+     "textId": "ch_field_m3_sim_st2_text"
+    },
+    {
+     "id": "st3",
+     "artId": "ch_field_m3_sim_st3",
+     "textId": "ch_field_m3_sim_st3_text"
+    },
+    {
+     "id": "st4",
+     "artId": "ch_field_m3_sim_st4",
+     "textId": "ch_field_m3_sim_st4_text"
+    },
+    {
+     "id": "st5",
+     "artId": "ch_field_m3_sim_st5",
+     "textId": "ch_field_m3_sim_st5_text"
+    },
+    {
+     "id": "st6",
+     "artId": "ch_field_m3_sim_st6",
+     "textId": "ch_field_m3_sim_st6_text"
+    },
+    {
+     "id": "st7",
+     "artId": "ch_field_m3_sim_st7",
+     "textId": "ch_field_m3_sim_st7_text"
+    },
+    {
+     "id": "st8",
+     "artId": "ch_field_m3_sim_st8",
+     "textId": "ch_field_m3_sim_st8_text"
+    }
+   ],
+   "artId": "ch_field_m3_sim"
   }
  ],
  "badges": [

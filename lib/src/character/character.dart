@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import '../bank/question_bank.dart';
 import '../practice/play_round.dart';
+import '../scope/unit_tree.dart';
 
 /// 相棒（キャラ）とバッジ。国をまたいで使える共通の部品と、その国らしいキャラ（地域キャラ）を、同じ仕組みのデータ
 /// （`characters.json`）で扱う。設計は `docs/character_design.md`。
@@ -58,7 +59,42 @@ class UnlockRule {
   bool met(LearnerMetrics m) => m[metric] >= atLeast;
 }
 
-enum CharacterKind { common, regional }
+/// 進化の分岐（最後の段階の姿）。**勉強の仕方**で決まり、どれも同じ価値（上下はない）。
+/// 実績 [metric] を [scale] でわった値がいちばん大きい姿になる（同じなら先に書いたもの）。運では決まらない。
+class FormSpec {
+  const FormSpec({
+    required this.id,
+    required this.nameId,
+    required this.textId,
+    required this.artId,
+    required this.metric,
+    required this.scale,
+  });
+
+  final String id, nameId, textId, artId, metric;
+  final int scale;
+}
+
+/// 分野のキャラ 1 匹につき、スタンプはちょうどこの枚数。
+const stickersPerField = 8;
+
+/// スタンプ（分野をマスターしたごほうびの、チャット風のキャラ画像）の 1 枚。
+/// 画像には**名前・点数・日付など、その子の情報を入れない**（決まったひとことだけ）。
+class StickerSpec {
+  const StickerSpec({
+    required this.id,
+    required this.artId,
+    required this.textId,
+  });
+
+  final String id, artId;
+
+  /// 画像に添える一言（文言の ID）。読み上げ・代替文にも使う。
+  final String textId;
+}
+
+/// 種類: 共通の相棒／その国らしい相棒（地域キャラ）／分野のキャラ（その分野を**マスターするとゲット**。成長はしない。図鑑に並ぶ）。
+enum CharacterKind { common, regional, field }
 
 class CharacterSpec {
   const CharacterSpec({
@@ -69,7 +105,11 @@ class CharacterSpec {
     required this.nameId,
     required this.storyId,
     required this.stages,
+    this.forms = const [],
     this.unlock,
+    this.fieldId,
+    this.artId,
+    this.stickers = const [],
   });
 
   final String id;
@@ -84,7 +124,19 @@ class CharacterSpec {
   final List<String> subjects;
   final String nameId, storyId;
   final List<EvolutionStage> stages;
+
+  /// 最後の段階の姿の分岐（無ければ空）。
+  final List<FormSpec> forms;
   final UnlockRule? unlock;
+
+  /// 分野のキャラ（`kind` が `field`）が育つ分野（単元ツリーの一番上の単元）。成長ポイントは、その分野の正解の数（と「できた」）から数える。
+  final String? fieldId;
+
+  /// 分野のキャラの絵（成長しないので 1 枚。分野をマスターして**ゲット**したときの姿）。
+  final String? artId;
+
+  /// 分野をマスターしたらもらえるスタンプ（分野のキャラだけ。ちょうど 8 枚）。
+  final List<StickerSpec> stickers;
 
   bool availableIn({String? region, String? subject}) =>
       (regions.isEmpty || (region != null && regions.contains(region))) &&
@@ -105,10 +157,22 @@ class CharacterSpec {
     return s + 1 < stages.length ? stages[s + 1].points - points : null;
   }
 
+  /// 最後の段階にいるときの姿。勉強の仕方（実績）でいちばん多いものに合う姿（分岐がなければ null）。
+  FormSpec? formFor(int points, LearnerMetrics m) {
+    if (forms.isEmpty || stageOf(points) != stages.length - 1) return null;
+    var best = forms.first;
+    for (final f in forms) {
+      if (m[f.metric] / f.scale > m[best.metric] / best.scale) best = f;
+    }
+    return best;
+  }
+
   Iterable<String> get textIds => [
     nameId,
     storyId,
     for (final s in stages) ...[s.nameId, s.textId],
+    for (final f in forms) ...[f.nameId, f.textId],
+    for (final k in stickers) k.textId,
   ];
 }
 
@@ -183,7 +247,9 @@ class CharacterSet {
       final kind = CharacterKind.values
           .where((k) => k.name == kindName)
           .firstOrNull;
-      if (kind == null) throw FormatException('$id: kind は common か regional');
+      if (kind == null) {
+        throw FormatException('$id: kind は common・regional・field のどれか');
+      }
       final stages = [
         for (final raw in (c['stages'] as List? ?? const []))
           () {
@@ -193,6 +259,20 @@ class CharacterSet {
               textId: _str(s, 'textId', '$id の段階'),
               artId: _str(s, 'artId', '$id の段階'),
               points: _int(s, 'points', '$id の段階'),
+            );
+          }(),
+      ];
+      final forms = [
+        for (final raw in (c['forms'] as List? ?? const []))
+          () {
+            final f = Map<String, dynamic>.from(raw as Map);
+            return FormSpec(
+              id: _str(f, 'id', '$id の姿'),
+              nameId: _str(f, 'nameId', '$id の姿'),
+              textId: _str(f, 'textId', '$id の姿'),
+              artId: _str(f, 'artId', '$id の姿'),
+              metric: _str(f, 'metric', '$id の姿'),
+              scale: _int(f, 'scale', '$id の姿'),
             );
           }(),
       ];
@@ -208,12 +288,26 @@ class CharacterSet {
           nameId: _str(c, 'nameId', id),
           storyId: _str(c, 'storyId', id),
           stages: stages,
+          forms: forms,
           unlock: u == null
               ? null
               : UnlockRule(
                   metric: _str(u, 'metric', '$id の入手条件'),
                   atLeast: _int(u, 'atLeast', '$id の入手条件'),
                 ),
+          fieldId: c['fieldId'] as String?,
+          artId: c['artId'] as String?,
+          stickers: [
+            for (final raw in (c['stickers'] as List? ?? const []))
+              () {
+                final k = Map<String, dynamic>.from(raw as Map);
+                return StickerSpec(
+                  id: _str(k, 'id', '$id のスタンプ'),
+                  artId: _str(k, 'artId', '$id のスタンプ'),
+                  textId: _str(k, 'textId', '$id のスタンプ'),
+                );
+              }(),
+          ],
         ),
       );
     }
@@ -241,6 +335,38 @@ class CharacterSet {
     return CharacterSet(characters: chars, badges: badges);
   }
 
+  /// その国・その教科で、はじめに選べる相棒（入手条件のないもの）。その国らしい地域キャラを先に、共通キャラを後に並べる。
+  List<CharacterSpec> startersFor(String subject, {String? region}) {
+    final all = [
+      for (final c in characters)
+        if (c.kind != CharacterKind.field &&
+            c.unlock == null &&
+            c.availableIn(region: region, subject: subject))
+          c,
+    ];
+    return [
+      ...all.where((c) => c.kind == CharacterKind.regional),
+      ...all.where((c) => c.kind == CharacterKind.common),
+    ];
+  }
+
+  /// 分野 [fieldId] のキャラ（無ければ null）。
+  CharacterSpec? fieldCharacterFor(String fieldId) {
+    for (final c in characters) {
+      if (c.kind == CharacterKind.field && c.fieldId == fieldId) return c;
+    }
+    return null;
+  }
+
+  /// 分野のキャラ全部（図鑑に並ぶもの）。
+  List<CharacterSpec> get fieldCharacters => [
+    for (final c in characters)
+      if (c.kind == CharacterKind.field) c,
+  ];
+
+  /// キャラに書かれた教科の一覧。
+  Set<String> get subjects => {for (final c in characters) ...c.subjects};
+
   /// この国・この教科で出せるキャラのうち、入手条件を満たしたもの。
   List<CharacterSpec> unlocked(
     LearnerMetrics m, {
@@ -248,7 +374,8 @@ class CharacterSet {
     String? subject,
   }) => [
     for (final c in characters)
-      if (c.availableIn(region: region, subject: subject) &&
+      if (c.kind != CharacterKind.field &&
+          c.availableIn(region: region, subject: subject) &&
           (c.unlock?.met(m) ?? true))
         c,
   ];
@@ -259,6 +386,28 @@ class CharacterSet {
       if (m[b.metric] >= b.atLeast) b,
   ];
 }
+
+/// 分野 [fieldId] の単元（一番下の単元）がすべて「できた」か。単元がなければ偽。
+bool fieldMastered(UnitTree tree, String fieldId, Set<String> doneUnitIds) {
+  final leaves = tree.resolveLeaves([fieldId]);
+  return leaves.isNotEmpty && leaves.every((u) => doneUnitIds.contains(u.id));
+}
+
+/// スタンプがもらえる（分野をマスターした）分野のキャラ。教科・並びは `characters.json` の順。
+/// スタンプの画像を端末に保存・共有するのは**アプリ側**（キットは送らない）。外へ渡すので、年齢・保護者の設定に従う
+/// （`docs/character_design.md` §5.5）。
+List<CharacterSpec> stickersEarned(
+  CharacterSet set,
+  UnitTree tree,
+  Set<String> doneUnitIds, {
+  String? subject,
+}) => [
+  for (final c in set.fieldCharacters)
+    if (c.stickers.isNotEmpty &&
+        (subject == null || c.availableIn(subject: subject)) &&
+        fieldMastered(tree, c.fieldId!, doneUnitIds))
+      c,
+];
 
 /// 1 回の遊び（ラウンド）で増える成長ポイント。最後までやれば必ず 1 点（正解数に依らない）。
 /// つながり・立て直しは少し多く。**マイナスはない**。
@@ -274,38 +423,112 @@ int growthPointsForRound(Set<PlayReward> rewards) {
 /// 単元テストで「できた」になったときの成長ポイント。
 const growthPointsForUnitDone = 5;
 
+/// 図鑑の 1 項目: 分野のキャラと、その分野の進み具合。マスター（単元がすべて「できた」）したら `obtained`（ゲット）。
+/// まだのものは「あと [remaining] 単元」で、シルエットで見せる。
+/// 図鑑は**自分の進みを見る**ためのもので、順位や他の子との比較は載せない。
+class ZukanEntry {
+  const ZukanEntry({
+    required this.character,
+    required this.unitsDone,
+    required this.unitsTotal,
+  });
+
+  final CharacterSpec character;
+  final int unitsDone, unitsTotal;
+
+  bool get obtained => unitsTotal > 0 && unitsDone >= unitsTotal;
+
+  int get remaining => unitsTotal - unitsDone;
+}
+
+/// 教科 [subject] の分野のキャラの図鑑（並びは `characters.json` の順）。[doneUnitIds] は「できた」になった単元。
+List<ZukanEntry> zukan(
+  CharacterSet set,
+  UnitTree tree,
+  String subject,
+  Set<String> doneUnitIds,
+) => [
+  for (final c in set.fieldCharacters)
+    if (c.availableIn(subject: subject))
+      () {
+        final leaves = tree.resolveLeaves([c.fieldId!]);
+        return ZukanEntry(
+          character: c,
+          unitsDone: leaves.where((u) => doneUnitIds.contains(u.id)).length,
+          unitsTotal: leaves.length,
+        );
+      }(),
+];
+
 /// 相棒ごとの成長ポイント。増えるだけ（負の値は 0 として扱い、休んでも下がらない）。
+/// **相棒は教科ごとに 1 匹**: 教科アプリごとに連れる相棒が別で、その教科の勉強でだけ育つ。
 class CompanionProgress {
-  const CompanionProgress({this.points = const {}, this.activeId});
+  const CompanionProgress({
+    this.points = const {},
+    this.activeBySubject = const {},
+  });
 
   final Map<String, int> points;
 
-  /// いま連れている相棒。
-  final String? activeId;
+  /// 教科 → いま育てている相棒。
+  final Map<String, String> activeBySubject;
 
   int pointsOf(String id) => points[id] ?? 0;
+
+  String? activeIn(String subject) => activeBySubject[subject];
 
   /// 相棒 [id] に [add] ポイントを足す。
   CompanionProgress grow(String id, int add) => CompanionProgress(
     points: {...points, id: pointsOf(id) + (add < 0 ? 0 : add)},
-    activeId: activeId,
+    activeBySubject: activeBySubject,
   );
 
-  CompanionProgress choose(String id) =>
-      CompanionProgress(points: points, activeId: id);
+  /// 教科 [subject] で育てる相棒を [id] にする。
+  CompanionProgress choose(String subject, String id) => CompanionProgress(
+    points: points,
+    activeBySubject: {...activeBySubject, subject: id},
+  );
+
+  /// 教科 [subject] の勉強で得た成長ポイント [add] を、育てている相棒に足す（いなければ変えない）。
+  CompanionProgress growActive(String subject, int add) {
+    final id = activeIn(subject);
+    return id == null ? this : grow(id, add);
+  }
 }
 
 /// キャラとバッジの検証。
 /// エラー: `character_stage_invalid`（段階は 3〜6 個、最初は 0 点、点は増える順）・`character_region_invalid`（国コードは大文字 2 文字）・
 /// `character_regional_no_region`（地域キャラは国を指定する）・`character_metric_unknown`・`character_threshold_invalid`（1 以上）・
-/// `character_no_starter`（入手条件のないはじめの共通キャラが無い）。
-List<ValidationIssue> validateCharacters(CharacterSet set) {
+/// `character_field_invalid`（分野のキャラは artId が要り、段階・姿は付けない）・`character_sticker_invalid`（スタンプは分野のキャラだけ・ちょうど 8 枚）・`character_field_missing`（分野のキャラの分野がない・分野以外に fieldId）・`character_field_duplicate`（同じ分野に 2 つ）・`character_form_invalid`（姿の分岐は 2〜4 個・scale は 1 以上）・`character_no_starter`（教科ごとに、はじめの共通キャラが無い）。
+List<ValidationIssue> validateCharacters(
+  CharacterSet set, {
+  Set<String>? fieldIds,
+}) {
   final issues = <ValidationIssue>[];
   void err(String code, String id, String msg) =>
       issues.add(ValidationIssue(IssueSeverity.error, code, id, msg));
   final art = RegExp(r'^[a-z0-9_]+$');
+  final seenUnits = <String>{};
   for (final c in set.characters) {
-    if (c.stages.length < 3 || c.stages.length > 6) {
+    final u = c.fieldId;
+    if (c.kind != CharacterKind.field || u == null) continue;
+    if (!seenUnits.add(u)) {
+      err('character_field_duplicate', c.id, '分野 $u のキャラが 2 つあります');
+    }
+    if (fieldIds != null && !fieldIds.contains(u)) {
+      err('character_field_missing', c.id, '分野 $u がありません');
+    }
+  }
+  for (final c in set.characters) {
+    if (c.kind == CharacterKind.field) {
+      // 分野のキャラは成長しない: 絵は 1 枚（artId）。段階・姿は持たない
+      if (c.artId == null || !art.hasMatch(c.artId!)) {
+        err('character_field_invalid', c.id, '分野のキャラは artId（小文字・数字・_ だけ）が要ります');
+      }
+      if (c.stages.isNotEmpty || c.forms.isNotEmpty) {
+        err('character_field_invalid', c.id, '分野のキャラは成長しません（段階・姿は付けない）');
+      }
+    } else if (c.stages.length < 3 || c.stages.length > 6) {
       err('character_stage_invalid', c.id, '段階は 3〜6 個（${c.stages.length}）');
     }
     if (c.stages.isNotEmpty && c.stages.first.points != 0) {
@@ -326,8 +549,54 @@ List<ValidationIssue> validateCharacters(CharacterSet set) {
         err('character_region_invalid', c.id, '国コードは大文字 2 文字: $r');
       }
     }
+    if (c.kind == CharacterKind.field &&
+        (c.fieldId == null || c.fieldId!.isEmpty)) {
+      err('character_field_missing', c.id, '分野のキャラは fieldId が要ります');
+    }
+    if (c.kind != CharacterKind.field && c.fieldId != null) {
+      err('character_field_missing', c.id, 'fieldId は分野のキャラだけに書きます');
+    }
+    if (c.stickers.isNotEmpty) {
+      if (c.kind != CharacterKind.field) {
+        err('character_sticker_invalid', c.id, 'スタンプは分野のキャラだけに付けます');
+      }
+      if (c.stickers.length != stickersPerField) {
+        err(
+          'character_sticker_invalid',
+          c.id,
+          'スタンプは $stickersPerField 枚（${c.stickers.length}）',
+        );
+      }
+      final sids = <String>{};
+      for (final k in c.stickers) {
+        if (!sids.add(k.id)) {
+          err('character_sticker_invalid', c.id, 'スタンプの id が重複: ${k.id}');
+        }
+        if (!art.hasMatch(k.artId)) {
+          err(
+            'character_sticker_invalid',
+            c.id,
+            '絵の名前は小文字・数字・_ だけ: ${k.artId}',
+          );
+        }
+      }
+    }
     if (c.kind == CharacterKind.regional && c.regions.isEmpty) {
       err('character_regional_no_region', c.id, '地域キャラは国を指定します');
+    }
+    if (c.forms.isNotEmpty && (c.forms.length < 2 || c.forms.length > 4)) {
+      err('character_form_invalid', c.id, '姿の分岐は 2〜4 個（${c.forms.length}）');
+    }
+    for (final f in c.forms) {
+      if (!knownMetrics.contains(f.metric)) {
+        err('character_metric_unknown', c.id, '知らない実績: ${f.metric}');
+      }
+      if (f.scale < 1) {
+        err('character_form_invalid', c.id, '姿 ${f.id} の scale は 1 以上');
+      }
+      if (!art.hasMatch(f.artId)) {
+        err('character_form_invalid', c.id, '絵の名前は小文字・数字・_ だけ: ${f.artId}');
+      }
     }
     final u = c.unlock;
     if (u != null) {
@@ -346,15 +615,28 @@ List<ValidationIssue> validateCharacters(CharacterSet set) {
       err('character_stage_invalid', b.id, '絵の名前は小文字・数字・_ だけ: ${b.artId}');
     }
   }
-  if (set.characters.isNotEmpty &&
-      !set.characters.any(
-        (c) => c.unlock == null && c.kind == CharacterKind.common,
-      )) {
-    err(
-      'character_no_starter',
-      'characters',
-      '入手条件のないはじめの共通キャラが必要です（どの国でも最初の相棒がいるように）',
+  if (set.characters.isNotEmpty) {
+    // 教科ごとの相棒: キャラに書かれた教科のそれぞれに、はじめに選べる共通キャラ（入手条件なし）が要る。
+    // 教科の指定がなければ、全教科で使うはじめの共通キャラが 1 匹要る。
+    bool hasCommonStarter(String? sub) => set.characters.any(
+      (c) =>
+          c.kind == CharacterKind.common &&
+          c.unlock == null &&
+          (sub == null ? c.subjects.isEmpty : c.availableIn(subject: sub)),
     );
+    final subjects = set.subjects;
+    if (subjects.isEmpty && !hasCommonStarter(null)) {
+      err('character_no_starter', 'characters', '入手条件のないはじめの共通キャラが必要です');
+    }
+    for (final sub in subjects) {
+      if (!hasCommonStarter(sub)) {
+        err(
+          'character_no_starter',
+          sub,
+          '教科 $sub に、入手条件のないはじめの共通キャラが必要です（どの国でも最初の相棒がいるように）',
+        );
+      }
+    }
   }
   return issues;
 }

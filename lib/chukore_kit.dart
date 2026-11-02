@@ -77,6 +77,7 @@ export 'src/experience/experience.dart';
 export 'src/experience/time_zone.dart';
 export 'src/chart/chart.dart';
 export 'src/lesson/lesson.dart';
+export 'src/character/art_pack.dart';
 export 'src/character/character.dart';
 export 'src/proof/proof.dart';
 export 'src/scene/scene.dart';
