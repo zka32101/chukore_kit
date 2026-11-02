@@ -1,0 +1,96 @@
+{
+ "version": 1,
+ "note": "見本のパターン（実在のクラスの値ではない）。箱ひげ図の読み取り・比較の練習用",
+ "charts": {
+  "chart_box_class_ab": {
+   "kind": "box",
+   "altId": "alt_chart_box_class_ab",
+   "categories": [
+    "A組",
+    "B組"
+   ],
+   "series": [
+    {
+     "id": "min",
+     "values": [
+      35,
+      40
+     ]
+    },
+    {
+     "id": "q1",
+     "values": [
+      50,
+      58
+     ]
+    },
+    {
+     "id": "median",
+     "values": [
+      62,
+      64
+     ]
+    },
+    {
+     "id": "q3",
+     "values": [
+      74,
+      70
+     ]
+    },
+    {
+     "id": "max",
+     "values": [
+      92,
+      85
+     ]
+    }
+   ]
+  },
+  "chart_box_run_time": {
+   "kind": "box",
+   "altId": "alt_chart_box_run_time",
+   "categories": [
+    "先月",
+    "今月"
+   ],
+   "series": [
+    {
+     "id": "min",
+     "values": [
+      8.2,
+      7.9
+     ]
+    },
+    {
+     "id": "q1",
+     "values": [
+      8.8,
+      8.4
+     ]
+    },
+    {
+     "id": "median",
+     "values": [
+      9.4,
+      8.9
+     ]
+    },
+    {
+     "id": "q3",
+     "values": [
+      10.1,
+      9.3
+     ]
+    },
+    {
+     "id": "max",
+     "values": [
+      11.0,
+      10.0
+     ]
+    }
+   ]
+  }
+ }
+}

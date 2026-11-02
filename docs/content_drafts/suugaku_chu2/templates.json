@@ -1313,6 +1313,460 @@
     }
    ],
    "explanationId": "exp_m2_lin_use_002"
+  },
+  {
+   "id": "m2_lin_graph_002",
+   "templateVersion": 1,
+   "unitId": "m2_lin_graph",
+   "type": "expr",
+   "difficulty": 0.6,
+   "params": {
+    "a": {
+     "int": [
+      -3,
+      3
+     ]
+    },
+    "b": {
+     "int": [
+      -4,
+      4
+     ]
+    }
+   },
+   "constraints": [
+    "a != 0",
+    "b != 0"
+   ],
+   "figure": {
+    "plot": {
+     "x": [
+      -2,
+      4
+     ],
+     "y": [
+      -10,
+      10
+     ],
+     "curves": [
+      {
+       "expr": "a*x+b"
+      }
+     ],
+     "points": [
+      {
+       "at": [
+        0,
+        "b"
+       ],
+       "label": "A"
+      },
+      {
+       "at": [
+        2,
+        "2*a+b"
+       ],
+       "label": "B"
+      }
+     ],
+     "ticks": {
+      "x": 1,
+      "y": 2
+     }
+    },
+    "altId": "fig_line_two_points"
+   },
+   "display": {
+    "v": "{a}"
+   },
+   "answer": "{a}",
+   "wrong": [
+    {
+     "expr": "{2*a}",
+     "tag": "change_not_rate"
+    },
+    {
+     "expr": "{b}",
+     "tag": "slope_intercept_mixup"
+    },
+    {
+     "expr": "{-a}",
+     "tag": "sign_error"
+    }
+   ],
+   "explanationId": "exp_m2_lin_graph_002"
+  },
+  {
+   "id": "m2_lin_graph_003",
+   "templateVersion": 1,
+   "unitId": "m2_lin_graph",
+   "type": "expr",
+   "difficulty": 0.65,
+   "params": {
+    "a": {
+     "int": [
+      -3,
+      3
+     ]
+    },
+    "b": {
+     "int": [
+      -4,
+      4
+     ]
+    }
+   },
+   "constraints": [
+    "a != 0",
+    "b != 0"
+   ],
+   "figure": {
+    "plot": {
+     "x": [
+      -2,
+      4
+     ],
+     "y": [
+      -10,
+      10
+     ],
+     "curves": [
+      {
+       "expr": "a*x+b"
+      }
+     ],
+     "points": [
+      {
+       "at": [
+        1,
+        "a+b"
+       ],
+       "label": "C"
+      },
+      {
+       "at": [
+        2,
+        "2*a+b"
+       ],
+       "label": "D"
+      }
+     ],
+     "ticks": {
+      "x": 1,
+      "y": 2
+     }
+    },
+    "altId": "fig_line_intercept"
+   },
+   "display": {
+    "v": "{b}"
+   },
+   "answer": "{b}",
+   "wrong": [
+    {
+     "expr": "{a+b}",
+     "tag": "read_wrong_point"
+    },
+    {
+     "expr": "{a}",
+     "tag": "slope_intercept_mixup"
+    },
+    {
+     "expr": "{-b}",
+     "tag": "sign_error"
+    }
+   ],
+   "explanationId": "exp_m2_lin_graph_003"
+  },
+  {
+   "id": "m2_lin_sim_003",
+   "templateVersion": 1,
+   "unitId": "m2_lin_sim",
+   "type": "expr",
+   "difficulty": 0.65,
+   "params": {
+    "a": {
+     "int": [
+      -3,
+      3
+     ]
+    },
+    "c": {
+     "int": [
+      -3,
+      3
+     ]
+    },
+    "b": {
+     "int": [
+      -4,
+      4
+     ]
+    },
+    "p": {
+     "int": [
+      -3,
+      3
+     ]
+    }
+   },
+   "derived": {
+    "d": "b+(a-c)*p"
+   },
+   "constraints": [
+    "a != c",
+    "a != 0",
+    "c != 0",
+    "b != 0",
+    "p != 0"
+   ],
+   "figure": {
+    "plot": {
+     "x": [
+      -4,
+      4
+     ],
+     "y": [
+      -14,
+      14
+     ],
+     "curves": [
+      {
+       "expr": "a*x+b"
+      },
+      {
+       "expr": "c*x+d"
+      }
+     ],
+     "points": [
+      {
+       "at": [
+        "p",
+        "a*p+b"
+       ],
+       "label": "P"
+      }
+     ],
+     "ticks": {
+      "x": 1,
+      "y": 2
+     }
+    },
+    "altId": "fig_two_lines"
+   },
+   "display": {
+    "v": "{p}"
+   },
+   "answer": "{p}",
+   "wrong": [
+    {
+     "expr": "{a*p+b}",
+     "tag": "y_not_x"
+    },
+    {
+     "expr": "{-p}",
+     "tag": "sign_error"
+    }
+   ],
+   "explanationId": "exp_m2_lin_sim_003"
+  },
+  {
+   "id": "m2_prob_count_003",
+   "templateVersion": 1,
+   "unitId": "m2_prob_count",
+   "type": "expr",
+   "difficulty": 0.5,
+   "params": {
+    "a": {
+     "int": [
+      1,
+      9
+     ]
+    }
+   },
+   "figure": {
+    "viewBox": [
+     0,
+     0,
+     100,
+     80
+    ],
+    "points": {
+     "O": [
+      8,
+      40
+     ],
+     "P": [
+      40,
+      12
+     ],
+     "Q": [
+      40,
+      40
+     ],
+     "R": [
+      40,
+      68
+     ],
+     "S": [
+      88,
+      4
+     ],
+     "U": [
+      88,
+      20
+     ],
+     "V": [
+      88,
+      32
+     ],
+     "W": [
+      88,
+      48
+     ],
+     "X": [
+      88,
+      60
+     ],
+     "Y": [
+      88,
+      76
+     ]
+    },
+    "draw": [
+     {
+      "seg": [
+       "O",
+       "P"
+      ]
+     },
+     {
+      "seg": [
+       "O",
+       "Q"
+      ]
+     },
+     {
+      "seg": [
+       "O",
+       "R"
+      ]
+     },
+     {
+      "seg": [
+       "P",
+       "S"
+      ]
+     },
+     {
+      "seg": [
+       "P",
+       "U"
+      ]
+     },
+     {
+      "seg": [
+       "Q",
+       "V"
+      ]
+     },
+     {
+      "seg": [
+       "Q",
+       "W"
+      ]
+     },
+     {
+      "seg": [
+       "R",
+       "X"
+      ]
+     },
+     {
+      "seg": [
+       "R",
+       "Y"
+      ]
+     }
+    ],
+    "marks": [
+     {
+      "text": [
+       "P",
+       "A"
+      ]
+     },
+     {
+      "text": [
+       "Q",
+       "B"
+      ]
+     },
+     {
+      "text": [
+       "R",
+       "C"
+      ]
+     },
+     {
+      "text": [
+       "S",
+       "B"
+      ]
+     },
+     {
+      "text": [
+       "U",
+       "C"
+      ]
+     },
+     {
+      "text": [
+       "V",
+       "A"
+      ]
+     },
+     {
+      "text": [
+       "W",
+       "C"
+      ]
+     },
+     {
+      "text": [
+       "X",
+       "A"
+      ]
+     },
+     {
+      "text": [
+       "Y",
+       "B"
+      ]
+     }
+    ],
+    "names": false,
+    "altId": "fig_tree_abc"
+   },
+   "display": {
+    "v": "{a}"
+   },
+   "answer": "6",
+   "wrong": [
+    {
+     "expr": "3",
+     "tag": "only_first_choice"
+    },
+    {
+     "expr": "9",
+     "tag": "allowed_repeat"
+    },
+    {
+     "expr": "5",
+     "tag": "missed_branch"
+    }
+   ],
+   "explanationId": "exp_m2_prob_count_003"
   }
  ]
 }

@@ -5,6 +5,7 @@
 - `manifest.json`: 目録（学年 2。`docs/content_pack_spec.md`）
 - `units.json`: 7 分野・16 単元（葉）。`estimatedQuestions` の計 約 310 問
 - `proofs.json`: 合同の証明 2 つ（並べる・根拠を選ぶ）
+- `charts.json`: 箱ひげ図の見本 2 つ（クラス比較・記録の比較）
 - `templates.json`・`texts.json`: 型 19（多項式・単項式・式の利用・連立方程式・一次関数・角・場合の数と確率・四分位範囲）と、その問題文・解説（草案）。証明・図の型・箱ひげ図を描く型は未着手
 - `prerequisites.json`: 前提。**中1の単元は `external`（`パックID:単元ID`）で指す**（テストが、指す単元が実在し学年が低いことを確認する）
 
