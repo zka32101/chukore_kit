@@ -157,7 +157,16 @@ class CharacterSpec {
     return s + 1 < stages.length ? stages[s + 1].points - points : null;
   }
 
-  /// 最後の段階にいるときの姿。勉強の仕方（実績）でいちばん多いものに合う姿（分岐がなければ null）。
+  /// 相棒の段階（0 始まり）。進化ポイント（[evolutionScore]）で上がり、**最後の段階は完全クリア（その教科の単元がすべて「できた」）のときだけ**。
+  /// 完全クリアしていないあいだは、最後のひとつ手前までで止まる。
+  int stageFor({required double mastery, required int effort}) {
+    final last = stages.length - 1;
+    if (mastery >= 1) return last; // 完全クリア（頑張りが少なくても、最後の段階）
+    final s = stageOf(evolutionScore(mastery: mastery, effort: effort));
+    return s == last ? last - 1 : s;
+  }
+
+  /// 完全クリアしたときの姿。勉強の仕方（実績）でいちばん多いものに合う姿（分岐がなければ null）。
   FormSpec? formFor(int points, LearnerMetrics m) {
     if (forms.isEmpty || stageOf(points) != stages.length - 1) return null;
     var best = forms.first;
@@ -460,6 +469,32 @@ List<ZukanEntry> zukan(
       }(),
 ];
 
+/// 相棒の段階の最大数（完全クリアまで 10 段階）。
+const maxStages = 10;
+
+/// 進化ポイントの満点。
+const evolutionScoreMax = 1000;
+
+/// 「頑張り」の満点（成長ポイント。これで頑張り分が満点になる）。
+const effortCap = 200;
+
+/// 相棒の**進化ポイント**（0〜1000）。教科の単元のマスター状況（6 割）と、頑張り（4 割）を合わせる。
+/// - [mastery]: その教科の単元のうち「できた」の割合（0〜1）。`subjectMastery` で求める。
+/// - [effort]: 頑張りの成長ポイント（`growthPointsForRound` などの累計。[effortCap] で満点）。
+/// どちらも増えるだけなので、進化ポイントも下がらない。マスターが進まなくても、頑張れば進化できる。
+int evolutionScore({required double mastery, required int effort}) {
+  final m = mastery.isNaN ? 0.0 : mastery.clamp(0.0, 1.0);
+  final e = (effort < 0 ? 0 : effort) / effortCap;
+  return ((0.6 * m + 0.4 * (e > 1 ? 1.0 : e)) * evolutionScoreMax).round();
+}
+
+/// 教科 [subject] の単元（一番下の単元）のうち、「できた」の割合（0〜1）。単元がなければ 0。
+double subjectMastery(UnitTree tree, String subject, Set<String> doneUnitIds) {
+  final leaves = tree.allLeaves().where((u) => u.subject == subject).toList();
+  if (leaves.isEmpty) return 0;
+  return leaves.where((u) => doneUnitIds.contains(u.id)).length / leaves.length;
+}
+
 /// 相棒ごとの成長ポイント。増えるだけ（負の値は 0 として扱い、休んでも下がらない）。
 /// **相棒は教科ごとに 1 匹**: 教科アプリごとに連れる相棒が別で、その教科の勉強でだけ育つ。
 class CompanionProgress {
@@ -497,7 +532,7 @@ class CompanionProgress {
 }
 
 /// キャラとバッジの検証。
-/// エラー: `character_stage_invalid`（段階は 3〜6 個、最初は 0 点、点は増える順）・`character_region_invalid`（国コードは大文字 2 文字）・
+/// エラー: `character_stage_invalid`（段階は 3〜10 個、最初は 0 点、点は増える順）・`character_region_invalid`（国コードは大文字 2 文字）・
 /// `character_regional_no_region`（地域キャラは国を指定する）・`character_metric_unknown`・`character_threshold_invalid`（1 以上）・
 /// `character_field_invalid`（分野のキャラは artId が要り、段階・姿は付けない）・`character_sticker_invalid`（スタンプは分野のキャラだけ・ちょうど 8 枚）・`character_field_missing`（分野のキャラの分野がない・分野以外に fieldId）・`character_field_duplicate`（同じ分野に 2 つ）・`character_form_invalid`（姿の分岐は 2〜4 個・scale は 1 以上）・`character_no_starter`（教科ごとに、はじめの共通キャラが無い）。
 List<ValidationIssue> validateCharacters(
@@ -528,8 +563,12 @@ List<ValidationIssue> validateCharacters(
       if (c.stages.isNotEmpty || c.forms.isNotEmpty) {
         err('character_field_invalid', c.id, '分野のキャラは成長しません（段階・姿は付けない）');
       }
-    } else if (c.stages.length < 3 || c.stages.length > 6) {
-      err('character_stage_invalid', c.id, '段階は 3〜6 個（${c.stages.length}）');
+    } else if (c.stages.length < 3 || c.stages.length > maxStages) {
+      err(
+        'character_stage_invalid',
+        c.id,
+        '段階は 3〜$maxStages 個（${c.stages.length}）',
+      );
     }
     if (c.stages.isNotEmpty && c.stages.first.points != 0) {
       err('character_stage_invalid', c.id, '最初の段階は 0 点から');

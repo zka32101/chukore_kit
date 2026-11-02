@@ -20,25 +20,55 @@
      "nameId": "ch_math_s2_name",
      "textId": "ch_math_s2_text",
      "artId": "ch_math_s2",
-     "points": 12
+     "points": 8
     },
     {
      "nameId": "ch_math_s3_name",
      "textId": "ch_math_s3_text",
      "artId": "ch_math_s3",
-     "points": 40
+     "points": 30
     },
     {
      "nameId": "ch_math_s4_name",
      "textId": "ch_math_s4_text",
      "artId": "ch_math_s4",
-     "points": 90
+     "points": 70
     },
     {
      "nameId": "ch_math_s5_name",
      "textId": "ch_math_s5_text",
      "artId": "ch_math_s5",
-     "points": 160
+     "points": 130
+    },
+    {
+     "nameId": "ch_math_s6_name",
+     "textId": "ch_math_s6_text",
+     "artId": "ch_math_s6",
+     "points": 210
+    },
+    {
+     "nameId": "ch_math_s7_name",
+     "textId": "ch_math_s7_text",
+     "artId": "ch_math_s7",
+     "points": 320
+    },
+    {
+     "nameId": "ch_math_s8_name",
+     "textId": "ch_math_s8_text",
+     "artId": "ch_math_s8",
+     "points": 470
+    },
+    {
+     "nameId": "ch_math_s9_name",
+     "textId": "ch_math_s9_text",
+     "artId": "ch_math_s9",
+     "points": 680
+    },
+    {
+     "nameId": "ch_math_s10_name",
+     "textId": "ch_math_s10_text",
+     "artId": "ch_math_s10",
+     "points": 1000
     }
    ],
    "forms": [
@@ -87,25 +117,55 @@
      "nameId": "ch_en_s2_name",
      "textId": "ch_en_s2_text",
      "artId": "ch_en_s2",
-     "points": 12
+     "points": 8
     },
     {
      "nameId": "ch_en_s3_name",
      "textId": "ch_en_s3_text",
      "artId": "ch_en_s3",
-     "points": 40
+     "points": 30
     },
     {
      "nameId": "ch_en_s4_name",
      "textId": "ch_en_s4_text",
      "artId": "ch_en_s4",
-     "points": 90
+     "points": 70
     },
     {
      "nameId": "ch_en_s5_name",
      "textId": "ch_en_s5_text",
      "artId": "ch_en_s5",
-     "points": 160
+     "points": 130
+    },
+    {
+     "nameId": "ch_en_s6_name",
+     "textId": "ch_en_s6_text",
+     "artId": "ch_en_s6",
+     "points": 210
+    },
+    {
+     "nameId": "ch_en_s7_name",
+     "textId": "ch_en_s7_text",
+     "artId": "ch_en_s7",
+     "points": 320
+    },
+    {
+     "nameId": "ch_en_s8_name",
+     "textId": "ch_en_s8_text",
+     "artId": "ch_en_s8",
+     "points": 470
+    },
+    {
+     "nameId": "ch_en_s9_name",
+     "textId": "ch_en_s9_text",
+     "artId": "ch_en_s9",
+     "points": 680
+    },
+    {
+     "nameId": "ch_en_s10_name",
+     "textId": "ch_en_s10_text",
+     "artId": "ch_en_s10",
+     "points": 1000
     }
    ],
    "forms": [
@@ -154,25 +214,55 @@
      "nameId": "ch_social_s2_name",
      "textId": "ch_social_s2_text",
      "artId": "ch_social_s2",
-     "points": 12
+     "points": 8
     },
     {
      "nameId": "ch_social_s3_name",
      "textId": "ch_social_s3_text",
      "artId": "ch_social_s3",
-     "points": 40
+     "points": 30
     },
     {
      "nameId": "ch_social_s4_name",
      "textId": "ch_social_s4_text",
      "artId": "ch_social_s4",
-     "points": 90
+     "points": 70
     },
     {
      "nameId": "ch_social_s5_name",
      "textId": "ch_social_s5_text",
      "artId": "ch_social_s5",
-     "points": 160
+     "points": 130
+    },
+    {
+     "nameId": "ch_social_s6_name",
+     "textId": "ch_social_s6_text",
+     "artId": "ch_social_s6",
+     "points": 210
+    },
+    {
+     "nameId": "ch_social_s7_name",
+     "textId": "ch_social_s7_text",
+     "artId": "ch_social_s7",
+     "points": 320
+    },
+    {
+     "nameId": "ch_social_s8_name",
+     "textId": "ch_social_s8_text",
+     "artId": "ch_social_s8",
+     "points": 470
+    },
+    {
+     "nameId": "ch_social_s9_name",
+     "textId": "ch_social_s9_text",
+     "artId": "ch_social_s9",
+     "points": 680
+    },
+    {
+     "nameId": "ch_social_s10_name",
+     "textId": "ch_social_s10_text",
+     "artId": "ch_social_s10",
+     "points": 1000
     }
    ],
    "forms": [
@@ -221,25 +311,55 @@
      "nameId": "ch_science_s2_name",
      "textId": "ch_science_s2_text",
      "artId": "ch_science_s2",
-     "points": 12
+     "points": 8
     },
     {
      "nameId": "ch_science_s3_name",
      "textId": "ch_science_s3_text",
      "artId": "ch_science_s3",
-     "points": 40
+     "points": 30
     },
     {
      "nameId": "ch_science_s4_name",
      "textId": "ch_science_s4_text",
      "artId": "ch_science_s4",
-     "points": 90
+     "points": 70
     },
     {
      "nameId": "ch_science_s5_name",
      "textId": "ch_science_s5_text",
      "artId": "ch_science_s5",
-     "points": 160
+     "points": 130
+    },
+    {
+     "nameId": "ch_science_s6_name",
+     "textId": "ch_science_s6_text",
+     "artId": "ch_science_s6",
+     "points": 210
+    },
+    {
+     "nameId": "ch_science_s7_name",
+     "textId": "ch_science_s7_text",
+     "artId": "ch_science_s7",
+     "points": 320
+    },
+    {
+     "nameId": "ch_science_s8_name",
+     "textId": "ch_science_s8_text",
+     "artId": "ch_science_s8",
+     "points": 470
+    },
+    {
+     "nameId": "ch_science_s9_name",
+     "textId": "ch_science_s9_text",
+     "artId": "ch_science_s9",
+     "points": 680
+    },
+    {
+     "nameId": "ch_science_s10_name",
+     "textId": "ch_science_s10_text",
+     "artId": "ch_science_s10",
+     "points": 1000
     }
    ],
    "forms": [
@@ -288,25 +408,55 @@
      "nameId": "ch_language_s2_name",
      "textId": "ch_language_s2_text",
      "artId": "ch_language_s2",
-     "points": 12
+     "points": 8
     },
     {
      "nameId": "ch_language_s3_name",
      "textId": "ch_language_s3_text",
      "artId": "ch_language_s3",
-     "points": 40
+     "points": 30
     },
     {
      "nameId": "ch_language_s4_name",
      "textId": "ch_language_s4_text",
      "artId": "ch_language_s4",
-     "points": 90
+     "points": 70
     },
     {
      "nameId": "ch_language_s5_name",
      "textId": "ch_language_s5_text",
      "artId": "ch_language_s5",
-     "points": 160
+     "points": 130
+    },
+    {
+     "nameId": "ch_language_s6_name",
+     "textId": "ch_language_s6_text",
+     "artId": "ch_language_s6",
+     "points": 210
+    },
+    {
+     "nameId": "ch_language_s7_name",
+     "textId": "ch_language_s7_text",
+     "artId": "ch_language_s7",
+     "points": 320
+    },
+    {
+     "nameId": "ch_language_s8_name",
+     "textId": "ch_language_s8_text",
+     "artId": "ch_language_s8",
+     "points": 470
+    },
+    {
+     "nameId": "ch_language_s9_name",
+     "textId": "ch_language_s9_text",
+     "artId": "ch_language_s9",
+     "points": 680
+    },
+    {
+     "nameId": "ch_language_s10_name",
+     "textId": "ch_language_s10_text",
+     "artId": "ch_language_s10",
+     "points": 1000
     }
    ],
    "forms": [
@@ -355,25 +505,55 @@
      "nameId": "ch_social_jp_s2_name",
      "textId": "ch_social_jp_s2_text",
      "artId": "ch_social_jp_s2",
-     "points": 12
+     "points": 8
     },
     {
      "nameId": "ch_social_jp_s3_name",
      "textId": "ch_social_jp_s3_text",
      "artId": "ch_social_jp_s3",
-     "points": 40
+     "points": 30
     },
     {
      "nameId": "ch_social_jp_s4_name",
      "textId": "ch_social_jp_s4_text",
      "artId": "ch_social_jp_s4",
-     "points": 90
+     "points": 70
     },
     {
      "nameId": "ch_social_jp_s5_name",
      "textId": "ch_social_jp_s5_text",
      "artId": "ch_social_jp_s5",
-     "points": 160
+     "points": 130
+    },
+    {
+     "nameId": "ch_social_jp_s6_name",
+     "textId": "ch_social_jp_s6_text",
+     "artId": "ch_social_jp_s6",
+     "points": 210
+    },
+    {
+     "nameId": "ch_social_jp_s7_name",
+     "textId": "ch_social_jp_s7_text",
+     "artId": "ch_social_jp_s7",
+     "points": 320
+    },
+    {
+     "nameId": "ch_social_jp_s8_name",
+     "textId": "ch_social_jp_s8_text",
+     "artId": "ch_social_jp_s8",
+     "points": 470
+    },
+    {
+     "nameId": "ch_social_jp_s9_name",
+     "textId": "ch_social_jp_s9_text",
+     "artId": "ch_social_jp_s9",
+     "points": 680
+    },
+    {
+     "nameId": "ch_social_jp_s10_name",
+     "textId": "ch_social_jp_s10_text",
+     "artId": "ch_social_jp_s10",
+     "points": 1000
     }
    ],
    "forms": [
@@ -425,25 +605,55 @@
      "nameId": "ch_social_br_s2_name",
      "textId": "ch_social_br_s2_text",
      "artId": "ch_social_br_s2",
-     "points": 12
+     "points": 8
     },
     {
      "nameId": "ch_social_br_s3_name",
      "textId": "ch_social_br_s3_text",
      "artId": "ch_social_br_s3",
-     "points": 40
+     "points": 30
     },
     {
      "nameId": "ch_social_br_s4_name",
      "textId": "ch_social_br_s4_text",
      "artId": "ch_social_br_s4",
-     "points": 90
+     "points": 70
     },
     {
      "nameId": "ch_social_br_s5_name",
      "textId": "ch_social_br_s5_text",
      "artId": "ch_social_br_s5",
-     "points": 160
+     "points": 130
+    },
+    {
+     "nameId": "ch_social_br_s6_name",
+     "textId": "ch_social_br_s6_text",
+     "artId": "ch_social_br_s6",
+     "points": 210
+    },
+    {
+     "nameId": "ch_social_br_s7_name",
+     "textId": "ch_social_br_s7_text",
+     "artId": "ch_social_br_s7",
+     "points": 320
+    },
+    {
+     "nameId": "ch_social_br_s8_name",
+     "textId": "ch_social_br_s8_text",
+     "artId": "ch_social_br_s8",
+     "points": 470
+    },
+    {
+     "nameId": "ch_social_br_s9_name",
+     "textId": "ch_social_br_s9_text",
+     "artId": "ch_social_br_s9",
+     "points": 680
+    },
+    {
+     "nameId": "ch_social_br_s10_name",
+     "textId": "ch_social_br_s10_text",
+     "artId": "ch_social_br_s10",
+     "points": 1000
     }
    ],
    "forms": [
@@ -495,25 +705,55 @@
      "nameId": "ch_social_mx_s2_name",
      "textId": "ch_social_mx_s2_text",
      "artId": "ch_social_mx_s2",
-     "points": 12
+     "points": 8
     },
     {
      "nameId": "ch_social_mx_s3_name",
      "textId": "ch_social_mx_s3_text",
      "artId": "ch_social_mx_s3",
-     "points": 40
+     "points": 30
     },
     {
      "nameId": "ch_social_mx_s4_name",
      "textId": "ch_social_mx_s4_text",
      "artId": "ch_social_mx_s4",
-     "points": 90
+     "points": 70
     },
     {
      "nameId": "ch_social_mx_s5_name",
      "textId": "ch_social_mx_s5_text",
      "artId": "ch_social_mx_s5",
-     "points": 160
+     "points": 130
+    },
+    {
+     "nameId": "ch_social_mx_s6_name",
+     "textId": "ch_social_mx_s6_text",
+     "artId": "ch_social_mx_s6",
+     "points": 210
+    },
+    {
+     "nameId": "ch_social_mx_s7_name",
+     "textId": "ch_social_mx_s7_text",
+     "artId": "ch_social_mx_s7",
+     "points": 320
+    },
+    {
+     "nameId": "ch_social_mx_s8_name",
+     "textId": "ch_social_mx_s8_text",
+     "artId": "ch_social_mx_s8",
+     "points": 470
+    },
+    {
+     "nameId": "ch_social_mx_s9_name",
+     "textId": "ch_social_mx_s9_text",
+     "artId": "ch_social_mx_s9",
+     "points": 680
+    },
+    {
+     "nameId": "ch_social_mx_s10_name",
+     "textId": "ch_social_mx_s10_text",
+     "artId": "ch_social_mx_s10",
+     "points": 1000
     }
    ],
    "forms": [
@@ -565,25 +805,55 @@
      "nameId": "ch_social_in_s2_name",
      "textId": "ch_social_in_s2_text",
      "artId": "ch_social_in_s2",
-     "points": 12
+     "points": 8
     },
     {
      "nameId": "ch_social_in_s3_name",
      "textId": "ch_social_in_s3_text",
      "artId": "ch_social_in_s3",
-     "points": 40
+     "points": 30
     },
     {
      "nameId": "ch_social_in_s4_name",
      "textId": "ch_social_in_s4_text",
      "artId": "ch_social_in_s4",
-     "points": 90
+     "points": 70
     },
     {
      "nameId": "ch_social_in_s5_name",
      "textId": "ch_social_in_s5_text",
      "artId": "ch_social_in_s5",
-     "points": 160
+     "points": 130
+    },
+    {
+     "nameId": "ch_social_in_s6_name",
+     "textId": "ch_social_in_s6_text",
+     "artId": "ch_social_in_s6",
+     "points": 210
+    },
+    {
+     "nameId": "ch_social_in_s7_name",
+     "textId": "ch_social_in_s7_text",
+     "artId": "ch_social_in_s7",
+     "points": 320
+    },
+    {
+     "nameId": "ch_social_in_s8_name",
+     "textId": "ch_social_in_s8_text",
+     "artId": "ch_social_in_s8",
+     "points": 470
+    },
+    {
+     "nameId": "ch_social_in_s9_name",
+     "textId": "ch_social_in_s9_text",
+     "artId": "ch_social_in_s9",
+     "points": 680
+    },
+    {
+     "nameId": "ch_social_in_s10_name",
+     "textId": "ch_social_in_s10_text",
+     "artId": "ch_social_in_s10",
+     "points": 1000
     }
    ],
    "forms": [

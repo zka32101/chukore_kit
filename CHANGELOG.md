@@ -7,6 +7,7 @@
 - 中2の数学: 型 19 と問題文・解説の草案（`docs/content_drafts/suugaku_chu2/`）
 - 証明の問題（`ProofSpec`・`gradeProofOrder`・`gradeProofReasons`・`validateProofs`）と、目録の `proofs`。中2に合同の証明 2 つ、中3に相似の証明 2 つ
 - 証明に図（`ProofSpec.figure`）。描けない図は `pack_proof_figure_invalid`。中2・中3の草案の証明 4 つに図を付けた
+- 相棒は 10 段階に進化（完全クリアが最後。単元のマスター状況 6 割＋頑張り 4 割の進化ポイント `evolutionScore`/`stageFor`。序盤はすぐ進む）
 - 絵のトーン B の見本づくりと確認の手順 `docs/art_tone_sample_plan.md`
 - 世界観の方針 `docs/world_design.md`（基地から旅に出て、分野をマスターして仲間の部屋に入る。部屋は学年ごと。絵のトーンは B「ゆるかわ・落ち着いた」に決定）
 - 教科ごとの分野分けの案（`docs/field_division.md`。数学 22・社会 12・英語 16・理科 14・国語 15 の確定: 計 79 分野）
