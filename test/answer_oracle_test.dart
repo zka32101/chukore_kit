@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
@@ -78,11 +79,11 @@ void main() {
     'm2_sim_solve_002': (n) => (n[0] - n[1]) / 2,
     'm2_sim_solve_003': (n) => (n[2] - n[1]) / (n[0] + 1),
     'm2_sim_word_001': (n) =>
-        (n[5] - n[3] * n[4]) / (n[1] - n[3]), // 1 個 a 円・1 個 b 円・あわせて N 個・代金 M 円
+        (n[3] - n[1] * n[2]) / (n[0] - n[1]), // りんご a 円・みかん b 円・あわせて N 個・代金 M 円
     'm2_lin_graph_001': (n) => (n[3] - n[2]) / (n[1] - n[0]),
     'm2_lin_eq_001': (n) => n[2] - n[0] * n[1],
-    'm2_lin_eq_002': (n) => (n[4] - n[2]) / (n[3] - n[1]), // 先頭の 2 は「2 点」
-    'm2_par_angle_001': (n) => 180 - n.last, // 「2 直線」「1 つ」の数字が先に出る
+    'm2_lin_eq_002': (n) => (n[3] - n[1]) / (n[2] - n[0]),
+    'm2_par_angle_001': (n) => 180 - n.last,
     'm2_par_angle_002': (n) => 180 * (n[0] - 2),
     'm2_par_angle_003': (n) => 360 / n[0],
     'm2_prob_count_001': (n) => n[0] * (n[0] - 1),
@@ -98,18 +99,19 @@ void main() {
     'm2_tri_para_002': (n) => 180 - n[0],
     'm2_tri_para_003': (n) => 2 * (n[0] + n[1]),
     'm2_tri_para_004': (n) => n[0] / 2,
-    'm2_lin_sim_001': (n) => (n[4] - n[2]) / (n[1] - n[3]), // 先頭の 2 は「2 直線」,
-    'm2_lin_sim_002': (n) => n[1] * (n[4] - n[2]) / (n[1] - n[3]) + n[2],
+    'm2_lin_sim_001': (n) => (n[3] - n[1]) / (n[0] - n[2]),
+    'm2_lin_sim_002': (n) => n[0] * (n[3] - n[1]) / (n[0] - n[2]) + n[1],
     'm2_lin_use_001': (n) => n[0] + n[1] * n[2],
     'm2_lin_use_002': (n) => (n[2] - n[0]) / n[1],
-    'm2_lin_use_003': (n) => n[0] + n[1] * n[3], // 乗りはじめ b 円・距離 p km・「1 km」の 1 を飛ばして a 円
+    'm2_lin_use_003': (n) =>
+        n[0] + n[1] * n[2], // 乗りはじめ b 円・距離 p km・1 km あたり a 円
     'm2_prob_count_003': (n) => 3 * 2, // 3 人から 2 人を順に選ぶ
     // 中3
     'm3_fn_graph_001': (n) => n[1] / sq(n[0]),
     'm3_fn_graph_002': (n) => n[0] * sq(n[1]),
     'm3_fn_rate_001': (n) => n[0] * (n[1] + n[2]),
-    'm3_fn_use_001': (n) => sq(n[2]) / n[1], // 「2 乗」の 2 を飛ばす
-    'm3_fn_use_002': (n) => 5 * sq(n[1]),
+    'm3_fn_use_001': (n) => sq(n[1]) / n[0],
+    'm3_fn_use_002': (n) => 5 * sq(n[0]),
     'm3_poly_expand_001': (n) =>
         'x^2+(${ex(n[0] + n[1])})*x+(${ex(n[0] * n[1])})',
     'm3_poly_expand_002': (n) => 'x^2+(${ex(2 * n[0])})*x+(${ex(n[0] * n[0])})',
@@ -124,18 +126,18 @@ void main() {
     'm3_sqrt_calc_001': (n) => sqrt(n[0] * n[1]),
     'm3_quad_solve_001': (n) => (-n[1] + sqrt(sq(n[1]) - 4 * n[2])) / 2,
     'm3_quad_solve_002': (n) => -n[0] + sqrt(n[2]),
-    'm3_quad_word_001': (n) => (-1 + sqrt(1 + 4 * n[1])) / 2, // 先頭の 2 は「2 つ」
+    'm3_quad_word_001': (n) => (-1 + sqrt(1 + 4 * n[0])) / 2,
     'm3_sim_def_001': (n) => n[2] * n[1] / n[0],
     'm3_sim_ratio_001': (n) => n[2] * n[0] / (n[0] + n[1]),
     'm3_sim_ratio_002': (n) => n[2] * n[0] / (n[0] + n[1]),
-    'm3_sim_area_001': (n) => n[3] * sq(n[2] / n[1]), // 先頭の 2 は「2 つ」
-    'm3_sim_area_002': (n) => n[3] * pow(n[2] / n[1], 3),
+    'm3_sim_area_001': (n) => n[2] * sq(n[1] / n[0]),
+    'm3_sim_area_002': (n) => n[2] * pow(n[1] / n[0], 3),
     'm3_circ_angle_001': (n) => n[0] / 2,
     'm3_circ_angle_002': (n) => 90 - n[0],
     'm3_circ_angle_003': (n) => n[0] / 2,
     'm3_circ_angle_004': (n) => 90 - n[0],
-    'm3_pyth_thm_001': (n) => sqrt(sq(n[1]) + sq(n[2])), // 先頭の 2 は「2 辺」
-    'm3_pyth_thm_002': (n) => sqrt(sq(n[0]) - sq(n[2])), // 間の 1 は「1 辺」
+    'm3_pyth_thm_001': (n) => sqrt(sq(n[0]) + sq(n[1])),
+    'm3_pyth_thm_002': (n) => sqrt(sq(n[0]) - sq(n[1])),
     'm3_pyth_use_001': (n) => sqrt(sq(n[0]) + sq(n[1])),
     'm3_pyth_use_002': (n) => sqrt(sq(n[0]) - sq(n[1])),
     'm3_samp_sample_001': (n) => n[0] * n[2] / n[1],
@@ -152,8 +154,8 @@ void main() {
     'm1_alg_value_001': (n) => n[1] * n[0] + n[2],
     'm1_linear_002': (n) => (n[2] - n[1]) / n[0],
     'm1_linear_003': (n) => (n[3] - n[1]) / (n[0] - n[2]),
-    'm1_eq_prop_001': (n) => '両辺から${ex(n[0])}をひく',
-    'm1_alg_rel_001': (n) => '${ex(n[1])}x+${ex(n[2])}円',
+    'm1_eq_prop_001': (n) => 'sub', // はじめにすること: 両辺から x のほうの数をひく
+    'm1_alg_rel_001': (n) => 'ok', // a x + b
     'm1_num_abs_001': (n) => n[0].abs(),
     'm1_num_add_001': (n) => n[0] + n[1],
     'm1_num_add_002': (n) => n[0] + n[1],
@@ -189,7 +191,7 @@ void main() {
     'm1_space_vol_003': (n) => pi(4 * n[0] * n[0] * n[0], 3),
     'm1_space_vol_004': (n) => pi(4 * sq(n[0]), 1),
     'm1_space_vol_005': (n) => pi(2 * n[0] * (n[0] + n[1]), 1),
-    'm1_geo_angle_001': (n) => 180 - n[1] - n[2],
+    'm1_geo_angle_001': (n) => 180 - n[0] - n[1],
     'm1_geo_angle_002': (n) => n.last,
     'm1_geo_angle_003': (n) => 180 - n.last,
     'm1_geo_angle_004': (n) => (180 - n.last) / 2,
@@ -200,7 +202,7 @@ void main() {
     'm1_space_fig_005': (n) => 2 * (n[0] * n[1] + n[1] * n[2] + n[2] * n[0]),
     'm1_space_net_001': (n) => pi(2 * n[0], 1),
     'm1_space_net_002': (n) => frac((360 * n[1]).round(), n[0].round()),
-    'm1_eq_word_001': (n) => (n[3] - n[2]) / n[1],
+    'm1_eq_word_001': (n) => (n[2] - n[1]) / n[0],
     'm1_eq_word_002': (n) => (n[1] + n[3]) / (n[2] - n[0]),
     'm1_eq_word_003': (n) => (n[1] - n[2] * n[0]) / (n[2] - 1),
     'm1_geo_move_001': (n) => n[0] + n[2],
@@ -219,17 +221,16 @@ void main() {
     'm1_space_solid_edge_001': (n) => 3 * n[0],
     'm1_space_solid_vertex_001': (n) => n[0] + 1,
     'm1_space_solid_edge_002': (n) => 2 * n[0],
-    'm1_space_cut_001': (n) => '円',
-    'm1_space_cut_002': (n) => '長方形',
-    'm1_space_cut_003': (n) => '円',
-    'm1_space_cut_004': (n) => '二等辺三角形',
-    'm1_space_cut_005': (n) => '円',
+    'm1_space_cut_001': (n) => 'circle',
+    'm1_space_cut_002': (n) => 'rect',
+    'm1_space_cut_003': (n) => 'circle',
+    'm1_space_cut_004': (n) => 'isosceles',
+    'm1_space_cut_005': (n) => 'circle',
     'm1_space_cut_face_001': (n) => 6 + n[0],
     'm1_space_cut_vertex_001': (n) => 8 + 2 * n[0],
     'm1_space_cut_edge_001': (n) => 12 + 3 * n[0],
     'm1_linear_check_001': (n) => n[0] * n[3] + n[1],
-    'm1_num_mul_sign_001': (n) =>
-        n.skip(2).where((x) => x < 0).length.isEven ? 1 : -1,
+    'm1_num_mul_sign_001': (n) => n.where((x) => x < 0).length.isEven ? 1 : -1,
   };
   // 数の並びだけでは式の形が決まらない型は、問題文の式そのものから解く
   final Map<String, Object Function(String prompt)> byText = {
@@ -261,7 +262,23 @@ void main() {
   };
 
   /// 検算: 食い違い（型ID~種と内容）の一覧。
-  List<String> verify(TemplateSet set, ContentTexts texts) {
+  /// 画面に出る数: 基準の問題文（[reference]）の `{…}` の値を、出てくる順に集める。
+  /// 地の文の数字（「2 直線」など）は含めない。**翻訳した問題文ではなく、基準の問題文の差し込み位置**で決まるので、言語に依存しない。
+  List<double> shown(ContentTexts reference, String templateId, Variant v) {
+    final src = reference.texts['prompt_$templateId']!;
+    return [
+      for (final m in RegExp(r'\{[^{}]+\}').allMatches(src))
+        ...nums(renderVariantText(m.group(0)!, v)),
+    ];
+  }
+
+  /// 検算: 食い違い（型ID~種と内容）の一覧。[reference] は基準の文言（既定は [texts] 自身。ほかの言語のパックを検算するときは、基準の言語のものを渡す）。
+  List<String> verify(
+    TemplateSet set,
+    ContentTexts texts, {
+    ContentTexts? reference,
+  }) {
+    final ref = reference ?? texts;
     final bad = <String>[];
     for (final t in set.templates) {
       if (figureOnly.contains(t.id)) continue;
@@ -285,19 +302,22 @@ void main() {
           }
           continue;
         }
-        final prompt = renderVariantText(texts.texts['prompt_${t.id}']!, v);
+        final prompt = renderVariantText(ref.texts['prompt_${t.id}']!, v);
         final Object want;
         try {
-          want = byText[t.id]?.call(prompt) ?? f!(nums(prompt));
+          want = byText[t.id]?.call(prompt) ?? f!(shown(ref, t.id, v));
         } on RangeError {
           bad.add('${t.id}~$s 問題文の数が足りません: $prompt');
           break;
         }
         var input = want is num ? ex(want) : want as String;
         if (t.choiceLabels) {
-          // 選択肢が ID の型: 解き直した文言（国・言語の文言）に合う選択肢の ID に直す
-          final key = t.choices.where((c) => renderVariantText(texts.texts[choiceLabelTextId(t.id, c)]!, v) == input).firstOrNull;
-          input = key ?? 'no_such_label:$input';
+          // 選択肢が ID の型: 検算は ID で答える（国・言語に依存しない）。画面の文言があることも確かめる
+          for (final c in t.choices) {
+            if (!texts.texts.containsKey(choiceLabelTextId(t.id, c))) {
+              bad.add('${t.id} の選択肢 $c の文言がありません');
+            }
+          }
         }
         if (!checkAnswer(v.question, input).correct) {
           bad.add(
@@ -348,4 +368,38 @@ void main() {
       );
     }
   });
+
+  test(
+    '検算は言語に依存しない: 別の言語（問題文の語順・差し込みの順を入れ替えた英語風）の文言でも、基準の問題文の差し込み位置から検算できる',
+    () {
+      final texts = ContentTexts.parse(
+        File('docs/content_drafts/suugaku_chu2/texts.json').readAsStringSync(),
+      );
+      final set = TemplateSet.parse(
+        File(
+          'docs/content_drafts/suugaku_chu2/templates.json',
+        ).readAsStringSync(),
+      );
+      // 問題文を、差し込みの順を逆にした別の文に置き換える（翻訳で語順が変わることを想定）
+      final other = <String, String>{...texts.texts};
+      for (final t in set.templates) {
+        final ph = RegExp(r'\{[^{}]+\}')
+            .allMatches(texts.texts['prompt_${t.id}']!)
+            .map((m) => m.group(0)!)
+            .toList()
+            .reversed
+            .join(' / ');
+        other['prompt_${t.id}'] = 'Solve: $ph';
+      }
+      final translated = ContentTexts.parse(
+        jsonEncode({'version': 1, 'locale': 'en', 'texts': other}),
+      );
+      expect(
+        verify(set, translated, reference: texts),
+        isEmpty,
+      ); // 基準（日本語）の差し込み位置で検算できる
+      // 基準を翻訳側にすると、差し込みの順が変わるので、検算の前提が崩れる（基準を取り違えると気づける）
+      expect(verify(set, translated), isNotEmpty);
+    },
+  );
 }

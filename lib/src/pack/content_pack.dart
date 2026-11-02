@@ -69,7 +69,7 @@ class ContentPackManifest {
 
   static const fileKeys = {
     'units', 'prerequisites', 'questions', 'templates', 'lessons',
-    'explorations', 'constructions', 'experiences', 'charts', 'scenes', 'proofs', 'characters', 'texts', 'maps',
+    'explorations', 'constructions', 'experiences', 'charts', 'scenes', 'proofs', 'characters', 'placements', 'texts', 'maps',
   };
   static const _keys = {
     'version', 'id', 'country', 'locale', 'subject', 'grades', 'curriculum', 'contentVersion', 'attribution', 'files', 'textsCover',
@@ -352,7 +352,11 @@ ContentPackReport validateContentPack(String manifestSource, String? Function(St
   final templatesFile = m.files['templates'] as String?;
   TemplateSet? templates;
   if (templatesFile != null) {
-    templates = tryParse(templatesFile, TemplateSet.parse);
+    // 国ごとの型の置き方（任意）。あれば、載っている型だけをその国の単元に置く
+    final placementsFile = m.files['placements'] as String?;
+    Map<String, String>? placement;
+    if (placementsFile != null) placement = tryParse(placementsFile, parsePlacements);
+    templates = tryParse(templatesFile, (src) => TemplateSet.parse(src, placement: placement));
     if (templates != null) {
       if (tree != null) addAll(templatesFile, validateTemplates(templates, tree: tree));
       counts['templates'] = templates.templates.length;

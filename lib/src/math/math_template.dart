@@ -611,7 +611,9 @@ class TemplateSet {
   final List<MathTemplate> templates;
 
   /// 形式名のない単純な JSON: `{"version":1,"templates":[…]}`。読めなければ [FormatException]。
-  factory TemplateSet.parse(String source) {
+  /// [placement]（型ID → 単元ID）を渡すと、**その国の置き方**になる: 載っている型だけを使い、`unitId` をその国の単元に付け替える
+  /// （型の `unitId` は書かなくてよい）。載っていない型は使わない。型にない ID はエラー。
+  factory TemplateSet.parse(String source, {Map<String, String>? placement}) {
     final Object? j;
     try {
       j = jsonDecode(source);
@@ -622,7 +624,18 @@ class TemplateSet {
     if (j['version'] != 1) throw FormatException('未対応の版: ${j['version']}');
     final raw = j['templates'];
     if (raw is! List) throw const FormatException('templates が必要です');
-    final out = [for (final t in raw) MathTemplate.fromJson(Map<String, dynamic>.from(t as Map))];
+    final maps = [for (final t in raw) Map<String, dynamic>.from(t as Map)];
+    if (placement != null) {
+      final known = {for (final t in maps) t['id']};
+      for (final id in placement.keys) {
+        if (!known.contains(id)) throw FormatException('置き方にある型 $id が、型の一覧にありません');
+      }
+      maps.removeWhere((t) => !placement.containsKey(t['id']));
+      for (final t in maps) {
+        t['unitId'] = placement[t['id']];
+      }
+    }
+    final out = [for (final t in maps) MathTemplate.fromJson(t)];
     final ids = <String>{};
     for (final t in out) {
       if (!ids.add(t.id)) throw FormatException('id が重複しています: ${t.id}');
@@ -642,6 +655,32 @@ class TemplateSet {
 /// `template_choice_locale_text`（警告: 選択肢に国・言語の文字が直接ある。`choiceLabels` にして文言へ）、
 /// `template_answer_dup`（警告: 変種の答え［選択肢が図の型は選択肢の並びと図］が半分以上かぶる＝範囲が狭い）、
 /// `template_net_mismatch`（エラー: 展開図の選択肢で、正解だけが立方体の展開図になっていない）。
+/// 国ごとの型の置き方（`placements.json`）: `{"version":1,"placements":[{"template":型ID,"unitId":単元ID}]}`。
+/// 載っている型だけをその国で使い、単元に置く。読めなければ [FormatException]。
+Map<String, String> parsePlacements(String source) {
+  final Object? j;
+  try {
+    j = jsonDecode(source);
+  } on FormatException catch (e) {
+    throw FormatException('置き方の JSON を読めません: ${e.message}');
+  }
+  if (j is! Map<String, dynamic>) throw const FormatException('置き方の JSON はオブジェクトです');
+  if (j['version'] != 1) throw FormatException('未対応の版: ${j['version']}');
+  final raw = j['placements'];
+  if (raw is! List || raw.isEmpty) throw const FormatException('placements が必要です（1 つ以上）');
+  final out = <String, String>{};
+  for (final e in raw) {
+    final m = Map<String, dynamic>.from(e as Map);
+    final unknown = m.keys.where((k) => k != 'template' && k != 'unitId');
+    if (unknown.isNotEmpty) throw FormatException('置き方の未知のキー: ${unknown.join(', ')}');
+    final t = m['template'], u = m['unitId'];
+    if (t is! String || t.isEmpty || u is! String || u.isEmpty) throw const FormatException('置き方: template と unitId は空でない文字列');
+    if (out.containsKey(t)) throw FormatException('置き方で型 $t が重複しています');
+    out[t] = u;
+  }
+  return out;
+}
+
 /// 選択肢の文言の文言 ID（`choiceLabels` の型）。
 String choiceLabelTextId(String templateId, String choiceId) => 'choice_${templateId}_$choiceId';
 
