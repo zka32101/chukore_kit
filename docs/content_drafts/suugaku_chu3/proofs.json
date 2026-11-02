@@ -242,6 +242,261 @@
     "names": true,
     "altId": "pffig_m3_sim_oac"
    }
+  },
+  {
+   "id": "pf_m3_sim_rt",
+   "unitId": "m3_sim_def",
+   "titleId": "pf_m3_sim_rt_title",
+   "givenId": "pf_m3_sim_rt_given",
+   "goalId": "pf_m3_sim_rt_goal",
+   "reasons": [
+    {
+     "id": "r_given",
+     "textId": "pfr3_given"
+    },
+    {
+     "id": "r_common",
+     "textId": "pfr3_common"
+    },
+    {
+     "id": "r_aa",
+     "textId": "pfr3_aa"
+    },
+    {
+     "id": "r_ratio",
+     "textId": "pfr3_ratio"
+    },
+    {
+     "id": "r_sas",
+     "textId": "pfr3_sas"
+    },
+    {
+     "id": "r_corr",
+     "textId": "pfr3_corresponding"
+    }
+   ],
+   "steps": [
+    {
+     "id": "s1",
+     "claimId": "pf_m3_sim_rt_s1",
+     "reasonId": "r_given"
+    },
+    {
+     "id": "s2",
+     "claimId": "pf_m3_sim_rt_s2",
+     "reasonId": "r_common"
+    },
+    {
+     "id": "s3",
+     "claimId": "pf_m3_sim_rt_s3",
+     "reasonId": "r_aa",
+     "after": [
+      "s1",
+      "s2"
+     ]
+    },
+    {
+     "id": "s4",
+     "claimId": "pf_m3_sim_rt_s4",
+     "reasonId": "r_ratio",
+     "after": [
+      "s3"
+     ]
+    }
+   ],
+   "decoys": [
+    {
+     "id": "d1",
+     "claimId": "pf_m3_sim_rt_d1",
+     "tag": "assumed_conclusion"
+    }
+   ],
+   "figure": {
+    "viewBox": [
+     0,
+     0,
+     100,
+     80
+    ],
+    "points": {
+     "A": [
+      74,
+      38
+     ],
+     "B": [
+      10,
+      70
+     ],
+     "C": [
+      90,
+      70
+     ],
+     "D": [
+      74,
+      70
+     ]
+    },
+    "draw": [
+     {
+      "poly": [
+       "A",
+       "B",
+       "C"
+      ]
+     },
+     {
+      "seg": [
+       "A",
+       "D"
+      ]
+     }
+    ],
+    "marks": [
+     {
+      "right": [
+       "B",
+       "A",
+       "C"
+      ]
+     },
+     {
+      "right": [
+       "A",
+       "D",
+       "B"
+      ]
+     }
+    ],
+    "names": true,
+    "altId": "pffig_m3_sim_rt"
+   }
+  },
+  {
+   "id": "pf_m3_circ_chords",
+   "unitId": "m3_circ_angle",
+   "titleId": "pf_m3_circ_chords_title",
+   "givenId": "pf_m3_circ_chords_given",
+   "goalId": "pf_m3_circ_chords_goal",
+   "reasons": [
+    {
+     "id": "r_inscribed",
+     "textId": "pfr3_inscribed"
+    },
+    {
+     "id": "r_vertical",
+     "textId": "pfr3_vertical"
+    },
+    {
+     "id": "r_aa",
+     "textId": "pfr3_aa"
+    },
+    {
+     "id": "r_ratio",
+     "textId": "pfr3_ratio"
+    },
+    {
+     "id": "r_alt",
+     "textId": "pfr3_alt"
+    },
+    {
+     "id": "r_sas",
+     "textId": "pfr3_sas"
+    }
+   ],
+   "steps": [
+    {
+     "id": "s1",
+     "claimId": "pf_m3_circ_chords_s1",
+     "reasonId": "r_inscribed"
+    },
+    {
+     "id": "s2",
+     "claimId": "pf_m3_circ_chords_s2",
+     "reasonId": "r_vertical"
+    },
+    {
+     "id": "s3",
+     "claimId": "pf_m3_circ_chords_s3",
+     "reasonId": "r_aa",
+     "after": [
+      "s1",
+      "s2"
+     ]
+    },
+    {
+     "id": "s4",
+     "claimId": "pf_m3_circ_chords_s4",
+     "reasonId": "r_ratio",
+     "after": [
+      "s3"
+     ]
+    }
+   ],
+   "decoys": [
+    {
+     "id": "d1",
+     "claimId": "pf_m3_circ_chords_d1",
+     "tag": "used_parallel"
+    },
+    {
+     "id": "d2",
+     "claimId": "pf_m3_circ_chords_d2",
+     "tag": "assumed_conclusion"
+    }
+   ],
+   "figure": {
+    "viewBox": [
+     0,
+     0,
+     100,
+     80
+    ],
+    "points": {
+     "O": [
+      50,
+      40
+     ],
+     "A": [
+      24,
+      25
+     ],
+     "B": [
+      76,
+      25
+     ],
+     "C": [
+      76,
+      55
+     ],
+     "D": [
+      24,
+      55
+     ]
+    },
+    "draw": [
+     {
+      "circle": [
+       "O",
+       30
+      ]
+     },
+     {
+      "seg": [
+       "A",
+       "C"
+      ]
+     },
+     {
+      "seg": [
+       "B",
+       "D"
+      ]
+     }
+    ],
+    "marks": [],
+    "names": false,
+    "altId": "pffig_m3_circ_chords"
+   }
   }
  ]
 }
